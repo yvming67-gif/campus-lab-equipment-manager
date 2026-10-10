@@ -2,6 +2,8 @@
 
 `campus-lab-equipment-manager` ·《系统分析与设计》课程演示 · 某高校实验教学中心（模拟组织）。
 
+[公开 GitHub 仓库](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [GitHub Actions](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions) · [交付核验](docs/delivery.md)
+
 本系统管理带唯一标签的单台或整套设备，覆盖查询 → 预约 → 人工审核 → 借出 → 检查归还 → 异常维修 → 管理员验收。所有账号、实验室、设备、培训及消息服务均为模拟数据；没有连接真实学校统一认证、短信或邮件平台。本期只在本地运行。
 
 ## 技术与目录
@@ -125,4 +127,4 @@ agent-browser install
 
 没有支付、采购、赔偿、整间实验室预约或真实校内平台接口。业务写操作以单个 PostgreSQL 配置行作为事务锁，保证课程演示规模的一致性；大规模并发需要进一步拆分锁和压测。所有操作入口均在后端校验角色和实验室范围，系统管理员不会自动拥有借还审核权限。审计表具备禁止 UPDATE/DELETE 的数据库触发器。
 
-本地工程和验收完成前不会创建远程仓库。公开托管目标为 `yvming67-gif/campus-lab-equipment-manager`；是否已创建、推送和 CI 通过，见最终交付及真实远程记录，不能由该目标名称推断。
+本地工程和验收完成后，已在核验的 `yvming67-gif` 账号下创建公开仓库并正常推送。首个代码提交 `43c110f7a3d956e502ccd4d3a300104c342e761e` 的 GitHub Actions 已真实通过；各次提交的最新状态以仓库 Actions 页面为准。核验记录见 `docs/delivery.md`。

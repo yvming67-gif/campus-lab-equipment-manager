@@ -37,7 +37,7 @@
 - 持久化：按 README 再次运行 setup 幂等初始化，交付的 stop/start 脚本实际重启应用、worker 及 PostgreSQL 后，七类核心业务对象数量和 SHA256 数据摘要一致，浏览器设备列表重新查询成功。见 `artifacts/persistence.json`。依赖检查及全项目 Python 编译通过。
 - 界面：真实浏览器管理员首页与设备列表的可访问性树和 DOM 边界检查，1258px视口无页面横向溢出，导航/标题无内部文字溢出；不是像素级视觉识别验收。外部识图调用被自动审批拒绝，没有发送截图。
 - Docker Compose：配置已提供，本机没有 Docker，**本机未验证**。Windows 手动路径是此次运行和验收路径。
-- GitHub/CI：第一阶段完成前未创建仓库、未推送；远程状态待第二阶段记录，不以本地配置代替远程运行结果。
+- GitHub/CI：严格在第一阶段完成后创建公开仓库并推送。已核验账号 `yvming67-gif`、PUBLIC 可见性、远程 main 提交 `43c110f7a3d956e502ccd4d3a300104c342e761e` 和67个首批文件，无禁止上传资料。首次真实 Actions [38054080467](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/38054080467) **success**，含迁移、52项测试和3条 Chromium 流程；后续文档提交的运行以 Actions 页面为准。
 
 ## 质量限制
 
