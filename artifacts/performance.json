@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-10T12:24:34.525865+00:00",
+  "environment": {
+    "python": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+    "database": "PostgreSQL 17.11",
+    "server": "Django runserver --noreload, Windows loopback"
+  },
+  "data": {
+    "equipment": 15,
+    "laboratories": 3,
+    "reservations": 24,
+    "users": 24
+  },
+  "query": {
+    "concurrent_users": 8,
+    "requests": 120,
+    "p95_ms": 499.59,
+    "max_ms": 571.69
+  },
+  "submit": {
+    "concurrent_users": 4,
+    "requests": 16,
+    "p95_ms": 496.5
+  },
+  "visibility": {
+    "max_ms": 244.93
+  },
+  "pass": true
+}

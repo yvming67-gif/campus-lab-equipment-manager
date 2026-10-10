@@ -1,0 +1,34 @@
+{
+  "verified_at": "2026-10-10T12:41:06.633821+00:00",
+  "result": "PASS",
+  "models": {
+    "Equipment": {
+      "count": 15,
+      "sha256": "b74979962f5ea4f7d4dc683e71e6daaf077f52a05d9d9fe7ba9027e71ed0dc2c"
+    },
+    "Reservation": {
+      "count": 24,
+      "sha256": "386d3d8eb1605e08fc02533bd72bdb1de26dec9dbef09e6d539859d72cccfa57"
+    },
+    "Loan": {
+      "count": 5,
+      "sha256": "96823ffbeabefa14d848bef96feed14a2d830416fc2373029ba77831a329a830"
+    },
+    "ReturnRecord": {
+      "count": 3,
+      "sha256": "fe32ce8b8823b2df8e10f4e080437409ce595db4b276d6176b5367e52e4e6046"
+    },
+    "Incident": {
+      "count": 3,
+      "sha256": "13a649ebae43a2dd1eab73c758c5cc30296b5d5087e29fbb01963837eacfce56"
+    },
+    "WorkOrder": {
+      "count": 3,
+      "sha256": "cf6487143f60ed88a0e4c9b9fbbe016f50f3774f867a033ffe352dc66818585b"
+    },
+    "Audit": {
+      "count": 78,
+      "sha256": "2f6ddddeb17d7aeb323760494a2753724a02104811d8e42733c5607c05769689"
+    }
+  }
+}

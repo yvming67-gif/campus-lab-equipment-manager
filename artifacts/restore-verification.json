@@ -1,0 +1,8 @@
+{
+  "verified_at": "2026-10-10T12:24:08.250471+00:00",
+  "tables": 26,
+  "rows": 368,
+  "seconds": 1.068915,
+  "result": "PASS",
+  "method": "fresh PostgreSQL database; all table counts and SHA256 row digests match"
+}

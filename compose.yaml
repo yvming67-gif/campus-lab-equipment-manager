@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:17.11
+    environment:
+      POSTGRES_USER: campus
+      POSTGRES_DB: campus_lab
+      POSTGRES_PASSWORD: ${PGPASSWORD:?Use scripts/compose.ps1 or set PGPASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U campus -d campus_lab]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  app:
+    build: .
+    environment: &app-env
+      PGHOST: db
+      PGPORT: '5432'
+      PGUSER: campus
+      PGDATABASE: campus_lab
+      PGPASSWORD: ${PGPASSWORD:?Set PGPASSWORD}
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY}
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      DEBUG: '1'
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 127.0.0.1:8000:8000
+    volumes:
+      - demo_accounts:/app/.local
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/login/')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+  worker:
+    build: .
+    command: [python, manage.py, worker]
+    environment: *app-env
+    depends_on:
+      app:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  pgdata:
+  demo_accounts:
