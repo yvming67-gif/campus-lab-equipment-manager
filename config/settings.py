@@ -18,11 +18,11 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [BASE_DIR / "templates"], "APP_DIRS": True, "OPTIONS": {"context_processors": ["django.template.context_processors.request", "django.contrib.auth.context_processors.auth", "django.contrib.messages.context_processors.messages", "core.context.navigation"]}}]
 WSGI_APPLICATION = "config.wsgi.application"
 db_config_file = LOCAL / "database.json"
-if db_config_file.exists():
-    db_config = json.loads(db_config_file.read_text(encoding="utf-8"))
-    for k,v in {"PGHOST":"host","PGPORT":"port","PGDATABASE":"name","PGUSER":"user","PGPASSWORD":"password"}.items():
-        os.environ.setdefault(k, str(db_config[v]))
-DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql", "NAME": os.environ.get("PGDATABASE", "campus_lab"), "USER": os.environ.get("PGUSER", "campus"), "PASSWORD": os.environ.get("PGPASSWORD", ""), "HOST": os.environ.get("PGHOST", "127.0.0.1"), "PORT": os.environ.get("PGPORT", "55432"), "CONN_MAX_AGE": 0, "OPTIONS": {"connect_timeout": 10}}}
+use_private_db = db_config_file.exists() and os.environ.get("CAMPUS_USE_EXTERNAL_DATABASE") != "1"
+db_config = json.loads(db_config_file.read_text(encoding="utf-8")) if use_private_db else {}
+def database_value(env_name, field, default):
+    return str(db_config[field]) if use_private_db else os.environ.get(env_name, default)
+DATABASES = {"default": {"ENGINE": "django.db.backends.postgresql", "NAME": database_value("PGDATABASE", "name", "campus_lab"), "USER": database_value("PGUSER", "user", "campus"), "PASSWORD": database_value("PGPASSWORD", "password", ""), "HOST": database_value("PGHOST", "host", "127.0.0.1"), "PORT": database_value("PGPORT", "port", "55432"), "CONN_MAX_AGE": 0, "OPTIONS": {"connect_timeout": 10}}}
 AUTH_USER_MODEL = "core.User"
 AUTH_PASSWORD_VALIDATORS = []
 LANGUAGE_CODE = "zh-hans"

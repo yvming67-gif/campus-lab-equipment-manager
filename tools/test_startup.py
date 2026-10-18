@@ -61,6 +61,22 @@ class StartupTests(unittest.TestCase):
                 with patch("windows_paths._short_ascii",return_value=None),patch("windows_paths.tempfile.gettempdir",return_value=str(base/"中文临时目录")),patch.dict(os.environ,{"PUBLIC":str(base/"public")},clear=False):
                     with self.assertRaises(RuntimeError):windows_paths.ascii_alias(root)
             finally:os.rmdir(alias)
+    def database_settings(self,external=False):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);(root/"config").mkdir();(root/".local").mkdir()
+            source=Path(launcher.ROOT)/"config/settings.py"
+            target=root/"config/settings.py";target.write_text(source.read_text("utf-8"),encoding="utf-8")
+            (root/".local/database.json").write_text(json.dumps({"host":"127.0.0.1","port":55440,"name":"private_demo","user":"campus","password":"simulated-test-only"}),encoding="utf-8")
+            env=os.environ.copy();env.update({"PGUSER":"unrelated_global_user","PGPORT":"1"})
+            if external:env["CAMPUS_USE_EXTERNAL_DATABASE"]="1"
+            else:env.pop("CAMPUS_USE_EXTERNAL_DATABASE",None)
+            code="import runpy,json;d=runpy.run_path('config/settings.py')['DATABASES']['default'];print(json.dumps({'user':d['USER'],'port':d['PORT']}))"
+            result=subprocess.run([sys.executable,"-c",code],cwd=root,env=env,capture_output=True,check=True)
+            return json.loads(result.stdout)
+    def test_private_database_ignores_unrelated_global_settings(self):
+        self.assertEqual(self.database_settings(),{"user":"campus","port":"55440"})
+    def test_external_database_requires_explicit_opt_in(self):
+        self.assertEqual(self.database_settings(external=True),{"user":"unrelated_global_user","port":"1"})
     def test_invalid_port_is_rejected(self):
         with self.assertRaises(launcher.StartupError):launcher.available_port(0)
 

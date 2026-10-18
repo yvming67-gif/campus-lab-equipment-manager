@@ -23,7 +23,7 @@ python tools/start_local.py --setup
 python tools/start_local.py --setup --no-browser --smoke-test
 ```
 
-启动器同时运行网页服务及每30秒扫描的任务进程；后台运行时每23小时触发完整备份，失败一小时后重试。中文目录使用经过目标校验的临时ASCII目录联接，实际数据仍保存在项目内。不要在运行中移动项目或删除目录别名。
+启动器同时运行网页服务及每30秒扫描的任务进程；后台运行时每23小时触发完整备份，失败一小时后重试。中文目录使用Windows短路径或经过目标校验的可写英文目录联接，实际数据仍保存在项目内。不要在运行中移动项目或删除目录别名。
 
 ## 演示账号
 
@@ -77,13 +77,15 @@ python tools/backup_restore.py --restore-test
 
 ## 已有PostgreSQL或非Windows环境
 
-安装 `requirements.txt`，配置 PGHOST、PGPORT、PGDATABASE、PGUSER、PGPASSWORD 后执行迁移和种子命令。初始化用户应能创建测试数据库及 `btree_gist` 扩展；课程用本地实例由启动器初始化。网页运行 `python manage.py runserver 127.0.0.1:8000`，另开终端运行 `python manage.py run_jobs --loop`。不要用SQLite替代并发约束测试。
+安装 `requirements.txt`，配置 PGHOST、PGPORT、PGDATABASE、PGUSER、PGPASSWORD 后执行迁移和种子命令。已初始化私有数据库的目录默认优先使用`.local/database.json`，不会受电脑上其他项目的PG变量干扰；需要明确切换到外部实例时，设置`CAMPUS_USE_EXTERNAL_DATABASE=1`。初始化用户应能创建测试数据库及 `btree_gist` 扩展；课程用本地实例由启动器初始化。网页运行 `python manage.py runserver 127.0.0.1:8000`，另开终端运行 `python manage.py run_jobs --loop`。不要用SQLite替代并发约束测试。
 
 ## 文档导航
 
 - [演示操作说明](docs/演示操作说明.md)
 - [需求、实现与验证映射](docs/需求与实现映射.md)
 - [测试与验收记录](docs/测试与验收记录.md)
+- [独立验收报告](docs/独立验收报告.md)
+- [老师运行指南](docs/老师运行指南.md)
 - [完整开发提示词](docs/完整开发提示词.md)
 - [模型源文件说明](models/README.md)
 
