@@ -59,6 +59,9 @@ jobs:
           python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           .venv/Scripts/python.exe tools/test_startup.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv/Scripts/python.exe tools/backup_restore.py --restore-test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Stop this test cluster
         if: always()
         shell: pwsh

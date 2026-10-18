@@ -1,6 +1,7 @@
 """一致性备份及隔离恢复演练：不覆盖开发数据库，不备份有效会话。"""
 import argparse,hashlib,json,os,secrets,subprocess,sys,tempfile,time,zipfile
 from pathlib import Path
+from windows_paths import ascii_alias
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT));os.environ.setdefault("DJANGO_SETTINGS_MODULE","config.settings")
 import django
 django.setup()
@@ -14,7 +15,9 @@ def main():
     runtime=json.loads((LOCAL/"runtime.json").read_text("utf-8"));db=settings.DATABASES["default"];pg=Path(runtime["pg_bin"]);env=os.environ.copy();env.update({"PGHOST":db["HOST"],"PGPORT":str(db["PORT"]),"PGUSER":db["USER"],"PGPASSWORD":db["PASSWORD"]})
     folder=LOCAL/"backups";folder.mkdir(exist_ok=True);stamp=time.strftime("%Y%m%d-%H%M%S")+"-"+secrets.token_hex(3);target=folder/("backup-"+stamp+".zip")
     with tempfile.TemporaryDirectory(dir=LOCAL) as temp:
-        temp=Path(temp);dump=temp/"database.dump"
+        temp=Path(temp)
+        native_temp=ascii_alias(ROOT)/".local"/temp.name if os.name=="nt" else temp
+        dump=native_temp/"database.dump"
         with transaction.atomic():
             with connection.cursor() as c:c.execute("LOCK TABLE core_evidence IN SHARE MODE")
             attachments=list(Evidence.objects.values("id","file","sha256"))
