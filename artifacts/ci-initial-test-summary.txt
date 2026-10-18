@@ -1,6 +1,0 @@
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:03.9851704Z test_flow_1_query_reserve_approve_issue_normal_return (core.tests.test_browser.BrowserAcceptance.test_flow_1_query_reserve_approve_issue_normal_return) ... ok
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:17.0819374Z test_flow_2_abnormal_return_repair_accept_restore (core.tests.test_browser.BrowserAcceptance.test_flow_2_abnormal_return_repair_accept_restore) ... ok
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:28.2473461Z test_flow_3_two_applicants_simultaneous_ui_approval (core.tests.test_browser.BrowserAcceptance.test_flow_3_two_applicants_simultaneous_ui_approval) ... ok
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:29.2035733Z test_actual_parallel_approval_one_winner (core.tests.test_concurrency.ConcurrencyTests.test_actual_parallel_approval_one_winner) ... ok
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:31.1077876Z Ran 52 tests in 43.530s
-test	Run python manage.py test core.tests --verbosity 2	2026-10-10T13:02:31.1078166Z OK

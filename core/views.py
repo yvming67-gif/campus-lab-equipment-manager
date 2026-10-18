@@ -1,315 +1,310 @@
-import uuid
-from datetime import datetime, timedelta, time
+import json,secrets,uuid,hashlib
+from datetime import datetime,timedelta
+from pathlib import Path
+from urllib.parse import urlencode
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.contrib.auth.hashers import make_password,check_password
+from django.core import signing
 from django.core.paginator import Paginator
-from django.db import OperationalError
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError,transaction
+from django.db.models import Q,Count
+from django.http import FileResponse,Http404,JsonResponse
+from django.shortcuts import render,redirect,get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.dateparse import parse_date
-from . import forms, services as s
+from django.views.decorators.http import require_POST
 from .models import *
-from .queries import *
+from .forms import *
+from . import services as s
+from .reports import utilization
 
-def page(request, qs): return Paginator(qs,10).get_page(request.GET.get('page'))
-def link(label,url): return {'label':label,'url':url}
-def act(label,operation,pk): return link(label,f'/act/{operation}/{pk}/')
-def detail(request,title,fields,actions=(),rows=None):
-    return render(request,'detail.html',dict(title=title,fields=fields,actions=actions,rows=rows))
-def listing(request,title,headers,rows,pagination=None,actions=(),hint=''):
-    choices={'设备目录':Equipment.Service.choices,'审核工作台':Reservation.Status.choices,'我的预约':Reservation.Status.choices,
-        '异常记录':Incident.Status.choices,'维修工作台':WorkOrder.Status.choices,
-        '借出与归还记录':[('open','借出中'),('overdue','逾期未归还'),('closed','已归还')]}
-    return render(request,'list.html',dict(title=title,headers=headers,rows=rows,pagination=pagination,actions=actions,hint=hint,filter_states=choices.get(title,[])))
-def fmt(value): return timezone.localtime(value).strftime('%Y-%m-%d %H:%M') if value else '—'
+def protected(ok):
+    if not ok:raise PermissionDenied
+
+def scoped_bookings(user):
+    qs=Reservation.objects.select_related("resource__lab","applicant").prefetch_related("review_notes__actor")
+    if user.has_role("LAB_ADMIN"):return qs.filter(Q(applicant=user)|Q(resource__lab__labgrant__user=user)).distinct()
+    return qs.filter(applicant=user)
+
+def scoped_incidents(user):
+    q=Q(reporter=user)
+    if user.has_role("LAB_ADMIN"):q|=Q(resource__lab__labgrant__user=user)
+    if user.has_role("TECHNICIAN"):q|=Q(work_orders__assigned_to=user)
+    return Incident.objects.filter(q).select_related("resource__lab","reporter").distinct()
+
+def scoped_work(user):
+    qs=WorkOrder.objects.select_related("incident__resource__lab","assigned_to","incident__reporter")
+    q=Q(pk__isnull=True)
+    if user.has_role("LAB_ADMIN"):q|=Q(incident__resource__lab__labgrant__user=user)
+    if user.has_role("TECHNICIAN"):q|=Q(assigned_to=user)
+    return qs.filter(q).distinct()
+
+def login_page(request):
+    if request.user.is_authenticated:return redirect("dashboard")
+    if request.method=="POST":
+        request.session["idp_nonce"]=secrets.token_urlsafe(24)
+        return redirect("identity")
+    return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE})
+
+def identity(request):
+    if not settings.DEMO_MODE:raise Http404("学校认证适配器尚未配置")
+    if not request.session.get("idp_nonce"):return redirect("login")
+    accounts=User.objects.filter(is_active=True).order_by("pk")
+    error=""
+    if request.method=="POST":
+        # 课程模拟身份提供方；凭据单独存放，不进入业务用户表。
+        path=settings.LOCAL/"mock-identity.json"
+        if not path.exists():path.write_text(json.dumps({u.username:make_password("Demo@2026") for u in User.objects.all()}),encoding="utf-8")
+        hashes=json.loads(path.read_text("utf-8"));username=request.POST.get("username","")
+        user=User.objects.filter(username=username,is_active=True).first()
+        if user and check_password(request.POST.get("password",""),hashes.get(username,"!")):
+            ticket=signing.dumps({"sub":user.school_no,"nonce":request.session["idp_nonce"]},key=settings.MOCK_IDP_KEY,salt="mock-idp")
+            return redirect(reverse("callback")+"?"+urlencode({"ticket":ticket}))
+        error="模拟账号或演示密码不正确，或账号已停用"
+    return render(request,"identity.html",{"title":"模拟学校身份认证","accounts":accounts,"error":error})
+
+def callback(request):
+    try:
+        assertion=signing.loads(request.GET.get("ticket",""),key=settings.MOCK_IDP_KEY,salt="mock-idp",max_age=60)
+        protected(assertion["nonce"]==request.session.pop("idp_nonce",None))
+        user=get_object_or_404(User,school_no=assertion["sub"],is_active=True)
+    except (signing.BadSignature,KeyError):raise PermissionDenied
+    login(request,user,backend="django.contrib.auth.backends.ModelBackend");s.audit(user,user,"LOGIN",new={"identity":"MOCK"},reason="课程模拟身份断言校验通过")
+    return redirect("dashboard")
+
+@require_POST
+def signout(request):
+    logout(request);return redirect("login")
 
 @login_required
 def dashboard(request):
-    u=request.user
-    stats=[('设备总数',Equipment.objects.count()),('正常服务',Equipment.objects.filter(service='normal').count()),
-           ('我的未读通知',Notification.objects.filter(recipient=u,read_at__isnull=True).count())]
-    if u.role=='manager':
-        stats += [('待审核',reservations_for(u).filter(status='pending').count()),('待归还',loans_for(u).filter(closed_at__isnull=True).count())]
-    return render(request,'dashboard.html',{'stats':stats,'recent':reservations_for(u)[:5]})
+    now=timezone.now();mine=Reservation.objects.filter(applicant=request.user)
+    context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"resource_count":Resource.objects.count(),"lab_count":Lab.objects.count(),"policy":Policy.objects.get(pk=1),"overdue":s.overdue_for(request.user,now)}
+    if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
+    return render(request,"dashboard.html",context)
 
 @login_required
-def labs(request):
-    q=Laboratory.objects.all().order_by('code')
-    term=request.GET.get('q','').strip()
-    if term: q=q.filter(Q(name__icontains=term)|Q(location__icontains=term)|Q(code__icontains=term))
-    p=page(request,q)
-    rows=[[x.code,x.name,x.location,x.opening,link('查看设备',f'/equipment/?lab={x.pk}'),act('编辑','lab',x.pk) if request.user.role=='system' else ''] for x in p]
-    return listing(request,'实验室查询',['编号','实验室','位置','开放信息','设备','管理'],rows,p,[act('新增实验室','lab',0)] if request.user.role=='system' else [])
+def resources(request):
+    form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","room").order_by("kind","code")
+    times=None
+    if form.is_bound and form.is_valid():
+        d=form.cleaned_data
+        if d["q"]:qs=qs.filter(Q(name__icontains=d["q"])|Q(code__icontains=d["q"]))
+        if d["kind"]:qs=qs.filter(kind=d["kind"])
+        if d["lab"]:qs=qs.filter(lab=d["lab"])
+        if d["starts_at"]:times=(d["starts_at"],d["ends_at"])
+    items=list(qs[:100])
+    for r in items:
+        r.available_label="请选择目标时段查询"
+        r.available=None
+        if times:r.available,r.available_label=s.availability(r,*times)
+    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"times":times,"policy":Policy.objects.get(pk=1)})
 
 @login_required
-def equipment_list(request):
-    q=Equipment.objects.select_related('laboratory').order_by('tag')
-    term=request.GET.get('q','').strip()
-    if term: q=q.filter(Q(tag__icontains=term)|Q(name__icontains=term)|Q(category__icontains=term))
-    lab=request.GET.get('lab',''); state=request.GET.get('status','')
-    if lab.isdigit(): q=q.filter(laboratory_id=lab)
-    if state in Equipment.Service.values: q=q.filter(service=state)
-    p=page(request,q)
-    rows=[[link(e.tag,f'/equipment/{e.pk}/'),e.name,e.category,e.laboratory.name,e.get_physical_display(),e.get_service_display(),e.qualification or '普通设备'] for e in p]
-    return listing(request,'设备目录',['标签','设备','类型','实验室','实物状态','服务状态','资格'],rows,p,
-        [act('新建设备','equipment-new',0)] if request.user.role=='manager' else [],'选择设备可查询指定时段。待审核申请不占用设备。')
+def resource_detail(request,pk):
+    r=get_object_or_404(Resource.objects.select_related("lab","equipment__qualification","room"),pk=pk)
+    start=timezone.localtime()+timedelta(days=1);start=start.replace(hour=10,minute=0,second=0,microsecond=0)
+    form=BookingForm(request.POST or None,initial={"starts_at":start,"ends_at":start+timedelta(hours=1),"request_key":uuid.uuid4()})
+    if r.kind=="EQUIPMENT":form.fields["participants"].widget=forms.HiddenInput()
+    if request.method=="POST" and form.is_valid():
+        try:
+            b=s.create_reservation(request.user,r.pk,**form.cleaned_data)
+            messages.success(request,"预约已保存："+b.get_status_display());return redirect("booking",pk=b.pk)
+        except s.BusinessError as e:form.add_error(None,str(e))
+        except IntegrityError:form.add_error(None,"时段或请求已被其他操作占用，请刷新后重试")
+    return render(request,"resource.html",{"title":r.name,"resource":r,"form":form,"can_apply":request.user.has_role("TEACHER") if r.kind=="ROOM" else request.user.has_role("STUDENT","TEACHER"),"manageable":s.manager(request.user,r),"reservations":r.reservations.filter(status__in=s.ACTIVE).order_by("starts_at")[:15]})
 
 @login_required
-def equipment_detail(request,pk):
-    e=get_object_or_404(Equipment.objects.select_related('laboratory'),pk=pk)
-    availability=None
-    if request.GET:
-        # availability uses dates only; do not require purpose or command key.
-        dates=forms.AvailabilityForm(request.GET)
-        if dates.is_valid():
-            start,end=dates.cleaned_data['start'],dates.cleaned_data['end']
-            if start>=end: availability='结束时间必须晚于开始时间。'
-            else: availability=s.available(e,start,end)[1]
-        else: availability='时间格式无效，请填写完整日期和时间。'
-    now=timezone.now()
-    slots=e.reservations.filter(status='approved',end__gt=now).order_by('start')[:20]
-    actions=[]
-    if request.user.role in ['student','teacher']: actions.append(act('提交预约','reserve',pk))
-    if request.user.role=='manager' and request.user.managed_labs.filter(pk=e.laboratory_id).exists():
-        actions += [act('维护设备','equipment',pk),act('登记异常','incident',pk)]
-    elif request.user.role in ['student','teacher'] and Loan.objects.filter(equipment=e,borrower=request.user).exists():
-        actions.append(act('提交相关异常说明','incident',pk))
-    return render(request,'equipment.html',dict(title=str(e),e=e,slots=slots,actions=actions,availability=availability))
-
-def record_filters(request,q,date_field):
-    term=request.GET.get('q','').strip()
-    if term: q=q.filter(Q(equipment__tag__icontains=term)|Q(equipment__name__icontains=term))
-    lab=request.GET.get('lab','')
-    if lab.isdigit(): q=q.filter(equipment__laboratory_id=lab)
-    date=parse_date(request.GET.get('date',''))
-    if date: q=q.filter(**{f'{date_field}__date':date})
-    return q
+def bookings(request):
+    qs=scoped_bookings(request.user);q=request.GET.get("q","");status=request.GET.get("status","");lab=request.GET.get("lab","");day=request.GET.get("day","")
+    if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
+    if status:qs=qs.filter(status=status)
+    if lab.isdigit():qs=qs.filter(resource__lab_id=lab)
+    if day:
+        try:qs=qs.filter(starts_at__date=datetime.strptime(day,"%Y-%m-%d").date())
+        except ValueError:messages.error(request,"日期格式应为年-月-日")
+    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":qs[:100],"statuses":Reservation.STATUS,"labs":Lab.objects.all()})
 
 @login_required
-def reservations(request):
-    q=record_filters(request,reservations_for(request.user),'start')
-    state=request.GET.get('status','')
-    if state in Reservation.Status.values: q=q.filter(status=state)
-    p=page(request,q)
-    rows=[[link(f'#{r.pk}',f'/reservations/{r.pk}/'),r.equipment.tag,r.applicant.username,fmt(r.start),fmt(r.end),r.get_status_display()] for r in p]
-    return listing(request,'审核工作台' if request.user.role=='manager' else '我的预约',['预约','设备','申请人','开始','结束','状态'],rows,p,hint='按设备、实验室、开始日期和状态查询；所有预约均须人工审核。')
+def booking(request,pk):
+    b=get_object_or_404(scoped_bookings(request.user),pk=pk)
+    return render(request,"booking.html",{"title":"预约详情","b":b,"manageable":s.manager(request.user,b.resource),"owner":b.applicant_id==request.user.pk,"notes":b.review_notes.all(),"incidents":b.incident_set.all(),"events":AuditEvent.objects.filter(entity_type="reservation",entity_id=b.pk).select_related("actor").order_by("created_at")})
 
 @login_required
-def reservation_detail(request,pk):
-    r=get_object_or_404(reservations_for(request.user),pk=pk)
-    actions=[]
-    if request.user.pk==r.applicant_id and r.status in ['pending','approved'] and r.start>timezone.now(): actions.append(act('取消预约','cancel',pk))
-    if request.user.role=='manager':
-        if r.status=='pending': actions.append(act('审核预约','review',pk))
-        if r.status=='approved': actions.append(act('办理借出','issue',pk))
-    if hasattr(r,'loan'): actions.append(link('查看借用记录',f'/loans/{r.loan.pk}/'))
-    fields=[('申请人',r.applicant.username),('设备',str(r.equipment)),('开始',fmt(r.start)),('结束',fmt(r.end)),('状态',r.get_status_display()),('用途',r.purpose),('状态原因',r.reason or '等待管理员处理')]
-    if hasattr(r,'review'): fields += [('审核人',r.review.reviewer.username),('审核结论',r.review.reason)]
-    return detail(request,f'预约 #{pk}',fields,actions)
+def booking_action(request,pk,action):
+    b=get_object_or_404(scoped_bookings(request.user),pk=pk);now=timezone.localtime().replace(microsecond=0)
+    manager_actions={"review","checkout","return","room-start","room-end"}
+    if action in manager_actions:protected(s.manager(request.user,b.resource))
+    else:protected(b.applicant_id==request.user.pk)
+    initial={"version":b.version,"arrived_at":now,"service_started_at":now,"returned_at":now,"ended_at":now,"participants":b.participants}
+    classes={"review":ReviewForm,"checkout":CheckoutForm,"return":ReturnForm,"room-start":RoomStartForm,"room-end":RoomEndForm,"cancel":ActionForm,"supplement":ActionForm}
+    titles={"review":"审核预约","checkout":"办理设备借出","return":"办理设备归还","room-start":"登记场地使用开始","room-end":"登记场地使用结束","cancel":"取消预约","supplement":"补充申请说明"}
+    if action not in classes:raise Http404
+    kwargs={"loan":b.loan} if action=="return" and hasattr(b,"loan") else {}
+    form=classes[action](request.POST or None,initial=initial,**kwargs)
+    if request.method=="POST" and form.is_valid():
+        d=form.cleaned_data
+        try:
+            if action=="review":
+                if d["choice"]=="info":s.review_note(request.user,pk,d["reason"])
+                else:s.approve(request.user,pk,d["choice"]=="approve",d["reason"],d["version"])
+            elif action=="cancel":s.cancel(request.user,pk,d["reason"],request.POST.get("version"))
+            elif action=="supplement":s.review_note(request.user,pk,d["reason"])
+            elif action=="checkout":s.checkout(request.user,pk,**d)
+            elif action=="return":
+                quantities={int(k[4:]):v for k,v in d.items() if k.startswith("qty_")};d={k:v for k,v in d.items() if not k.startswith("qty_")};s.return_equipment(request.user,pk,return_quantities=quantities,**d)
+            elif action=="room-start":s.start_room(request.user,pk,d["school_no"],d["participants"],d["note"],d["arrived_at"])
+            elif action=="room-end":s.end_room(request.user,pk,**d)
+            messages.success(request,"办理结果已保存，记录与状态已同步");return redirect("booking",pk=pk)
+        except s.BusinessError as e:form.add_error(None,str(e))
+        except IntegrityError:form.add_error(None,"记录已被其他操作更新，请刷新后重试")
+    return render(request,"form.html",{"title":titles[action],"form":form,"subtitle":f"{b.code} · {b.resource.name} · {b.applicant.display_name}","back":reverse("booking",args=[pk]),"booking":b,"action":action})
 
 @login_required
-def loans(request):
-    q=record_filters(request,loans_for(request.user),'issued_at').order_by('-id')
-    state=request.GET.get('status','')
-    if state=='open': q=q.filter(closed_at__isnull=True)
-    if state=='closed': q=q.filter(closed_at__isnull=False)
-    if state=='overdue': q=q.filter(closed_at__isnull=True,due_at__lt=timezone.now())
-    p=page(request,q)
-    rows=[[link(f'#{x.pk}',f'/loans/{x.pk}/'),x.equipment.tag,x.borrower.username,fmt(x.issued_at),fmt(x.due_at),fmt(x.closed_at),'已归还' if x.closed_at else ('逾期未归还' if x.due_at<timezone.now() else '借出中')] for x in p]
-    return listing(request,'借出与归还记录',['编号','设备','借用人','借出','应还','实还','状态'],rows,p)
+def incidents(request):return render(request,"incidents.html",{"title":"异常追踪","incidents":scoped_incidents(request.user).order_by("-reported_at")[:100]})
 
 @login_required
-def loan_detail(request,pk):
-    x=get_object_or_404(loans_for(request.user),pk=pk)
-    actions=[act('办理归还','receive',pk)] if request.user.role=='manager' and not x.closed_at else []
-    fields=[('设备',str(x.equipment)),('借用人',x.borrower.username),('借出时间',fmt(x.issued_at)),('应还时间',fmt(x.due_at)),('实际归还',fmt(x.closed_at)),('借出检查',x.inspection),('配件快照',str(x.accessories))]
-    if hasattr(x,'return_record'):
-        y=x.return_record
-        fields += [('接收人',y.receiver.username),('归还检查',y.get_condition_display()),('检查记录',y.notes),('逾期秒数',y.overdue_seconds)]
-    return detail(request,f'借用 #{pk}',fields,actions)
+def incident_new(request):
+    protected(request.user.has_role("STUDENT","TEACHER","LAB_ADMIN"))
+    form=IncidentForm(request.POST or None,initial={"resource":request.GET.get("resource"),"reservation":request.GET.get("reservation"),"occurred_at":timezone.localtime().replace(second=0,microsecond=0)})
+    form.fields["reservation"].queryset=scoped_bookings(request.user)
+    if request.method=="POST" and form.is_valid():
+        d=form.cleaned_data
+        try:
+            s.require(d["occurred_at"]<=timezone.now(),"发现时间不得晚于当前时间")
+            item=s.report_incident(request.user,d["resource"].pk,d["kind"],d["description"],d["reservation"].pk if d["reservation"] else None,occurred_at=d["occurred_at"])
+            messages.success(request,"异常已上报，资源暂时隔离并通知负责人");return redirect("incident",pk=item.pk)
+        except s.BusinessError as e:form.add_error(None,str(e))
+    return render(request,"form.html",{"title":"提交资源异常","form":form,"subtitle":"请描述可核查的事实，场地和设备分别记录。"})
 
 @login_required
-def incidents(request):
-    q=record_filters(request,incidents_for(request.user),'created_at').order_by('-id')
-    state=request.GET.get('status','')
-    if state in Incident.Status.values: q=q.filter(status=state)
-    p=page(request,q)
-    rows=[[link(f'#{i.pk}',f'/incidents/{i.pk}/'),i.equipment.tag,i.reporter.username,i.description,i.get_status_display(),fmt(i.created_at)] for i in p]
-    return listing(request,'异常记录',['编号','设备','报告人','异常说明','状态','报告时间'],rows,p)
+def incident(request,pk):
+    item=get_object_or_404(scoped_incidents(request.user),pk=pk)
+    return render(request,"incident.html",{"title":"异常详情","item":item,"manageable":s.manager(request.user,item.resource),"evidence":item.evidence.all(),"work":item.work_orders.all()})
 
 @login_required
-def incident_detail(request,pk):
-    i=get_object_or_404(incidents_for(request.user),pk=pk)
-    actions=[]
-    if request.user.role=='manager' and i.status!='resolved':
-        actions += [act('核验异常','confirm',pk)]
-        if i.status=='confirmed': actions.append(act('创建维修工单','work-new',pk))
-    return detail(request,f'异常 #{pk}',[('设备',str(i.equipment)),('情况',i.description),('状态',i.get_status_display()),('处理说明',i.resolution)],actions,
-        [[link(f'工单 #{w.pk}',f'/work/{w.pk}/'),w.get_status_display()] for w in i.work_orders.all() if request.user.role=='manager' or w.assignee_id==request.user.pk])
+def incident_action(request,pk,action):
+    item=get_object_or_404(scoped_incidents(request.user),pk=pk)
+    if action in ["verify","work"]:protected(s.manager(request.user,item.resource))
+    classes={"verify":VerifyForm,"work":WorkCreateForm,"evidence":EvidenceForm}
+    titles={"verify":"核实与处置异常","work":"创建与指派维修工单","evidence":"追加异常证据"}
+    if action not in classes:raise Http404
+    form=classes[action](request.POST or None,request.FILES or None)
+    if request.method=="POST" and form.is_valid():
+        try:
+            d=form.cleaned_data
+            if action=="verify":s.verify_incident(request.user,pk,d["choice"],d["reason"])
+            elif action=="work":s.create_work_order(request.user,pk,d["technician"].pk,d["reason"])
+            else:s.upload_evidence(request.user,pk,d["file"])
+            messages.success(request,"处置记录已保存");return redirect("incident",pk=pk)
+        except s.BusinessError as e:form.add_error(None,str(e))
+    return render(request,"form.html",{"title":titles[action],"form":form,"subtitle":item.resource.name,"multipart":True})
 
 @login_required
-def work(request):
-    q=record_filters(request,work_for(request.user),'created_at').order_by('-id')
-    state=request.GET.get('status','')
-    if state in WorkOrder.Status.values: q=q.filter(status=state)
-    p=page(request,q)
-    return listing(request,'维修工作台',['工单','设备','维修人员','状态','创建时间'],[[link(f'#{w.pk}',f'/work/{w.pk}/'),w.equipment.tag,w.assignee.username,w.get_status_display(),fmt(w.created_at)] for w in p],p)
+def evidence_download(request,pk):
+    ev=get_object_or_404(Evidence.objects.select_related("incident__resource__lab"),pk=pk)
+    protected(s.incident_access(request.user,ev.incident));s.audit(request.user,ev.incident,"EVIDENCE_READ",new={"evidence_id":ev.pk},reason="读取受控证据")
+    return FileResponse(ev.file.open("rb"),as_attachment=True,filename=ev.original_name)
+
+@login_required
+def work_list(request):return render(request,"work.html",{"title":"维修任务","work":scoped_work(request.user).order_by("-created_at")[:100]})
 
 @login_required
 def work_detail(request,pk):
-    w=get_object_or_404(work_for(request.user),pk=pk)
-    actions=[]
-    if request.user.role=='technician' and w.status in ['open','progress']: actions.append(act('更新维修 / 提交验收','progress',pk))
-    if request.user.role=='manager' and w.status=='acceptance': actions.append(act('管理员验收','accept',pk))
-    return detail(request,f'工单 #{pk}',[('设备',str(w.equipment)),('关联异常',w.incident.description),('维修人员',w.assignee.username),('状态',w.get_status_display()),('进度',w.progress),('结果',w.result),('验收人',w.accepted_by.username if w.accepted_by else '—')],actions)
+    w=get_object_or_404(scoped_work(request.user),pk=pk)
+    return render(request,"work_detail.html",{"title":"维修任务详情","w":w,"manageable":s.manager(request.user,w.incident.resource),"assigned":w.assigned_to_id==request.user.pk,"events":w.events.select_related("actor").order_by("created_at")})
+
+@login_required
+def work_action(request,pk,action):
+    w=get_object_or_404(scoped_work(request.user),pk=pk)
+    protected(s.manager(request.user,w.incident.resource) if action=="accept" else request.user.has_role("TECHNICIAN") and w.assigned_to_id==request.user.pk)
+    if action not in ["accept","update"]:raise Http404
+    form=(AcceptanceForm if action=="accept" else WorkUpdateForm)(request.POST or None)
+    if request.method=="POST" and form.is_valid():
+        try:
+            d=form.cleaned_data
+            if action=="accept":s.accept_work(request.user,pk,d["choice"]=="pass",d["reason"])
+            else:s.update_work(request.user,pk,d["choice"],d["reason"])
+            messages.success(request,"维修过程已记录");return redirect("work-detail",pk=pk)
+        except s.BusinessError as e:form.add_error(None,str(e))
+    return render(request,"form.html",{"title":"验收维修" if action=="accept" else "处理维修任务","form":form,"subtitle":w.incident.resource.name})
 
 @login_required
 def notifications(request):
-    q=Notification.objects.filter(recipient=request.user).order_by('-id')
-    p=page(request,q)
-    return listing(request,'通知中心',['时间','消息','模拟外部发送','发送次数（首次＋重试）','最近错误'],[[fmt(n.created_at),n.message,n.get_status_display(),n.attempts,n.last_error] for n in p],p,hint='站内通知随业务事务立即生成；外部消息完全模拟，失败不会撤销业务。')
+    if request.method=="POST":
+        request.user.notifications.filter(read_at__isnull=True).update(read_at=timezone.now());return redirect("notifications")
+    return render(request,"notifications.html",{"title":"消息中心","notifications":request.user.notifications.prefetch_related("deliveries").order_by("-created_at")[:100]})
 
 @login_required
-def audits(request):
-    s.require_role(request.user,'manager','system')
-    q=Audit.objects.select_related('actor').all()
-    if request.user.role=='manager':
-        es=Equipment.objects.filter(laboratory__in=request.user.managed_labs.all())
-        allowed=Q(object_type='Equipment',object_id__in=es.values('id'))
-        for model in [Reservation,Loan,Incident,WorkOrder]: allowed |= Q(object_type=model.__name__,object_id__in=model.objects.filter(equipment__in=es).values('id'))
-        allowed |= Q(object_type='ReturnRecord',object_id__in=ReturnRecord.objects.filter(loan__equipment__in=es).values('id'))
-        q=q.filter(allowed)
-    term=request.GET.get('q','')
-    if term: q=q.filter(Q(object_type__icontains=term)|Q(reason__icontains=term)|Q(trace__icontains=term))
-    date=parse_date(request.GET.get('date',''))
-    if date: q=q.filter(at__date=date)
-    p=page(request,q)
-    return listing(request,'操作审计',['时间','对象','编号','原状态','新状态','操作者','原因','追踪'],[[fmt(a.at),a.object_type,a.object_id,a.old_state,a.new_state,a.actor.username if a.actor else '后台任务',a.reason,a.trace] for a in p],p,hint='关键历史只读，页面不提供修改或删除功能。')
+def audit_list(request):
+    protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN","DIRECTOR"))
+    qs=AuditEvent.objects.select_related("actor","lab")
+    if not request.user.has_role("SYS_ADMIN","DIRECTOR"):qs=qs.filter(lab__labgrant__user=request.user)
+    if request.GET.get("q"):qs=qs.filter(Q(action__icontains=request.GET["q"])|Q(reason__icontains=request.GET["q"])|Q(entity_type__icontains=request.GET["q"]))
+    return render(request,"audit.html",{"title":"审计记录","events":qs[:100]})
 
 @login_required
-def users(request):
-    s.require_role(request.user,'system')
-    q=User.objects.order_by('username')
-    if request.GET.get('q'): q=q.filter(username__icontains=request.GET['q'])
-    p=page(request,q)
-    return listing(request,'用户与角色',['账号','角色','启用','授权实验室','操作'],[[u.username,u.get_role_display(),'是' if u.is_active else '否','、'.join(u.managed_labs.values_list('name',flat=True)),act('编辑','user',u.pk)] for u in p],p,[act('新增用户','user',0)])
+def reports(request):
+    protected(request.user.has_role("LAB_ADMIN","DIRECTOR"));now=timezone.now();start=(now-timedelta(days=7)).replace(hour=0,minute=0,second=0,microsecond=0);end=now
+    error="";page=None
+    try:
+        if request.GET.get("start"):start=timezone.make_aware(datetime.strptime(request.GET["start"],"%Y-%m-%d"))
+        if request.GET.get("end"):end=min(now,timezone.make_aware(datetime.strptime(request.GET["end"],"%Y-%m-%d"))+timedelta(days=1))
+        qs=Resource.objects.select_related("lab")
+        if not request.user.has_role("DIRECTOR"):qs=qs.filter(lab__labgrant__user=request.user)
+        page=Paginator(qs.order_by("code"),50).get_page(request.GET.get("page",1));rows=utilization(page.object_list,start,end)
+    except (ValueError,s.BusinessError) as e:rows=[];error=str(e)
+    return render(request,"reports.html",{"title":"利用与运行报表","rows":rows,"start":start,"end":end,"error":error,"page":page})
 
 @login_required
-def foundation(request):
-    s.require_role(request.user,'system')
-    c=BusinessConfig.objects.get(pk=1)
-    p=page(request,Qualification.objects.select_related('user').order_by('user__username','code'))
-    return listing(request,'基础数据与培训资格',['用户','资格代码','有效至'],[[q.user.username,q.code,fmt(q.expires_at)] for q in p],p,
-        [act('业务参数','config',1),act('添加 / 更新培训资格','qualification',0),link('实验室维护','/labs/')],
-        f'课程假设：提前 {c.advance_days} 天 / {c.slot_minutes} 分钟粒度 / 最长 {c.max_hours} 小时 / 最多 {c.max_future} 条 / 领取宽限 {c.grace_minutes} 分钟。')
+def manage(request):
+    protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN"))
+    return render(request,"manage.html",{"title":"资源与配置","resources":Resource.objects.filter(lab__labgrant__user=request.user).select_related("lab").order_by("code") if request.user.has_role("LAB_ADMIN") else [],"users":User.objects.prefetch_related("roles").all() if request.user.has_role("SYS_ADMIN") else [],"labs":Lab.objects.all(),"policy":Policy.objects.get(pk=1)})
 
 @login_required
-def report(request):
-    s.require_role(request.user,'manager')
-    now=timezone.now()
-    from_date=parse_date(request.GET.get('from','')) or (timezone.localdate()-timedelta(days=7))
-    to_date=parse_date(request.GET.get('to','')) or timezone.localdate()
-    if to_date<from_date or (to_date-from_date).days>366:
-        return render(request,'error.html',{'title':'统计日期无效','message':'结束日须不早于开始日，周期最多367天。'},status=400)
-    start=timezone.make_aware(datetime.combine(from_date,time.min))
-    end=timezone.make_aware(datetime.combine(to_date+timedelta(days=1),time.min))
-    q=Equipment.objects.filter(laboratory__in=request.user.managed_labs.all()).select_related('laboratory').order_by('tag')
-    lab=request.GET.get('lab','')
-    if lab.isdigit(): q=q.filter(laboratory_id=lab)
-    p=page(request,q)
-    rows=[]
-    for e in p:
-        used,denominator,ratio=utilisation(e,start,end,now)
-        rows.append([e.tag,e.laboratory.name,used,denominator,f'{ratio}%'])
-    return listing(request,'设备利用率报表',['设备','实验室','实际使用小时','可服务小时','利用率'],rows,p,
-        hint=f'{from_date} 至 {to_date}（含结束日，截至当前时刻）。分子：实际借出时长扣除服务中断；分母：全天日历时长扣除异常/维修/停用/报废时长。仅模拟数据，不代表真实实施效果。')
-
-ACTION_FORMS={'reserve':forms.ReserveForm,'review':forms.ReviewForm,'cancel':forms.ReasonForm,'issue':forms.IssueForm,
-    'receive':forms.ReceiveForm,'incident':forms.IncidentForm,'confirm':forms.ConfirmForm,'work-new':forms.WorkCreateForm,
-    'progress':forms.ProgressForm,'accept':forms.AcceptForm,'equipment':forms.EquipmentForm,'equipment-new':forms.EquipmentCreateForm,
-    'user':forms.UserForm,'lab':forms.LabForm,'qualification':forms.QualificationForm,'config':forms.ConfigForm}
-TITLES={'reserve':'提交预约','review':'审核预约','cancel':'取消预约','issue':'办理设备借出','receive':'办理设备归还',
-    'incident':'登记异常 / 提交说明','confirm':'核验异常','work-new':'创建维修工单','progress':'处理维修工单','accept':'管理员维修验收',
-    'equipment':'维护设备','equipment-new':'新建设备','user':'管理用户与角色','lab':'维护实验室','qualification':'维护培训资格','config':'业务参数'}
+def manage_form(request,action,pk=None):
+    protected(request.user.has_role("LAB_ADMIN") if action in ["resource","hold"] else request.user.has_role("SYS_ADMIN"))
+    if action not in ["resource","hold","grant","policy","opening","lab"]:raise Http404
+    initial={};r=None
+    if action in ["resource","hold"] and pk:
+        r=get_object_or_404(Resource,pk=pk);protected(s.manager(request.user,r))
+        initial={"code":r.code,"name":r.name,"kind":r.kind,"lab":r.lab,"description":r.description}
+        if r.kind=="ROOM":initial["capacity"]=r.room.capacity
+        else:initial.update({"category":r.equipment.category,"risk":r.equipment.risk,"qualification":r.equipment.qualification,"accessories":"\n".join(f"{a.code},{a.name},{a.quantity}" for a in r.accessories.filter(is_active=True))})
+    if action=="grant" and pk:
+        u=get_object_or_404(User,pk=pk);initial={"user":u,"roles":u.roles.all(),"labs":Lab.objects.filter(labgrant__user=u),"active":u.is_active}
+    if action=="policy":initial=Policy.objects.get(pk=1).snapshot()
+    cls={"resource":ResourceForm,"hold":ActionForm,"grant":GrantForm,"policy":PolicyForm,"opening":OpeningForm,"lab":LabForm}[action]
+    form=cls(request.POST or None,initial=initial)
+    if action=="hold":form.fields["hold"]=forms.ChoiceField(label="手工服务限制",choices=[("","解除手工限制（仍检查异常与工单）"),("DISABLED","停用"),("SCRAPPED","报废")])
+    if action=="resource":form.fields["lab"].queryset=Lab.objects.filter(labgrant__user=request.user)
+    if request.method=="POST" and form.is_valid():
+        d=form.cleaned_data
+        try:
+            if action=="resource":s.save_resource(request.user,d,pk)
+            elif action=="hold":s.set_resource_hold(request.user,pk,d["hold"],d["reason"])
+            elif action=="grant":s.grant_user(request.user,d)
+            elif action=="policy":s.save_policy(request.user,d,d["reason"])
+            elif action=="opening":s.change_opening(request.user,d)
+            elif action=="lab":
+                with transaction.atomic():
+                    obj=Lab.objects.create(code=d["code"],name=d["name"],location=d["location"],description=d["description"]);s.audit(request.user,obj,"LAB_CREATE",new=d,reason=d["reason"])
+            messages.success(request,"设置已保存，变更依据已记录");return redirect("manage")
+        except (s.BusinessError,IntegrityError) as e:form.add_error(None,str(e) if isinstance(e,s.BusinessError) else "编号重复或记录已变化，请检查")
+    return render(request,"form.html",{"title":{"resource":"维护资源档案","hold":"调整服务限制","grant":"维护用户角色与管理范围","policy":"预约与通知参数","opening":"开放日历版本","lab":"新增实验室"}[action],"form":form,"subtitle":"变更将保留操作者与依据，既有借还事实及审计不可覆盖。"})
 
 @login_required
-def action(request,operation,pk):
-    if operation not in ACTION_FORMS: return error404(request,None)
-    u=request.user; initial={'key':uuid.uuid4()}; subject=None; hint=''
-    if operation in ['review','cancel','issue']:
-        subject=get_object_or_404(reservations_for(u),pk=pk)
-        if operation in ['review','issue']: s.require_manager(u,subject.equipment)
-        elif subject.applicant_id!=u.pk: raise PermissionDenied('只能取消本人预约。')
-        if operation=='issue': hint='配件：'+str(list(subject.equipment.accessories.values('name','quantity')))+'。核验实际到场借用人、标签及正常外观功能。'
-    elif operation=='receive':
-        subject=get_object_or_404(loans_for(u),pk=pk); s.require_manager(u,subject.equipment)
-    elif operation in ['reserve','incident','equipment']:
-        subject=get_object_or_404(Equipment,pk=pk)
-        if operation=='equipment':
-            s.require_manager(u,subject)
-            initial.update({f:getattr(subject,f) for f in ['name','category','description','qualification','high_value','dangerous','service']})
-        elif operation=='reserve': s.require_role(u,'student','teacher')
-        elif u.role=='manager': s.require_manager(u,subject)
-        elif u.role not in ['student','teacher'] or not Loan.objects.filter(equipment=subject,borrower=u).exists(): raise PermissionDenied('只能报告本人相关设备异常。')
-    elif operation in ['confirm','work-new']:
-        subject=get_object_or_404(incidents_for(u),pk=pk); s.require_manager(u,subject.equipment)
-    elif operation in ['progress','accept']:
-        subject=get_object_or_404(work_for(u),pk=pk)
-        if operation=='accept': s.require_manager(u,subject.equipment)
-        else: s.require_role(u,'technician')
-    elif operation=='equipment-new': s.require_role(u,'manager')
-    else:
-        s.require_role(u,'system')
-        if operation=='user' and pk:
-            subject=get_object_or_404(User,pk=pk)
-            initial.update(username=subject.username,role=subject.role,active=subject.is_active,labs=subject.managed_labs.all())
-        if operation=='lab' and pk:
-            subject=get_object_or_404(Laboratory,pk=pk)
-            initial.update({f:getattr(subject,f) for f in ['code','name','location','opening']})
-        if operation=='config':
-            subject=BusinessConfig.objects.get(pk=1)
-            initial.update({f:getattr(subject,f) for f in ['advance_days','slot_minutes','max_hours','max_future','grace_minutes']})
-    form=ACTION_FORMS[operation](request.POST or None,initial=initial)
-    if operation=='equipment-new': form.fields['laboratory'].queryset=u.managed_labs.all()
-    status=200
-    if request.method=='POST':
-        if form.is_valid():
-            d=form.cleaned_data.copy(); key=str(d.pop('key'))
-            try:
-                if operation=='reserve': obj=s.reserve(u,pk,key=key,**d); url=f'/reservations/{obj.pk}/'
-                elif operation=='review': obj=s.review(u,pk,d['approve']=='yes',d['reason'],key=key); url=f'/reservations/{pk}/'
-                elif operation=='cancel': obj=s.cancel(u,pk,d['reason'],key=key); url=f'/reservations/{pk}/'
-                elif operation=='issue':
-                    d.pop('normal_checked'); obj=s.issue(u,pk,key=key,**d); url=f'/loans/{obj.pk}/'
-                elif operation=='receive': obj=s.receive(u,pk,key=key,**d); url=f'/loans/{pk}/'
-                elif operation=='incident': obj=s.report_incident(u,pk,key=key,**d); url=f'/incidents/{obj.pk}/'
-                elif operation=='confirm': obj=s.confirm_incident(u,pk,key=key,**d); url=f'/incidents/{pk}/'
-                elif operation=='work-new': obj=s.create_work_order(u,pk,d['assignee'].pk,d['reason'],key=key); url=f'/work/{obj.pk}/'
-                elif operation=='progress': obj=s.progress_work(u,pk,d['submit']=='yes',d['text'],key=key); url=f'/work/{pk}/'
-                elif operation=='accept': obj=s.accept_work(u,pk,d['approved']=='yes',d['reason'],key=key); url=f'/work/{pk}/'
-                elif operation=='equipment': obj=s.maintain_equipment(u,pk,key=key,**d); url=f'/equipment/{pk}/'
-                elif operation=='equipment-new':
-                    d['laboratory_id']=d.pop('laboratory').pk
-                    obj=s.add_equipment(u,key=key,**d); url=f'/equipment/{obj.pk}/'
-                elif operation=='user':
-                    d['labs']=list(d['labs'].values_list('pk',flat=True)); obj=s.save_user(u,pk,key=key,**d); url='/users/'
-                elif operation=='lab': obj=s.save_lab(u,pk,key=key,**d); url='/labs/'
-                elif operation=='qualification':
-                    d['user_id']=d.pop('user').pk; obj=s.save_qualification(u,key=key,**d); url='/foundation/'
-                elif operation=='config': obj=s.save_config(u,key=key,**d); url='/foundation/'
-                messages.success(request,'操作已成功保存。')
-                return redirect(url)
-            except s.BusinessError as exc:
-                form.add_error(exc.field if exc.field in form.fields else None,str(exc)); status=400
-            except ValidationError as exc:
-                form.add_error(None,exc); status=400
-            except OperationalError:
-                form.add_error(None,'数据库暂时不可用，事务未确认。请保留此表单稍后重试，同一请求标识可防止重复。'); status=503
-        else: status=400
-    return render(request,'form.html',{'title':TITLES[operation],'form':form,'subject':subject,'hint':hint},status=status)
-
-def error403(request,exception): return render(request,'error.html',{'title':'无权限','message':'当前账号没有访问此资源或操作的权限。'},status=403)
-def error404(request,exception): return render(request,'error.html',{'title':'记录不存在','message':'记录不存在或不在您的可访问范围内。'},status=404)
-def error500(request): return render(request,'error.html',{'title':'服务暂时异常','message':'未能完成请求，请稍后重试。重复提交请使用原表单。'},status=500)
+def deliveries(request):
+    protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN"))
+    qs=Delivery.objects.filter(channel="MOCK_EXTERNAL").select_related("notification__recipient","notification__audit")
+    if not request.user.has_role("SYS_ADMIN"):qs=qs.filter(notification__audit__lab__labgrant__user=request.user)
+    if request.method=="POST":
+        task=get_object_or_404(qs,pk=request.POST.get("pk"))
+        try:s.record_manual_contact(request.user,task.pk,request.POST.get("reason",""));messages.success(request,"人工联系结果已追加至审计")
+        except s.BusinessError as e:messages.error(request,str(e))
+        return redirect("deliveries")
+    return render(request,"deliveries.html",{"title":"外部通知投递","deliveries":qs.order_by("-pk")[:100]})

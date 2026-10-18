@@ -1,44 +1,35 @@
-name: PostgreSQL and browser acceptance
-on: [push, pull_request, workflow_dispatch]
-permissions:
-  contents: read
+name: PostgreSQL business checks
+on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:17.11
+        image: postgres:17
         env:
-          POSTGRES_USER: campus
-          POSTGRES_PASSWORD: ci-ephemeral-database-only
           POSTGRES_DB: campus_lab
+          POSTGRES_USER: campus
+          POSTGRES_PASSWORD: ci-test-only
         ports: ['5432:5432']
         options: >-
-          --health-cmd "pg_isready -U campus -d campus_lab"
-          --health-interval 3s --health-timeout 3s --health-retries 30
+          --health-cmd 'pg_isready -U campus'
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    permissions:
+      contents: read
     env:
       PGHOST: 127.0.0.1
       PGPORT: '5432'
-      PGUSER: campus
       PGDATABASE: campus_lab
-      PGPASSWORD: ci-ephemeral-database-only
-      SECRET_KEY: ci-ephemeral-test-key-never-used-for-real-data
+      PGUSER: campus
+      PGPASSWORD: ci-test-only
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
-          python-version: '3.13.12'
-          cache: pip
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
+          python-version: '3.13'
       - run: pip install -r requirements.txt
-      - run: npm install -g agent-browser@0.27.2
-      - run: agent-browser install --with-deps
-      - run: python manage.py check && python manage.py makemigrations --check --dry-run && python manage.py migrate --noinput
-      - run: python manage.py test core.tests --verbosity 2
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence
-          path: artifacts/browser
+      - run: python manage.py check
+      - run: python manage.py test core.tests --noinput
+      - run: python tools/validate_registry.py

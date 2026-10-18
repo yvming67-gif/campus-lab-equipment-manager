@@ -1,9 +1,0 @@
-.git
-.venv
-.local
-.learnings
-__pycache__
-*.pdf
-*.docx
-artifacts/private
-node_modules

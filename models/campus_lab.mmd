@@ -1,0 +1,360 @@
+erDiagram
+    core_role {
+        bigint id PK
+        varchar code
+        varchar name
+    }
+    core_user {
+        bigint id PK
+        varchar password
+        timestamp_with_time_zone last_login
+        boolean is_superuser
+        varchar username
+        varchar first_name
+        varchar last_name
+        varchar email
+        boolean is_staff
+        boolean is_active
+        timestamp_with_time_zone date_joined
+        varchar school_no
+        varchar display_name
+    }
+    core_userrole {
+        bigint id PK
+        bigint user_id FK
+        bigint role_id FK
+        bigint granted_by_id FK
+        timestamp_with_time_zone granted_at
+    }
+    core_lab {
+        bigint id PK
+        varchar code
+        varchar name
+        varchar location
+        text description
+        boolean is_active
+    }
+    core_labgrant {
+        bigint id PK
+        bigint user_id FK
+        bigint lab_id FK
+        timestamp_with_time_zone granted_at
+    }
+    core_qualificationtype {
+        bigint id PK
+        varchar code
+        varchar name
+    }
+    core_userqualification {
+        bigint id PK
+        bigint user_id FK
+        bigint qualification_id FK
+        timestamp_with_time_zone issued_at
+        timestamp_with_time_zone expires_at
+        boolean revoked
+        bigint granted_by_id FK
+    }
+    core_resource {
+        bigint id PK
+        varchar code
+        varchar name
+        varchar kind
+        bigint lab_id FK
+        text description
+        varchar service_status
+        varchar manual_hold
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone updated_at
+    }
+    core_equipmentdetail {
+        bigint id PK
+        bigint resource_id FK
+        varchar category
+        varchar risk
+        bigint qualification_id FK
+        varchar physical_status
+    }
+    core_roomdetail {
+        bigint id PK
+        bigint resource_id FK
+        integer capacity
+        text safety_note
+    }
+    core_accessory {
+        bigint id PK
+        bigint resource_id FK
+        varchar code
+        varchar name
+        integer quantity
+        boolean is_active
+    }
+    core_openingperiod {
+        bigint id PK
+        bigint lab_id FK
+        smallint weekday
+        time starts_at
+        time ends_at
+        date valid_from
+        date valid_to
+    }
+    core_policy {
+        bigint id PK
+        integer version
+        integer window_days
+        integer slot_minutes
+        integer max_hours
+        integer equipment_quota
+        integer room_quota
+        integer simultaneous_equipment
+        integer grace_minutes
+        boolean mock_delivery_failure
+        timestamp_with_time_zone updated_at
+    }
+    core_policyrevision {
+        bigint id PK
+        bigint policy_id FK
+        integer version
+        jsonb data
+        text reason
+        bigint actor_id FK
+        timestamp_with_time_zone created_at
+    }
+    core_reservation {
+        bigint id PK
+        varchar code
+        bigint applicant_id FK
+        bigint resource_id FK
+        timestamp_with_time_zone starts_at
+        timestamp_with_time_zone ends_at
+        text purpose
+        integer participants
+        varchar status
+        varchar approval_mode
+        uuid request_key
+        varchar request_fingerprint
+        jsonb policy_snapshot
+        text reason
+        integer version
+        timestamp_with_time_zone created_at
+    }
+    core_reviewnote {
+        bigint id PK
+        bigint reservation_id FK
+        bigint actor_id FK
+        varchar kind
+        text content
+        varchar evidence_ref
+        timestamp_with_time_zone created_at
+    }
+    core_approvaldecision {
+        bigint id PK
+        bigint reservation_id FK
+        bigint actor_id FK
+        varchar mode
+        boolean approved
+        text reason
+        timestamp_with_time_zone decided_at
+    }
+    core_loan {
+        bigint id PK
+        varchar code
+        bigint reservation_id FK
+        bigint operator_id FK
+        timestamp_with_time_zone arrived_at
+        timestamp_with_time_zone service_started_at
+        timestamp_with_time_zone handed_over_at
+        timestamp_with_time_zone due_at
+        varchar tag_snapshot
+        text condition_out
+    }
+    core_returnrecord {
+        bigint id PK
+        varchar code
+        bigint loan_id FK
+        bigint operator_id FK
+        timestamp_with_time_zone returned_at
+        boolean damaged
+        boolean missing
+        boolean fault
+        text note
+    }
+    core_handoveritem {
+        bigint id PK
+        bigint loan_id FK
+        bigint accessory_id FK
+        varchar code_snapshot
+        varchar name_snapshot
+        integer expected_qty
+        integer out_qty
+        varchar out_condition
+        integer return_qty
+        varchar return_condition
+    }
+    core_roomuse {
+        bigint id PK
+        bigint reservation_id FK
+        bigint started_by_id FK
+        timestamp_with_time_zone arrived_at
+        timestamp_with_time_zone started_at
+        integer actual_participants
+        text start_note
+        bigint ended_by_id FK
+        timestamp_with_time_zone ended_at
+        text end_note
+        boolean abnormal
+    }
+    core_incident {
+        bigint id PK
+        varchar code
+        bigint resource_id FK
+        bigint reporter_id FK
+        bigint reservation_id FK
+        varchar kind
+        text description
+        timestamp_with_time_zone occurred_at
+        timestamp_with_time_zone reported_at
+        varchar status
+        bigint confirmed_by_id FK
+        text conclusion
+        timestamp_with_time_zone resolved_at
+    }
+    core_evidence {
+        bigint id PK
+        bigint incident_id FK
+        bigint uploaded_by_id FK
+        varchar file
+        varchar original_name
+        varchar sha256
+        timestamp_with_time_zone uploaded_at
+    }
+    core_workorder {
+        bigint id PK
+        varchar code
+        bigint incident_id FK
+        bigint created_by_id FK
+        bigint assigned_to_id FK
+        varchar status
+        varchar priority
+        text result
+        timestamp_with_time_zone finished_at
+        bigint accepted_by_id FK
+        timestamp_with_time_zone accepted_at
+        timestamp_with_time_zone created_at
+    }
+    core_workorderevent {
+        bigint id PK
+        bigint work_order_id FK
+        bigint actor_id FK
+        varchar old_status
+        varchar new_status
+        text note
+        timestamp_with_time_zone created_at
+    }
+    core_auditevent {
+        bigint id PK
+        bigint actor_id FK
+        varchar actor_kind
+        varchar entity_type
+        bigint entity_id
+        varchar action
+        jsonb old_state
+        jsonb new_state
+        text reason
+        uuid request_id
+        timestamp_with_time_zone created_at
+        bigint lab_id FK
+        varchar dedupe_key
+    }
+    core_serviceperiod {
+        bigint id PK
+        bigint resource_id FK
+        bigint audit_id FK
+        varchar status
+        timestamp_with_time_zone starts_at
+        timestamp_with_time_zone ends_at
+    }
+    core_notification {
+        bigint id PK
+        varchar code
+        bigint audit_id FK
+        bigint recipient_id FK
+        varchar kind
+        text content
+        timestamp_with_time_zone created_at
+        timestamp_with_time_zone read_at
+    }
+    core_delivery {
+        bigint id PK
+        bigint notification_id FK
+        varchar channel
+        varchar status
+        smallint retry_count
+        timestamp_with_time_zone next_attempt_at
+        timestamp_with_time_zone locked_until
+        text last_error
+    }
+    core_deliveryattempt {
+        bigint id PK
+        bigint delivery_id FK
+        smallint attempt_no
+        varchar outcome
+        text detail
+        timestamp_with_time_zone attempted_at
+    }
+    core_mockreceipt {
+        bigint id PK
+        bigint delivery_id FK
+        timestamp_with_time_zone received_at
+    }
+    core_user ||--o{ core_userrole : "user"
+    core_role ||--o{ core_userrole : "role"
+    core_user |o--o{ core_userrole : "granted_by"
+    core_user ||--o{ core_labgrant : "user"
+    core_lab ||--o{ core_labgrant : "lab"
+    core_user ||--o{ core_userqualification : "user"
+    core_qualificationtype ||--o{ core_userqualification : "qualification"
+    core_user |o--o{ core_userqualification : "granted_by"
+    core_lab ||--o{ core_resource : "lab"
+    core_resource ||--o| core_equipmentdetail : "resource"
+    core_qualificationtype |o--o{ core_equipmentdetail : "qualification"
+    core_resource ||--o| core_roomdetail : "resource"
+    core_resource ||--o{ core_accessory : "resource"
+    core_lab ||--o{ core_openingperiod : "lab"
+    core_policy ||--o{ core_policyrevision : "policy"
+    core_user |o--o{ core_policyrevision : "actor"
+    core_user ||--o{ core_reservation : "applicant"
+    core_resource ||--o{ core_reservation : "resource"
+    core_reservation ||--o{ core_reviewnote : "reservation"
+    core_user ||--o{ core_reviewnote : "actor"
+    core_reservation ||--o| core_approvaldecision : "reservation"
+    core_user |o--o{ core_approvaldecision : "actor"
+    core_reservation ||--o| core_loan : "reservation"
+    core_user ||--o{ core_loan : "operator"
+    core_loan ||--o| core_returnrecord : "loan"
+    core_user ||--o{ core_returnrecord : "operator"
+    core_loan ||--o{ core_handoveritem : "loan"
+    core_accessory |o--o{ core_handoveritem : "accessory"
+    core_reservation ||--o| core_roomuse : "reservation"
+    core_user ||--o{ core_roomuse : "started_by"
+    core_user |o--o{ core_roomuse : "ended_by"
+    core_resource ||--o{ core_incident : "resource"
+    core_user ||--o{ core_incident : "reporter"
+    core_reservation |o--o{ core_incident : "reservation"
+    core_user |o--o{ core_incident : "confirmed_by"
+    core_incident ||--o{ core_evidence : "incident"
+    core_user ||--o{ core_evidence : "uploaded_by"
+    core_incident ||--o{ core_workorder : "incident"
+    core_user ||--o{ core_workorder : "created_by"
+    core_user ||--o{ core_workorder : "assigned_to"
+    core_user |o--o{ core_workorder : "accepted_by"
+    core_workorder ||--o{ core_workorderevent : "work_order"
+    core_user ||--o{ core_workorderevent : "actor"
+    core_user |o--o{ core_auditevent : "actor"
+    core_lab |o--o{ core_auditevent : "lab"
+    core_resource ||--o{ core_serviceperiod : "resource"
+    core_auditevent ||--o| core_serviceperiod : "audit"
+    core_auditevent ||--o{ core_notification : "audit"
+    core_user ||--o{ core_notification : "recipient"
+    core_notification ||--o{ core_delivery : "notification"
+    core_delivery ||--o{ core_deliveryattempt : "delivery"
+    core_delivery ||--o| core_mockreceipt : "delivery"

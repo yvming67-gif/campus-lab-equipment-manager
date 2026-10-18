@@ -1,0 +1,391 @@
+Project campus_lab { database_type: 'PostgreSQL' Note: '设备与场地独立预约；完整业务约束见数据设计说明与迁移文件。' }
+Table core_role {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(20)" [not null, unique, note: '角色代码']
+  name "varchar(40)" [not null, note: '角色名称']
+  Note: '业务角色；约束及条件唯一项以迁移文件为准。'
+}
+Table core_user {
+  id "bigint" [pk, not null, note: 'ID']
+  password "varchar(128)" [not null, note: '密码']
+  last_login "timestamp with time zone" [note: '上次登录']
+  is_superuser "boolean" [not null, note: '超级用户状态']
+  username "varchar(150)" [not null, unique, note: '用户名']
+  first_name "varchar(150)" [not null, note: '名字']
+  last_name "varchar(150)" [not null, note: '姓氏']
+  email "varchar(254)" [not null, note: '电子邮件地址']
+  is_staff "boolean" [not null, note: '工作人员状态']
+  is_active "boolean" [not null, note: '有效']
+  date_joined "timestamp with time zone" [not null, note: '加入日期']
+  school_no "varchar(32)" [not null, unique, note: '学校唯一编号']
+  display_name "varchar(60)" [not null, note: '显示名']
+  Note: '身份映射；约束及条件唯一项以迁移文件为准。'
+}
+Table core_userrole {
+  id "bigint" [pk, not null, note: 'ID']
+  user_id "bigint" [not null, note: 'user']
+  role_id "bigint" [not null, note: 'role']
+  granted_by_id "bigint" [note: 'granted by']
+  granted_at "timestamp with time zone" [not null, note: 'granted at']
+  Note: '用户角色关联；约束及条件唯一项以迁移文件为准。'
+}
+Table core_lab {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(32)" [not null, unique, note: '实验室编号']
+  name "varchar(80)" [not null, note: '名称']
+  location "varchar(120)" [not null, note: '地点']
+  description "text" [not null, note: '说明']
+  is_active "boolean" [not null, note: '开放服务']
+  Note: '实验室；约束及条件唯一项以迁移文件为准。'
+}
+Table core_labgrant {
+  id "bigint" [pk, not null, note: 'ID']
+  user_id "bigint" [not null, note: 'user']
+  lab_id "bigint" [not null, note: 'lab']
+  granted_at "timestamp with time zone" [not null, note: 'granted at']
+  Note: '实验室管理范围；约束及条件唯一项以迁移文件为准。'
+}
+Table core_qualificationtype {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(32)" [not null, unique, note: 'code']
+  name "varchar(80)" [not null, note: 'name']
+  Note: '培训资格类型；约束及条件唯一项以迁移文件为准。'
+}
+Table core_userqualification {
+  id "bigint" [pk, not null, note: 'ID']
+  user_id "bigint" [not null, note: 'user']
+  qualification_id "bigint" [not null, note: 'qualification']
+  issued_at "timestamp with time zone" [not null, note: 'issued at']
+  expires_at "timestamp with time zone" [note: 'expires at']
+  revoked "boolean" [not null, note: 'revoked']
+  granted_by_id "bigint" [note: 'granted by']
+  Note: '用户培训资格；约束及条件唯一项以迁移文件为准。'
+}
+Table core_resource {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: '唯一标签或场地编号']
+  name "varchar(100)" [not null, note: '资源名称']
+  kind "varchar(16)" [not null, note: '资源类型；枚举：[('EQUIPMENT', '设备'), ('ROOM', '场地')]']
+  lab_id "bigint" [not null, note: 'lab']
+  description "text" [not null, note: '资源说明']
+  service_status "varchar(20)" [not null, note: '服务状态；枚举：[('NORMAL', '正常'), ('ISOLATED', '异常隔离'), ('MAINTENANCE', '维护中'), ('DISABLED', '停用'), ('SCRAPPED', '报废')]']
+  manual_hold "varchar(16)" [not null, note: '人工服务限制；枚举：[('', '无'), ('DISABLED', '停用'), ('SCRAPPED', '报废')]']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  updated_at "timestamp with time zone" [not null, note: 'updated at']
+  Note: '可预约资源；约束及条件唯一项以迁移文件为准。'
+}
+Table core_equipmentdetail {
+  id "bigint" [pk, not null, note: 'ID']
+  resource_id "bigint" [not null, unique, note: 'resource']
+  category "varchar(60)" [not null, note: '设备类别']
+  risk "varchar(20)" [not null, note: '受限级别；枚举：[('NORMAL', '普通'), ('HIGH_VALUE', '高价值'), ('HAZARDOUS', '危险')]']
+  qualification_id "bigint" [note: 'qualification']
+  physical_status "varchar(16)" [not null, note: '实物状态；枚举：[('IN_STOCK', '在库'), ('BORROWED', '借出中')]']
+  Note: '设备属性；约束及条件唯一项以迁移文件为准。'
+}
+Table core_roomdetail {
+  id "bigint" [pk, not null, note: 'ID']
+  resource_id "bigint" [not null, unique, note: 'resource']
+  capacity "integer" [not null, note: '容纳人数']
+  safety_note "text" [not null, note: '安全说明']
+  Note: '场地属性；约束及条件唯一项以迁移文件为准。'
+}
+Table core_accessory {
+  id "bigint" [pk, not null, note: 'ID']
+  resource_id "bigint" [not null, note: 'resource']
+  code "varchar(32)" [not null, note: 'code']
+  name "varchar(80)" [not null, note: 'name']
+  quantity "integer" [not null, note: 'quantity']
+  is_active "boolean" [not null, note: 'is active']
+  Note: '设备配件档案；约束及条件唯一项以迁移文件为准。'
+}
+Table core_openingperiod {
+  id "bigint" [pk, not null, note: 'ID']
+  lab_id "bigint" [not null, note: 'lab']
+  weekday "smallint" [not null, note: '星期1至7']
+  starts_at "time" [not null, note: '开放时间']
+  ends_at "time" [not null, note: '关闭时间']
+  valid_from "date" [not null, note: 'valid from']
+  valid_to "date" [note: 'valid to']
+  Note: '日间开放时段；约束及条件唯一项以迁移文件为准。'
+}
+Table core_policy {
+  id "bigint" [pk, not null, note: 'ID']
+  version "integer" [not null, note: 'version']
+  window_days "integer" [not null, note: 'window days']
+  slot_minutes "integer" [not null, note: 'slot minutes']
+  max_hours "integer" [not null, note: 'max hours']
+  equipment_quota "integer" [not null, note: 'equipment quota']
+  room_quota "integer" [not null, note: 'room quota']
+  simultaneous_equipment "integer" [not null, note: 'simultaneous equipment']
+  grace_minutes "integer" [not null, note: 'grace minutes']
+  mock_delivery_failure "boolean" [not null, note: 'mock delivery failure']
+  updated_at "timestamp with time zone" [not null, note: 'updated at']
+  Note: '当前业务参数；约束及条件唯一项以迁移文件为准。'
+}
+Table core_policyrevision {
+  id "bigint" [pk, not null, note: 'ID']
+  policy_id "bigint" [not null, note: 'policy']
+  version "integer" [not null, note: 'version']
+  data "jsonb" [not null, note: 'data']
+  reason "text" [not null, note: 'reason']
+  actor_id "bigint" [note: 'actor']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '参数历史版本；约束及条件唯一项以迁移文件为准。'
+}
+Table core_reservation {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  applicant_id "bigint" [not null, note: 'applicant']
+  resource_id "bigint" [not null, note: 'resource']
+  starts_at "timestamp with time zone" [not null, note: 'starts at']
+  ends_at "timestamp with time zone" [not null, note: 'ends at']
+  purpose "text" [not null, note: 'purpose']
+  participants "integer" [not null, note: 'participants']
+  status "varchar(16)" [not null, note: 'status；枚举：[('PENDING', '待审核'), ('CONFIRMED', '已确认'), ('REJECTED', '已驳回'), ('CANCELLED', '已取消'), ('EXPIRED', '已失效'), ('IN_USE', '使用中'), ('COMPLETED', '已完成')]']
+  approval_mode "varchar(10)" [not null, note: 'approval mode；枚举：[('AUTO', '自动确认'), ('MANUAL', '人工审核')]']
+  request_key "uuid" [not null, note: 'request key']
+  request_fingerprint "varchar(64)" [not null, note: 'request fingerprint']
+  policy_snapshot "jsonb" [not null, note: 'policy snapshot']
+  reason "text" [not null, note: 'reason']
+  version "integer" [not null, note: 'version']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '资源预约；约束及条件唯一项以迁移文件为准。'
+}
+Table core_reviewnote {
+  id "bigint" [pk, not null, note: 'ID']
+  reservation_id "bigint" [not null, note: 'reservation']
+  actor_id "bigint" [not null, note: 'actor']
+  kind "varchar(20)" [not null, note: 'kind；枚举：[('REQUEST_INFO', '要求补充'), ('PROVIDE_INFO', '补充材料')]']
+  content "text" [not null, note: 'content']
+  evidence_ref "varchar(240)" [not null, note: 'evidence ref']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '审核补充记录；约束及条件唯一项以迁移文件为准。'
+}
+Table core_approvaldecision {
+  id "bigint" [pk, not null, note: 'ID']
+  reservation_id "bigint" [not null, unique, note: 'reservation']
+  actor_id "bigint" [note: 'actor']
+  mode "varchar(10)" [not null, note: 'mode']
+  approved "boolean" [not null, note: 'approved']
+  reason "text" [not null, note: 'reason']
+  decided_at "timestamp with time zone" [not null, note: 'decided at']
+  Note: '自动或人工确认决定；约束及条件唯一项以迁移文件为准。'
+}
+Table core_loan {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  reservation_id "bigint" [not null, unique, note: 'reservation']
+  operator_id "bigint" [not null, note: 'operator']
+  arrived_at "timestamp with time zone" [not null, note: 'arrived at']
+  service_started_at "timestamp with time zone" [not null, note: 'service started at']
+  handed_over_at "timestamp with time zone" [not null, note: 'handed over at']
+  due_at "timestamp with time zone" [not null, note: 'due at']
+  tag_snapshot "varchar(40)" [not null, note: 'tag snapshot']
+  condition_out "text" [not null, note: 'condition out']
+  Note: '设备借出事实；约束及条件唯一项以迁移文件为准。'
+}
+Table core_returnrecord {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  loan_id "bigint" [not null, unique, note: 'loan']
+  operator_id "bigint" [not null, note: 'operator']
+  returned_at "timestamp with time zone" [not null, note: 'returned at']
+  damaged "boolean" [not null, note: 'damaged']
+  missing "boolean" [not null, note: 'missing']
+  fault "boolean" [not null, note: 'fault']
+  note "text" [not null, note: 'note']
+  Note: '设备归还事实；约束及条件唯一项以迁移文件为准。'
+}
+Table core_handoveritem {
+  id "bigint" [pk, not null, note: 'ID']
+  loan_id "bigint" [not null, note: 'loan']
+  accessory_id "bigint" [note: 'accessory']
+  code_snapshot "varchar(32)" [not null, note: 'code snapshot']
+  name_snapshot "varchar(80)" [not null, note: 'name snapshot']
+  expected_qty "integer" [not null, note: 'expected qty']
+  out_qty "integer" [not null, note: 'out qty']
+  out_condition "varchar(160)" [not null, note: 'out condition']
+  return_qty "integer" [note: 'return qty']
+  return_condition "varchar(160)" [not null, note: 'return condition']
+  Note: '配件交接快照；约束及条件唯一项以迁移文件为准。'
+}
+Table core_roomuse {
+  id "bigint" [pk, not null, note: 'ID']
+  reservation_id "bigint" [not null, unique, note: 'reservation']
+  started_by_id "bigint" [not null, note: 'started by']
+  arrived_at "timestamp with time zone" [not null, note: 'arrived at']
+  started_at "timestamp with time zone" [not null, note: 'started at']
+  actual_participants "integer" [not null, note: 'actual participants']
+  start_note "text" [not null, note: 'start note']
+  ended_by_id "bigint" [note: 'ended by']
+  ended_at "timestamp with time zone" [note: 'ended at']
+  end_note "text" [not null, note: 'end note']
+  abnormal "boolean" [not null, note: 'abnormal']
+  Note: '场地实际使用与检查；约束及条件唯一项以迁移文件为准。'
+}
+Table core_incident {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  resource_id "bigint" [not null, note: 'resource']
+  reporter_id "bigint" [not null, note: 'reporter']
+  reservation_id "bigint" [note: 'reservation']
+  kind "varchar(20)" [not null, note: 'kind；枚举：[('DAMAGE', '损坏'), ('MISSING', '缺件'), ('FAULT', '运行或场地异常')]']
+  description "text" [not null, note: 'description']
+  occurred_at "timestamp with time zone" [not null, note: 'occurred at']
+  reported_at "timestamp with time zone" [not null, note: 'reported at']
+  status "varchar(16)" [not null, note: 'status；枚举：[('PENDING', '待核实'), ('CONFIRMED', '已确认'), ('DISMISSED', '已排除'), ('RESOLVED', '已解决')]']
+  confirmed_by_id "bigint" [note: 'confirmed by']
+  conclusion "text" [not null, note: 'conclusion']
+  resolved_at "timestamp with time zone" [note: 'resolved at']
+  Note: '资源异常事实；约束及条件唯一项以迁移文件为准。'
+}
+Table core_evidence {
+  id "bigint" [pk, not null, note: 'ID']
+  incident_id "bigint" [not null, note: 'incident']
+  uploaded_by_id "bigint" [not null, note: 'uploaded by']
+  file "varchar(100)" [not null, note: 'file']
+  original_name "varchar(160)" [not null, note: 'original name']
+  sha256 "varchar(64)" [not null, note: 'sha256']
+  uploaded_at "timestamp with time zone" [not null, note: 'uploaded at']
+  Note: '异常证据索引；约束及条件唯一项以迁移文件为准。'
+}
+Table core_workorder {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  incident_id "bigint" [not null, note: 'incident']
+  created_by_id "bigint" [not null, note: 'created by']
+  assigned_to_id "bigint" [not null, note: 'assigned to']
+  status "varchar(24)" [not null, note: 'status；枚举：[('OPEN', '待处理'), ('IN_PROGRESS', '处理中'), ('AWAITING_ACCEPTANCE', '待验收'), ('CLOSED', '已关闭')]']
+  priority "varchar(12)" [not null, note: 'priority']
+  result "text" [not null, note: 'result']
+  finished_at "timestamp with time zone" [note: 'finished at']
+  accepted_by_id "bigint" [note: 'accepted by']
+  accepted_at "timestamp with time zone" [note: 'accepted at']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '维修工单；约束及条件唯一项以迁移文件为准。'
+}
+Table core_workorderevent {
+  id "bigint" [pk, not null, note: 'ID']
+  work_order_id "bigint" [not null, note: 'work order']
+  actor_id "bigint" [not null, note: 'actor']
+  old_status "varchar(24)" [not null, note: 'old status']
+  new_status "varchar(24)" [not null, note: 'new status']
+  note "text" [not null, note: 'note']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '维修及验收过程；约束及条件唯一项以迁移文件为准。'
+}
+Table core_auditevent {
+  id "bigint" [pk, not null, note: 'ID']
+  actor_id "bigint" [note: 'actor']
+  actor_kind "varchar(8)" [not null, note: 'actor kind']
+  entity_type "varchar(40)" [not null, note: 'entity type']
+  entity_id "bigint" [not null, note: 'entity id']
+  action "varchar(40)" [not null, note: 'action']
+  old_state "jsonb" [not null, note: 'old state']
+  new_state "jsonb" [not null, note: 'new state']
+  reason "text" [not null, note: 'reason']
+  request_id "uuid" [not null, note: 'request id']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  lab_id "bigint" [note: 'lab']
+  dedupe_key "varchar(160)" [unique, note: 'dedupe key']
+  Note: '不可覆盖审计事件；约束及条件唯一项以迁移文件为准。'
+}
+Table core_serviceperiod {
+  id "bigint" [pk, not null, note: 'ID']
+  resource_id "bigint" [not null, note: 'resource']
+  audit_id "bigint" [not null, unique, note: 'audit']
+  status "varchar(20)" [not null, note: 'status']
+  starts_at "timestamp with time zone" [not null, note: 'starts at']
+  ends_at "timestamp with time zone" [note: 'ends at']
+  Note: '资源服务状态区间；约束及条件唯一项以迁移文件为准。'
+}
+Table core_notification {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(40)" [not null, unique, note: 'code']
+  audit_id "bigint" [not null, note: 'audit']
+  recipient_id "bigint" [not null, note: 'recipient']
+  kind "varchar(32)" [not null, note: 'kind']
+  content "text" [not null, note: 'content']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  read_at "timestamp with time zone" [note: 'read at']
+  Note: '接收人通知；约束及条件唯一项以迁移文件为准。'
+}
+Table core_delivery {
+  id "bigint" [pk, not null, note: 'ID']
+  notification_id "bigint" [not null, note: 'notification']
+  channel "varchar(16)" [not null, note: 'channel']
+  status "varchar(16)" [not null, note: 'status']
+  retry_count "smallint" [not null, note: 'retry count']
+  next_attempt_at "timestamp with time zone" [not null, note: 'next attempt at']
+  locked_until "timestamp with time zone" [note: 'locked until']
+  last_error "text" [not null, note: 'last error']
+  Note: '渠道投递任务；约束及条件唯一项以迁移文件为准。'
+}
+Table core_deliveryattempt {
+  id "bigint" [pk, not null, note: 'ID']
+  delivery_id "bigint" [not null, note: 'delivery']
+  attempt_no "smallint" [not null, note: 'attempt no']
+  outcome "varchar(12)" [not null, note: 'outcome']
+  detail "text" [not null, note: 'detail']
+  attempted_at "timestamp with time zone" [not null, note: 'attempted at']
+  Note: '投递尝试；约束及条件唯一项以迁移文件为准。'
+}
+Table core_mockreceipt {
+  id "bigint" [pk, not null, note: 'ID']
+  delivery_id "bigint" [not null, unique, note: 'delivery']
+  received_at "timestamp with time zone" [not null, note: 'received at']
+  Note: '模拟投递去重凭据；约束及条件唯一项以迁移文件为准。'
+}
+Ref: core_userrole.user_id > core_user.id
+Ref: core_userrole.role_id > core_role.id
+Ref: core_userrole.granted_by_id > core_user.id
+Ref: core_labgrant.user_id > core_user.id
+Ref: core_labgrant.lab_id > core_lab.id
+Ref: core_userqualification.user_id > core_user.id
+Ref: core_userqualification.qualification_id > core_qualificationtype.id
+Ref: core_userqualification.granted_by_id > core_user.id
+Ref: core_resource.lab_id > core_lab.id
+Ref: core_equipmentdetail.resource_id - core_resource.id
+Ref: core_equipmentdetail.qualification_id > core_qualificationtype.id
+Ref: core_roomdetail.resource_id - core_resource.id
+Ref: core_accessory.resource_id > core_resource.id
+Ref: core_openingperiod.lab_id > core_lab.id
+Ref: core_policyrevision.policy_id > core_policy.id
+Ref: core_policyrevision.actor_id > core_user.id
+Ref: core_reservation.applicant_id > core_user.id
+Ref: core_reservation.resource_id > core_resource.id
+Ref: core_reviewnote.reservation_id > core_reservation.id
+Ref: core_reviewnote.actor_id > core_user.id
+Ref: core_approvaldecision.reservation_id - core_reservation.id
+Ref: core_approvaldecision.actor_id > core_user.id
+Ref: core_loan.reservation_id - core_reservation.id
+Ref: core_loan.operator_id > core_user.id
+Ref: core_returnrecord.loan_id - core_loan.id
+Ref: core_returnrecord.operator_id > core_user.id
+Ref: core_handoveritem.loan_id > core_loan.id
+Ref: core_handoveritem.accessory_id > core_accessory.id
+Ref: core_roomuse.reservation_id - core_reservation.id
+Ref: core_roomuse.started_by_id > core_user.id
+Ref: core_roomuse.ended_by_id > core_user.id
+Ref: core_incident.resource_id > core_resource.id
+Ref: core_incident.reporter_id > core_user.id
+Ref: core_incident.reservation_id > core_reservation.id
+Ref: core_incident.confirmed_by_id > core_user.id
+Ref: core_evidence.incident_id > core_incident.id
+Ref: core_evidence.uploaded_by_id > core_user.id
+Ref: core_workorder.incident_id > core_incident.id
+Ref: core_workorder.created_by_id > core_user.id
+Ref: core_workorder.assigned_to_id > core_user.id
+Ref: core_workorder.accepted_by_id > core_user.id
+Ref: core_workorderevent.work_order_id > core_workorder.id
+Ref: core_workorderevent.actor_id > core_user.id
+Ref: core_auditevent.actor_id > core_user.id
+Ref: core_auditevent.lab_id > core_lab.id
+Ref: core_serviceperiod.resource_id > core_resource.id
+Ref: core_serviceperiod.audit_id - core_auditevent.id
+Ref: core_notification.audit_id > core_auditevent.id
+Ref: core_notification.recipient_id > core_user.id
+Ref: core_delivery.notification_id > core_notification.id
+Ref: core_deliveryattempt.delivery_id > core_delivery.id
+Ref: core_mockreceipt.delivery_id - core_delivery.id

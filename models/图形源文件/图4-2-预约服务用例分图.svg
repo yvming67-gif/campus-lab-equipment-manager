@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="350" viewBox="0 0 507 350">
+<rect width="100%" height="100%" fill="white"/>
+<rect x="85" y="8" width="338" height="315" fill="none" stroke="#24384b"/>
+<text x="254.0" y="169.0" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436"></text>
+<text x="254" y="28.675" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10.5" fill="#2a3436">预约服务</text>
+<ellipse cx="173.0" cy="83.0" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="80.09" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-01</text>
+<text x="173.0" y="92.49000000000001" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">登录系统</text>
+<ellipse cx="337.0" cy="83.0" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="80.09" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-02</text>
+<text x="337.0" y="92.49000000000001" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">查询实验室与设备</text>
+<ellipse cx="173.0" cy="146.75" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="143.84" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-03</text>
+<text x="173.0" y="156.24" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">查询资源可用时段</text>
+<ellipse cx="337.0" cy="146.75" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="143.84" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-04</text>
+<text x="337.0" y="156.24" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">提交设备预约</text>
+<ellipse cx="173.0" cy="210.5" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="207.59" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-05</text>
+<text x="173.0" y="219.99" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">提交场地预约</text>
+<ellipse cx="337.0" cy="210.5" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="207.59" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-06</text>
+<text x="337.0" y="219.99" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">查看预约进度</text>
+<ellipse cx="173.0" cy="274.25" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="271.34000000000003" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-07</text>
+<text x="173.0" y="283.74" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">取消预约</text>
+<ellipse cx="337.0" cy="274.25" rx="69.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="271.34000000000003" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">UC-08</text>
+<text x="337.0" y="283.74" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">审核预约</text>
+<circle cx="28.0" cy="95" r="5" fill="none" stroke="#24384b"/>
+<path d="M28.0,100 V118 M17.0,108 H39.0 M28.0,118 L18.0,132 M28.0,118 L38.0,132" fill="none" stroke="#24384b"/>
+<text x="28.0" y="149.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学生</text>
+<polyline points="44,110 69,110 69,83.0 104,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,110 69,110 69,58 244,58 244,83.0 268,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,110 69,110 69,146.75 104,146.75" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,110 69,110 69,58 244,58 244,146.75 268,146.75" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,110 69,110 69,58 244,58 244,210.5 268,210.5" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,110 69,110 69,274.25 104,274.25" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<circle cx="28.0" cy="240" r="5" fill="none" stroke="#24384b"/>
+<path d="M28.0,245 V263 M17.0,253 H39.0 M28.0,263 L18.0,277 M28.0,263 L38.0,277" fill="none" stroke="#24384b"/>
+<text x="28.0" y="294.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教师</text>
+<polyline points="44,255 62,255 62,83.0 104,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,60 248,60 248,83.0 268,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,146.75 104,146.75" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,60 248,60 248,146.75 268,146.75" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,210.5 104,210.5" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,60 248,60 248,210.5 268,210.5" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,255 62,255 62,274.25 104,274.25" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<circle cx="479.0" cy="70" r="5" fill="none" stroke="#24384b"/>
+<path d="M479.0,75 V93 M468.0,83 H490.0 M479.0,93 L469.0,107 M479.0,93 L489.0,107" fill="none" stroke="#24384b"/>
+<text x="479.0" y="118.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">身份认证</text>
+<text x="479.0" y="130.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">系统</text>
+<polyline points="463,85 454,85 454,62 256,62 256,83.0 242,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<circle cx="479.0" cy="240" r="5" fill="none" stroke="#24384b"/>
+<path d="M479.0,245 V263 M468.0,253 H490.0 M479.0,263 L469.0,277 M479.0,263 L489.0,277" fill="none" stroke="#24384b"/>
+<text x="479.0" y="288.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验室</text>
+<text x="479.0" y="300.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
+<polyline points="463,255 440,255 440,210.5 406,210.5" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="463,255 440,255 440,274.25 406,274.25" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+</svg>
