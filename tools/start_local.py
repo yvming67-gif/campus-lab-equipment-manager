@@ -106,7 +106,7 @@ def main():
         # Port availability is not evidence that the responding database belongs to this project.
         config["port"]=available_port(int(config["port"]));env["PGPORT"]=str(config["port"]);save(config_file,config)
         print("[4/6] 启动本项目数据库。",flush=True)
-        run([pg/"pg_ctl.exe","-D",runtime["pg_data"],"-l",LOCAL/"postgres.log","-o",f"-h 127.0.0.1 -p {config['port']} -c timezone=Asia/Shanghai","-w","start"],stdout=subprocess.DEVNULL)
+        run([pg/"pg_ctl.exe","-D",runtime["pg_data"],"-l",ascii_alias(ROOT)/".local/postgres.log","-o",f"-h 127.0.0.1 -p {config['port']} -c timezone=Asia/Shanghai","-w","start"],stdout=subprocess.DEVNULL)
     check=subprocess.run([str(pg/"psql.exe"),"-d","postgres","-tAc","SELECT 1 FROM pg_database WHERE datname='campus_lab'"],env=env,capture_output=True,text=True,creationflags=NO_WINDOW)
     if check.returncode:raise StartupError("本项目数据库连接失败，请查看.local/postgres.log；不要删除已有数据库。")
     if check.stdout.strip()!="1":run([pg/"createdb.exe",config["name"]],env=env)

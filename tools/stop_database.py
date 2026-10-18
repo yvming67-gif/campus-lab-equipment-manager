@@ -1,9 +1,11 @@
 """Stop only the PostgreSQL cluster recorded in this project's private runtime."""
-import json,subprocess
+import json,subprocess,sys
 from pathlib import Path
 from windows_paths import ascii_alias
 
 def main():
+    for stream in (sys.stdout,sys.stderr):
+        if hasattr(stream,"reconfigure"):stream.reconfigure(encoding="utf-8",errors="backslashreplace")
     root=Path(__file__).resolve().parents[1];file=root/".local/runtime.json"
     if not file.exists():print("本项目尚未初始化，无需停止数据库。");return
     runtime=json.loads(file.read_text("utf-8"))
