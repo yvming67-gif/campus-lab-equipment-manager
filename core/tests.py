@@ -260,3 +260,18 @@ class ConcurrencyTests(TransactionTestCase):
         user=User.objects.get(username="student");resources=list(Resource.objects.filter(kind="EQUIPMENT",equipment__risk="NORMAL").order_by("pk")[:4])
         for r in resources[:2]:s.create_reservation(user,r.pk,self.start,self.end,"用途")
         results=self.race([lambda r=r:s.create_reservation(user,r.pk,self.start,self.end,"用途") for r in resources[2:]]);self.assertEqual(sum(x is not None for x in results),1)
+
+
+class LocalReadinessTests(TestCase):
+    def test_readiness_has_no_account_data_or_credentials(self):
+        response=self.client.get("/health/")
+        self.assertEqual(response.status_code,200)
+        self.assertEqual(set(response.json()),{"service","status","instance"})
+        self.assertEqual(response.json()["status"],"ready")
+        self.assertEqual(len(response.json()["instance"]),16)
+    def test_unavailable_database_is_not_reported_ready(self):
+        from django.db import OperationalError
+        with patch("config.health.connection.cursor",side_effect=OperationalError("not ready")):
+            response=self.client.get("/health/")
+        self.assertEqual(response.status_code,503)
+        self.assertNotIn("instance",response.json())

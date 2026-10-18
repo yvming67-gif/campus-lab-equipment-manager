@@ -33,3 +33,37 @@ jobs:
       - run: python manage.py check
       - run: python manage.py test core.tests --noinput
       - run: python tools/validate_registry.py
+      - run: python tools/test_startup.py
+
+  windows-first-install:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+          architecture: x64
+      - name: Fresh Windows install in a Chinese path with spaces
+        shell: pwsh
+        run: |
+          $demoPath = Join-Path $env:RUNNER_TEMP '课程验收 含空格'
+          New-Item -ItemType Directory -Path $demoPath -Force | Out-Null
+          git archive HEAD -o source.zip
+          Expand-Archive -LiteralPath source.zip -DestinationPath $demoPath
+          Set-Location -LiteralPath $demoPath
+          python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000 --db-port 55440
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          .venv/Scripts/python.exe tools/test_startup.py
+      - name: Stop this test cluster
+        if: always()
+        shell: pwsh
+        run: |
+          $demoPath = Join-Path $env:RUNNER_TEMP '课程验收 含空格'
+          if (Test-Path -LiteralPath (Join-Path $demoPath '.local/runtime.json')) {
+            python (Join-Path $demoPath 'tools/stop_database.py')
+          }
