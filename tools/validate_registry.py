@@ -32,3 +32,48 @@ for f in (ROOT/"models/图形源文件").glob("*.drawio"):ET.parse(f)
 for key,ref in mapping.items():
     for path in re.findall(r"core/[A-Za-z0-9_/]+\.py",ref):assert (ROOT/path).exists(),(key,path)
 print("PASS: 26 FR/UC/SPEC, 35 BR, 11 QR, 52 AC; full trace, 31 models/52 FK, editable UML and source locations")
+
+# Full-field ERD is verified against the exported application model, not a manual table list.
+import hashlib
+manifest=json.loads((ROOT/"models/ERD/manifest.json").read_text("utf-8"))
+assert manifest["schema_sha256"]==hashlib.sha256(json.dumps(schema,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest()
+actual={m["model"]:m for m in schema["models"]}
+assert manifest["entity_count"]==len(actual)==31
+assert manifest["field_count"]==sum(len(m["fields"]) for m in actual.values())==245
+assert manifest["relationship_count"]==len(schema["relationships"])==52
+assert {e["model"] for e in manifest["entities"]}==set(actual)
+for e in manifest["entities"]:
+    m=actual[e["model"]];assert e["table"]==m["table"]
+    assert len(e["fields"])==len(m["fields"]) and set(e["fields"])=={f["column"] for f in m["fields"]}
+from_table={m["table"]:m["model"] for m in actual.values()}
+expected={(from_table[r["from_table"]],r["from_field"],from_table[r["to_table"]],r["to_field"],r["null"],r["unique"]) for r in schema["relationships"]}
+assert {(r["child"],r["from_field"],r["parent"],r["to_field"],r["null"],r["unique"]) for r in manifest["relationships"]}==expected
+assert {r["id"] for r in manifest["relationships"]}=={f"R{i:02d}" for i in range(1,53)}
+svg=ET.parse(ROOT/"models/图形源文件/ERD-00-完整实体关系总图.svg")
+svgids={n.attrib.get("id") for n in svg.iter() if n.attrib.get("id")}
+assert sum(i.startswith("entity-") for i in svgids)==31
+assert sum(i.startswith("field-") for i in svgids)==245
+assert sum(i.startswith("edge-") for i in svgids)==52
+full=ET.parse(ROOT/"models/图形源文件/ERD-00-完整实体关系总图.drawio")
+fullcells={c.attrib["id"]:c for c in full.iter("mxCell")}
+assert fullcells["shared"].attrib.get("visible")=="0"
+for r in manifest["relationships"]:
+    edge=fullcells["edge-"+r["id"]]
+    child=actual[r["child"]]["table"];parent=actual[r["parent"]]["table"]
+    assert edge.attrib["source"]=="field-"+child+"-"+r["from_field"]
+    assert edge.attrib["target"]=="field-"+parent+"-"+r["to_field"]
+    for a,b in zip(r["points"],r["points"][1:]):
+        assert a[0]==b[0] or a[1]==b[1]
+        for entity in manifest["entities"]:
+            x,y,w,h=entity["rect"]
+            cross=(a[1]==b[1] and y+.2<a[1]<y+h-.2 and max(min(a[0],b[0]),x+.2)<min(max(a[0],b[0]),x+w-.2)) or (a[0]==b[0] and x+.2<a[0]<x+w-.2 and max(min(a[1],b[1]),y+.2)<min(max(a[1],b[1]),y+h-.2))
+            assert not cross,(r["id"],entity["model"])
+assert sorted(n for d in manifest["domains"] for n in d["entities"])==sorted(actual)
+for d in manifest["domains"]:
+    paths=list((ROOT/"models/图形源文件").glob(f"图D-*-*ERD.svg"))
+    matches=[f for f in paths if d["code"]+" · " in f.read_text("utf-8")]
+    assert len(matches)==1,d["code"]
+    domain_svg=ET.parse(matches[0]);groups={n.attrib.get("id") for n in domain_svg.iter()}
+    for name in d["entities"]:
+        for field in actual[name]["fields"]:assert "field-"+actual[name]["table"]+"-"+field["column"] in groups
+print("PASS: vector ERD has all 31 entities / 245 fields / 52 field-attached FK; six complete domains; no card-crossing connectors")

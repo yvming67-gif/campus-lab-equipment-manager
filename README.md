@@ -4,7 +4,7 @@
 
 面向课程展示的完整本地演示项目，支持设备借用与整间实验室场地预约。业务、身份、消息和资源数据均为模拟示例；本地验证不代表真实学校上线效果。
 
-## 老师在Windows电脑上运行
+## 在Windows电脑上运行
 
 1. 安装**Python 3.13，Windows 64位**，安装时勾选“Add python.exe to PATH”。[Python官方下载](https://www.python.org/downloads/windows/)。
 2. 在本仓库页面点击绿色“Code”→“Download ZIP”，**先解压**到本地文件夹；不要直接在压缩包内启动。
@@ -14,7 +14,7 @@
 
 无需安装Git、Node.js或另行安装PostgreSQL，也无需GitHub登录。数据和依赖仅在项目的`.local`、`.venv`中，公开源码不包含原电脑的数据库、路径配置或密钥。首次下载需保持联网，初始化完成后常规本地演示可离线运行。
 
-[老师运行指南与常见问题](docs/老师运行指南.md)包含安装前提、中文路径、运行库缺失、端口占用和复验步骤。自动安装适用于Windows x64；其他平台见下文。新电脑验收的实际结果与限制见[测试与验收记录](docs/测试与验收记录.md)。
+[运行指南与常见问题](docs/运行指南.md)包含安装前提、中文路径、运行库缺失、端口占用和复验步骤。自动安装适用于Windows x64；其他平台见下文。新电脑验收的实际结果与限制见[测试与验收记录](docs/测试与验收记录.md)。
 
 命令行等效入口及安装验证：
 
@@ -53,7 +53,15 @@ python tools/start_local.py --setup --no-browser --smoke-test
 
 Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和响应式CSS，无额外前端构建步骤。状态规则集中在 `core/services.py`，权限同时检查角色与对象范围，区间互斥由PostgreSQL条件排斥约束兜底。
 
-`models/` 包含31个对象、52条物理外键的JSON、DBML、Mermaid和可编辑draw.io/SVG。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、35条BR、11项QR、52条AC。课程封面个人信息及正式PDF单独交付，不默认进入公共仓库。
+`models/`包含31个实体、245个字段、52条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、35条BR、11项QR、52条AC。含个人信息的课程封面与正式分析报告单独交付；公开模型图不含这些个人信息。
+
+## 数据模型图
+
+[完整ERD总图](models/ERD/完整ERD总图.pdf) · [A4分域图册](models/ERD/分域ERD图册.pdf) · [可编辑draw.io源图](models/图形源文件/ERD-00-完整实体关系总图.drawio) · [读图与编辑说明](models/README.md)
+
+![数据模型全景](models/ERD/完整ERD预览.png)
+
+完整字段按身份权限、资源开放、预约规则、现场使用、异常维修、审计通知分为六个域。下载仓库后可打开`models/ERD/交互图谱.html`离线搜索和缩放；图中R01—R52与关系索引逐条对应。
 
 ## 常用操作与验证
 
@@ -85,7 +93,7 @@ python tools/backup_restore.py --restore-test
 - [需求、实现与验证映射](docs/需求与实现映射.md)
 - [测试与验收记录](docs/测试与验收记录.md)
 - [独立验收报告](docs/独立验收报告.md)
-- [老师运行指南](docs/老师运行指南.md)
+- [运行指南](docs/运行指南.md)
 - [完整开发提示词](docs/完整开发提示词.md)
 - [模型源文件说明](models/README.md)
 

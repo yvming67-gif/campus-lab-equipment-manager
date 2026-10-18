@@ -35,7 +35,7 @@ def ascii_alias(root):
             base.mkdir(parents=True,exist_ok=True)
             if not os.path.lexists(alias):
                 subprocess.run(["cmd","/d","/c","mklink","/J",str(alias),str(root)],check=True,capture_output=True)
-            if alias.resolve()!=root:raise RuntimeError("本项目目录联接已指向其他位置，已停止使用；请按老师运行指南排查。")
+            if alias.resolve()!=root:raise RuntimeError("本项目目录联接已指向其他位置，已停止使用；请按运行指南排查。")
             return alias
         except (OSError,subprocess.CalledProcessError):continue
-    raise RuntimeError("未找到可写的英文运行目录。请按老师运行指南设置本次终端TEMP后重试，已有数据无需删除。")
+    raise RuntimeError("未找到可写的英文运行目录。请按运行指南设置本次终端TEMP后重试，已有数据无需删除。")

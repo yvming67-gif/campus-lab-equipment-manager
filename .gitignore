@@ -12,3 +12,7 @@ __pycache__/
 
 # Course cover PDFs and private exports are delivered separately
 *.pdf
+
+# Public model diagrams contain no personal course-cover information
+!models/ERD/完整ERD总图.pdf
+!models/ERD/分域ERD图册.pdf

@@ -1,0 +1,2 @@
+# Optional authoring dependency; not required to run the application.
+reportlab==5.0.0

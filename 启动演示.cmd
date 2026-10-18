@@ -12,7 +12,7 @@ python -c "import sys,struct; assert sys.version_info[:2] == (3,13) and struct.c
 if errorlevel 1 (
     echo 请先安装Python 3.13的Windows 64位版本，安装时勾选Add python.exe to PATH。
     echo 官方下载：https://www.python.org/downloads/windows/
-    echo 安装完成后重新双击本文件。详细步骤见docs中的“老师运行指南”。
+    echo 安装完成后重新双击本文件。详细步骤见docs中的“运行指南”。
     pause
     exit /b 1
 )

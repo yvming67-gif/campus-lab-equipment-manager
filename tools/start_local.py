@@ -66,7 +66,7 @@ def install(args):
                 package.extract(item,base)
     alias=ascii_alias(ROOT);pg=alias/".local/postgres/pgsql/bin";data=alias/".local/pgdata"
     check=subprocess.run([str(pg/"initdb.exe"),"--version"],capture_output=True,creationflags=NO_WINDOW)
-    if check.returncode:raise StartupError("PostgreSQL组件无法启动。请安装微软Visual C++ 2015—2022 x64运行库；官方链接见老师运行指南。")
+    if check.returncode:raise StartupError("PostgreSQL组件无法启动。请安装微软Visual C++ 2015—2022 x64运行库；官方链接见运行指南。")
     file=LOCAL/"database.json"
     config=json.loads(file.read_text("utf-8")) if file.exists() else {"host":"127.0.0.1","port":available_port(args.db_port),"name":"campus_lab","user":"campus","password":secrets.token_urlsafe(32)}
     # Credentials are saved before initdb so interrupted setup never resets a database password.
@@ -97,7 +97,7 @@ def main():
     if runtime.get("portable"):
         alias=ascii_alias(ROOT);runtime.update({"pg_bin":str(alias/".local/postgres/pgsql/bin"),"pg_data":str(alias/".local/pgdata"),"python":str(ROOT/".venv/Scripts/python.exe")})
     config_file=LOCAL/"database.json";config=json.loads(config_file.read_text("utf-8"));pg=Path(runtime["pg_bin"])
-    if not Path(runtime["python"]).exists():raise StartupError("Python虚拟环境缺失。请保留数据库并按老师运行指南修复环境。")
+    if not Path(runtime["python"]).exists():raise StartupError("Python虚拟环境缺失。请保留数据库并按运行指南修复环境。")
     env=os.environ.copy()
     for key in ("DJANGO_SECRET_KEY","MOCK_IDP_KEY","DJANGO_SETTINGS_MODULE"):env.pop(key,None)
     env.update({"PGHOST":config["host"],"PGPORT":str(config["port"]),"PGDATABASE":config["name"],"PGUSER":config["user"],"PGPASSWORD":config["password"],"PGCLIENTENCODING":"UTF8","DEBUG":"1","DEMO_MODE":"1","ALLOWED_HOSTS":"127.0.0.1,localhost,testserver","PYTHONUTF8":"1"})
@@ -149,6 +149,6 @@ def main():
 if __name__=="__main__":
     try:main()
     except (StartupError,RuntimeError,OSError,subprocess.CalledProcessError,ValueError,zipfile.BadZipFile) as error:
-        if isinstance(error,subprocess.CalledProcessError):print("启动步骤执行失败。请检查网络、Python版本及.local日志；排查方法见老师运行指南。",file=sys.stderr)
+        if isinstance(error,subprocess.CalledProcessError):print("启动步骤执行失败。请检查网络、Python版本及.local日志；排查方法见运行指南。",file=sys.stderr)
         else:print(str(error),file=sys.stderr)
         sys.exit(1)

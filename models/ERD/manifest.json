@@ -1,0 +1,3116 @@
+{
+  "schema_hash_format": "canonical-json-sorted-compact-utf8",
+  "schema_sha256": "0ae9aa4a9964abd9b92d8c62cdbe1b66941ebcafe98bfbcfefbb4c9b94c95ad0",
+  "entity_count": 31,
+  "field_count": 245,
+  "relationship_count": 52,
+  "format": "complete-field-vector-v1",
+  "shared_reference_default": "hidden; all targets and IDs remain inline",
+  "entities": [
+    {
+      "model": "User",
+      "code": "A01",
+      "table": "core_user",
+      "fields": [
+        "id",
+        "username",
+        "school_no",
+        "password",
+        "last_login",
+        "is_superuser",
+        "first_name",
+        "last_name",
+        "email",
+        "is_staff",
+        "is_active",
+        "date_joined",
+        "display_name"
+      ],
+      "rect": [
+        105.0,
+        232,
+        335.0,
+        304
+      ]
+    },
+    {
+      "model": "Role",
+      "code": "A02",
+      "table": "core_role",
+      "fields": [
+        "id",
+        "code",
+        "name"
+      ],
+      "rect": [
+        105.0,
+        562,
+        335.0,
+        134
+      ]
+    },
+    {
+      "model": "LabGrant",
+      "code": "A04",
+      "table": "core_labgrant",
+      "fields": [
+        "id",
+        "user_id",
+        "lab_id",
+        "granted_at"
+      ],
+      "rect": [
+        105.0,
+        722,
+        335.0,
+        173
+      ]
+    },
+    {
+      "model": "UserRole",
+      "code": "A03",
+      "table": "core_userrole",
+      "fields": [
+        "id",
+        "user_id",
+        "role_id",
+        "granted_by_id",
+        "granted_at"
+      ],
+      "rect": [
+        520.0,
+        232,
+        335.0,
+        201
+      ]
+    },
+    {
+      "model": "QualificationType",
+      "code": "A05",
+      "table": "core_qualificationtype",
+      "fields": [
+        "id",
+        "code",
+        "name"
+      ],
+      "rect": [
+        520.0,
+        459,
+        335.0,
+        134
+      ]
+    },
+    {
+      "model": "UserQualification",
+      "code": "A06",
+      "table": "core_userqualification",
+      "fields": [
+        "id",
+        "user_id",
+        "qualification_id",
+        "granted_by_id",
+        "issued_at",
+        "expires_at",
+        "revoked"
+      ],
+      "rect": [
+        520.0,
+        619,
+        335.0,
+        235
+      ]
+    },
+    {
+      "model": "Lab",
+      "code": "B01",
+      "table": "core_lab",
+      "fields": [
+        "id",
+        "code",
+        "name",
+        "location",
+        "description",
+        "is_active"
+      ],
+      "rect": [
+        1025.0,
+        232,
+        335.0,
+        185
+      ]
+    },
+    {
+      "model": "OpeningPeriod",
+      "code": "B06",
+      "table": "core_openingperiod",
+      "fields": [
+        "id",
+        "lab_id",
+        "weekday",
+        "starts_at",
+        "ends_at",
+        "valid_from",
+        "valid_to"
+      ],
+      "rect": [
+        1025.0,
+        443,
+        335.0,
+        213
+      ]
+    },
+    {
+      "model": "Accessory",
+      "code": "B05",
+      "table": "core_accessory",
+      "fields": [
+        "id",
+        "resource_id",
+        "code",
+        "name",
+        "quantity",
+        "is_active"
+      ],
+      "rect": [
+        1025.0,
+        682,
+        335.0,
+        196
+      ]
+    },
+    {
+      "model": "Resource",
+      "code": "B02",
+      "table": "core_resource",
+      "fields": [
+        "id",
+        "lab_id",
+        "code",
+        "name",
+        "kind",
+        "description",
+        "service_status",
+        "manual_hold",
+        "created_at",
+        "updated_at"
+      ],
+      "rect": [
+        1440.0,
+        232,
+        335.0,
+        264
+      ]
+    },
+    {
+      "model": "EquipmentDetail",
+      "code": "B03",
+      "table": "core_equipmentdetail",
+      "fields": [
+        "id",
+        "resource_id",
+        "qualification_id",
+        "category",
+        "risk",
+        "physical_status"
+      ],
+      "rect": [
+        1440.0,
+        522,
+        335.0,
+        207
+      ]
+    },
+    {
+      "model": "RoomDetail",
+      "code": "B04",
+      "table": "core_roomdetail",
+      "fields": [
+        "id",
+        "resource_id",
+        "capacity",
+        "safety_note"
+      ],
+      "rect": [
+        1440.0,
+        755,
+        335.0,
+        162
+      ]
+    },
+    {
+      "model": "Reservation",
+      "code": "C01",
+      "table": "core_reservation",
+      "fields": [
+        "id",
+        "applicant_id",
+        "resource_id",
+        "code",
+        "starts_at",
+        "ends_at",
+        "purpose",
+        "participants",
+        "status",
+        "approval_mode",
+        "request_key",
+        "request_fingerprint",
+        "policy_snapshot",
+        "reason",
+        "version",
+        "created_at"
+      ],
+      "rect": [
+        1945.0,
+        232,
+        335.0,
+        377
+      ]
+    },
+    {
+      "model": "ApprovalDecision",
+      "code": "C02",
+      "table": "core_approvaldecision",
+      "fields": [
+        "id",
+        "reservation_id",
+        "actor_id",
+        "mode",
+        "approved",
+        "reason",
+        "decided_at"
+      ],
+      "rect": [
+        1945.0,
+        635,
+        335.0,
+        224
+      ]
+    },
+    {
+      "model": "Policy",
+      "code": "C04",
+      "table": "core_policy",
+      "fields": [
+        "id",
+        "version",
+        "window_days",
+        "slot_minutes",
+        "max_hours",
+        "equipment_quota",
+        "room_quota",
+        "simultaneous_equipment",
+        "grace_minutes",
+        "mock_delivery_failure",
+        "updated_at"
+      ],
+      "rect": [
+        2360.0,
+        232,
+        335.0,
+        270
+      ]
+    },
+    {
+      "model": "PolicyRevision",
+      "code": "C05",
+      "table": "core_policyrevision",
+      "fields": [
+        "id",
+        "policy_id",
+        "actor_id",
+        "version",
+        "data",
+        "reason",
+        "created_at"
+      ],
+      "rect": [
+        2360.0,
+        528,
+        335.0,
+        224
+      ]
+    },
+    {
+      "model": "ReviewNote",
+      "code": "C03",
+      "table": "core_reviewnote",
+      "fields": [
+        "id",
+        "reservation_id",
+        "actor_id",
+        "kind",
+        "content",
+        "evidence_ref",
+        "created_at"
+      ],
+      "rect": [
+        2360.0,
+        778,
+        335.0,
+        224
+      ]
+    },
+    {
+      "model": "Loan",
+      "code": "D01",
+      "table": "core_loan",
+      "fields": [
+        "id",
+        "reservation_id",
+        "operator_id",
+        "code",
+        "arrived_at",
+        "service_started_at",
+        "handed_over_at",
+        "due_at",
+        "tag_snapshot",
+        "condition_out"
+      ],
+      "rect": [
+        1945.0,
+        1182,
+        335.0,
+        275
+      ]
+    },
+    {
+      "model": "ReturnRecord",
+      "code": "D02",
+      "table": "core_returnrecord",
+      "fields": [
+        "id",
+        "loan_id",
+        "operator_id",
+        "code",
+        "returned_at",
+        "damaged",
+        "missing",
+        "fault",
+        "note"
+      ],
+      "rect": [
+        1945.0,
+        1483,
+        335.0,
+        258
+      ]
+    },
+    {
+      "model": "RoomUse",
+      "code": "D04",
+      "table": "core_roomuse",
+      "fields": [
+        "id",
+        "reservation_id",
+        "started_by_id",
+        "ended_by_id",
+        "arrived_at",
+        "started_at",
+        "actual_participants",
+        "start_note",
+        "ended_at",
+        "end_note",
+        "abnormal"
+      ],
+      "rect": [
+        2360.0,
+        1182,
+        335.0,
+        303
+      ]
+    },
+    {
+      "model": "HandoverItem",
+      "code": "D03",
+      "table": "core_handoveritem",
+      "fields": [
+        "id",
+        "loan_id",
+        "accessory_id",
+        "code_snapshot",
+        "name_snapshot",
+        "expected_qty",
+        "out_qty",
+        "out_condition",
+        "return_qty",
+        "return_condition"
+      ],
+      "rect": [
+        2360.0,
+        1511,
+        335.0,
+        275
+      ]
+    },
+    {
+      "model": "Incident",
+      "code": "E01",
+      "table": "core_incident",
+      "fields": [
+        "id",
+        "resource_id",
+        "reporter_id",
+        "reservation_id",
+        "confirmed_by_id",
+        "code",
+        "kind",
+        "description",
+        "occurred_at",
+        "reported_at",
+        "status",
+        "conclusion",
+        "resolved_at"
+      ],
+      "rect": [
+        1025.0,
+        1182,
+        335.0,
+        348
+      ]
+    },
+    {
+      "model": "Evidence",
+      "code": "E02",
+      "table": "core_evidence",
+      "fields": [
+        "id",
+        "incident_id",
+        "uploaded_by_id",
+        "file",
+        "original_name",
+        "sha256",
+        "uploaded_at"
+      ],
+      "rect": [
+        1025.0,
+        1556,
+        335.0,
+        224
+      ]
+    },
+    {
+      "model": "WorkOrder",
+      "code": "E03",
+      "table": "core_workorder",
+      "fields": [
+        "id",
+        "incident_id",
+        "created_by_id",
+        "assigned_to_id",
+        "accepted_by_id",
+        "code",
+        "status",
+        "priority",
+        "result",
+        "finished_at",
+        "accepted_at",
+        "created_at"
+      ],
+      "rect": [
+        1440.0,
+        1182,
+        335.0,
+        331
+      ]
+    },
+    {
+      "model": "WorkOrderEvent",
+      "code": "E04",
+      "table": "core_workorderevent",
+      "fields": [
+        "id",
+        "work_order_id",
+        "actor_id",
+        "old_status",
+        "new_status",
+        "note",
+        "created_at"
+      ],
+      "rect": [
+        1440.0,
+        1539,
+        335.0,
+        224
+      ]
+    },
+    {
+      "model": "AuditEvent",
+      "code": "F01",
+      "table": "core_auditevent",
+      "fields": [
+        "id",
+        "actor_id",
+        "lab_id",
+        "dedupe_key",
+        "actor_kind",
+        "entity_type",
+        "entity_id",
+        "action",
+        "old_state",
+        "new_state",
+        "reason",
+        "request_id",
+        "created_at"
+      ],
+      "rect": [
+        105.0,
+        1162,
+        335.0,
+        326
+      ]
+    },
+    {
+      "model": "ServicePeriod",
+      "code": "F02",
+      "table": "core_serviceperiod",
+      "fields": [
+        "id",
+        "resource_id",
+        "audit_id",
+        "status",
+        "starts_at",
+        "ends_at"
+      ],
+      "rect": [
+        105.0,
+        1514,
+        335.0,
+        207
+      ]
+    },
+    {
+      "model": "MockReceipt",
+      "code": "F06",
+      "table": "core_mockreceipt",
+      "fields": [
+        "id",
+        "delivery_id",
+        "received_at"
+      ],
+      "rect": [
+        105.0,
+        1747,
+        335.0,
+        145
+      ]
+    },
+    {
+      "model": "Notification",
+      "code": "F03",
+      "table": "core_notification",
+      "fields": [
+        "id",
+        "audit_id",
+        "recipient_id",
+        "code",
+        "kind",
+        "content",
+        "created_at",
+        "read_at"
+      ],
+      "rect": [
+        520.0,
+        1162,
+        335.0,
+        241
+      ]
+    },
+    {
+      "model": "Delivery",
+      "code": "F04",
+      "table": "core_delivery",
+      "fields": [
+        "id",
+        "notification_id",
+        "channel",
+        "status",
+        "retry_count",
+        "next_attempt_at",
+        "locked_until",
+        "last_error"
+      ],
+      "rect": [
+        520.0,
+        1429,
+        335.0,
+        230
+      ]
+    },
+    {
+      "model": "DeliveryAttempt",
+      "code": "F05",
+      "table": "core_deliveryattempt",
+      "fields": [
+        "id",
+        "delivery_id",
+        "attempt_no",
+        "outcome",
+        "detail",
+        "attempted_at"
+      ],
+      "rect": [
+        520.0,
+        1685,
+        335.0,
+        196
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "R07",
+      "child": "UserQualification",
+      "from_field": "qualification_id",
+      "parent": "QualificationType",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          738.84
+        ],
+        [
+          496,
+          738.84
+        ],
+        [
+          496,
+          533.84
+        ],
+        [
+          520.0,
+          533.84
+        ]
+      ]
+    },
+    {
+      "id": "R14",
+      "child": "OpeningPeriod",
+      "from_field": "lab_id",
+      "parent": "Lab",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1025.0,
+          534.84
+        ],
+        [
+          1000,
+          534.84
+        ],
+        [
+          1000,
+          306.84
+        ],
+        [
+          1025.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R51",
+      "child": "DeliveryAttempt",
+      "from_field": "delivery_id",
+      "parent": "Delivery",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          1776.84
+        ],
+        [
+          496,
+          1776.84
+        ],
+        [
+          496,
+          1503.84
+        ],
+        [
+          520.0,
+          1503.84
+        ]
+      ]
+    },
+    {
+      "id": "R50",
+      "child": "Delivery",
+      "from_field": "notification_id",
+      "parent": "Notification",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          1520.84
+        ],
+        [
+          496,
+          1520.84
+        ],
+        [
+          496,
+          1520
+        ],
+        [
+          488,
+          1520
+        ],
+        [
+          488,
+          1240
+        ],
+        [
+          496,
+          1240
+        ],
+        [
+          496,
+          1236.84
+        ],
+        [
+          520.0,
+          1236.84
+        ]
+      ]
+    },
+    {
+      "id": "R10",
+      "child": "EquipmentDetail",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          613.84
+        ],
+        [
+          1408,
+          613.84
+        ],
+        [
+          1408,
+          306.84
+        ],
+        [
+          1440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R15",
+      "child": "PolicyRevision",
+      "from_field": "policy_id",
+      "parent": "Policy",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          2360.0,
+          619.84
+        ],
+        [
+          2336,
+          619.84
+        ],
+        [
+          2336,
+          306.84
+        ],
+        [
+          2360.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R25",
+      "child": "ReturnRecord",
+      "from_field": "loan_id",
+      "parent": "Loan",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          1945.0,
+          1574.84
+        ],
+        [
+          1920,
+          1574.84
+        ],
+        [
+          1920,
+          1256.84
+        ],
+        [
+          1945.0,
+          1256.84
+        ]
+      ]
+    },
+    {
+      "id": "R47",
+      "child": "ServicePeriod",
+      "from_field": "audit_id",
+      "parent": "AuditEvent",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          105.0,
+          1633.84
+        ],
+        [
+          80,
+          1633.84
+        ],
+        [
+          80,
+          1236.84
+        ],
+        [
+          105.0,
+          1236.84
+        ]
+      ]
+    },
+    {
+      "id": "R42",
+      "child": "WorkOrderEvent",
+      "from_field": "work_order_id",
+      "parent": "WorkOrder",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          1630.84
+        ],
+        [
+          1408,
+          1630.84
+        ],
+        [
+          1408,
+          1256.84
+        ],
+        [
+          1440.0,
+          1256.84
+        ]
+      ]
+    },
+    {
+      "id": "R36",
+      "child": "Evidence",
+      "from_field": "incident_id",
+      "parent": "Incident",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1025.0,
+          1647.84
+        ],
+        [
+          1000,
+          1647.84
+        ],
+        [
+          1000,
+          1256.84
+        ],
+        [
+          1025.0,
+          1256.84
+        ]
+      ]
+    },
+    {
+      "id": "R21",
+      "child": "ApprovalDecision",
+      "from_field": "reservation_id",
+      "parent": "Reservation",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          1945.0,
+          726.84
+        ],
+        [
+          1920,
+          726.84
+        ],
+        [
+          1920,
+          306.84
+        ],
+        [
+          1945.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R01",
+      "child": "UserRole",
+      "from_field": "user_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          323.84
+        ],
+        [
+          496,
+          323.84
+        ],
+        [
+          496,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R03",
+      "child": "UserRole",
+      "from_field": "granted_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          379.84
+        ],
+        [
+          496,
+          379.84
+        ],
+        [
+          496,
+          376
+        ],
+        [
+          464,
+          376
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R09",
+      "child": "Resource",
+      "from_field": "lab_id",
+      "parent": "Lab",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          323.84
+        ],
+        [
+          1408,
+          323.84
+        ],
+        [
+          1408,
+          320
+        ],
+        [
+          1392,
+          320
+        ],
+        [
+          1392,
+          306.84
+        ],
+        [
+          1360.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R38",
+      "child": "WorkOrder",
+      "from_field": "incident_id",
+      "parent": "Incident",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          1273.84
+        ],
+        [
+          1408,
+          1273.84
+        ],
+        [
+          1408,
+          1272
+        ],
+        [
+          1392,
+          1272
+        ],
+        [
+          1392,
+          1256.84
+        ],
+        [
+          1360.0,
+          1256.84
+        ]
+      ]
+    },
+    {
+      "id": "R48",
+      "child": "Notification",
+      "from_field": "audit_id",
+      "parent": "AuditEvent",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          1253.84
+        ],
+        [
+          496,
+          1253.84
+        ],
+        [
+          496,
+          1256
+        ],
+        [
+          464,
+          1256
+        ],
+        [
+          464,
+          1236.84
+        ],
+        [
+          440.0,
+          1236.84
+        ]
+      ]
+    },
+    {
+      "id": "R04",
+      "child": "LabGrant",
+      "from_field": "user_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          105.0,
+          813.84
+        ],
+        [
+          80,
+          813.84
+        ],
+        [
+          80,
+          306.84
+        ],
+        [
+          105.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R18",
+      "child": "Reservation",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1945.0,
+          351.84
+        ],
+        [
+          1920,
+          351.84
+        ],
+        [
+          1920,
+          352
+        ],
+        [
+          1800,
+          352
+        ],
+        [
+          1800,
+          306.84
+        ],
+        [
+          1775.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R12",
+      "child": "RoomDetail",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          846.84
+        ],
+        [
+          1408,
+          846.84
+        ],
+        [
+          1408,
+          848
+        ],
+        [
+          1400,
+          848
+        ],
+        [
+          1400,
+          304
+        ],
+        [
+          1408,
+          304
+        ],
+        [
+          1408,
+          306.84
+        ],
+        [
+          1440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R52",
+      "child": "MockReceipt",
+      "from_field": "delivery_id",
+      "parent": "Delivery",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          440.0,
+          1838.84
+        ],
+        [
+          464,
+          1838.84
+        ],
+        [
+          464,
+          1504
+        ],
+        [
+          496,
+          1504
+        ],
+        [
+          496,
+          1503.84
+        ],
+        [
+          520.0,
+          1503.84
+        ]
+      ]
+    },
+    {
+      "id": "R27",
+      "child": "HandoverItem",
+      "from_field": "loan_id",
+      "parent": "Loan",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          2360.0,
+          1602.84
+        ],
+        [
+          2336,
+          1602.84
+        ],
+        [
+          2336,
+          1256
+        ],
+        [
+          2304,
+          1256
+        ],
+        [
+          2304,
+          1256.84
+        ],
+        [
+          2280.0,
+          1256.84
+        ]
+      ]
+    },
+    {
+      "id": "R02",
+      "child": "UserRole",
+      "from_field": "role_id",
+      "parent": "Role",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          351.84
+        ],
+        [
+          496,
+          351.84
+        ],
+        [
+          496,
+          352
+        ],
+        [
+          472,
+          352
+        ],
+        [
+          472,
+          640
+        ],
+        [
+          464,
+          640
+        ],
+        [
+          464,
+          636.84
+        ],
+        [
+          440.0,
+          636.84
+        ]
+      ]
+    },
+    {
+      "id": "R06",
+      "child": "UserQualification",
+      "from_field": "user_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          710.84
+        ],
+        [
+          496,
+          710.84
+        ],
+        [
+          496,
+          712
+        ],
+        [
+          456,
+          712
+        ],
+        [
+          456,
+          312
+        ],
+        [
+          464,
+          312
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R08",
+      "child": "UserQualification",
+      "from_field": "granted_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          520.0,
+          766.84
+        ],
+        [
+          496,
+          766.84
+        ],
+        [
+          496,
+          768
+        ],
+        [
+          480,
+          768
+        ],
+        [
+          480,
+          296
+        ],
+        [
+          464,
+          296
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R13",
+      "child": "Accessory",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1360.0,
+          773.84
+        ],
+        [
+          1392,
+          773.84
+        ],
+        [
+          1392,
+          776
+        ],
+        [
+          1384,
+          776
+        ],
+        [
+          1384,
+          296
+        ],
+        [
+          1408,
+          296
+        ],
+        [
+          1408,
+          306.84
+        ],
+        [
+          1440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R23",
+      "child": "Loan",
+      "from_field": "reservation_id",
+      "parent": "Reservation",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          1945.0,
+          1273.84
+        ],
+        [
+          1920,
+          1273.84
+        ],
+        [
+          1920,
+          1272
+        ],
+        [
+          1904,
+          1272
+        ],
+        [
+          1904,
+          304
+        ],
+        [
+          1920,
+          304
+        ],
+        [
+          1920,
+          306.84
+        ],
+        [
+          1945.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R19",
+      "child": "ReviewNote",
+      "from_field": "reservation_id",
+      "parent": "Reservation",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          2360.0,
+          869.84
+        ],
+        [
+          2336,
+          869.84
+        ],
+        [
+          2336,
+          872
+        ],
+        [
+          2304,
+          872
+        ],
+        [
+          2304,
+          306.84
+        ],
+        [
+          2280.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R11",
+      "child": "EquipmentDetail",
+      "from_field": "qualification_id",
+      "parent": "QualificationType",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1440.0,
+          641.84
+        ],
+        [
+          1408,
+          641.84
+        ],
+        [
+          1408,
+          640
+        ],
+        [
+          1416,
+          640
+        ],
+        [
+          1416,
+          896
+        ],
+        [
+          880,
+          896
+        ],
+        [
+          880,
+          533.84
+        ],
+        [
+          855.0,
+          533.84
+        ]
+      ]
+    },
+    {
+      "id": "R29",
+      "child": "RoomUse",
+      "from_field": "reservation_id",
+      "parent": "Reservation",
+      "to_field": "id",
+      "null": false,
+      "unique": true,
+      "shared": false,
+      "points": [
+        [
+          2360.0,
+          1273.84
+        ],
+        [
+          2336,
+          1273.84
+        ],
+        [
+          2336,
+          1272
+        ],
+        [
+          2296,
+          1272
+        ],
+        [
+          2296,
+          1760
+        ],
+        [
+          1896,
+          1760
+        ],
+        [
+          1896,
+          880
+        ],
+        [
+          2296,
+          880
+        ],
+        [
+          2296,
+          304
+        ],
+        [
+          2304,
+          304
+        ],
+        [
+          2304,
+          306.84
+        ],
+        [
+          2280.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R32",
+      "child": "Incident",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1360.0,
+          1273.84
+        ],
+        [
+          1392,
+          1273.84
+        ],
+        [
+          1392,
+          1784
+        ],
+        [
+          1816,
+          1784
+        ],
+        [
+          1816,
+          936
+        ],
+        [
+          1424,
+          936
+        ],
+        [
+          1424,
+          312
+        ],
+        [
+          1408,
+          312
+        ],
+        [
+          1408,
+          306.84
+        ],
+        [
+          1440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R05",
+      "child": "LabGrant",
+      "from_field": "lab_id",
+      "parent": "Lab",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          440.0,
+          841.84
+        ],
+        [
+          464,
+          841.84
+        ],
+        [
+          464,
+          872
+        ],
+        [
+          992,
+          872
+        ],
+        [
+          992,
+          304
+        ],
+        [
+          1000,
+          304
+        ],
+        [
+          1000,
+          306.84
+        ],
+        [
+          1025.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R17",
+      "child": "Reservation",
+      "from_field": "applicant_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1945.0,
+          323.84
+        ],
+        [
+          1920,
+          323.84
+        ],
+        [
+          1920,
+          320
+        ],
+        [
+          1792,
+          320
+        ],
+        [
+          1792,
+          944
+        ],
+        [
+          488,
+          944
+        ],
+        [
+          488,
+          312
+        ],
+        [
+          472,
+          312
+        ],
+        [
+          472,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R34",
+      "child": "Incident",
+      "from_field": "reservation_id",
+      "parent": "Reservation",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          1360.0,
+          1329.84
+        ],
+        [
+          1392,
+          1329.84
+        ],
+        [
+          1392,
+          1328
+        ],
+        [
+          1384,
+          1328
+        ],
+        [
+          1384,
+          1792
+        ],
+        [
+          1888,
+          1792
+        ],
+        [
+          1888,
+          296
+        ],
+        [
+          1920,
+          296
+        ],
+        [
+          1920,
+          306.84
+        ],
+        [
+          1945.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R28",
+      "child": "HandoverItem",
+      "from_field": "accessory_id",
+      "parent": "Accessory",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          2360.0,
+          1630.84
+        ],
+        [
+          2336,
+          1630.84
+        ],
+        [
+          2336,
+          1768
+        ],
+        [
+          1824,
+          1768
+        ],
+        [
+          1824,
+          952
+        ],
+        [
+          1376,
+          952
+        ],
+        [
+          1376,
+          760
+        ],
+        [
+          1392,
+          760
+        ],
+        [
+          1392,
+          756.84
+        ],
+        [
+          1360.0,
+          756.84
+        ]
+      ]
+    },
+    {
+      "id": "R46",
+      "child": "ServicePeriod",
+      "from_field": "resource_id",
+      "parent": "Resource",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": false,
+      "points": [
+        [
+          440.0,
+          1605.84
+        ],
+        [
+          464,
+          1605.84
+        ],
+        [
+          464,
+          1608
+        ],
+        [
+          488,
+          1608
+        ],
+        [
+          488,
+          1896
+        ],
+        [
+          984,
+          1896
+        ],
+        [
+          984,
+          904
+        ],
+        [
+          1392,
+          904
+        ],
+        [
+          1392,
+          784
+        ],
+        [
+          1408,
+          784
+        ],
+        [
+          1408,
+          648
+        ],
+        [
+          1376,
+          648
+        ],
+        [
+          1376,
+          288
+        ],
+        [
+          1408,
+          288
+        ],
+        [
+          1408,
+          306.84
+        ],
+        [
+          1440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R44",
+      "child": "AuditEvent",
+      "from_field": "actor_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          105.0,
+          1253.84
+        ],
+        [
+          80,
+          1253.84
+        ],
+        [
+          80,
+          1256
+        ],
+        [
+          64,
+          1256
+        ],
+        [
+          64,
+          304
+        ],
+        [
+          80,
+          304
+        ],
+        [
+          80,
+          306.84
+        ],
+        [
+          105.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R49",
+      "child": "Notification",
+      "from_field": "recipient_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          520.0,
+          1281.84
+        ],
+        [
+          496,
+          1281.84
+        ],
+        [
+          496,
+          1280
+        ],
+        [
+          480,
+          1280
+        ],
+        [
+          480,
+          1904
+        ],
+        [
+          896,
+          1904
+        ],
+        [
+          896,
+          904
+        ],
+        [
+          504,
+          904
+        ],
+        [
+          504,
+          288
+        ],
+        [
+          464,
+          288
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R45",
+      "child": "AuditEvent",
+      "from_field": "lab_id",
+      "parent": "Lab",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          440.0,
+          1281.84
+        ],
+        [
+          464,
+          1281.84
+        ],
+        [
+          464,
+          1280
+        ],
+        [
+          472,
+          1280
+        ],
+        [
+          472,
+          1912
+        ],
+        [
+          976,
+          1912
+        ],
+        [
+          976,
+          304
+        ],
+        [
+          1000,
+          304
+        ],
+        [
+          1000,
+          306.84
+        ],
+        [
+          1025.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R33",
+      "child": "Incident",
+      "from_field": "reporter_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1025.0,
+          1301.84
+        ],
+        [
+          1000,
+          1301.84
+        ],
+        [
+          1000,
+          1304
+        ],
+        [
+          904,
+          1304
+        ],
+        [
+          904,
+          952
+        ],
+        [
+          472,
+          952
+        ],
+        [
+          472,
+          632
+        ],
+        [
+          464,
+          632
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R35",
+      "child": "Incident",
+      "from_field": "confirmed_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1025.0,
+          1357.84
+        ],
+        [
+          1000,
+          1357.84
+        ],
+        [
+          1000,
+          1360
+        ],
+        [
+          912,
+          1360
+        ],
+        [
+          912,
+          960
+        ],
+        [
+          456,
+          960
+        ],
+        [
+          456,
+          720
+        ],
+        [
+          464,
+          720
+        ],
+        [
+          464,
+          648
+        ],
+        [
+          496,
+          648
+        ],
+        [
+          496,
+          360
+        ],
+        [
+          472,
+          360
+        ],
+        [
+          472,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R22",
+      "child": "ApprovalDecision",
+      "from_field": "actor_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1945.0,
+          754.84
+        ],
+        [
+          1920,
+          754.84
+        ],
+        [
+          1920,
+          752
+        ],
+        [
+          1800,
+          752
+        ],
+        [
+          1800,
+          968
+        ],
+        [
+          480,
+          968
+        ],
+        [
+          480,
+          776
+        ],
+        [
+          464,
+          776
+        ],
+        [
+          464,
+          656
+        ],
+        [
+          456,
+          656
+        ],
+        [
+          456,
+          312
+        ],
+        [
+          464,
+          312
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R37",
+      "child": "Evidence",
+      "from_field": "uploaded_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1025.0,
+          1675.84
+        ],
+        [
+          1000,
+          1675.84
+        ],
+        [
+          1000,
+          1672
+        ],
+        [
+          920,
+          1672
+        ],
+        [
+          920,
+          912
+        ],
+        [
+          496,
+          912
+        ],
+        [
+          496,
+          744
+        ],
+        [
+          480,
+          744
+        ],
+        [
+          480,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R39",
+      "child": "WorkOrder",
+      "from_field": "created_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1440.0,
+          1301.84
+        ],
+        [
+          1408,
+          1301.84
+        ],
+        [
+          1408,
+          1304
+        ],
+        [
+          1376,
+          1304
+        ],
+        [
+          1376,
+          1800
+        ],
+        [
+          928,
+          1800
+        ],
+        [
+          928,
+          880
+        ],
+        [
+          504,
+          880
+        ],
+        [
+          504,
+          296
+        ],
+        [
+          464,
+          296
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R40",
+      "child": "WorkOrder",
+      "from_field": "assigned_to_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1440.0,
+          1329.84
+        ],
+        [
+          1408,
+          1329.84
+        ],
+        [
+          1408,
+          1328
+        ],
+        [
+          1400,
+          1328
+        ],
+        [
+          1400,
+          1808
+        ],
+        [
+          936,
+          1808
+        ],
+        [
+          936,
+          976
+        ],
+        [
+          464,
+          976
+        ],
+        [
+          464,
+          728
+        ],
+        [
+          472,
+          728
+        ],
+        [
+          472,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R41",
+      "child": "WorkOrder",
+      "from_field": "accepted_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1440.0,
+          1357.84
+        ],
+        [
+          1408,
+          1357.84
+        ],
+        [
+          1408,
+          1360
+        ],
+        [
+          1416,
+          1360
+        ],
+        [
+          1416,
+          1816
+        ],
+        [
+          944,
+          1816
+        ],
+        [
+          944,
+          888
+        ],
+        [
+          488,
+          888
+        ],
+        [
+          488,
+          320
+        ],
+        [
+          464,
+          320
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R16",
+      "child": "PolicyRevision",
+      "from_field": "actor_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          2360.0,
+          647.84
+        ],
+        [
+          2336,
+          647.84
+        ],
+        [
+          2336,
+          648
+        ],
+        [
+          2312,
+          648
+        ],
+        [
+          2312,
+          984
+        ],
+        [
+          448,
+          984
+        ],
+        [
+          448,
+          912
+        ],
+        [
+          456,
+          912
+        ],
+        [
+          456,
+          624
+        ],
+        [
+          464,
+          624
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R43",
+      "child": "WorkOrderEvent",
+      "from_field": "actor_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1440.0,
+          1658.84
+        ],
+        [
+          1408,
+          1658.84
+        ],
+        [
+          1408,
+          1824
+        ],
+        [
+          952,
+          1824
+        ],
+        [
+          952,
+          920
+        ],
+        [
+          496,
+          920
+        ],
+        [
+          496,
+          280
+        ],
+        [
+          464,
+          280
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R24",
+      "child": "Loan",
+      "from_field": "operator_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1945.0,
+          1301.84
+        ],
+        [
+          1920,
+          1301.84
+        ],
+        [
+          1920,
+          1304
+        ],
+        [
+          1832,
+          1304
+        ],
+        [
+          1832,
+          960
+        ],
+        [
+          936,
+          960
+        ],
+        [
+          936,
+          928
+        ],
+        [
+          480,
+          928
+        ],
+        [
+          480,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R20",
+      "child": "ReviewNote",
+      "from_field": "actor_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          2360.0,
+          897.84
+        ],
+        [
+          2336,
+          897.84
+        ],
+        [
+          2336,
+          976
+        ],
+        [
+          960,
+          976
+        ],
+        [
+          960,
+          936
+        ],
+        [
+          472,
+          936
+        ],
+        [
+          472,
+          304
+        ],
+        [
+          464,
+          304
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R26",
+      "child": "ReturnRecord",
+      "from_field": "operator_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          1945.0,
+          1602.84
+        ],
+        [
+          1920,
+          1602.84
+        ],
+        [
+          1920,
+          1600
+        ],
+        [
+          1840,
+          1600
+        ],
+        [
+          1840,
+          992
+        ],
+        [
+          440,
+          992
+        ],
+        [
+          440,
+          920
+        ],
+        [
+          464,
+          920
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R30",
+      "child": "RoomUse",
+      "from_field": "started_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          2360.0,
+          1301.84
+        ],
+        [
+          2336,
+          1301.84
+        ],
+        [
+          2336,
+          1304
+        ],
+        [
+          2304,
+          1304
+        ],
+        [
+          2304,
+          1776
+        ],
+        [
+          1848,
+          1776
+        ],
+        [
+          1848,
+          1000
+        ],
+        [
+          432,
+          1000
+        ],
+        [
+          432,
+          912
+        ],
+        [
+          456,
+          912
+        ],
+        [
+          456,
+          312
+        ],
+        [
+          464,
+          312
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R31",
+      "child": "RoomUse",
+      "from_field": "ended_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          2360.0,
+          1329.84
+        ],
+        [
+          2336,
+          1329.84
+        ],
+        [
+          2336,
+          1328
+        ],
+        [
+          2312,
+          1328
+        ],
+        [
+          2312,
+          1832
+        ],
+        [
+          968,
+          1832
+        ],
+        [
+          968,
+          904
+        ],
+        [
+          872,
+          904
+        ],
+        [
+          872,
+          896
+        ],
+        [
+          488,
+          896
+        ],
+        [
+          488,
+          296
+        ],
+        [
+          464,
+          296
+        ],
+        [
+          464,
+          306.84
+        ],
+        [
+          440.0,
+          306.84
+        ]
+      ]
+    }
+  ],
+  "domains": [
+    {
+      "code": "A",
+      "entities": [
+        "User",
+        "Role",
+        "LabGrant",
+        "UserRole",
+        "QualificationType",
+        "UserQualification"
+      ]
+    },
+    {
+      "code": "B",
+      "entities": [
+        "Lab",
+        "OpeningPeriod",
+        "Accessory",
+        "Resource",
+        "EquipmentDetail",
+        "RoomDetail"
+      ]
+    },
+    {
+      "code": "C",
+      "entities": [
+        "Reservation",
+        "ApprovalDecision",
+        "Policy",
+        "PolicyRevision",
+        "ReviewNote"
+      ]
+    },
+    {
+      "code": "D",
+      "entities": [
+        "Loan",
+        "ReturnRecord",
+        "RoomUse",
+        "HandoverItem"
+      ]
+    },
+    {
+      "code": "E",
+      "entities": [
+        "Incident",
+        "Evidence",
+        "WorkOrder",
+        "WorkOrderEvent"
+      ]
+    },
+    {
+      "code": "F",
+      "entities": [
+        "AuditEvent",
+        "ServicePeriod",
+        "MockReceipt",
+        "Notification",
+        "Delivery",
+        "DeliveryAttempt"
+      ]
+    }
+  ]
+}
