@@ -79,6 +79,10 @@ def install(args):
     save(LOCAL/"runtime.json",{"portable":True,"pg_bin":str(pg),"pg_data":str(data),"python":str(python)})
 
 def main():
+    # English Windows redirects stdout using an ANSI code page by default.
+    for stream in (sys.stdout,sys.stderr):
+        if hasattr(stream,"reconfigure"):stream.reconfigure(encoding="utf-8",errors="backslashreplace")
+    os.environ["PYTHONUTF8"]="1";os.environ["PYTHONIOENCODING"]="utf-8"
     parser=argparse.ArgumentParser(description="校园实验室课程演示启动器")
     parser.add_argument("--setup",action="store_true");parser.add_argument("--no-browser",action="store_true")
     parser.add_argument("--smoke-test",action="store_true",help="启动并验证网页后退出，不清空业务数据")
@@ -144,7 +148,7 @@ def main():
 
 if __name__=="__main__":
     try:main()
-    except (StartupError,OSError,subprocess.CalledProcessError,ValueError,zipfile.BadZipFile) as error:
+    except (StartupError,RuntimeError,OSError,subprocess.CalledProcessError,ValueError,zipfile.BadZipFile) as error:
         if isinstance(error,subprocess.CalledProcessError):print("启动步骤执行失败。请检查网络、Python版本及.local日志；排查方法见老师运行指南。",file=sys.stderr)
         else:print(str(error),file=sys.stderr)
         sys.exit(1)
