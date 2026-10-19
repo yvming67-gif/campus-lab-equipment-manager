@@ -10,9 +10,12 @@ __pycache__/
 *.log
 .coverage
 
-# Course cover PDFs and private exports are delivered separately
+# PDFs are published only through explicit paths below
 *.pdf
 
 # Public model diagrams contain no personal course-cover information
 !models/ERD/完整ERD总图.pdf
 !models/ERD/分域ERD图册.pdf
+
+# Analysis report explicitly selected for publication by the project author
+!docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf

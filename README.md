@@ -1,6 +1,6 @@
 # 校园实验室设备预约与借用管理系统
 
-[公开源码](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [持续检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)
+[公开源码](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [系统分析报告（PDF）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf) · [持续检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)
 
 面向课程展示的完整本地演示项目，支持设备借用与整间实验室场地预约。业务、身份、消息和资源数据均为模拟示例；本地验证不代表真实学校上线效果。
 
@@ -53,7 +53,7 @@ python tools/start_local.py --setup --no-browser --smoke-test
 
 Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和响应式CSS，无额外前端构建步骤。状态规则集中在 `core/services.py`，权限同时检查角色与对象范围，区间互斥由PostgreSQL条件排斥约束兜底。
 
-`models/`包含31个实体、245个字段、52条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、35条BR、11项QR、52条AC。含个人信息的课程封面与正式分析报告单独交付；公开模型图不含这些个人信息。
+`models/`包含31个实体、245个字段、52条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、35条BR、11项QR、52条AC。系统分析报告以独立PDF随仓库提供，包含项目愿景、业务建模、系统需求、用例规约与需求追踪。
 
 ## 数据模型图
 
@@ -94,7 +94,7 @@ python tools/backup_restore.py --restore-test
 - [测试与验收记录](docs/测试与验收记录.md)
 - [独立验收报告](docs/独立验收报告.md)
 - [运行指南](docs/运行指南.md)
-- [完整开发提示词](docs/完整开发提示词.md)
+- [系统分析报告（PDF）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf)
 - [模型源文件说明](models/README.md)
 
 代码采用MIT许可证。演示系统绑定本机回环地址；正式校园接口、备份保留策略及真实业务制度仍需由目标学校确认。
