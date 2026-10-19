@@ -2,7 +2,7 @@
 
 [公开源码](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [系统分析报告（PDF）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf) · [持续检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)
 
-面向课程展示的完整本地演示项目，支持设备借用与整间实验室场地预约。业务、身份、消息和资源数据均为模拟示例；本地验证不代表真实学校上线效果。
+面向课程展示的完整本地演示项目，支持设备借用与整间实验室场地预约。新增原生微信小程序用户端，支持查询、预约、取消、进度和通知，管理业务继续使用网页。业务、身份、消息和资源数据均为模拟示例；本地验证不代表真实学校上线效果。
 
 ## 在Windows电脑上运行
 
@@ -24,6 +24,20 @@ python tools/start_local.py --setup --no-browser --smoke-test
 ```
 
 启动器同时运行网页服务及每30秒扫描的任务进程；后台运行时每23小时触发完整备份，失败一小时后重试。中文目录使用Windows短路径或经过目标校验的可写英文目录联接，实际数据仍保存在项目内。不要在运行中移动项目或删除目录别名。
+
+## 微信小程序用户端
+
+1. 先启动上面的Django后端，记录“启动成功”显示的本机地址。
+2. 打开微信开发者工具，导入仓库中的`miniprogram`目录，选择工具提供的测试号或自己的AppID；当前配置保留演示占位AppID。
+3. 开发者工具本地调试关闭合法域名校验，编译后以学生或教师账号登录；在小程序登录页填写后端实际地址。默认密码仍为`Demo@2026`。
+
+[导入与运行指南](miniprogram/README.md) · [需求、接口与验收](docs/微信小程序扩展说明.md)
+
+小程序与网页读取同一套PostgreSQL记录，普通设备自动确认，受限设备和场地等待网页管理员审批。当前交付用于本地开发者工具演示；原生微信容器、真机与正式发布的验证范围见文档。网页本身仍可独立运行，小程序不增加网页首次安装所需的组件。
+
+原生页面编译后的界面预览（浏览器渲染联调，非微信容器截图）：
+
+<img src="docs/images/mini-resources.png" width="230" alt="资源目录编译页面预览"> <img src="docs/images/mini-booking.png" width="230" alt="预约详情编译页面预览"> <img src="docs/images/mini-notifications.png" width="230" alt="通知中心编译页面预览">
 
 ## 演示账号
 
@@ -72,7 +86,7 @@ python manage.py check
 python manage.py migrate
 python manage.py seed_demo
 python manage.py prepare_demo
-python manage.py test core.tests --noinput
+python manage.py test core.tests core.miniapi_tests --noinput
 python manage.py test core.benchmark_tests --noinput
 python tools/export_model.py
 python tools/validate_registry.py
@@ -89,6 +103,8 @@ python tools/backup_restore.py --restore-test
 
 ## 文档导航
 
+- [微信小程序运行指南](miniprogram/README.md)
+- [微信小程序扩展说明](docs/微信小程序扩展说明.md)
 - [演示操作说明](docs/演示操作说明.md)
 - [需求、实现与验证映射](docs/需求与实现映射.md)
 - [测试与验收记录](docs/测试与验收记录.md)

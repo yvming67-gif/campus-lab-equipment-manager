@@ -1,0 +1,119 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const root = path.resolve(__dirname, '../../miniprogram');
+let api, storage, requests, reply, navigations;
+function setup() {
+  storage = new Map(); requests = []; navigations = [];
+  reply = r => r.success({ statusCode: 200, data: { ok: true, data: {} } });
+  global.wx = {
+    getStorageSync: k => storage.get(k), setStorageSync: (k, v) => storage.set(k, v), removeStorageSync: k => storage.delete(k),
+    request: r => { requests.push(r); reply(r); },
+    reLaunch: r => { navigations.push(r.url); if (r.complete) r.complete(); },
+    navigateTo: r => navigations.push(r.url), redirectTo: r => navigations.push(r.url), switchTab: r => navigations.push(r.url),
+    showModal: r => r.success({ confirm: true }), showToast() {}, stopPullDownRefresh() {}
+  };
+  for (const name of ['utils/api.js', 'controllers.js']) delete require.cache[require.resolve(path.join(root, name))];
+  api = require(path.join(root, 'utils/api'));
+}
+function signedIn() { storage.set('campus-mini-session', { token: 'a'.repeat(32), user: { id: 1, display_name: '模拟学生' }, expiresAt: Date.now() + 7200000 }); }
+function page(name) {
+  const definition = require(path.join(root, 'controllers')).create(name);
+  definition.setData = function (values) {
+    for (const [key, value] of Object.entries(values)) {
+      const parts = key.split('.'); let target = this.data;
+      for (const p of parts.slice(0, -1)) { if (!target[p]) target[p] = {}; target = target[p]; }
+      target[parts[parts.length - 1]] = value;
+    }
+  };
+  return definition;
+}
+const values = () => ({ resource_id: 1, starts_at: '2027-01-01T10:00:00', ends_at: '2027-01-01T11:00:00', purpose: '模拟用途', participants: 1 });
+test.beforeEach(setup);
+
+test('all seven native pages and lifecycle entry files exist', () => {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'app.json'), 'utf8'));
+  assert.equal(config.pages.length, 7);
+  for (const stem of config.pages) for (const ext of ['.js', '.json', '.wxml', '.wxss']) assert.ok(fs.existsSync(path.join(root, stem + ext)));
+  assert.equal(config.tabBar.list.length, 4);
+});
+test('WXML event bindings point to actual controller methods', () => {
+  for (const name of ['login', 'resources', 'resource', 'bookings', 'booking', 'notifications', 'profile']) {
+    const text = fs.readFileSync(path.join(root, 'pages', name, 'index.wxml'), 'utf8');
+    const definition = page(name);
+    for (const match of text.matchAll(/bind(?:tap|input|change|confirm)="([A-Za-z]+)"/g)) assert.equal(typeof definition[match[1]], 'function', name + ':' + match[1]);
+    assert.ok(!text.includes('<br'));
+  }
+});
+test('protected calls require an authenticated session', async () => {
+  await assert.rejects(api.request('/me/'), /请先登录/); assert.equal(requests.length, 0); assert.deepEqual(navigations, ['/pages/login/index']);
+});
+test('expired local session is removed', () => {
+  signedIn(); storage.get('campus-mini-session').expiresAt = Date.now() - 1;
+  assert.equal(api.session(), null); assert.equal(storage.has('campus-mini-session'), false);
+});
+test('only HTTPS or loopback HTTP service addresses are accepted', () => {
+  assert.equal(api.normalizeBase(' http://localhost:18000/ '), 'http://localhost:18000');
+  assert.equal(api.normalizeBase('https://lab.example.edu/'), 'https://lab.example.edu');
+  for (const url of ['javascript:alert(1)', 'http://example.com', 'https://user:pass@example.com', 'https://example.com?x=1']) assert.throws(() => api.normalizeBase(url));
+});
+test('changing service clears credentials and drafts', () => {
+  signedIn();storage.set('campus-mini-draft', { key: 'x' });api.setBase('http://localhost:18000');
+  assert.equal(api.session(), null);assert.equal(storage.has('campus-mini-draft'), false);
+});
+test('bearer token is sent in headers, never in the request URL', async () => {
+  signedIn();await api.request('/me/');assert.equal(requests[0].header.Authorization, 'Bearer ' + 'a'.repeat(32));assert.ok(!requests[0].url.includes('aaaa'));
+});
+test('unauthorized server response clears session and redirects', async () => {
+  signedIn();reply = r => r.success({ statusCode: 401, data: { ok: false, error: { message: '已失效' } } });
+  await assert.rejects(api.request('/me/'), /已失效/);assert.equal(api.session(), null);assert.equal(navigations[0], '/pages/login/index');
+});
+test('business rejection keeps the authenticated session', async () => {
+  signedIn();reply = r => r.success({ statusCode: 409, data: { ok: false, error: { code: 'RULE_REJECTED', message: '时间冲突' } } });
+  await assert.rejects(api.request('/bookings/', 'POST', {}), /时间冲突/);assert.ok(api.session());
+});
+test('unknown HTML response is a visible service error', async () => {
+  signedIn();reply = r => r.success({ statusCode: 200, data: '<html>wrong server</html>' });
+  await assert.rejects(api.request('/me/'), /服务返回异常/);
+});
+test('network failure retains stable idempotency key on retry', async () => {
+  signedIn();reply = r => r.fail({ errMsg: 'timeout' });
+  await assert.rejects(api.submitBooking(values()), /未能确认/);const key = requests[0].data.request_key;
+  await assert.rejects(api.submitBooking(values()), /未能确认/);assert.equal(requests[1].data.request_key, key);assert.match(key, /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/);
+});
+test('changed submission gets a new key and success removes draft', async () => {
+  signedIn();reply = r => r.fail({});await assert.rejects(api.submitBooking(values()));const key = requests[0].data.request_key;
+  reply = r => r.success({ statusCode: 200, data: { ok: true, data: { id: 17 } } });
+  await api.submitBooking(Object.assign(values(), { purpose: '新的用途' }));assert.notEqual(requests[1].data.request_key, key);assert.equal(storage.has('campus-mini-draft'), false);
+});
+test('unauthenticated submit cannot create a draft or issue a request', async () => {
+  await assert.rejects(api.submitBooking(values()), /请先登录/);assert.equal(storage.has('campus-mini-draft'), false);assert.equal(requests.length, 0);
+});
+test('field validation errors expose Chinese labels and causes', () => {
+  assert.equal(api.errorText({ fields: { starts_at: ['时间格式无效'] } }), '开始时间：时间格式无效');
+});
+test('resource draft restores the same form after interrupted submission', async () => {
+  signedIn();reply = r => r.fail({});await assert.rejects(api.submitBooking(values()));
+  const p = page('resource');p.onLoad({ id: '1' });assert.equal(p.data.form.purpose, '模拟用途');assert.equal(p.data.form.date, '2027-01-01');
+});
+test('double tap does not duplicate an in-flight login', async () => {
+  reply = () => {};const p = page('login');p.onLoad();p.submit();p.submit();assert.equal(requests.length, 1);assert.equal(p.data.busy, true);
+});
+test('student cannot trigger a room reservation from the page controller', async () => {
+  signedIn();const p = page('resource');p.setData({ item: { id: 1, kind: 'ROOM', can_apply: false } });await p.submit();assert.match(p.data.error, /仅教师/);assert.equal(requests.length, 0);
+});
+test('cancellation transmits the displayed optimistic version', async () => {
+  signedIn();const p = page('booking');p.setData({ id: 31, item: { version: 7 }, 'form.reason': '课程调整' });p.load = async () => {};
+  await p.cancel();assert.equal(requests[0].url.endsWith('/bookings/31/cancel/'), true);assert.deepEqual(requests[0].data, { reason: '课程调整', version: 7 });
+});
+test('marking one notification updates only that row and unread count', async () => {
+  signedIn();const p = page('notifications');p.setData({ unread: 2, items: [{ id: 3, unread: true, booking_id: null }, { id: 4, unread: true, booking_id: null }] });
+  await p.open({ currentTarget: { dataset: { id: '3' } } });assert.equal(p.data.items[0].unread, false);assert.equal(p.data.items[1].unread, true);assert.equal(p.data.unread, 1);
+});
+test('failed logout preserves session until server confirms revocation', async () => {
+  signedIn();reply = r => r.fail({});await assert.rejects(api.logout());assert.ok(api.session());
+});
+test('China date formatting is independent of the computer timezone', () => {
+  const fmt = require(path.join(root, 'utils/format'));assert.equal(fmt.day(Date.parse('2026-10-19T20:00:00Z')), '2026-10-20');
+});

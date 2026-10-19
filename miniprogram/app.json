@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/resources/index",
+    "pages/resource/index",
+    "pages/bookings/index",
+    "pages/booking/index",
+    "pages/notifications/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "校园实验室",
+    "navigationBarBackgroundColor": "#f7f7f2",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f7f2",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#7b8485",
+    "selectedColor": "#245f59",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/resources/index",
+        "text": "资源"
+      },
+      {
+        "pagePath": "pages/bookings/index",
+        "text": "预约"
+      },
+      {
+        "pagePath": "pages/notifications/index",
+        "text": "通知"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "networkTimeout": {
+    "request": 10000
+  },
+  "lazyCodeLoading": "requiredComponents"
+}

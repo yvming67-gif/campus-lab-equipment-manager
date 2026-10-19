@@ -1,0 +1,14 @@
+<view class="login-screen">
+  <view class="row"><view class="login-mark">LAB</view><text class="chip">课程演示</text></view>
+  <view class="eyebrow">CAMPUS LAB / RESERVATION</view>
+  <view class="login-title"><view>把下一次实验</view><view>安排好。</view></view>
+  <view class="sub">查询设备与场地，管理每一次预约。</view>
+  <view class="error" wx:if="{{error}}">{{error}}</view>
+  <view class="card">
+    <view class="field first"><text class="field-label">选择演示身份</text><picker range="{{accounts}}" range-key="name" value="{{accountIndex}}" bindchange="chooseAccount"><view class="field-value">{{accounts[accountIndex].name}}　⌄</view></picker></view>
+    <view class="field"><text class="field-label">演示密码</text><view class="field-box"><input password value="{{form.password}}" data-field="password" bindinput="input" placeholder="输入演示密码" maxlength="256" /></view></view>
+    <view class="field"><text class="field-label">本地服务地址</text><view class="field-box"><input value="{{form.base}}" data-field="base" bindinput="input" placeholder="http://127.0.0.1:8000" maxlength="200" /></view><view class="hint">填写后端启动窗口中的地址。默认演示密码：Demo@2026。</view></view>
+    <button class="primary top-gap" loading="{{busy}}" disabled="{{busy}}" bindtap="submit">进入实验室</button>
+  </view>
+  <view class="login-foot">模拟身份与数据 · 设备和整间场地分别预约</view>
+</view>

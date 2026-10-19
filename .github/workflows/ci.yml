@@ -31,7 +31,10 @@ jobs:
           python-version: '3.13'
       - run: pip install -r requirements.txt
       - run: python manage.py check
-      - run: python manage.py test core.tests --noinput
+      - run: python manage.py test core.tests core.miniapi_tests --noinput
+      - run: node --test tools/mini-check/client.test.cjs
+      - run: npm ci --prefix tools/mini-check --ignore-scripts --no-audit --no-fund
+      - run: node tools/mini-check/compile.cjs
       - run: python tools/validate_registry.py
       - run: python tools/test_startup.py
 

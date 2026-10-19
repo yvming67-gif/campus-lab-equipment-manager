@@ -1,0 +1,12 @@
+<view class="screen">
+  <view class="eyebrow">CAMPUS LAB / EXPLORE</view><view class="page-title">找到你的实验资源</view><view class="sub">{{user.display_name}}，从一段可用时间开始。</view>
+  <view class="hero"><view class="row"><text class="eyebrow">MY RESERVATIONS</text><text class="chip white-tag">教学资源共享</text></view><view class="hero-title"><view>预约有进度，</view><view>每一次使用都有记录。</view></view><view class="hero-stats"><view class="hero-stat"><text class="stat-number">{{stats.pending}}</text><text class="stat-label">待审核</text></view><view class="hero-stat"><text class="stat-number">{{stats.confirmed}}</text><text class="stat-label">已确认</text></view><view class="hero-stat"><text class="stat-number">{{stats.using}}</text><text class="stat-label">使用中</text></view></view></view>
+  <view class="error" wx:if="{{error}}">{{error}}</view><view class="notice" wx:if="{{overdue}}">你有逾期未结束的使用记录，办理结束后才能新增预约。</view>
+  <view class="tabs"><view class="tab {{kind === 'EQUIPMENT' ? 'active' : ''}}" data-kind="EQUIPMENT" bindtap="chooseKind">设备借用</view><view class="tab {{kind === 'ROOM' ? 'active' : ''}}" data-kind="ROOM" bindtap="chooseKind">场地预约</view></view>
+  <view class="search-box"><input value="{{form.q}}" placeholder="搜索资源名称或编号" data-field="q" bindinput="input" bindconfirm="search" confirm-type="search" /><button class="search-button" bindtap="search">搜索</button></view>
+  <picker range="{{labs}}" range-key="name" value="{{labIndex}}" bindchange="chooseLab"><view class="filter">{{labs[labIndex].name}}　⌄</view></picker>
+  <view class="row section-label"><text>资源目录</text><text>{{total}} 项</text></view>
+  <view class="card resource-card" wx:for="{{items}}" wx:key="id" data-id="{{item.id}}" bindtap="openResource"><view class="row"><text class="card-kicker">{{item.code}}</text><text class="chip {{item.tone}}">{{item.service_label}}</text></view><view class="card-title">{{item.name}}</view><view class="card-meta">{{item.category_label}}</view><view class="card-meta">{{item.lab.location}} · {{item.lab.name}}</view><view class="row card-footer"><text class="chip">{{item.mode_label}}</text><text class="action-link">查看与预约　↗</text></view></view>
+  <view wx:if="{{loading}}" class="loading">正在更新资源…</view><view wx:if="{{!loading && items.length === 0}}" class="empty"><view class="empty-title">暂无匹配资源</view>试试其他名称或实验室。</view>
+  <button wx:if="{{hasMore}}" class="text-button top-gap" bindtap="more" disabled="{{loading}}">加载更多</button>
+</view>

@@ -19,3 +19,8 @@ __pycache__/
 
 # Analysis report explicitly selected for publication by the project author
 !docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf
+
+# Optional authoring tools and private WeChat developer settings
+node_modules/
+miniprogram/project.private.config.json
+miniprogram/.debugger/

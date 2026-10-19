@@ -6,7 +6,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password,check_password
 from django.core import signing
 from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
@@ -21,6 +20,7 @@ from .models import *
 from .forms import *
 from . import services as s
 from .reports import utilization
+from .demo_identity import verify_demo_password
 
 def protected(ok):
     if not ok:raise PermissionDenied
@@ -56,12 +56,9 @@ def identity(request):
     accounts=User.objects.filter(is_active=True).order_by("pk")
     error=""
     if request.method=="POST":
-        # 课程模拟身份提供方；凭据单独存放，不进入业务用户表。
-        path=settings.LOCAL/"mock-identity.json"
-        if not path.exists():path.write_text(json.dumps({u.username:make_password("Demo@2026") for u in User.objects.all()}),encoding="utf-8")
-        hashes=json.loads(path.read_text("utf-8"));username=request.POST.get("username","")
-        user=User.objects.filter(username=username,is_active=True).first()
-        if user and check_password(request.POST.get("password",""),hashes.get(username,"!")):
+        username=request.POST.get("username","")
+        user=verify_demo_password(username,request.POST.get("password",""))
+        if user:
             ticket=signing.dumps({"sub":user.school_no,"nonce":request.session["idp_nonce"]},key=settings.MOCK_IDP_KEY,salt="mock-idp")
             return redirect(reverse("callback")+"?"+urlencode({"ticket":ticket}))
         error="模拟账号或演示密码不正确，或账号已停用"

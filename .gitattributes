@@ -9,3 +9,8 @@
 *.cmd text eol=crlf
 *.png binary
 *.pdf binary
+
+*.js text eol=lf
+*.cjs text eol=lf
+*.wxml text eol=lf
+*.wxss text eol=lf
