@@ -1,0 +1,35 @@
+{
+  "base_commit": "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+  "branch": "fix/audit-20261020",
+  "working_tree": true,
+  "independent_cases": 8,
+  "independent_passed": 8,
+  "mini_cases": 24,
+  "mini_passed": 24,
+  "test_database": "test_acceptance_20261020 (created and destroyed by Django runner)",
+  "source_sha256": {
+    "core/services.py": "fdc2933f085e0c1624f9903cf6572e25f36c1ea6a46ffb94ffaa6dfe8a8cef68",
+    "core/coordination.py": "ee4ce1ce72eaffabe656c25bce7637e928fff984b589bd3a41989015451c95f2",
+    "core/coordination_views.py": "d4a5e8c57a61a5c1f2fa25678ef9953900f99982d16f4c8b0ad4ab3cfcfb3f2c",
+    "core/adapters.py": "abfbf0f46252bc7d4bb905b4feb3786327d7480174f545fd3671770ac563a6c7",
+    "core/operations.py": "05a580f3b27f29ab789fe152d9830f91e6fdd3f0cbb2c239252f6df85750400a",
+    "core/models.py": "6fad05dc69ad70a286fedf2ce0ef9a254826aaca541cef79ea657f5a0f50de04",
+    "core/forms.py": "90fe83e22204e850bc1b3f0e11ceb5c783f6837448a525495a3f39875c3308fc",
+    "core/views.py": "ea8bf74d96f6b0830d277f7a0fd45f6d0667d710b7b9b4cfb0a8133b912b754b",
+    "core/miniapi.py": "35e169c63b7f2d8ce534b3456ad2e19864fd7b8976211a4ea10f25f9ef383529",
+    "miniprogram/controllers.js": "dc3a2ba35037afcb8c1fd7cdf37bcdc37b797ae1aa5a121d5095812f0212b707",
+    "miniprogram/utils/api.js": "2fb053bd9e89ce0730bee4c5a01ad525dff79ddd285b7658353fd333f2ffef8f",
+    "tools/backup_restore.py": "160504f2488b95807c083db827308f73bb07ebb750f3276eddc38bb111a05ab2",
+    "tools/restore_archive.py": "9e5b63508ea5ceff7b0cf7c00674a8100545c00f41f74ba0d22537c4b42bb9d8",
+    "tools/provision_app_role.py": "b83331e23fb75f915b7aeac0932169d70ee1dd82bc52dc5dfe121226b85000fd",
+    "tools/serve_production.py": "7836478d8b0ea99c74a4a65ee94181334d9caa205c04fabff883529542ef6b37",
+    "tools/start_local.py": "033e4c4163edd6632be4d8eb5d6fd2118e55ccba85f50d291f589402c7d25e91",
+    "config/production.py": "6c62032ba43b8132a31b66d76a5d4b444c835c73a2af116a5114e903e979f7fd"
+  },
+  "limits": [
+    "No live school identity or messaging provider",
+    "No actual WeChat container/device verification",
+    "No production TLS deployment",
+    "No full host disaster recovery; source configuration invalid and target DB on same local instance"
+  ]
+}

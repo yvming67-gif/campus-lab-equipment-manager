@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-19",
+  "scope": "Complete-field model diagrams and generic public documentation",
+  "schema_sha256": "0ae9aa4a9964abd9b92d8c62cdbe1b66941ebcafe98bfbcfefbb4c9b94c95ad0",
+  "entities": 31,
+  "fields": 245,
+  "physical_foreign_keys": 52,
+  "pdf_poster_pages": 1,
+  "pdf_atlas_pages": 6,
+  "editable_field_attached_edges": 52,
+  "six_domains_complete": true,
+  "orthogonal_no_card_crossing": true,
+  "column_type_text_no_overlap": true,
+  "active_pdf_fonts_embedded": true,
+  "pdf_text_inside_page_bounds": true,
+  "offline_browser": {
+    "offline_file_opened": true,
+    "entities": 31,
+    "fields": 245,
+    "foreign_key_edges": 52,
+    "field_search": true,
+    "chinese_search": true,
+    "zero_results": true,
+    "zoom": true,
+    "shared_layer_toggle": true
+  },
+  "startup_tool_tests_passed": 11,
+  "runtime_business_rules_changed": false,
+  "schema_hash_format": "canonical-json-sorted-compact-utf8"
+}

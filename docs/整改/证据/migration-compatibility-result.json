@@ -1,0 +1,8 @@
+{
+  "migration": "0003 -> 0004",
+  "historical_user_resource_reservation_audit": "preserved",
+  "new_defaults": "portable true, review_required false",
+  "invented_review_or_coordination_rows": 0,
+  "original_audit_unchanged": true,
+  "source_database_touched": false
+}

@@ -1,0 +1,32 @@
+✔ AUD-0017 older notification reads cannot overwrite a newer result (7.1511ms)
+✔ AUD-0018 changing dates invalidates an outstanding availability response (1.1059ms)
+✔ AUD-0036 offline logout clears local credentials and reaches address settings (1.7445ms)
+✔ all seven native pages and lifecycle entry files exist (4.3867ms)
+✔ WXML event bindings point to actual controller methods (3.0644ms)
+✔ protected calls require an authenticated session (1.7137ms)
+✔ expired local session is removed (0.4504ms)
+✔ only HTTPS or loopback HTTP service addresses are accepted (0.7257ms)
+✔ changing service clears credentials and drafts (0.4594ms)
+✔ bearer token is sent in headers, never in the request URL (0.8201ms)
+✔ unauthorized server response clears session and redirects (0.4452ms)
+✔ business rejection keeps the authenticated session (0.4081ms)
+✔ unknown HTML response is a visible service error (0.4155ms)
+✔ network failure retains stable idempotency key on retry (0.7994ms)
+✔ changed submission gets a new key and success removes draft (0.5198ms)
+✔ unauthenticated submit cannot create a draft or issue a request (0.3653ms)
+✔ field validation errors expose Chinese labels and causes (0.3851ms)
+✔ resource draft restores the same form after interrupted submission (0.8107ms)
+✔ double tap does not duplicate an in-flight login (0.7214ms)
+✔ student cannot trigger a room reservation from the page controller (1.0898ms)
+✔ cancellation transmits the displayed optimistic version (1.1526ms)
+✔ marking one notification updates only that row and unread count (0.9954ms)
+✔ failed remote logout still clears the local session (0.3963ms)
+✔ China date formatting is independent of the computer timezone (0.5875ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 136.2255

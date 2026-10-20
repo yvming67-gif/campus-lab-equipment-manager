@@ -1,0 +1,222 @@
+{
+  "version": "2.0",
+  "project": "校园实验室设备预约与借用管理系统",
+  "confirmed": {
+    "objects": [
+      "EQUIPMENT",
+      "ROOM"
+    ],
+    "room_applicant": "TEACHER",
+    "equipment_applicants": [
+      "STUDENT",
+      "TEACHER"
+    ],
+    "independent_resources": true,
+    "approval": {
+      "ordinary_equipment": "AUTO",
+      "restricted_equipment": "MANUAL",
+      "room": "MANUAL"
+    },
+    "pending_occupies": false,
+    "window_days": 14,
+    "slot_minutes": 30,
+    "max_hours": 8,
+    "future_equipment_quota": 3,
+    "future_room_quota": 3,
+    "simultaneous_equipment": 3,
+    "room_registration": "LAB_ADMIN_START_AND_END"
+  },
+  "recommended_assumptions": {
+    "opening": "每日08:00—20:00，日间不跨日",
+    "grace_minutes": 30,
+    "cancel": "开始前本人取消；已使用须办理结束",
+    "restricted": "高价值、危险或需要培训资质的设备",
+    "simultaneous_rooms_per_teacher": 1,
+    "future_in_use_resource": "允许未来空闲预约；实际领取前再核验；逾期未归还阻断新建、批准和领取",
+    "room_capacity": "申请和入场人数均不得超容量",
+    "isolation": "异常临时隔离；工单关闭并验收、所有阻断解除后恢复",
+    "resource_independence": "房间预约或故障不隐式占用或停用室内设备，独立异常独立处置",
+    "notifications": "提前1小时、逾期每日；首次0及1/5/15分钟重试1至3",
+    "authentication": "仅本地模拟身份提供方，业务用户无可用学校密码",
+    "privacy": "模拟业务数据；课程报告按作者明确授权范围公开，本地运行数据不公开",
+    "quality": "每次查询3秒、提交5秒；100组并发/100次状态同步；RPO24h/RTO4h为初步目标"
+  },
+  "use_cases": [
+    {
+      "id": "UC-01",
+      "spec": "SPEC-01",
+      "name": "登录系统",
+      "actors": "学生、教师及管理岗位"
+    },
+    {
+      "id": "UC-02",
+      "spec": "SPEC-02",
+      "name": "查询实验室与设备",
+      "actors": "学生、教师"
+    },
+    {
+      "id": "UC-03",
+      "spec": "SPEC-03",
+      "name": "查询资源可用时段",
+      "actors": "学生、教师"
+    },
+    {
+      "id": "UC-04",
+      "spec": "SPEC-04",
+      "name": "提交设备预约",
+      "actors": "学生、教师"
+    },
+    {
+      "id": "UC-05",
+      "spec": "SPEC-05",
+      "name": "提交场地预约",
+      "actors": "教师"
+    },
+    {
+      "id": "UC-06",
+      "spec": "SPEC-06",
+      "name": "查看预约进度",
+      "actors": "本人、授权管理员"
+    },
+    {
+      "id": "UC-07",
+      "spec": "SPEC-07",
+      "name": "取消预约",
+      "actors": "本人"
+    },
+    {
+      "id": "UC-08",
+      "spec": "SPEC-08",
+      "name": "审核预约",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-09",
+      "spec": "SPEC-09",
+      "name": "办理设备借出",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-10",
+      "spec": "SPEC-10",
+      "name": "办理设备归还",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-11",
+      "spec": "SPEC-11",
+      "name": "登记场地使用开始",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-12",
+      "spec": "SPEC-12",
+      "name": "登记场地使用结束",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-13",
+      "spec": "SPEC-13",
+      "name": "提交资源异常说明",
+      "actors": "学生、教师"
+    },
+    {
+      "id": "UC-14",
+      "spec": "SPEC-14",
+      "name": "核实与处置资源异常",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-15",
+      "spec": "SPEC-15",
+      "name": "创建与指派维修工单",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-16",
+      "spec": "SPEC-16",
+      "name": "处理维修任务",
+      "actors": "维修人员"
+    },
+    {
+      "id": "UC-17",
+      "spec": "SPEC-17",
+      "name": "验收维修与恢复资源",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-18",
+      "spec": "SPEC-18",
+      "name": "维护实验室与设备档案",
+      "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-19",
+      "spec": "SPEC-19",
+      "name": "维护用户角色与管理范围",
+      "actors": "系统管理员"
+    },
+    {
+      "id": "UC-20",
+      "spec": "SPEC-20",
+      "name": "维护开放时间及预约参数",
+      "actors": "系统管理员"
+    },
+    {
+      "id": "UC-21",
+      "spec": "SPEC-21",
+      "name": "查询审计记录",
+      "actors": "系统管理员、授权实验室管理员"
+    },
+    {
+      "id": "UC-22",
+      "spec": "SPEC-22",
+      "name": "查看本人通知",
+      "actors": "学生、教师及管理岗位"
+    },
+    {
+      "id": "UC-23",
+      "spec": "SPEC-23",
+      "name": "投递通知与失败重试",
+      "actors": "内部事件触发；消息服务协作"
+    },
+    {
+      "id": "UC-24",
+      "spec": "SPEC-24",
+      "name": "查看资源利用与运行报表",
+      "actors": "授权实验室管理员"
+    },
+    {
+      "id": "UC-25",
+      "spec": "SPEC-25",
+      "name": "提交与读取异常证据",
+      "actors": "报告人、授权管理员或维修人员"
+    },
+    {
+      "id": "UC-26",
+      "spec": "SPEC-26",
+      "name": "查询预约与使用历史",
+      "actors": "本人、授权实验室管理员"
+    }
+  ],
+  "references": [
+    {
+      "name": "LibreBooking资源审批与签到",
+      "url": "https://librebooking.readthedocs.io/en/latest/ADMINISTRATION.html"
+    },
+    {
+      "name": "Snipe-IT标签与借还责任",
+      "url": "https://snipe-it.readme.io/docs/overview"
+    },
+    {
+      "name": "MRBS房间冲突与多级权限",
+      "url": "https://mrbs.sourceforge.io/"
+    }
+  ],
+  "github": {
+    "user": "yvming67-gif",
+    "repo": "campus-lab-equipment-manager",
+    "visibility": "public",
+    "after_local_acceptance": true
+  }
+}

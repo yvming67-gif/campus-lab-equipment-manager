@@ -81,6 +81,9 @@ Table core_equipmentdetail {
   risk "varchar(20)" [not null, note: '受限级别；枚举：[('NORMAL', '普通'), ('HIGH_VALUE', '高价值'), ('HAZARDOUS', '危险')]']
   qualification_id "bigint" [note: 'qualification']
   physical_status "varchar(16)" [not null, note: '实物状态；枚举：[('IN_STOCK', '在库'), ('BORROWED', '借出中')]']
+  portable "boolean" [not null, note: '可独立外借']
+  access_room_id "bigint" [note: 'access room']
+  handover_location "varchar(120)" [not null, note: '交接地点']
   Note: '设备属性；约束及条件唯一项以迁移文件为准。'
 }
 Table core_roomdetail {
@@ -149,6 +152,10 @@ Table core_reservation {
   policy_snapshot "jsonb" [not null, note: 'policy snapshot']
   reason "text" [not null, note: 'reason']
   version "integer" [not null, note: 'version']
+  review_required "boolean" [not null, note: '暂停交接待复核']
+  review_reason "text" [not null, note: '待复核原因']
+  arrived_at "timestamp with time zone" [note: '已核实到场时间']
+  late_start_until "timestamp with time zone" [note: '协调后的最晚开始时间']
   created_at "timestamp with time zone" [not null, note: 'created at']
   Note: '资源预约；约束及条件唯一项以迁移文件为准。'
 }
@@ -232,6 +239,7 @@ Table core_incident {
   reservation_id "bigint" [note: 'reservation']
   kind "varchar(20)" [not null, note: 'kind；枚举：[('DAMAGE', '损坏'), ('MISSING', '缺件'), ('FAULT', '运行或场地异常')]']
   description "text" [not null, note: 'description']
+  blocks_service "boolean" [not null, note: '阻断服务']
   occurred_at "timestamp with time zone" [not null, note: 'occurred at']
   reported_at "timestamp with time zone" [not null, note: 'reported at']
   status "varchar(16)" [not null, note: 'status；枚举：[('PENDING', '待核实'), ('CONFIRMED', '已确认'), ('DISMISSED', '已排除'), ('RESOLVED', '已解决')]']
@@ -337,6 +345,57 @@ Table core_mockreceipt {
   received_at "timestamp with time zone" [not null, note: 'received at']
   Note: '模拟投递去重凭据；约束及条件唯一项以迁移文件为准。'
 }
+Table core_reservationreview {
+  id "bigint" [pk, not null, note: 'ID']
+  reservation_id "bigint" [not null, note: 'reservation']
+  actor_id "bigint" [not null, note: 'actor']
+  accepted "boolean" [not null, note: 'accepted']
+  reason "text" [not null, note: 'reason']
+  snapshot "jsonb" [not null, note: 'snapshot']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '预约复核历史；约束及条件唯一项以迁移文件为准。'
+}
+Table core_coordination {
+  id "bigint" [pk, not null, note: 'ID']
+  reservation_id "bigint" [not null, note: 'reservation']
+  actor_id "bigint" [not null, note: 'actor']
+  action "varchar(20)" [not null, note: 'action；枚举：[('WAIT', '前序延误等待'), ('CANCEL', '协调取消')]']
+  reason "text" [not null, note: 'reason']
+  old_state "jsonb" [not null, note: 'old state']
+  new_state "jsonb" [not null, note: 'new state']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '预约协调凭据；约束及条件唯一项以迁移文件为准。'
+}
+Table core_calendarexception {
+  id "bigint" [pk, not null, note: 'ID']
+  lab_id "bigint" [not null, note: 'lab']
+  day "date" [not null, note: 'day']
+  closed "boolean" [not null, note: 'closed']
+  starts_at "time" [note: 'starts at']
+  ends_at "time" [note: 'ends at']
+  active "boolean" [not null, note: 'active']
+  actor_id "bigint" [not null, note: 'actor']
+  reason "text" [not null, note: 'reason']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '单日开放例外版本；约束及条件唯一项以迁移文件为准。'
+}
+Table core_incidentresponse {
+  id "bigint" [pk, not null, note: 'ID']
+  incident_id "bigint" [not null, note: 'incident']
+  actor_id "bigint" [not null, note: 'actor']
+  kind "varchar(20)" [not null, note: 'kind；枚举：[('ACK', '确认知悉'), ('DISPUTE', '提出异议'), ('SUPPLEMENT', '追加事实'), ('REVIEW', '独立复核结论')]']
+  content "text" [not null, note: 'content']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '异常确认与异议记录；约束及条件唯一项以迁移文件为准。'
+}
+Table core_jobheartbeat {
+  id "bigint" [pk, not null, note: 'ID']
+  name "varchar(40)" [not null, unique, note: 'name']
+  last_success "timestamp with time zone" [note: 'last success']
+  last_error_at "timestamp with time zone" [note: 'last error at']
+  error_code "varchar(80)" [not null, note: 'error code']
+  Note: '后台任务健康记录；约束及条件唯一项以迁移文件为准。'
+}
 Ref: core_userrole.user_id > core_user.id
 Ref: core_userrole.role_id > core_role.id
 Ref: core_userrole.granted_by_id > core_user.id
@@ -348,6 +407,7 @@ Ref: core_userqualification.granted_by_id > core_user.id
 Ref: core_resource.lab_id > core_lab.id
 Ref: core_equipmentdetail.resource_id - core_resource.id
 Ref: core_equipmentdetail.qualification_id > core_qualificationtype.id
+Ref: core_equipmentdetail.access_room_id > core_resource.id
 Ref: core_roomdetail.resource_id - core_resource.id
 Ref: core_accessory.resource_id > core_resource.id
 Ref: core_openingperiod.lab_id > core_lab.id
@@ -389,3 +449,11 @@ Ref: core_notification.recipient_id > core_user.id
 Ref: core_delivery.notification_id > core_notification.id
 Ref: core_deliveryattempt.delivery_id > core_delivery.id
 Ref: core_mockreceipt.delivery_id - core_delivery.id
+Ref: core_reservationreview.reservation_id > core_reservation.id
+Ref: core_reservationreview.actor_id > core_user.id
+Ref: core_coordination.reservation_id > core_reservation.id
+Ref: core_coordination.actor_id > core_user.id
+Ref: core_calendarexception.lab_id > core_lab.id
+Ref: core_calendarexception.actor_id > core_user.id
+Ref: core_incidentresponse.incident_id > core_incident.id
+Ref: core_incidentresponse.actor_id > core_user.id

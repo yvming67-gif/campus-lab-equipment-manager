@@ -1,0 +1,30 @@
+{
+  "source_unavailable": true,
+  "invalid_django_settings": true,
+  "all_table_counts_match": true,
+  "table_count": 43,
+  "attachments": 1,
+  "sessions": 0,
+  "audit_protection_restored": true,
+  "runtime_role_restrictions": [
+    {
+      "operation": "UPDATE",
+      "sqlstate": "42501"
+    },
+    {
+      "operation": "ALTER",
+      "sqlstate": "42501"
+    },
+    {
+      "operation": "TRUNCATE",
+      "sqlstate": "42501"
+    },
+    {
+      "operation": "CREATE",
+      "sqlstate": "42501"
+    }
+  ],
+  "replica_hash_match": true,
+  "target_database": "campus_offline_a0a0bdef",
+  "elapsed_scope": "isolated local PostgreSQL 17.11"
+}

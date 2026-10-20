@@ -1,0 +1,2117 @@
+[
+  {
+    "id": "AUD-0001",
+    "title": "现场开始使用未复核借用人的账号与角色有效性",
+    "original_type": "已确认缺陷",
+    "original_severity": "严重：已停用或失去借用角色的人仍可能完成实物交接",
+    "root_cause": "创建/审批与开始交接采用不同的资格检查集合。",
+    "original_acceptance": "两种资源分别验证停用、撤角色和有效账号；失权不得产生 Loan/RoomUse，既有审计与预约保留。",
+    "status": "已复验关闭",
+    "decision": "设备借出与场地开始共用开始校验，重新读取当前账号、角色和覆盖时段的培训；账号失效仍可由管理员接收真实归还。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "设备借出与场地开始共用开始校验，重新读取当前账号、角色和覆盖时段的培训；账号失效仍可由管理员接收真实归还。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0001",
+    "original_problem": "创建和审批检查账号及角色，现场交接公共检查只查状态、时间、服务限制、逾期和培训；未复核 applicant.is_active 或所需角色。",
+    "entry_scope": "预约与现场交接；借用人、实验室管理员",
+    "current_locations": [
+      "core/services.py:225 _check_start",
+      "core/services.py:277 return_equipment"
+    ]
+  },
+  {
+    "id": "AUD-0002",
+    "title": "已确认设备升级为受限设备后仍可沿用自动确认直接借出",
+    "original_type": "需求待确认",
+    "original_severity": "严重：限制等级提高后可能绕过人工审核",
+    "root_cause": "资源分级变更未连接既有未开始预约的审核有效性。",
+    "original_acceptance": "普通转受限后未补审不能借出；补审和培训通过后允许；降级保留历史。",
+    "status": "等待制度确认",
+    "decision": "课程默认实施风险升级复核，原决定保留且原占用/配额继续；开始前及领取宽限内可追加复核，真实学校制度仍待确认。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0002相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "课程默认实施风险升级复核，原决定保留且原占用/配额继续；开始前及领取宽限内可追加复核，真实学校制度仍待确认。",
+      "课程演示边界内已执行证据见整改验证记录；真实制度尚未确认。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0002",
+    "original_problem": "资源档案可以修改 risk/qualification；现场仅检查当前培训资质，没有检查原自动确认是否仍满足新的人工审批条件。",
+    "entry_scope": "预约与现场交接；借用人、实验室管理员",
+    "current_locations": [
+      "core/services.py:590 save_resource",
+      "core/coordination.py:65 recheck"
+    ]
+  },
+  {
+    "id": "AUD-0003",
+    "title": "网页主要列表静默截取100条，无法翻页访问更早记录",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：历史与待办可能因记录量被隐藏",
+    "root_cause": "以演示数据量硬截断代替分页。",
+    "original_acceptance": "每个已列入口101+条，所有授权记录可到达；筛选翻页保留，越权记录仍不可见。",
+    "status": "已复验关闭",
+    "decision": "资源、预约、异常、工单、通知、审计、投递七列表统一30条分页，总数、稳定排序、页码及筛选保留；各105条以上实测第四页可达。",
+    "files": [
+      "core/views.py",
+      "templates/pagination.html"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "待执行网页/客户端/业务回归"
+    ],
+    "results": [
+      "资源、预约、异常、工单、通知、审计、投递七列表统一30条分页，总数、稳定排序、页码及筛选保留；各105条以上实测第四页可达。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0003",
+    "original_problem": "资源、预约、异常、维修、通知、审计、外部投递多入口使用 [:100]，没有总数、截断提示或下一页；资源配置 manage 另为无分页全量。",
+    "entry_scope": "网页列表；所有角色",
+    "current_locations": [
+      "core/views.py:25 paginate"
+    ]
+  },
+  {
+    "id": "AUD-0004",
+    "title": "备份工具无法选择已有备份执行灾后恢复",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：原库损坏时现有演练入口不足以完成恢复",
+    "root_cause": "将备份及在线演练实现为同一流程，未交付独立恢复操作手册。",
+    "original_acceptance": "在源库不可用的新目录仅用备份、锁定依赖和手册恢复，核对预约/交接/审计/附件及清空会话。",
+    "status": "已复验关闭",
+    "decision": "新增独立restore_archive，不导入Django、不重新备份；源连接配置无效时恢复43表、1附件、0会话，保护机制保持；原库未停止、不夸称异地演练。",
+    "files": [
+      "tools/restore_archive.py",
+      "tools/backup_restore.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0004相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "新增独立restore_archive，不导入Django、不重新备份；源连接配置无效时恢复43表、1附件、0会话，保护机制保持；原库未停止、不夸称异地演练。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0004",
+    "original_problem": "唯一参数为 --restore-test；该模式先访问当前源库重新备份，再将新 dump 恢复到演练库。没有从指定已存在 ZIP 恢复或提取媒体到目标目录的操作入口。",
+    "entry_scope": "运维与数据恢复；维护人员",
+    "current_locations": [
+      "tools/restore_archive.py:26 restore",
+      "tools/restore_archive.py:6 inspect_archive"
+    ]
+  },
+  {
+    "id": "AUD-0005",
+    "title": "无使用记录的用户可通过报障立即隔离任意资源",
+    "original_type": "需求待确认",
+    "original_severity": "严重：若开放给全校账号，单人可阻断大量资源",
+    "root_cause": "临时隔离对所有可报告资源统一生效，没有分级或重复上报控制。",
+    "original_acceptance": "验证本人/非本人、危险/普通和重复上报四类，规则与制度一致且核实可恢复。",
+    "status": "等待制度确认",
+    "decision": "课程默认按关联与责任分级阻断，普通未关联报告先核实；核实/驳回/工单/恢复及受影响人通知有凭据，学校安全分级须确认。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0005相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "课程默认按关联与责任分级阻断，普通未关联报告先核实；核实/驳回/工单/恢复及受影响人通知有凭据，学校安全分级须确认。",
+      "课程演示边界内已执行证据见整改验证记录；真实制度尚未确认。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0005",
+    "original_problem": "无需关联预约、位置或管理范围，任意有效学生/教师可上报任意设备或场地，待核实即隔离；该安全优先设计也带来误报或恶意阻断风险。",
+    "entry_scope": "异常管理；学生、教师、管理员",
+    "current_locations": [
+      "core/services.py:362 _new_incident",
+      "core/services.py:392 verify_incident"
+    ]
+  },
+  {
+    "id": "AUD-0006",
+    "title": "可用性查询对违反时间规则的时段仍显示“时段可预约”",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：查询结果给出不能兑现的时间可约提示",
+    "root_cause": "资源空闲判断与完整可预约语义混用。",
+    "original_acceptance": "网页/API分别查询各非法边界，查询与提交在客观时间规则上保持一致。",
+    "status": "已复验关闭",
+    "decision": "查询与提交共用客观时间规则；明确时段空闲不等于本人具备资格，固定场地依赖查询按当前申请人判断。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "查询与提交共用客观时间规则；明确时段空闲不等于本人具备资格，固定场地依赖查询按当前申请人判断。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0006",
+    "original_problem": "查询只查开放、服务状态和资源冲突，不查窗口、粒度、最长时长和过去时间；未将提示限定为资源空闲。",
+    "entry_scope": "查询；学生、教师",
+    "current_locations": [
+      "core/services.py:93 validate_time",
+      "core/services.py:138 availability"
+    ]
+  },
+  {
+    "id": "AUD-0007",
+    "title": "前序逾期占用导致下一位超过宽限后没有延期交接渠道",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：守约到场的人可能失去已获批使用安排",
+    "root_cause": "宽限仅比较计划开始时间，未建等待到场凭据、原因分类或人工协调动作。",
+    "original_acceptance": "按上述31分钟场景，下一位不会被误计爽约；协调后不与再下一位冲突。",
+    "status": "已复验关闭",
+    "decision": "登记原宽限内真实到场及可核实前序延误，等待领取可至原结束前；不延长结束、不伪造前序归还；无依据等待拒绝。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0007相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "登记原宽限内真实到场及可核实前序延误，等待领取可至原结束前；不延长结束、不伪造前序归还；无依据等待拒绝。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0007",
+    "original_problem": "前一次未完成阻止下一次开始是合理的；但下一位等待超过30分钟，即使前人随后归还，也只能收到宽限超时，后台还可能使其预约失效。",
+    "entry_scope": "实际使用协调；借用人、管理员",
+    "current_locations": [
+      "core/coordination.py:87 coordinate"
+    ]
+  },
+  {
+    "id": "AUD-0008",
+    "title": "已确认预约的资源报障隔离后未立即通知受影响申请人",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：用户仍持已确认凭据到场但无法领取",
+    "root_cause": "临时隔离和预约影响通知只在工单阶段衔接。",
+    "original_acceptance": "隔离、排除、维修三种走向均能让受影响预约人得到准确且不重复的通知。",
+    "status": "已复验关闭",
+    "decision": "故障、停用和使用中安全事件通知受影响申请人及范围管理员；未来预约暂停复核或因维修明确取消，不静默丢失。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0008相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "故障、停用和使用中安全事件通知受影响申请人及范围管理员；未来预约暂停复核或因维修明确取消，不静默丢失。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0008",
+    "original_problem": "报障隔离只通知实验室管理员，既有已确认预约不变；只有建维修工单或人工停用才取消并通知；核实期间可能持续无消息。",
+    "entry_scope": "故障影响处置；申请人、管理员",
+    "current_locations": [
+      "core/services.py:362 _new_incident",
+      "core/coordination.py:53 flag_affected"
+    ]
+  },
+  {
+    "id": "AUD-0009",
+    "title": "网页取消和投递接口未校验整数参数，格式错误可导致500",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：非预期输入导致不可理解的服务器错误",
+    "root_cause": "原始参数未经过表单清洗。",
+    "original_acceptance": "三类错误输入均非500；正常取消/联系不受影响，记录不变。",
+    "status": "已复验关闭",
+    "decision": "原始版本号、投递编号进行格式/长度校验，非法取消版本和投递参数不触发500。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "原始版本号、投递编号进行格式/长度校验，非法取消版本和投递参数不触发500。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0009",
+    "original_problem": "取消版本号来自原始request.POST.get，_version int转换未捕获 ValueError；投递pk直接传给get_object_or_404，非数字或缺失可能产生ValueError。",
+    "entry_scope": "网页参数与错误处理；申请人、管理员",
+    "current_locations": [
+      "core/services.py:67 _version",
+      "core/views.py:339 deliveries"
+    ]
+  },
+  {
+    "id": "AUD-0010",
+    "title": "修改迟到宽限参数后提示语和失效原因仍写死30分钟",
+    "original_type": "已确认缺陷",
+    "original_severity": "轻微：错误文案与实际执行参数不一致",
+    "root_cause": "业务数字在计算使用参数，但文案未格式化。",
+    "original_acceptance": "将宽限改15/60、同时上限改2/4，触发所有列出位置，文本与规则一致。",
+    "status": "已复验关闭",
+    "decision": "宽限、窗口、配额、设备同时数等提示取实际Policy；归因及审计采用当前值/执行快照。",
+    "files": [
+      "core/views.py",
+      "core/services.py",
+      "templates/",
+      "miniprogram/controllers.js",
+      "miniprogram/utils/api.js"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "待执行网页/客户端/业务回归"
+    ],
+    "results": [
+      "宽限、窗口、配额、设备同时数等提示取实际Policy；归因及审计采用当前值/执行快照。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "files": [
+          "core/services.py",
+          "core/views.py",
+          "core/management/commands/seed_demo.py",
+          "core/benchmark_tests.py",
+          "core/remediation_tests.py"
+        ],
+        "migration": "无结构变更",
+        "tests": [
+          "core.remediation_tests；baseline-tests.log；regression-before.log"
+        ]
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0010",
+    "original_problem": "grace_minutes 可配置，实际计算用参数，但失败文本与失效reason写死30分钟；checkout同时上限提示写死3台。",
+    "entry_scope": "参数文案；所有用户",
+    "current_locations": [
+      "core/services.py:225 _check_start",
+      "core/services.py:106 validate",
+      "tools/render_erd.py:94 validate"
+    ]
+  },
+  {
+    "id": "AUD-0011",
+    "title": "显式seed_demo会无审计恢复已撤销的管理员角色和管理范围",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：维护命令可能悄然恢复权限",
+    "root_cause": "种子补数据与恢复授权混用。",
+    "original_acceptance": "显式seed与启动器两种路径分别在撤权后执行，都不会无声恢复。",
+    "status": "已复验关闭",
+    "decision": "重复初始化不恢复既有角色、范围及培训；只给本次新建模拟用户赋初始权限，显式重置另需明确操作。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "重复初始化不恢复既有角色、范围及培训；只给本次新建模拟用户赋初始权限，显式重置另需明确操作。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0011",
+    "original_problem": "默认seed_demo无 --if-empty 时，对既有人 get_or_create角色与LabGrant；README把该命令列为常用验证，未提示会恢复已撤销授权。启动器的 --if-empty 已正确避开，不混为同一缺陷。",
+    "entry_scope": "模拟初始化与授权；维护人员",
+    "current_locations": [
+      "core/management/commands/prepare_demo.py:9 handle",
+      "core/management/commands/run_jobs.py:10 handle",
+      "core/management/commands/seed_demo.py:12 handle"
+    ]
+  },
+  {
+    "id": "AUD-0012",
+    "title": "性能测试子进程被私有数据库配置覆盖，默认复验失败",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：性能证据可能无效，难以按文档独立复验",
+    "root_cause": "多进程数据库选择契约遗漏显式外部数据库开关。",
+    "original_acceptance": "标准私有配置下性能测试成功且两个进程库名一致；所有写入只在临时库。",
+    "status": "已复验关闭",
+    "decision": "性能HTTP子进程显式同隔离测试库与私有运行目录，临时端口避冲突；保留原响应及同步断言。",
+    "files": [
+      "core/benchmark_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "性能HTTP子进程显式同隔离测试库与私有运行目录，临时端口避冲突；保留原响应及同步断言。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0012",
+    "original_problem": "性能脚本给子进程设置PGDATABASE为test库，但不设置CAMPUS_USE_EXTERNAL_DATABASE=1；存在.local/database.json时settings优先私有库配置。",
+    "entry_scope": "性能验证；维护人员",
+    "current_locations": [
+      "core/benchmark_tests.py:14 test_course_load"
+    ]
+  },
+  {
+    "id": "AUD-0013",
+    "title": "借出检查不通过仍显示通用成功，未明确告知“未借出”",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：管理员可能误以为交接完成",
+    "root_cause": "网页忽略服务返回值及业务结果分支。",
+    "original_acceptance": "失败检查页面与打印凭据均明确没有借出；正常借出仍显示凭据。",
+    "status": "已复验关闭",
+    "decision": "借出失败返回未借出/已隔离反馈和关联异常，不再通用提示成功；无Loan落库。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "借出失败返回未借出/已隔离反馈和关联异常，不再通用提示成功；无Loan落库。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0013",
+    "original_problem": "设备/配件检查失败时服务正确隔离且返回None，网页不检查返回值，显示“办理结果已保存，记录与状态已同步”，预约详情仍为已确认。",
+    "entry_scope": "设备交接网页；管理员",
+    "current_locations": [
+      "core/views.py:166 booking_action",
+      "core/services.py:251 checkout"
+    ]
+  },
+  {
+    "id": "AUD-0014",
+    "title": "重复交接请求内容改变时仍返回旧结果，差异未提示",
+    "original_type": "优化建议",
+    "original_severity": "一般：错误修订或设备标签变化可能被误认为保存成功",
+    "root_cause": "幂等定义为业务对象唯一，未对重复动作比较载荷。",
+    "original_acceptance": "各已列入口同内容返回原凭据；不同内容明确告知未保存，不伪改历史。",
+    "status": "已复验关闭",
+    "decision": "同内容重试返回原事实；不同内容明确拒绝并引导追加异常/异议。归还配件数量归一化覆盖missing=False但数量不足的重试。",
+    "files": [
+      "core/views.py",
+      "core/services.py",
+      "templates/",
+      "miniprogram/controllers.js",
+      "miniprogram/utils/api.js"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "待执行网页/客户端/业务回归"
+    ],
+    "results": [
+      "同内容重试返回原事实；不同内容明确拒绝并引导追加异常/异议。归还配件数量归一化覆盖missing=False但数量不足的重试。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0014",
+    "original_problem": "创建预约有指纹校验，重复审批/借还/场地结束多以已有记录直接返回。特别是归还先返回已有record再核验标签、damage/note，新的损坏说明与错误标签都静默忽略。",
+    "entry_scope": "交接与审核重试；管理员",
+    "current_locations": [
+      "core/services.py:251 checkout",
+      "core/services.py:277 return_equipment",
+      "core/services.py:309 start_room",
+      "core/services.py:330 end_room"
+    ]
+  },
+  {
+    "id": "AUD-0015",
+    "title": "网页筛选字段缺少关联标签，部分日期与状态控件没有可访问名称",
+    "original_type": "已确认缺陷",
+    "original_severity": "轻微：辅助技术无法可靠识别部分字段",
+    "root_cause": "手写筛选模板与Django label_tag方式不一致。",
+    "original_acceptance": "所有列出控件有正确可访问名称，点击标签聚焦；键盘和读屏抽查通过。",
+    "status": "已复验关闭",
+    "decision": "筛选控件补显式label/id关联，保留原placeholder可访问回退事实；非将所有原控件误判无名称。",
+    "files": [
+      "templates/bookings.html",
+      "templates/audit.html",
+      "templates/reports.html",
+      "templates/deliveries.html"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "证据/网页布局验证.json与390px/桌面截图；模板label关联及aria-current检查。"
+    ],
+    "results": [
+      "筛选控件补显式label/id关联，保留原placeholder可访问回退事实；非将所有原控件误判无名称。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0015",
+    "original_problem": "bookings的可见label未以for/id关联，日期/实验室/状态控件缺少可靠名称；reports两日期同类。bookings搜索和audit搜索有placeholder，浏览器可能把placeholder作名称，因此不应说这些控件完全没有名称，但仍缺持久关联标签。投递reason也仅有placeholder。Django form字段的label_tag正常。",
+    "entry_scope": "网页可访问性；全部查询用户",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0016",
+    "title": "网页导航没有当前页标识",
+    "original_type": "优化建议",
+    "original_severity": "轻微：页面定位和发现隐藏管理入口较慢",
+    "root_cause": "共用模板未按resolver_match标记导航。",
+    "original_acceptance": "各角色主要页面均能辨认当前项；读屏识别aria-current；不靠颜色单独区分。",
+    "status": "已复验关闭",
+    "decision": "当前导航加入aria-current=page及视觉标识，桌面和手机均可识别。",
+    "files": [
+      "templates/base.html",
+      "static/app.css"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "证据/网页布局验证.json与390px/桌面截图；模板label关联及aria-current检查。"
+    ],
+    "results": [
+      "当前导航加入aria-current=page及视觉标识，桌面和手机均可识别。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0016",
+    "original_problem": "各页菜单样式相同，没有aria-current或选中态；手机横向菜单可发现性另见AUD-0041。",
+    "entry_scope": "网页导航；全部角色",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0017",
+    "title": "小程序通知的旧响应会覆盖较新的已读结果",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：已读状态和未读计数可能回退",
+    "root_cause": "通知列表缺少序号或取消旧请求机制。",
+    "original_acceptance": "按相反完成顺序重复查询/读消息，界面保留最新结果。",
+    "status": "已复验关闭",
+    "decision": "通知读取/刷新/翻页序列号保护；已读操作使旧请求失效，旧响应不能覆盖新状态。",
+    "files": [
+      "miniprogram/controllers.js"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "tools/mini-check/client.test.cjs对应AUD控制器场景；24项通过。"
+    ],
+    "results": [
+      "通知读取/刷新/翻页序列号保护；已读操作使旧请求失效，旧响应不能覆盖新状态。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0017",
+    "original_problem": "资源和预约列表使用_serial丢弃过期响应，通知列表没有；onShow、下拉刷新、markAll可重叠，旧请求最后返回会覆盖较新数据。",
+    "entry_scope": "小程序通知；学生、教师",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0018",
+    "title": "小程序更换日期时，未完成的可用性查询仍可显示旧日期结果",
+    "original_type": "已确认缺陷",
+    "original_severity": "轻微：当前时段旁显示了其他时段的可预约提示",
+    "root_cause": "异步结果未绑定查询参数或请求序号。",
+    "original_acceptance": "日期、开始、结束分别在请求中变化，旧响应均不覆盖当前结果。",
+    "status": "已复验关闭",
+    "decision": "资源日期/起止变更立即使在途查询失效，查询绑定表单快照，旧结果不覆盖新时段。",
+    "files": [
+      "miniprogram/controllers.js"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "tools/mini-check/client.test.cjs对应AUD控制器场景；24项通过。"
+    ],
+    "results": [
+      "资源日期/起止变更立即使在途查询失效，查询绑定表单快照，旧结果不覆盖新时段。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0018",
+    "original_problem": "选择器在查询中仍可修改，chooseDate清空结果，但旧查询完成后不检查时段是否变化，直接设availability。",
+    "entry_scope": "小程序资源查询；学生、教师",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0019",
+    "title": "借用人的归还详情展示其无权访问的异常链接",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：涉及本人设备损坏或缺件时无法查看关联处置",
+    "root_cause": "异常权限只考虑报告人/范围管理员/被指派维修者，预约详情链接未复用该判断。",
+    "original_acceptance": "管理员登记本人损坏后，借用人入口可用且只见获授权字段；其他借用人的异常仍不可见。",
+    "status": "已复验关闭",
+    "decision": "本人关联异常与证据按最小范围可见，工单本人只展示状态，不生成无权内部链接；他人异常及证据拒绝。",
+    "files": [
+      "core/views.py",
+      "core/services.py",
+      "templates/",
+      "miniprogram/controllers.js",
+      "miniprogram/utils/api.js"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "待执行网页/客户端/业务回归"
+    ],
+    "results": [
+      "本人关联异常与证据按最小范围可见，工单本人只展示状态，不生成无权内部链接；他人异常及证据拒绝。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0019",
+    "original_problem": "管理员在归还时产生的异常，其reporter是管理员；借用人虽然是关联预约申请人，不满足异常查询或附件访问条件，但预约详情仍无条件给出异常链接。",
+    "entry_scope": "异常权限与预约详情；学生、教师",
+    "current_locations": [
+      "core/views.py:39 scoped_incidents",
+      "core/services.py:676 incident_access"
+    ]
+  },
+  {
+    "id": "AUD-0020",
+    "title": "附件只校验扩展名和文件头，接受无法打开的PDF",
+    "original_type": "优化建议",
+    "original_severity": "轻微：证据有效性不等于具有文件头",
+    "root_cause": "校验范围为魔数而非结构。",
+    "original_acceptance": "有效PNG/JPEG/PDF可存，截断/伪头不可存；记录错误字段且不留孤儿文件。",
+    "status": "已复验关闭",
+    "decision": "PNG/JPEG经Pillow解码校验，PDF结构/页数/加密校验；5MB、20MP和200页上限。可读性校验不代表恶意文件扫描。",
+    "files": [
+      "core/evidence_validation.py"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "待执行网页/客户端/业务回归"
+    ],
+    "results": [
+      "PNG/JPEG经Pillow解码校验，PDF结构/页数/加密校验；5MB、20MP和200页上限。可读性校验不代表恶意文件扫描。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0020",
+    "original_problem": "符合文件头的截断或伪造文件可作为附件保存。当前BR-32只承诺文件头校验，因此不应写成违背当前需求的安全漏洞。",
+    "entry_scope": "异常附件；上报者、管理员、维护人员",
+    "current_locations": [
+      "core/evidence_validation.py:6 readable",
+      "core/services.py:681 upload_evidence"
+    ]
+  },
+  {
+    "id": "AUD-0021",
+    "title": "临时闭馆和节假日缺少按日期例外配置",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：真实教学日历不能仅由每周开放时段表达",
+    "root_cause": "课程采用简化的每周日间日历。",
+    "original_acceptance": "指定单日关闭后当日不能申请/入场，前后日不受影响；已确认预约得到通知与协调。",
+    "status": "已复验关闭",
+    "decision": "新增同实验室同日唯一生效的开放例外版本，影响已有预约时通知并阻止交接，不改邻日和历史日历。",
+    "files": [
+      "core/coordination.py",
+      "core/coordination_views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0021相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "新增同实验室同日唯一生效的开放例外版本，影响已有预约时通知并阻止交接，不改邻日和历史日历。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0021",
+    "original_problem": "开放模型只有星期及生效版本；要求start<end，界面无法设置某一日期全天不开放，也没有假期、考试周或临时闭馆例外。Lab.is_active有字段但无编辑入口。",
+    "entry_scope": "开放日历；系统管理员、实验室管理员",
+    "current_locations": [
+      "core/coordination.py:113 calendar_exception",
+      "core/coordination.py:18 check_calendar"
+    ]
+  },
+  {
+    "id": "AUD-0022",
+    "title": "场地和设备独立预约尚未确认设备取放通道与不可移动设备边界",
+    "original_type": "需求待确认",
+    "original_severity": "严重：物理访问冲突可能中断整班教学或引发安全问题",
+    "root_cause": "需求假设未映射到设备可外借分类与交接地点。",
+    "original_acceptance": "用目标实验室平面与清单逐项走查；设备交接不侵入封闭活动；被关闭区域资源不能承诺。",
+    "status": "等待制度确认",
+    "decision": "移动设备保持独立，固定设备关联同实验室场地并双向检测计划冲突和他人未结束实际使用；真实区域和责任需学校确认。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0022相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "移动设备保持独立，固定设备关联同实验室场地并双向检测计划冲突和他人未结束实际使用；真实区域和责任需学校确认。",
+      "课程演示边界内已执行证据见整改验证记录；真实制度尚未确认。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0022",
+    "original_problem": "系统明确允许教师占整间场地时其他人仍预约室内设备；这是用户已选方案，不是并发错误。真实情况下取物是否必须进入已占用教室，以及机器人等是否允许外借，尚无制度证据。",
+    "entry_scope": "资源边界；教师、学生、管理员",
+    "current_locations": [
+      "core/coordination.py:28 check_dependency"
+    ]
+  },
+  {
+    "id": "AUD-0023",
+    "title": "审批积压与管理员缺席没有明确的转派或时限升级机制",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：人工申请可能一直等待到自动失效",
+    "root_cause": "课程仅定义管理员审批职责，未定义运行值守制度。",
+    "original_acceptance": "主负责人不可用时授权代理能合法处理且有原始责任记录；超时通知仅发一次。",
+    "status": "已复验关闭",
+    "decision": "共享LabGrant支持多名范围管理员备岗；列表显示提交及待办龄期，临近1小时或等待24小时后台按日去重升级提醒。",
+    "files": [
+      "core/operations.py",
+      "templates/booking_table.html"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0023相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "共享LabGrant支持多名范围管理员备岗；列表显示提交及待办龄期，临近1小时或等待24小时后台按日去重升级提醒。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0023",
+    "original_problem": "多名有范围管理员都可审批，已有合理共享待办；但未设置值班代理、审批期望时限、超时升级或竞争落选后的替代推荐。只到开始时自动失效。",
+    "entry_scope": "人工审批；教师、学生、管理员",
+    "current_locations": [
+      "core/operations.py:10 escalations"
+    ]
+  },
+  {
+    "id": "AUD-0024",
+    "title": "损坏或缺件争议缺少借用人确认和追加异议流程",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：真实责任认定无法仅靠管理员单方记录",
+    "root_cause": "课程聚焦流程记录，未定义双方确认和争议闭环。",
+    "original_acceptance": "同意、拒绝、缺席签认分别留痕；异议可追加证据，处理人有权限分离。",
+    "status": "已复验关闭",
+    "decision": "异常确认、异议、补充及独立复核采用追加IncidentResponse，报告人/借用人不得自行独立复核，不自动判赔。",
+    "files": [
+      "core/coordination.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0024相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "异常确认、异议、补充及独立复核采用追加IncidentResponse，报告人/借用人不得自行独立复核，不自动判赔。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0024",
+    "original_problem": "设备标签、配件快照、操作者和时间已有价值，但交接事实由管理员单方提交；没有借用人确认、拒绝签认、异议说明或裁定角色。已归还事实不能改写是合理的。",
+    "entry_scope": "交接责任；借用人、管理员、中心负责人",
+    "current_locations": [
+      "core/coordination.py:147 respond_incident"
+    ]
+  },
+  {
+    "id": "AUD-0025",
+    "title": "维修人员离岗或任务长期未响应时缺少工单重新指派入口",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：工单可能长期阻断资源恢复",
+    "root_cause": "固定指派字段有创建入口，无带审计的变更动作。",
+    "original_acceptance": "原技师失效后可审计转派，新人可处理，旧人不可继续；原事件仍保留。",
+    "status": "已复验关闭",
+    "decision": "非关闭工单有审计地重新指派给有效维修人员，通知并保留原过程，原执行人停用不阻断后续修复。",
+    "files": [
+      "core/coordination.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0025相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "非关闭工单有审计地重新指派给有效维修人员，通知并保留原过程，原执行人停用不阻断后续修复。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0025",
+    "original_problem": "创建时指派有效技师；后续只有原指派者处理，管理员不能改派。重复create_work_order返回原工单且忽略新technician_id，不能实现转派。",
+    "entry_scope": "维修维护；维修人员、管理员",
+    "current_locations": [
+      "core/coordination.py:133 reassign_work"
+    ]
+  },
+  {
+    "id": "AUD-0026",
+    "title": "正式学校身份仍为模拟适配器，真实账号接入与回收尚未验收",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：真实身份与授权回收是校内试点前提",
+    "root_cause": "明确课程模拟适配器边界，尚未接入学校身份。",
+    "original_acceptance": "学校测试身份覆盖成功、伪造、过期、重放、停用与换岗，网页和小程序执行一致授权规则。",
+    "status": "等待外部环境验证",
+    "decision": "正式身份begin/complete契约与本地主体映射、单次state校验及缺配置拒绝已测试；无学校协议资料，真实SSO联调仍未执行。",
+    "files": [
+      "core/adapters.py",
+      "core/views.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0026相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "正式身份begin/complete契约与本地主体映射、单次state校验及缺配置拒绝已测试；无学校协议资料，真实SSO联调仍未执行。",
+      "课程演示边界内已执行证据见整改验证记录；真实外部环境尚未验收。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0026",
+    "original_problem": "公开演示账号和模拟密码属于课程定位；关闭DEMO_MODE后网页模拟入口404、小程序503，尚无真实学校身份、入离校同步和账号映射运行证据。外部消息适配见AUD-0040。",
+    "entry_scope": "身份认证；全部用户",
+    "current_locations": [
+      "core/views.py:59 identity",
+      "core/views.py:83 callback",
+      "core/adapters.py:7 identity_adapter"
+    ]
+  },
+  {
+    "id": "AUD-0027",
+    "title": "未提供可直接复用的生产Web/TLS配置，演示启动器强制DEBUG",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：直接改监听地址上网会暴露调试环境和明文会话风险",
+    "root_cause": "交付目标是本地演示。",
+    "original_acceptance": "测试域名HTTPS、DEBUG关闭、错误不泄露、静态可用、secure cookies正确且回环安装不受影响。",
+    "status": "等待外部环境验证",
+    "decision": "补生产settings、Waitress入口、HTTPS/安全Cookie、静态与信任代理说明及非所有者身份拒绝；实际HTTPS平台、静态发布和长期托管仍待验证。",
+    "files": [
+      "config/production.py",
+      "tools/serve_production.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0027相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "补生产settings、Waitress入口、HTTPS/安全Cookie、静态与信任代理说明及非所有者身份拒绝；实际HTTPS平台、静态发布和长期托管仍待验证。",
+      "课程演示边界内已执行证据见整改验证记录；真实外部环境尚未验收。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0027",
+    "original_problem": "当前runserver回环绑定适合本地；没有生产WSGI服务器、反代/TLS、静态文件、secure cookie等完整配置。不是认定本机回环本身不安全。",
+    "entry_scope": "部署与会话；维护人员、全体用户",
+    "current_locations": [
+      "tools/serve_production.py:14 check_role"
+    ]
+  },
+  {
+    "id": "AUD-0028",
+    "title": "资源档案审计缺少风险、资格、容量与配件的变更前值",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：安全分级和交接配置变动无法直接复核",
+    "root_cause": "审计快照只覆盖主资源两字段，未覆盖子类型和配件。",
+    "original_acceptance": "逐字段修改分级/资格/容量/配件，审计显示准确前后值；原交接快照仍不变。",
+    "status": "已复验关闭",
+    "decision": "档案审计保存完整主档/风险/资格/容量/配件前后快照，后续变更不改既有交接快照；历史未记录旧值不虚构回填。",
+    "files": [
+      "core/services.py",
+      "core/views.py",
+      "core/management/commands/seed_demo.py",
+      "core/benchmark_tests.py",
+      "core/remediation_tests.py"
+    ],
+    "migration": "无结构变更",
+    "tests": [
+      "core.remediation_tests；baseline-tests.log；regression-before.log"
+    ],
+    "results": [
+      "档案审计保存完整主档/风险/资格/容量/配件前后快照，后续变更不改既有交接快照；历史未记录旧值不虚构回填。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
+      "b45ce67（最终业务、迁移、客户端和工具）"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0028",
+    "original_problem": "更新时old只保存name和description，新状态保存全部输入；risk/qualification/category/capacity/accessories的旧值没有入审计。借出已有配件快照不能覆盖未借出的历史档案。",
+    "entry_scope": "资源档案与审计；管理员、中心主任",
+    "current_locations": [
+      "core/services.py:579 resource_snapshot",
+      "core/services.py:590 save_resource"
+    ]
+  },
+  {
+    "id": "AUD-0029",
+    "title": "演示运行角色是数据库超级用户，审计防改边界仅覆盖正常应用操作",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：真实应用凭据不应拥有禁用审计保护的能力",
+    "root_cause": "为便携演示和扩展初始化使用了单一管理账户。",
+    "original_acceptance": "应用角色可正常业务但无法ALTER/TRUNCATE/禁用触发器；迁移由授权角色执行；审计边界文档明确。",
+    "status": "已复验关闭",
+    "decision": "提供新建应用角色工具并实测非表所有者角色拒绝审计UPDATE/TRUNCATE、禁用保护和建表；迁移、备份和恢复职责明确分离，DBA是信任边界。",
+    "files": [
+      "tools/provision_app_role.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0029相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "提供新建应用角色工具并实测非表所有者角色拒绝审计UPDATE/TRUNCATE、禁用保护和建表；迁移、备份和恢复职责明确分离，DBA是信任边界。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0029",
+    "original_problem": "本地初始化用户是集群超级用户，应用复用该账号；触发器阻止UPDATE/DELETE，但持有该凭据的DBA级操作可停用/删除触发器或TRUNCATE。不是已证明存在SQL注入，也不是说触发器无效。",
+    "entry_scope": "数据库权限；维护人员、审计人员",
+    "current_locations": [
+      "tools/provision_app_role.py:7 provision"
+    ]
+  },
+  {
+    "id": "AUD-0030",
+    "title": "备份仅保存在同一项目磁盘，缺少异地副本流程",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：源盘损坏可能同时丢失业务库和全部备份",
+    "root_cause": "课程实现本地完整备份，没有异地复制流程。",
+    "original_acceptance": "源盘不可用时能从独立位置取得完整有效备份并恢复；副本过期可告警。",
+    "status": "等待外部环境验证",
+    "decision": "指定独立副本目录、摘要复核、24小时标记及容量预警已实现，本地副本校验通过；同机另一目录不等于独立故障域，实际异地/独立介质待配置和演练。",
+    "files": [
+      "tools/backup_restore.py",
+      "core/coordination_views.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0030相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "指定独立副本目录、摘要复核、24小时标记及容量预警已实现，本地副本校验通过；同机另一目录不等于独立故障域，实际异地/独立介质待配置和演练。",
+      "课程演示边界内已执行证据见整改验证记录；真实外部环境尚未验收。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0030",
+    "original_problem": "定时备份归档到本项目.local/backups，没有异地复制和副本可用性检查；保留清理另见AUD-0042。README如实写保留策略待确认。",
+    "entry_scope": "运维备份；维护人员",
+    "current_locations": [
+      "core/coordination_views.py:64 operations_health"
+    ]
+  },
+  {
+    "id": "AUD-0031",
+    "title": "网页与后台任务没有持久托管和业务积压健康告警",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：进程或任务异常可能导致服务停摆而无人知晓",
+    "root_cause": "本地交互窗口作为进程生命周期，健康接口定位为启动就绪。",
+    "original_acceptance": "杀任务进程能检测并按策略恢复；未运行任务时健康监控明确降级；无重复业务通知。",
+    "status": "已复验关闭",
+    "decision": "后台扫描失败留错误心跳再试、任务/备份新鲜度与积压受控查询，启动器受限重启；实际终止本次worker后新worker启动且网页继续200。",
+    "files": [
+      "tools/start_local.py",
+      "core/management/commands/run_jobs.py",
+      "core/operations.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0031相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "后台扫描失败留错误心跳再试、任务/备份新鲜度与积压受控查询，启动器受限重启；实际终止本次worker后新worker启动且网页继续200。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0031",
+    "original_problem": "启动器监控子进程，任一退出会停止其余进程；没有自动重启或通知值守者。health只执行SELECT1，不能说明最近任务是否成功、投递是否积压、备份是否新鲜。",
+    "entry_scope": "运行托管；维护人员",
+    "current_locations": [
+      "core/operations.py:24 healthy_worker",
+      "tools/backup_restore.py:13 main",
+      "tools/render_erd.py:411 main",
+      "tools/restore_archive.py:54 main",
+      "tools/serve_production.py:22 main",
+      "tools/start_local.py:88 main",
+      "tools/stop_database.py:6 main",
+      "core/management/commands/prepare_demo.py:9 handle",
+      "core/management/commands/run_jobs.py:10 handle",
+      "core/management/commands/seed_demo.py:12 handle"
+    ]
+  },
+  {
+    "id": "AUD-0032",
+    "title": "运行日志持续追加但没有轮换和访问保留安排",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：长期运行可能耗尽磁盘或保留过量业务信息",
+    "root_cause": "演示只为定位启动失败保存文件。",
+    "original_acceptance": "模拟日志超阈值发生轮换，错误仍可查；非授权账号不可读；不出现密码/令牌。",
+    "status": "已复验关闭",
+    "decision": "应用请求元数据带关联编号并5MiB×5轮换；启动/备份子进程日志在开档前轮换，说明读权限与保留；不记录正文或凭据。",
+    "files": [
+      "core/request_context.py",
+      "config/settings.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0032相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "应用请求元数据带关联编号并5MiB×5轮换；启动/备份子进程日志在开档前轮换，说明读权限与保留；不记录正文或凭据。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0032",
+    "original_problem": "网页、任务、备份日志采用ab模式持续追加，未见大小限制/轮换；没有定义谁查看日志、保存多久或如何按request_id定位。",
+    "entry_scope": "运行日志；维护人员",
+    "current_locations": [
+      "core/request_context.py:17 __call__",
+      "core/operations.py:29 rotate_log",
+      "tools/start_local.py:12 rotate_log"
+    ]
+  },
+  {
+    "id": "AUD-0033",
+    "title": "真实个人信息与证据的访问、保留、删除和脱敏制度尚未定义",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：真实使用后个人与争议资料生命周期不明确",
+    "root_cause": "需求基线有意限定模拟信息。",
+    "original_acceptance": "按学校批准的模拟离校/纠错/归档场景执行，历史关联和权限范围保持可复核。",
+    "status": "等待制度确认",
+    "decision": "补用途、访问、证据/日志/审计/备份分层保留和追加更正草案；没有学校批准的期限与匿名化制度，保持等待制度确认。",
+    "files": [
+      "docs/整改/数据与隐私管理方案.md"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0033相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "补用途、访问、证据/日志/审计/备份分层保留和追加更正草案；没有学校批准的期限与匿名化制度，保持等待制度确认。",
+      "课程演示边界内已执行证据见整改验证记录；真实制度尚未确认。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0033",
+    "original_problem": "当前只用模拟数据，保留历史且大多PROTECT，这是演示内合理设计；真实姓名、身份编号、用途、附件、审计和备份应保存多久及离校后如何处理，未形成可执行策略。",
+    "entry_scope": "数据与隐私；全部用户、维护人员",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0034",
+    "title": "当前性能样本集中于精确搜索，未覆盖常见全目录和报表负载",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：现有性能数字不足以确定真实校园容量",
+    "root_cause": "测试场景选择与使用路径分布不同；查询实现按资源循环。",
+    "original_acceptance": "定义规模后记录p95/p99、错误率、锁等待与数据一致性；所有热点符合目标。",
+    "status": "已复验关闭",
+    "decision": "保留原精准检索负载，新增目录、时段、待办、报表及mini五类混合各40样本，记录P50/P95/最大及错误率，核验业务结果。",
+    "files": [
+      "core/benchmark_tests.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0034相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "保留原精准检索负载，新增目录、时段、待办、报表及mini五类混合各40样本，记录P50/P95/最大及错误率，核验业务结果。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0034",
+    "original_problem": "负载中查询总带单资源编号，未测未筛选目录、管理待办、报表、大附件、API与网页混合流量。状态查询对每个资源逐条查询，10项资源已35条SQL。",
+    "entry_scope": "性能与测试；维护人员",
+    "current_locations": [
+      "core/benchmark_tests.py:14 test_course_load"
+    ]
+  },
+  {
+    "id": "AUD-0035",
+    "title": "需求追踪检查验证编号与路径存在，未证明用例行为覆盖完整",
+    "original_type": "优化建议",
+    "original_severity": "一般：结构检查通过不能替代需求验收",
+    "root_cause": "静态一致性和动态验收的证据层级没有逐项落到执行结果。",
+    "original_acceptance": "每条AC可指向实际断言或明确人工未执行；删除相关测试会被覆盖检查发现。",
+    "status": "已复验关闭",
+    "decision": "64验收场景逐项映射FR/UC/SPEC/BR、实现、实际测试函数和断言行、本轮结果及证据；结构检查不能替代真实行为或外部联调。",
+    "files": [
+      "docs/整改/behavior-trace.json",
+      "docs/整改/需求行为追踪.md"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0035相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "64验收场景逐项映射FR/UC/SPEC/BR、实现、实际测试函数和断言行、本轮结果及证据；结构检查不能替代真实行为或外部联调。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0035",
+    "original_problem": "validate_registry检查26/35/52等数量、引用、语法、图形和路径；源码定位只正则找文件是否存在，不校验函数语义或逐AC断言。已存在的撤权交接缺陷仍可在检查PASS时出现。",
+    "entry_scope": "需求追踪与测试；维护人员、审查者",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0036",
+    "title": "小程序在后端不可达时无法退出并修改服务地址",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般：本地端口改变后用户可能困在失联会话中",
+    "root_cause": "远端注销与本地清理未分离，地址设置依赖已退出状态。",
+    "original_acceptance": "模拟后端换端口、断网退出及服务端503；均可回登录改地址，旧凭据不发送给新地址。",
+    "status": "已复验关闭",
+    "decision": "远程注销失败仍清本地会话、回登录和服务地址页；退出按钮不依赖profile加载成功。保留远端失效时限说明。",
+    "files": [
+      "miniprogram/utils/api.js",
+      "miniprogram/controllers.js",
+      "miniprogram/pages/profile/index.wxml"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "tools/mini-check/client.test.cjs对应AUD控制器场景；24项通过。"
+    ],
+    "results": [
+      "远程注销失败仍清本地会话、回登录和服务地址页；退出按钮不依赖profile加载成功。保留远端失效时限说明。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0036",
+    "original_problem": "logout仅在后端撤销成功后clearSession。断网时会保留旧会话；地址只在login可编辑，而login.onShow又跳回资源页。此外profile首次加载失败时user为空，整个退出按钮也在wx:if=user内，不可见。",
+    "entry_scope": "小程序会话与恢复；学生、教师",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0037",
+    "title": "小程序尚未在当前微信开发者工具容器或真机验收",
+    "original_type": "待验证风险",
+    "original_severity": "一般：编译和浏览器联调不能证明目标容器可运行",
+    "root_cause": "当前证据范围未覆盖目标运行容器。",
+    "original_acceptance": "实际工具完成查询、提交、取消、网页审批刷新、通知和离线恢复；真机另列平台验证结果。",
+    "status": "等待外部环境验证",
+    "decision": "控制器/API及基础WXML/WXSS编译通过；未提供开发者工具登录、AppID、真机和发布环境，不能用浏览器替代。",
+    "files": [
+      "docs/整改/待确认与外部依赖.md"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0037相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "控制器/API及基础WXML/WXSS编译通过；未提供开发者工具登录、AppID、真机和发布环境，不能用浏览器替代。",
+      "课程演示边界内已执行证据见整改验证记录；真实外部环境尚未验收。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0037",
+    "original_problem": "七页基础编译和Node控制器测试有价值，但原项目明确未完成原生微信容器/真机测试。本轮同样无已登录开发者工具和目标AppID/测试号环境，未执行其网络、picker、生命周期、存储等原生交互。",
+    "entry_scope": "微信平台验证；学生、教师、维护人员",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0038",
+    "title": "课程预约限制尚未与教学优先和长期实验制度核对",
+    "original_type": "需求待确认",
+    "original_severity": "一般：真实组织适用范围可能比当前日间短借狭窄",
+    "root_cause": "课程范围选择尚未完成真实制度映射。",
+    "original_acceptance": "学校签认适用清单；典型课程、考试、长期实验分别有明确处理路径且不会绕过冲突约束。",
+    "status": "等待制度确认",
+    "decision": "课程继续日间教学短借，跨日科研/学期排课/教学优先抢占等不自动扩展；真实校园制度需确认。",
+    "files": [
+      "docs/specification.json",
+      "docs/整改/待确认与外部依赖.md"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0038相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "课程继续日间教学短借，跨日科研/学期排课/教学优先抢占等不自动扩展；真实校园制度需确认。",
+      "课程演示边界内已执行证据见整改验证记录；真实制度尚未确认。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0038",
+    "original_problem": "未来14天、最长8小时、不跨日、每类3项是已确认课程方案；不存在按课程/考试优先级、批量课表或长期科研豁免。不能把用户已选规则本身称为错误。",
+    "entry_scope": "业务制度；中心负责人、教师、管理员",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0039",
+    "title": "公开分析报告引用配套数据设计说明，但仓库未提供该文档或获取说明",
+    "original_type": "优化建议",
+    "original_severity": "轻微：阅读者无法沿报告引用继续核对完整设计说明",
+    "root_cause": "报告配套交付范围与公开仓库导航没有完全对应。",
+    "original_acceptance": "新维护者按所有文档引用均能找到内容或知道范围限制；不误公开未授权个人资料。",
+    "status": "已复验关闭",
+    "decision": "更新正式分析PDF、36实体/289字段/61FK完整模型与数据设计PDF、可编辑源图和字典；计数由实际模型导出，未加入提示词/内部制作说明。",
+    "files": [
+      "docs/ERD与数据设计说明.pdf",
+      "docs/分析报告",
+      "models/schema.json",
+      "models/ERD",
+      "models/图形源文件"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0039相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "更新正式分析PDF、36实体/289字段/61FK完整模型与数据设计PDF、可编辑源图和字典；计数由实际模型导出，未加入提示词/内部制作说明。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0039",
+    "original_problem": "报告写配套《ERD与数据设计说明》；仓库只有分析报告及两份ERD图PDF，未找到独立数据设计说明文档或说明其不公开。已有schema/DBML/迁移可供结构核查，不是缺少全部模型。",
+    "entry_scope": "文档导航；读者、维护人员",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0040",
+    "title": "外部投递成功仅表示本地模拟收据，未接真实通知渠道",
+    "original_type": "应用适配缺口",
+    "original_severity": "严重：真实预约与逾期通知不能依赖模拟成功",
+    "root_cause": "明确课程模拟适配器边界。",
+    "original_acceptance": "渠道异常、重复回执、服务超时和人工联系均可核查；业务提交不因渠道失败回滚。",
+    "status": "等待外部环境验证",
+    "decision": "正式EXTERNAL与MOCK_EXTERNAL模式隔离，缺配置失败重试而不模拟成功，稳定投递键与回执摘要契约测试通过；实际供应商联调和去重窗口未验证。",
+    "files": [
+      "core/adapters.py",
+      "core/services.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0040相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "正式EXTERNAL与MOCK_EXTERNAL模式隔离，缺配置失败重试而不模拟成功，稳定投递键与回执摘要契约测试通过；实际供应商联调和去重窗口未验证。",
+      "课程演示边界内已执行证据见整改验证记录；真实外部环境尚未验收。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0040",
+    "original_problem": "MOCK_EXTERNAL任务完成只写MockReceipt；没有调用学校邮件、短信或微信订阅消息。当前文档明确说明模拟，不构成课程实现缺陷。",
+    "entry_scope": "外部通知；学生、教师、管理员",
+    "current_locations": [
+      "core/services.py:39 notify",
+      "core/services.py:503 process_delivery",
+      "core/adapters.py:13 external_delivery"
+    ]
+  },
+  {
+    "id": "AUD-0041",
+    "title": "手机横向导航缺少隐藏菜单的发现提示",
+    "original_type": "优化建议",
+    "original_severity": "轻微：新用户可能不知道后方还有管理入口",
+    "root_cause": "水平滚动导航缺少可见提示。",
+    "original_acceptance": "390px下新用户可发现全部授权菜单；键盘可移动到隐藏项且自动可见。",
+    "status": "已复验关闭",
+    "decision": "手机导航采用有名称的可展开菜单，当前项标识保留，390px截图与无横向溢出检查；桌面保持常驻菜单。",
+    "files": [
+      "templates/base.html",
+      "static/app.css"
+    ],
+    "migration": "由0004兼容新增字段配套",
+    "tests": [
+      "证据/网页布局验证.json与390px/桌面截图；模板label关联及aria-current检查。"
+    ],
+    "results": [
+      "手机导航采用有名称的可展开菜单，当前项标识保留，390px截图与无横向溢出检查；桌面保持常驻菜单。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "files": [],
+        "migration": "",
+        "tests": []
+      },
+      {
+        "status": "已实现待复验",
+        "decision": "统一分页/标签导航、关键重复动作载荷校验、附件结构校验、旧响应作废、离线本地退出及本人异常访问。",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0041",
+    "original_problem": "390px视口只能显示前几项导航，末尾“异常”等文字截断；可以横向滑动，但没有提示或展开控件。不是整页横向溢出。",
+    "entry_scope": "移动网页导航；全部角色",
+    "current_locations": []
+  },
+  {
+    "id": "AUD-0042",
+    "title": "完整备份持续累积，没有保留期限或容量清理",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：长期开启会不断新增数据库与附件完整包",
+    "root_cause": "仅实现生成与演练，没有生命周期管理。",
+    "original_acceptance": "超过保留窗口的备份/演练库按策略清理，最近可恢复副本保留；低磁盘不会静默继续写。",
+    "status": "已复验关闭",
+    "decision": "保留工具默认预览，仅显式apply且副本通过摘要校验后清理指定目录老归档，最少7份；隔离夹具10份验证删除3份、损坏归档保留、不碰业务归档。",
+    "files": [
+      "tools/backup_retention.py"
+    ],
+    "migration": "不新增结构或已由0004共享字段支持；原审计不覆盖。",
+    "tests": [
+      "core/remediation_tests.py中AUD0042相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "保留工具默认预览，仅显式apply且副本通过摘要校验后清理指定目录老归档，最少7份；隔离夹具10份验证删除3份、损坏归档保留、不碰业务归档。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0042",
+    "original_problem": "每23小时触发完整备份，每次唯一ZIP；没有按数量/时间/容量清理，也未明确保留失败演练库的清理方法。",
+    "entry_scope": "备份维护；维护人员",
+    "current_locations": [
+      "tools/backup_retention.py:7 maintenance"
+    ]
+  },
+  {
+    "id": "AUD-0043",
+    "title": "撤销培训资格后未通知已获批预约的持有人及管理员",
+    "original_type": "应用适配缺口",
+    "original_severity": "一般：资格校验阻止领取，但预约人可能到场才知道失效",
+    "root_cause": "授权变更与预约影响通知未衔接。",
+    "original_acceptance": "撤培训/缩有效期分别验证：领取拒绝、双方通知准确、可追踪协调；恢复资格不自动伪造新审批。",
+    "status": "已复验关闭",
+    "decision": "撤销资格/账号/角色后影响未来预约并通知，交接重新检查当前值，原审批不覆盖，实际归还仍允许。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/views.py"
+    ],
+    "migration": "0004新增结构，原数据保留；新增默认和历史兼容详见版本与迁移说明。",
+    "tests": [
+      "core/remediation_tests.py中AUD0043相关反例；core/operations_tests.py、core/independent_tests.py；详见整改验证记录与需求行为追踪。"
+    ],
+    "results": [
+      "撤销资格/账号/角色后影响未来预约并通知，交接重新检查当前值，原审批不覆盖，实际归还仍允许。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "待处理",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "original_record": "../审查基线/问题完整台账.md#AUD-0043",
+    "original_problem": "培训撤销有审计、领取会按当前资格拒绝，这是正确控制；但授权变更不通知受影响用户或范围管理员，也不标记既有预约待协调。",
+    "entry_scope": "资格与预约影响；学生、教师、系统管理员",
+    "current_locations": [
+      "core/services.py:632 grant_user",
+      "core/services.py:225 _check_start"
+    ]
+  },
+  {
+    "id": "AUD-0044",
+    "title": "本人配套场地下固定设备查询与提交结论不一致",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般",
+    "root_cause": "新增依赖检查的查询入口未传当前申请人，保守检查把本人的场地也视为冲突，提交服务则排除本人。",
+    "original_acceptance": "教师拥有本人获批场地时，对固定设备网页目录及小程序目录/详情的时段查询应与提交相同；其他人仍被拒绝。",
+    "status": "已复验关闭",
+    "decision": "查询入口带当前申请人，与提交的本人配套场地豁免保持一致；他人仍拒绝。",
+    "files": [
+      "core/services.py:availability",
+      "core/views.py:resources",
+      "core/miniapi.py:resource_data/resources/resource_detail",
+      "core/operations_tests.py:test_aud0044_owned_room_query_matches_fixed_equipment_submission"
+    ],
+    "migration": "无新增迁移",
+    "tests": [
+      "上述自动回归及最终完整后端回归"
+    ],
+    "results": [
+      "查询入口带当前申请人，与提交的本人配套场地豁免保持一致；他人仍拒绝。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "已实现待复验",
+        "decision": "查询及提交共用依赖规则，并传入当前已认证申请人；不返回其他人身份或预约资料。复现：教师获批场地后查询关联固定设备，修复前提示冲突而提交成功。",
+        "results": []
+      }
+    ],
+    "original_record": "本台账新增记录；独立复验报告与原失败日志。",
+    "original_problem": "本人配套场地下固定设备查询与提交结论不一致",
+    "entry_scope": "设备、场地及责任记录；申请人、管理员和维修人员，详见独立复验",
+    "current_locations": [
+      "core/services.py:138 availability",
+      "core/miniapi.py:144 resource_data"
+    ]
+  },
+  {
+    "id": "AUD-0045",
+    "title": "固定设备与场地实际超时使用未双向阻止后续交接",
+    "original_type": "已确认缺陷",
+    "original_severity": "严重",
+    "root_cause": "只比计划区间，未同时核验关联资源的未结束实际使用。",
+    "original_acceptance": "用独立验收原失败断言复验，原事实/权限/时段不变。",
+    "status": "已复验关闭",
+    "decision": "开始交接时双向检查他人尚未实际结束的固定设备/场地，不只比较计划时段；相邻预约超时反例与反向反例均通过。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/independent_tests.py",
+      "core/operations_tests.py"
+    ],
+    "migration": "无新增迁移",
+    "tests": [
+      "test_overdue_fixed_equipment_blocks_next_room_start / test_overdue_room_blocks_next_fixed_equipment_collection"
+    ],
+    "results": [
+      "开始交接时双向检查他人尚未实际结束的固定设备/场地，不只比较计划时段；相邻预约超时反例与反向反例均通过。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "已实现待复验",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "new_details": {
+      "发现与影响": "独立子agent在隔离真实PostgreSQL库复现；角色为申请人及范围管理员。",
+      "位置及函数": "_check_start / check_dependency",
+      "触发/步骤": "见core/independent_tests.py对应test_overdue_fixed_equipment_blocks_next_room_start / test_overdue_room_blocks_next_fixed_equipment_collection，采用模拟账号、明日10-11/11-12相邻预约。",
+      "预期与依据": "不得在前序实际使用未结束时开始他人使用；领取宽限与复核、终态及当前阻断标志必须一致，依据课程业务规则。",
+      "实际与证据": "初次失败后修复，证据/独立验收-first-run.log、second-run.log与final-run.log保留；最终原断言通过。",
+      "根因": "只比计划区间，未同时核验关联资源的未结束实际使用。",
+      "验收": "test_overdue_fixed_equipment_blocks_next_room_start / test_overdue_room_blocks_next_fixed_equipment_collection",
+      "关联": "AUD-0022/AUD-0002/AUD-0005"
+    },
+    "original_record": "本台账新增记录；独立复验报告与原失败日志。",
+    "original_problem": "固定设备与场地实际超时使用未双向阻止后续交接",
+    "entry_scope": "设备、场地及责任记录；申请人、管理员和维修人员，详见独立复验",
+    "current_locations": [
+      "core/coordination.py:28 check_dependency",
+      "core/services.py:225 _check_start"
+    ]
+  },
+  {
+    "id": "AUD-0046",
+    "title": "领取宽限内安全条件恢复后无法复核原预约",
+    "original_type": "已确认缺陷",
+    "original_severity": "一般",
+    "root_cause": "复核复用提交校验，将原开始早于当前时间一律拒绝。",
+    "original_acceptance": "用独立验收原失败断言复验，原事实/权限/时段不变。",
+    "status": "已复验关闭",
+    "decision": "原领取截止或已有等待截止内允许追加复核；时间客观校验采用不改原预约的参考时刻，当前资格/状态仍按实际时刻核验，逾截止拒绝。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/independent_tests.py",
+      "core/operations_tests.py"
+    ],
+    "migration": "无新增迁移",
+    "tests": [
+      "test_recheck_during_existing_pickup_grace"
+    ],
+    "results": [
+      "原领取截止或已有等待截止内允许追加复核；时间客观校验采用不改原预约的参考时刻，当前资格/状态仍按实际时刻核验，逾截止拒绝。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "已实现待复验",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "new_details": {
+      "发现与影响": "独立子agent在隔离真实PostgreSQL库复现；角色为申请人及范围管理员。",
+      "位置及函数": "recheck / validate",
+      "触发/步骤": "见core/independent_tests.py对应test_recheck_during_existing_pickup_grace，采用模拟账号、明日10-11/11-12相邻预约。",
+      "预期与依据": "不得在前序实际使用未结束时开始他人使用；领取宽限与复核、终态及当前阻断标志必须一致，依据课程业务规则。",
+      "实际与证据": "初次失败后修复，证据/独立验收-first-run.log、second-run.log与final-run.log保留；最终原断言通过。",
+      "根因": "复核复用提交校验，将原开始早于当前时间一律拒绝。",
+      "验收": "test_recheck_during_existing_pickup_grace",
+      "关联": "AUD-0022/AUD-0002/AUD-0005"
+    },
+    "original_record": "本台账新增记录；独立复验报告与原失败日志。",
+    "original_problem": "领取宽限内安全条件恢复后无法复核原预约",
+    "entry_scope": "设备、场地及责任记录；申请人、管理员和维修人员，详见独立复验",
+    "current_locations": [
+      "core/coordination.py:65 recheck",
+      "core/services.py:106 validate",
+      "tools/render_erd.py:94 validate"
+    ]
+  },
+  {
+    "id": "AUD-0047",
+    "title": "已取消和已失效预约遗留当前待复核标记",
+    "original_type": "已确认缺陷",
+    "original_severity": "轻微",
+    "root_cause": "终态转换未清当前review标记，网页和mini继续显示待复核。",
+    "original_acceptance": "用独立验收原失败断言复验，原事实/权限/时段不变。",
+    "status": "已复验关闭",
+    "decision": "终态清除当前复核标志/原因，通过追加审计和原复核保留历史；取消、失效、维护取消及协调/复核拒绝入口同步。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/independent_tests.py",
+      "core/operations_tests.py"
+    ],
+    "migration": "无新增迁移",
+    "tests": [
+      "test_cancelled_booking_no_longer_requires_active_recheck / test_aud0047_cancel_and_expiry_end_current_review_flag"
+    ],
+    "results": [
+      "终态清除当前复核标志/原因，通过追加审计和原复核保留历史；取消、失效、维护取消及协调/复核拒绝入口同步。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "已实现待复验",
+        "decision": "",
+        "results": []
+      },
+      {
+        "original_severity": "一般",
+        "correction": "与独立最终评定统一，终态事实正确但当前标记与文案失真。"
+      }
+    ],
+    "new_details": {
+      "发现与影响": "独立子agent在隔离真实PostgreSQL库复现；角色为申请人及范围管理员。",
+      "位置及函数": "finish_booking / recheck / coordinate",
+      "触发/步骤": "见core/independent_tests.py对应test_cancelled_booking_no_longer_requires_active_recheck / test_aud0047_cancel_and_expiry_end_current_review_flag，采用模拟账号、明日10-11/11-12相邻预约。",
+      "预期与依据": "不得在前序实际使用未结束时开始他人使用；领取宽限与复核、终态及当前阻断标志必须一致，依据课程业务规则。",
+      "实际与证据": "初次失败后修复，证据/独立验收-first-run.log、second-run.log与final-run.log保留；最终原断言通过。",
+      "根因": "终态转换未清当前review标记，网页和mini继续显示待复核。",
+      "验收": "test_cancelled_booking_no_longer_requires_active_recheck / test_aud0047_cancel_and_expiry_end_current_review_flag",
+      "关联": "AUD-0022/AUD-0002/AUD-0005"
+    },
+    "original_record": "本台账新增记录；独立复验报告与原失败日志。",
+    "original_problem": "已取消和已失效预约遗留当前待复核标记",
+    "entry_scope": "设备、场地及责任记录；申请人、管理员和维修人员，详见独立复验",
+    "current_locations": [
+      "core/services.py:60 finish_booking",
+      "core/coordination.py:87 coordinate",
+      "core/services.py:478 expire_booking"
+    ]
+  },
+  {
+    "id": "AUD-0048",
+    "title": "维修验收结案后异常仍宣称阻断服务",
+    "original_type": "已确认缺陷",
+    "original_severity": "轻微",
+    "root_cause": "验收将状态转RESOLVED但没有同步blocks_service，事实页文案失真。",
+    "original_acceptance": "用独立验收原失败断言复验，原事实/权限/时段不变。",
+    "status": "已复验关闭",
+    "decision": "维修验收结案同时清当前阻断标记并记录原/新值，其他未解除限制仍阻止恢复。",
+    "files": [
+      "core/services.py",
+      "core/coordination.py",
+      "core/independent_tests.py",
+      "core/operations_tests.py"
+    ],
+    "migration": "无新增迁移",
+    "tests": [
+      "test_repaired_incident_is_no_longer_a_current_service_block"
+    ],
+    "results": [
+      "维修验收结案同时清当前阻断标记并记录原/新值，其他未解除限制仍阻止恢复。",
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+    ],
+    "commits": [
+      "b45ce67（最终业务、迁移、客户端和工具）",
+      "配套模型文档提交见发布记录"
+    ],
+    "history": [
+      {
+        "status": "已实现待复验",
+        "decision": "",
+        "results": []
+      }
+    ],
+    "new_details": {
+      "发现与影响": "独立子agent在隔离真实PostgreSQL库复现；角色为申请人及范围管理员。",
+      "位置及函数": "accept_work",
+      "触发/步骤": "见core/independent_tests.py对应test_repaired_incident_is_no_longer_a_current_service_block，采用模拟账号、明日10-11/11-12相邻预约。",
+      "预期与依据": "不得在前序实际使用未结束时开始他人使用；领取宽限与复核、终态及当前阻断标志必须一致，依据课程业务规则。",
+      "实际与证据": "初次失败后修复，证据/独立验收-first-run.log、second-run.log与final-run.log保留；最终原断言通过。",
+      "根因": "验收将状态转RESOLVED但没有同步blocks_service，事实页文案失真。",
+      "验收": "test_repaired_incident_is_no_longer_a_current_service_block",
+      "关联": "AUD-0022/AUD-0002/AUD-0005"
+    },
+    "original_record": "本台账新增记录；独立复验报告与原失败日志。",
+    "original_problem": "维修验收结案后异常仍宣称阻断服务",
+    "entry_scope": "设备、场地及责任记录；申请人、管理员和维修人员，详见独立复验",
+    "current_locations": [
+      "core/services.py:459 accept_work"
+    ]
+  }
+]

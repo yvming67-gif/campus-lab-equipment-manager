@@ -1,0 +1,185 @@
+{
+  "scope": "模拟管理员；9页面×桌面1440/手机390；真实Chromium；非微信容器",
+  "results": [
+    {
+      "path": "/resources/",
+      "title": "资源目录 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "▦　资源目录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/bookings/",
+      "title": "预约与使用记录 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "▤　预约与使用记录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/incidents/",
+      "title": "异常追踪 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "◇　异常追踪"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/work/",
+      "title": "维修任务 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "⚒　维修任务"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/notifications/",
+      "title": "消息中心 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "◉　消息中心 1"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/audit/",
+      "title": "审计记录 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "≡　审计记录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/reports/",
+      "title": "利用与运行报表 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "▥　利用与运行报表"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/deliveries/",
+      "title": "外部通知投递 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "↗　外部通知投递"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/manage/",
+      "title": "资源与配置 · 实验资源中心",
+      "width": 1440,
+      "overflow": false,
+      "active": [
+        "⚙　资源与配置"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/resources/",
+      "title": "资源目录 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "▦　资源目录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/bookings/",
+      "title": "预约与使用记录 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "▤　预约与使用记录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/incidents/",
+      "title": "异常追踪 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "◇　异常追踪"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/work/",
+      "title": "维修任务 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "⚒　维修任务"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/notifications/",
+      "title": "消息中心 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "◉　消息中心 1"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/audit/",
+      "title": "审计记录 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "≡　审计记录"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/reports/",
+      "title": "利用与运行报表 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "▥　利用与运行报表"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/deliveries/",
+      "title": "外部通知投递 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "↗　外部通知投递"
+      ],
+      "unlabelled": []
+    },
+    {
+      "path": "/manage/",
+      "title": "资源与配置 · 实验资源中心",
+      "width": 390,
+      "overflow": false,
+      "active": [
+        "⚙　资源与配置"
+      ],
+      "unlabelled": []
+    }
+  ]
+}

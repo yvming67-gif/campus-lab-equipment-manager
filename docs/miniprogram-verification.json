@@ -1,41 +1,16 @@
 {
-  "date": "2026-10-19",
-  "scope": "Native WeChat user client for local course demonstration; management stays on the web",
-  "original_business_tests": 76,
-  "mini_api_tests": 36,
-  "combined_backend_tests_passed": 112,
-  "client_contract_tests_passed": 21,
+  "date": "2026-10-20",
+  "backend_total_tests": 154,
+  "client_controller_tests": 24,
   "native_template_compilation": {
-    "tool": "miniprogram-compiler",
-    "version": "0.2.3",
+    "tool": "miniprogram-compiler@0.2.3",
     "pages": 7,
     "wxml": "pass",
     "wxss": "pass"
   },
-  "browser_integration": {
-    "scope": "official compiled WXML + shared page controllers in browser harness + real Django/PostgreSQL; not a WeChat container",
-    "scenarios": [
-      "模拟学生登录并读取真实资源目录",
-      "资源名称筛选与完整预约表单",
-      "实际时段可用性检查",
-      "原生页面提交普通设备并自动确认",
-      "取消本人预约并同步状态与审计",
-      "真实通知查询及全部已读",
-      "受限设备保持待审核且不占用时段",
-      "网页管理员审批后小程序读取同一预约的结果",
-      "学生可查看场地但无法提交场地申请",
-      "教师切换账号后可提交独立场地申请",
-      "390像素移动视口无横向溢出"
-    ],
-    "count": 11,
-    "native_wechat_container_tested": false,
-    "demo_records_cancelled": true
-  },
-  "native_wechat_developer_tool_tested": false,
-  "physical_wechat_device_tested": false,
-  "wechat_platform_published": false,
-  "domain_schema_changed": false,
-  "domain_models": 31,
-  "fields": 245,
-  "physical_foreign_keys": 52
+  "developer_tool_current_container": "not executed",
+  "physical_device": "not executed",
+  "production_release": "not executed",
+  "scope": "simulated identities and shared actual Django/PostgreSQL; browser not equivalent to WeChat runtime",
+  "evidence": "整改/整改验证记录.md"
 }

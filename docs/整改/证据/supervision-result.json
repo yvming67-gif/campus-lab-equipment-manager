@@ -1,0 +1,7 @@
+{
+  "owned_worker_terminated": true,
+  "new_worker_created": true,
+  "launcher_survived": true,
+  "http_login_after_worker_restart": 200,
+  "scope": "one actual local worker restart; bounded 3 retries verified in source, not long-term hosting"
+}

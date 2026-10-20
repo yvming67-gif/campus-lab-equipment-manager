@@ -1,26 +1,15 @@
 {
-  "source_tree": "3b0614d5986010d20d8cb492abc89436f732dd7f",
-  "initial_local_config": false,
-  "initial_venv": false,
-  "inherited_database_env_removed": true,
-  "chinese_and_spaces_path": true,
-  "occupied_ports": [
-    18000,
-    55440
-  ],
-  "first_install_seconds": 73.717,
-  "first_startup": {
-    "status": "passed",
-    "http_login": 200,
-    "url": "http://127.0.0.1:18001",
-    "database_port": 55441,
-    "smoke_test": true,
-    "python": "3.13.12",
-    "checked_at": "2026-10-19T00:36:48+0800"
-  },
-  "persisted_reservation_id": 1,
-  "restart_preserves_reservations": true,
-  "restart_preserves_keys": true,
-  "status": "passed",
-  "own_database_stopped": true
+  "platform": "Windows 10/11 compatible host",
+  "python": "3.13.12",
+  "fresh_source_directory": true,
+  "fresh_virtualenv": true,
+  "postgres_archive": "pre-cached official ZIP with launcher checksum validation; new DB initialized",
+  "database_port": 55491,
+  "occupied_http_port_skipped": true,
+  "unrelated_global_database_settings_ignored": true,
+  "first_http_login": 200,
+  "repeat_http_login": 200,
+  "operations_regressions": "pass",
+  "existing_data_preserved": "seed and startup tests; see dedicated revocation regression",
+  "scope": "local clean path with Chinese and spaces; actual remote ZIP download checked by GitHub Windows CI after publication"
 }

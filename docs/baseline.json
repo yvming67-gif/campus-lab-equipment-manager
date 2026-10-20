@@ -1,5 +1,5 @@
 {
-  "version": "2.0",
+  "version": "2.1",
   "project": "校园实验室设备预约与借用管理系统",
   "confirmed": {
     "objects": [
@@ -11,7 +11,7 @@
       "STUDENT",
       "TEACHER"
     ],
-    "independent_resources": true,
+    "independent_resources": "可移动设备独立；固定设备受关联场地依赖约束",
     "approval": {
       "ordinary_equipment": "AUTO",
       "restricted_equipment": "MANUAL",
@@ -34,10 +34,10 @@
     "simultaneous_rooms_per_teacher": 1,
     "future_in_use_resource": "允许未来空闲预约；实际领取前再核验；逾期未归还阻断新建、批准和领取",
     "room_capacity": "申请和入场人数均不得超容量",
-    "isolation": "异常临时隔离；工单关闭并验收、所有阻断解除后恢复",
-    "resource_independence": "房间预约或故障不隐式占用或停用室内设备，独立异常独立处置",
+    "isolation": "普通无关联报告待核实；授权或核实安全事件阻断；验收后复核全部限制",
+    "resource_independence": "可移动设备独立；固定设备及取放区域按关联场地限制，并核对未结束实际使用",
     "notifications": "提前1小时、逾期每日；首次0及1/5/15分钟重试1至3",
-    "authentication": "仅本地模拟身份提供方，业务用户无可用学校密码",
+    "authentication": "演示为独立模拟身份；正式适配器缺失安全拒绝，真实学校未联调",
     "privacy": "模拟业务数据；课程报告按作者明确授权范围公开，本地运行数据不公开",
     "quality": "每次查询3秒、提交5秒；100组并发/100次状态同步；RPO24h/RTO4h为初步目标"
   },

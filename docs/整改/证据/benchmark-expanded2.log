@@ -1,0 +1,13 @@
+Creating test database for alias 'default'...
+
+.
+----------------------------------------------------------------------
+Ran 1 test in 89.882s
+
+OK
+Destroying test database for alias 'default'...
+
+Found 1 test(s).
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+BENCHMARK {"mixed": {"directory": {"samples": 40, "p50": 0.1025, "p95": 0.1203, "max": 0.1258, "errors": 0}, "times": {"samples": 40, "p50": 0.2265, "p95": 0.262, "max": 0.3432, "errors": 0}, "pending": {"samples": 40, "p50": 0.0974, "p95": 0.1094, "max": 0.1195, "errors": 0}, "report": {"samples": 40, "p50": 0.2443, "p95": 0.3099, "max": 0.4184, "errors": 0}, "mini": {"samples": 40, "p50": 0.1036, "p95": 0.1237, "max": 0.198, "errors": 0}}, "mixed_arrival_rate_requests_second": 10, "mixed_samples": 200, "mixed_error_rate": 0, "equipment_count": 10008, "history_count": 100000, "sessions": 50, "arrival_rate_requests_second": 10, "query_samples": 200, "submit_samples": 100, "query_max_seconds": 0.1442, "submit_max_seconds": 0.4762, "sync_samples": 100, "sync_max_seconds": 0.1947, "maintenance_sync_samples": 100, "maintenance_sync_max_seconds": 0.1654, "scope": "\u771f\u5b9e\u672c\u673aHTTP\u4e0ePostgreSQL\uff0c\u6a21\u62df\u6570\u636e\uff1b\u975e\u771f\u5b9e\u6821\u56ed\u7f51\u7edc\u4e0e\u771f\u5b9e\u7528\u6237\u8c03\u7814"}

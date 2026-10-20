@@ -1,0 +1,15 @@
+{
+  "platform": "Windows 10/11 compatible host",
+  "python": "3.13.12",
+  "fresh_source_directory": true,
+  "fresh_virtualenv": true,
+  "postgres_archive": "pre-cached official ZIP with launcher checksum validation; new DB initialized",
+  "database_port": 55491,
+  "occupied_http_port_skipped": true,
+  "unrelated_global_database_settings_ignored": true,
+  "first_http_login": 200,
+  "repeat_http_login": 200,
+  "operations_regressions": "pass",
+  "existing_data_preserved": "seed and startup tests; see dedicated revocation regression",
+  "scope": "local clean path with Chinese and spaces; actual remote ZIP download checked by GitHub Windows CI after publication"
+}

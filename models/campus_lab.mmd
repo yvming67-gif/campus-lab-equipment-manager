@@ -73,6 +73,9 @@ erDiagram
         varchar risk
         bigint qualification_id FK
         varchar physical_status
+        boolean portable
+        bigint access_room_id FK
+        varchar handover_location
     }
     core_roomdetail {
         bigint id PK
@@ -135,6 +138,10 @@ erDiagram
         jsonb policy_snapshot
         text reason
         integer version
+        boolean review_required
+        text review_reason
+        timestamp_with_time_zone arrived_at
+        timestamp_with_time_zone late_start_until
         timestamp_with_time_zone created_at
     }
     core_reviewnote {
@@ -211,6 +218,7 @@ erDiagram
         bigint reservation_id FK
         varchar kind
         text description
+        boolean blocks_service
         timestamp_with_time_zone occurred_at
         timestamp_with_time_zone reported_at
         varchar status
@@ -306,6 +314,52 @@ erDiagram
         bigint delivery_id FK
         timestamp_with_time_zone received_at
     }
+    core_reservationreview {
+        bigint id PK
+        bigint reservation_id FK
+        bigint actor_id FK
+        boolean accepted
+        text reason
+        jsonb snapshot
+        timestamp_with_time_zone created_at
+    }
+    core_coordination {
+        bigint id PK
+        bigint reservation_id FK
+        bigint actor_id FK
+        varchar action
+        text reason
+        jsonb old_state
+        jsonb new_state
+        timestamp_with_time_zone created_at
+    }
+    core_calendarexception {
+        bigint id PK
+        bigint lab_id FK
+        date day
+        boolean closed
+        time starts_at
+        time ends_at
+        boolean active
+        bigint actor_id FK
+        text reason
+        timestamp_with_time_zone created_at
+    }
+    core_incidentresponse {
+        bigint id PK
+        bigint incident_id FK
+        bigint actor_id FK
+        varchar kind
+        text content
+        timestamp_with_time_zone created_at
+    }
+    core_jobheartbeat {
+        bigint id PK
+        varchar name
+        timestamp_with_time_zone last_success
+        timestamp_with_time_zone last_error_at
+        varchar error_code
+    }
     core_user ||--o{ core_userrole : "user"
     core_role ||--o{ core_userrole : "role"
     core_user |o--o{ core_userrole : "granted_by"
@@ -317,6 +371,7 @@ erDiagram
     core_lab ||--o{ core_resource : "lab"
     core_resource ||--o| core_equipmentdetail : "resource"
     core_qualificationtype |o--o{ core_equipmentdetail : "qualification"
+    core_resource |o--o{ core_equipmentdetail : "access_room"
     core_resource ||--o| core_roomdetail : "resource"
     core_resource ||--o{ core_accessory : "resource"
     core_lab ||--o{ core_openingperiod : "lab"
@@ -358,3 +413,11 @@ erDiagram
     core_notification ||--o{ core_delivery : "notification"
     core_delivery ||--o{ core_deliveryattempt : "delivery"
     core_delivery ||--o| core_mockreceipt : "delivery"
+    core_reservation ||--o{ core_reservationreview : "reservation"
+    core_user ||--o{ core_reservationreview : "actor"
+    core_reservation ||--o{ core_coordination : "reservation"
+    core_user ||--o{ core_coordination : "actor"
+    core_lab ||--o{ core_calendarexception : "lab"
+    core_user ||--o{ core_calendarexception : "actor"
+    core_incident ||--o{ core_incidentresponse : "incident"
+    core_user ||--o{ core_incidentresponse : "actor"

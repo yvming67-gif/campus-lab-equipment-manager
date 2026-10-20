@@ -67,7 +67,13 @@ python tools/start_local.py --setup --no-browser --smoke-test
 
 Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和响应式CSS，无额外前端构建步骤。状态规则集中在 `core/services.py`，权限同时检查角色与对象范围，区间互斥由PostgreSQL条件排斥约束兜底。
 
-`models/`包含31个实体、245个字段、52条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、35条BR、11项QR、52条AC。系统分析报告以独立PDF随仓库提供，包含项目愿景、业务建模、系统需求、用例规约与需求追踪。
+`models/`包含36个实体、289个字段、61条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、47条BR、11项QR、64条AC。系统分析报告以独立PDF随仓库提供，包含项目愿景、业务建模、系统需求、用例规约与需求追踪。
+
+## 本轮质量与适用范围
+
+原43项审查及新增5项均保留在[完整整改台账](docs/整改/问题整改台账.md)：38项复验关闭，5项等待制度确认，5项等待外部环境验证。19项已确认缺陷均已修复并复验。后端154项、控制器24项、Windows启动11项通过；独立验收8项原断言通过。性能与恢复结论仅限记录的本机模拟环境。
+
+支持风险变化后追加复核、前序延误到场协调、固定设备场地依赖、单日闭馆例外、维修改派及损坏异议；默认日间教学短借。真实学校身份、消息提供方、微信容器/真机及正式HTTPS部署仍需验收，不能把配置入口当作上线证明。
 
 ## 数据模型图
 
@@ -75,7 +81,7 @@ Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和
 
 ![数据模型全景](models/ERD/完整ERD预览.png)
 
-完整字段按身份权限、资源开放、预约规则、现场使用、异常维修、审计通知分为六个域。下载仓库后可打开`models/ERD/交互图谱.html`离线搜索和缩放；图中R01—R52与关系索引逐条对应。
+完整字段按身份权限、资源开放、预约规则、现场使用、异常维修、审计通知分为六个域。下载仓库后可打开`models/ERD/交互图谱.html`离线搜索和缩放；图中R01-R61与关系索引逐条对应。
 
 ## 常用操作与验证
 
@@ -86,7 +92,7 @@ python manage.py check
 python manage.py migrate
 python manage.py seed_demo
 python manage.py prepare_demo
-python manage.py test core.tests core.miniapi_tests --noinput
+python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests --noinput
 python manage.py test core.benchmark_tests --noinput
 python tools/export_model.py
 python tools/validate_registry.py
@@ -103,6 +109,11 @@ python tools/backup_restore.py --restore-test
 
 ## 文档导航
 
+- [整改概览与证据](docs/整改/整改概览.md)
+- [独立复验报告](docs/整改/独立复验报告.md)
+- [版本与迁移说明](docs/整改/版本与迁移说明.md)
+- [运行与恢复指南](docs/整改/运行与恢复指南.md)
+- [ERD与数据设计说明（PDF）](docs/ERD与数据设计说明.pdf)
 - [微信小程序运行指南](miniprogram/README.md)
 - [微信小程序扩展说明](docs/微信小程序扩展说明.md)
 - [演示操作说明](docs/演示操作说明.md)

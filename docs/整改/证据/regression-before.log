@@ -1,0 +1,137 @@
+Creating test database for alias 'default'...
+
+F.FFFFFFFFFFFE
+======================================================================
+ERROR: test_aud0028_resource_audit_contains_old_details (core.remediation_tests.RemediationTests.test_aud0028_resource_audit_contains_old_details)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 73, in test_aud0028_resource_audit_contains_old_details
+    self.assertEqual(ev.old_state['equipment']['risk'],'NORMAL')
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^
+KeyError: 'equipment'
+
+======================================================================
+FAIL: test_aud0001_inactive_borrower_cannot_collect (core.remediation_tests.RemediationTests.test_aud0001_inactive_borrower_cannot_collect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 31, in test_aud0001_inactive_borrower_cannot_collect
+    with self.assertRaises(s.BusinessError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: BusinessError not raised
+
+======================================================================
+FAIL: test_aud0001_teacher_role_rechecked_at_room_start (core.remediation_tests.RemediationTests.test_aud0001_teacher_role_rechecked_at_room_start)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 38, in test_aud0001_teacher_role_rechecked_at_room_start
+    with self.assertRaises(s.BusinessError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: BusinessError not raised
+
+======================================================================
+FAIL: test_aud0006_query_rejects_objective_invalid_times (core.remediation_tests.RemediationTests.test_aud0006_query_rejects_objective_invalid_times) (start=datetime.datetime(2026, 10, 21, 10, 1, tzinfo=zoneinfo.ZoneInfo(key='Asia/Shanghai')))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 50, in test_aud0006_query_rejects_objective_invalid_times
+    with self.subTest(start=start):self.assertFalse(s.availability(self.eq,start,end)[0])
+                                   ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_aud0006_query_rejects_objective_invalid_times (core.remediation_tests.RemediationTests.test_aud0006_query_rejects_objective_invalid_times) (start=datetime.datetime(2026, 10, 21, 10, 0, tzinfo=zoneinfo.ZoneInfo(key='Asia/Shanghai')))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 50, in test_aud0006_query_rejects_objective_invalid_times
+    with self.subTest(start=start):self.assertFalse(s.availability(self.eq,start,end)[0])
+                                   ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_aud0006_query_rejects_objective_invalid_times (core.remediation_tests.RemediationTests.test_aud0006_query_rejects_objective_invalid_times) (start=datetime.datetime(2026, 11, 5, 10, 0, tzinfo=zoneinfo.ZoneInfo(key='Asia/Shanghai')))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 50, in test_aud0006_query_rejects_objective_invalid_times
+    with self.subTest(start=start):self.assertFalse(s.availability(self.eq,start,end)[0])
+                                   ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_aud0006_query_rejects_objective_invalid_times (core.remediation_tests.RemediationTests.test_aud0006_query_rejects_objective_invalid_times) (start=datetime.datetime(2026, 10, 18, 10, 0, tzinfo=zoneinfo.ZoneInfo(key='Asia/Shanghai')))
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 50, in test_aud0006_query_rejects_objective_invalid_times
+    with self.subTest(start=start):self.assertFalse(s.availability(self.eq,start,end)[0])
+                                   ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+======================================================================
+FAIL: test_aud0009_bad_cancel_version_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_cancel_version_is_not_500)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 55, in test_aud0009_bad_cancel_version_is_not_500
+    self.assertLess(r.status_code,500);b.refresh_from_db();self.assertEqual(b.status,'CONFIRMED')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 500 not less than 500
+
+======================================================================
+FAIL: test_aud0009_bad_delivery_id_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_delivery_id_is_not_500) (pk='bad')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 62, in test_aud0009_bad_delivery_id_is_not_500
+    self.assertLess(r.status_code,500)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 500 not less than 500
+
+======================================================================
+FAIL: test_aud0009_bad_delivery_id_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_delivery_id_is_not_500) (pk='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 62, in test_aud0009_bad_delivery_id_is_not_500
+    self.assertLess(r.status_code,500)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 500 not less than 500
+
+======================================================================
+FAIL: test_aud0009_bad_delivery_id_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_delivery_id_is_not_500) (pk=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 62, in test_aud0009_bad_delivery_id_is_not_500
+    self.assertLess(r.status_code,500)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+AssertionError: 500 not less than 500
+
+======================================================================
+FAIL: test_aud0010_grace_message_uses_policy (core.remediation_tests.RemediationTests.test_aud0010_grace_message_uses_policy)
+----------------------------------------------------------------------
+core.services.BusinessError: 未到使用时间或已超过30分钟领取/入场宽限
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 78, in test_aud0010_grace_message_uses_policy
+    with self.assertRaisesMessage(s.BusinessError,'60'):
+         ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python\Lib\contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+AssertionError: '60' not found in '未到使用时间或已超过30分钟领取/入场宽限'
+
+======================================================================
+FAIL: test_aud0011_explicit_seed_preserves_revocation (core.remediation_tests.RemediationTests.test_aud0011_explicit_seed_preserves_revocation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<workspace>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\remediation_tests.py", line 67, in test_aud0011_explicit_seed_preserves_revocation
+    self.assertFalse(self.admin.has_role('LAB_ADMIN'));self.assertFalse(LabGrant.objects.filter(user=self.admin).exists())
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.468s
+
+FAILED (failures=12, errors=1)
+Destroying test database for alias 'default'...
+
+Found 9 test(s).
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
