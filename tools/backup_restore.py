@@ -8,15 +8,15 @@ django.setup()
 from django.conf import settings
 from django.db import connection,transaction
 from core.models import Evidence
-LOCAL=ROOT/".local"
+LOCAL=settings.LOCAL
 def call(args,env):subprocess.run([str(x) for x in args],env=env,check=True,capture_output=True,creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument("--restore-test",action="store_true");args=parser.parse_args();start=time.perf_counter()
+    parser=argparse.ArgumentParser();parser.add_argument("--restore-test",action="store_true");parser.add_argument("--replica",default=os.environ.get("CAMPUS_BACKUP_REPLICA"));args=parser.parse_args();start=time.perf_counter()
     runtime=json.loads((LOCAL/"runtime.json").read_text("utf-8"));db=settings.DATABASES["default"];pg=Path(runtime["pg_bin"]);env=os.environ.copy();env.update({"PGHOST":db["HOST"],"PGPORT":str(db["PORT"]),"PGUSER":db["USER"],"PGPASSWORD":db["PASSWORD"]})
     folder=LOCAL/"backups";folder.mkdir(exist_ok=True);stamp=time.strftime("%Y%m%d-%H%M%S")+"-"+secrets.token_hex(3);target=folder/("backup-"+stamp+".zip")
     with tempfile.TemporaryDirectory(dir=LOCAL) as temp:
         temp=Path(temp)
-        native_temp=ascii_alias(ROOT)/".local"/temp.name if os.name=="nt" else temp
+        native_temp=ascii_alias(LOCAL)/temp.name if os.name=="nt" else temp
         dump=native_temp/"database.dump"
         with transaction.atomic():
             with connection.cursor() as c:c.execute("LOCK TABLE core_evidence IN SHARE MODE")
@@ -47,5 +47,17 @@ def main():
                     with zipfile.ZipFile(target) as z:
                         for file,digest in dest.fetchall():assert hashlib.sha256(z.read("media/"+file)).hexdigest()==digest
             outcome.update({"restore_database":restore_name,"table_counts":counts,"verified":True})
+        if args.replica:
+            import shutil
+            from restore_archive import inspect_archive
+            destination=Path(args.replica).resolve()
+            if destination==folder.resolve() or destination.is_relative_to(folder.resolve()) or folder.resolve().is_relative_to(destination):raise ValueError("副本必须位于独立目录")
+            destination.mkdir(parents=True,exist_ok=True);replica=destination/target.name
+            if replica.exists():raise ValueError("副本已存在，不覆盖")
+            shutil.copy2(target,replica);inspect_archive(replica)
+            if hashlib.sha256(replica.read_bytes()).hexdigest()!=outcome["sha256"]:raise RuntimeError("副本摘要不符")
+            outcome["replica_verified"]=True
+        from django.utils import timezone
+        (LOCAL/'last-backup.json').write_text(json.dumps({'last_success':timezone.now().isoformat(),'replica_verified':outcome.get('replica_verified',False)}),'utf-8')
         outcome["elapsed_seconds"]=round(time.perf_counter()-start,3);(folder/("result-"+stamp+".json")).write_text(json.dumps(outcome,ensure_ascii=False,indent=2),encoding="utf-8");print(json.dumps({k:v for k,v in outcome.items() if k not in ["table_counts"]},ensure_ascii=True))
 if __name__=="__main__":main()

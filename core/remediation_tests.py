@@ -77,3 +77,109 @@ class RemediationTests(TestCase):
         b=self.book();Policy.objects.filter(pk=1).update(grace_minutes=60)
         with self.assertRaisesMessage(s.BusinessError,'60'):
             s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start+timedelta(minutes=61))
+
+    def test_aud0002_upgrade_requires_recheck_preserves_original_decision(self):
+        from .coordination import recheck
+        b=self.book();decision=b.decision.pk
+        s.save_resource(self.admin,dict(code=self.eq.code,name=self.eq.name,kind='EQUIPMENT',lab=self.eq.lab,description='',category='示波器',risk='HIGH_VALUE',qualification=None,accessories='',reason='安全升级'),self.eq.pk)
+        b.refresh_from_db();self.assertTrue(b.review_required);self.assertEqual(b.decision.pk,decision)
+        with self.assertRaises(s.BusinessError):s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start)
+        recheck(self.admin,b.pk,True,'用途与安全条件复核',expected=b.version)
+        self.assertEqual(s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start).reservation_id,b.pk)
+        self.assertEqual(ApprovalDecision.objects.filter(reservation=b).count(),1)
+        self.assertEqual(ReservationReview.objects.filter(reservation=b).count(),1)
+
+    def test_aud0005_unrelated_report_does_not_block_but_authorized_report_does(self):
+        report=s.report_incident(self.student,self.eq.pk,'FAULT','普通待核实')
+        self.eq.refresh_from_db();self.assertFalse(report.blocks_service);self.assertEqual(self.eq.service_status,'NORMAL')
+        s.report_incident(self.admin,self.eq.pk,'FAULT','授权紧急检查')
+        self.eq.refresh_from_db();self.assertEqual(self.eq.service_status,'ISOLATED')
+
+    def test_aud0007_delay_coordination_releases_no_extra_time(self):
+        from .coordination import coordinate
+        b=self.book();other=User.objects.get(username='student2')
+        next_booking=s.create_reservation(other,self.eq.pk,self.end,self.end+timedelta(hours=1),'后续使用')
+        s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start)
+        coordinate(self.admin,next_booking.pk,'WAIT','前人未归还',self.end+timedelta(minutes=1),at=self.end+timedelta(minutes=1))
+        self.assertFalse(s.expire_booking(next_booking.pk,at=self.end+timedelta(minutes=31)))
+        s.return_equipment(self.admin,b.pk,self.eq.code,'已还',at=self.end+timedelta(minutes=31))
+        loan=s.checkout(self.admin,next_booking.pk,other.school_no,self.eq.code,at=self.end+timedelta(minutes=32))
+        self.assertEqual(loan.due_at,self.end+timedelta(hours=1))
+
+    def test_aud0007_unproven_wait_is_rejected(self):
+        from .coordination import coordinate
+        b=self.book()
+        with self.assertRaises(s.BusinessError):coordinate(self.admin,b.pk,'WAIT','没有前序占用',self.start,at=self.start)
+
+    def test_aud0008_fault_notifies_confirmed_applicant(self):
+        b=self.book();before=self.student.notifications.count()
+        s.report_incident(self.admin,self.eq.pk,'FAULT','安全检查')
+        b.refresh_from_db();self.assertTrue(b.review_required);self.assertGreater(self.student.notifications.count(),before)
+
+    def test_aud0019_borrower_can_access_own_return_incident_only(self):
+        b=self.book();s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start)
+        s.return_equipment(self.admin,b.pk,self.eq.code,'损坏',damaged=True,at=self.end)
+        item=Incident.objects.get(reservation=b);c=Client();c.force_login(self.student)
+        self.assertEqual(c.get(f'/incidents/{item.pk}/').status_code,200)
+        c.force_login(User.objects.get(username='teacher'));self.assertEqual(c.get(f'/incidents/{item.pk}/').status_code,404)
+
+    def test_aud0021_single_day_closure_preserves_other_days(self):
+        from .coordination import calendar_exception
+        b=self.book();day=self.start.date()
+        calendar_exception(self.sys,self.eq.lab_id,day,True,None,None,'临时闭馆')
+        self.assertFalse(s.availability(self.eq,self.start,self.end)[0]);b.refresh_from_db();self.assertTrue(b.review_required)
+        self.assertTrue(s.availability(self.eq,self.start+timedelta(days=1),self.end+timedelta(days=1))[0])
+        with self.assertRaises(s.BusinessError):s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start)
+
+    def test_aud0022_fixed_equipment_checks_both_booking_directions(self):
+        EquipmentDetail.objects.filter(resource=self.eq).update(portable=False,access_room=self.room)
+        b=self.book()
+        with self.assertRaises(s.BusinessError):self.book(self.teacher,self.room)
+        s.cancel(self.student,b.pk,'释放')
+        room=self.book(self.teacher,self.room);s.approve(self.admin,room.pk,True,'课堂')
+        with self.assertRaises(s.BusinessError):self.book()
+
+    def test_aud0024_responses_append_and_reviewer_is_independent(self):
+        from .coordination import respond_incident
+        b=self.book();i=s.report_incident(self.admin,self.eq.pk,'DAMAGE','检查',booking_id=b.pk)
+        respond_incident(self.student,i.pk,'DISPUTE','提出异议')
+        with self.assertRaises(s.BusinessError):respond_incident(self.admin,i.pk,'REVIEW','本人结案')
+        self.assertEqual(i.responses.count(),1);i.refresh_from_db();self.assertEqual(i.description,'检查')
+
+    def test_aud0025_reassignment_after_technician_deactivation(self):
+        from .coordination import reassign_work
+        tech=User.objects.get(username='tech');i=s.report_incident(self.admin,self.eq.pk,'FAULT','故障');s.verify_incident(self.admin,i.pk,'CONFIRM','确认')
+        w=s.create_work_order(self.admin,i.pk,tech.pk,'维修');User.objects.filter(pk=tech.pk).update(is_active=False)
+        replacement=User.objects.create(username='repair_backup',school_no='TECH-TEST',display_name='替补维修');UserRole.objects.create(user=replacement,role=Role.objects.get(code='TECHNICIAN'))
+        reassign_work(self.admin,w.pk,replacement.pk,'离岗交接')
+        s.update_work(replacement,w.pk,'START','接单')
+        with self.assertRaises(s.BusinessError):s.update_work(tech,w.pk,'PROGRESS','越权')
+
+    def test_aud0043_revocation_notifies_and_blocks(self):
+        r=Resource.objects.get(code='EQ-ROB-01');b=self.book(resource=r);s.approve(self.admin,b.pk,True,'合格')
+        before=self.student.notifications.count()
+        s.grant_user(self.sys,dict(user=self.student,roles=list(self.student.roles.all()),labs=[],active=True,qualification=r.equipment.qualification,expires_at=None,revoke=True,reason='撤销'))
+        b.refresh_from_db();self.assertTrue(b.review_required);self.assertGreater(self.student.notifications.count(),before)
+        with self.assertRaises(s.BusinessError):s.checkout(self.admin,b.pk,self.student.school_no,r.code,at=self.start)
+
+    def test_aud0014_changed_return_is_not_silently_accepted(self):
+        b=self.book();s.checkout(self.admin,b.pk,self.student.school_no,self.eq.code,at=self.start)
+        original=s.return_equipment(self.admin,b.pk,self.eq.code,'完好',at=self.end)
+        self.assertEqual(s.return_equipment(self.admin,b.pk,self.eq.code,'完好',at=self.end).pk,original.pk)
+        with self.assertRaises(s.BusinessError):s.return_equipment(self.admin,b.pk,'WRONG','新增损坏',damaged=True,at=self.end)
+
+    def test_aud0020_invalid_header_only_pdf_rejected(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        i=s.report_incident(self.student,self.eq.pk,'FAULT','故障')
+        with self.assertRaises(s.BusinessError):s.upload_evidence(self.student,i.pk,SimpleUploadedFile('bad.pdf',b'%PDF-1.4\n%%EOF'))
+        self.assertFalse(Evidence.objects.exists())
+
+    def test_aud0003_all_list_entries_have_reachable_pagination(self):
+        for n in range(101):
+            ev=s.audit(self.admin,self.eq,'LIST_TEST',reason=str(n))
+            Notification.objects.create(audit=ev,recipient=self.admin,kind='LIST_TEST',content=f'通知{n}')
+        c=Client();c.force_login(self.admin)
+        for path in ['/resources/','/bookings/','/incidents/','/work/','/notifications/','/audit/','/deliveries/']:
+            with self.subTest(path=path):
+                response=c.get(path);self.assertEqual(response.status_code,200);self.assertIsNotNone(response.context['page'])
+        response=c.get('/notifications/?page=4');self.assertEqual(response.context['page'].number,4)

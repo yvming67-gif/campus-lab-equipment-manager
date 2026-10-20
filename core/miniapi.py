@@ -71,7 +71,7 @@ def endpoint(*methods, public=False):
             try:
                 if request.method not in methods:
                     raise ApiError("METHOD_NOT_ALLOWED", "不支持此请求方式", 405)
-                if not settings.DEMO_MODE:
+                if not settings.DEMO_MODE and not settings.CAMPUS_MINI_IDENTITY_ADAPTER:
                     raise ApiError("ADAPTER_UNAVAILABLE", "小程序身份适配器尚未启用", 503)
                 if not public:
                     authenticate(request)
@@ -141,8 +141,8 @@ def policy_data():
     return {key: getattr(policy, key) for key in ("window_days", "slot_minutes", "max_hours", "equipment_quota", "room_quota", "simultaneous_equipment", "grace_minutes")}
 
 
-def resource_data(resource, times=None):
-    available, label = s.availability(resource, *times) if times else (None, "请选择目标时段")
+def resource_data(resource, times=None, user=None):
+    available, label = s.availability(resource, *times, applicant=user) if times else (None, "请选择目标时段")
     data = {"id": resource.pk, "code": resource.code, "name": resource.name, "kind": resource.kind,
             "kind_label": resource.get_kind_display(), "description": resource.description,
             "lab": {"id": resource.lab_id, "name": resource.lab.name, "location": resource.lab.location},
@@ -166,9 +166,10 @@ def booking_data(booking):
             "resource_name": booking.resource.name, "resource_code": booking.resource.code,
             "kind": booking.resource.kind, "lab_name": booking.resource.lab.name,
             "starts_at": date_text(booking.starts_at), "ends_at": date_text(booking.ends_at),
-            "status": booking.status, "status_label": booking.get_status_display(),
+            "status": booking.status, "status_label": booking.get_status_display()+" · 待复核" if booking.review_required else booking.get_status_display(),
             "approval_mode": booking.approval_mode, "purpose": booking.purpose,
-            "participants": booking.participants, "version": booking.version, "reason": booking.reason,
+            "participants": booking.participants, "version": booking.version, "reason": booking.review_reason if booking.review_required else booking.reason,
+            "review_required":booking.review_required,
             "created_at": date_text(booking.created_at),
             "can_cancel": booking.status in s.FUTURE and booking.starts_at > timezone.now()}
 
@@ -179,6 +180,18 @@ def my_bookings(user):
 
 @endpoint("POST", public=True)
 def login(request):
+    if not settings.DEMO_MODE:
+        data=payload(request,{"code"})
+        if not isinstance(data.get('code'),str) or not 1<=len(data['code'])<=256:raise ApiError('VALIDATION_ERROR','必须提供微信一次性登录凭据')
+        from django.utils.module_loading import import_string
+        try:identity=import_string(settings.CAMPUS_MINI_IDENTITY_ADAPTER)(code=data['code'])
+        except Exception:raise ApiError('ADAPTER_UNAVAILABLE','学校小程序身份服务暂不可用',503)
+        user=User.objects.filter(school_no=identity.get('school_no'),is_active=True).first() if isinstance(identity,dict) else None
+        if not user or not user.has_role('STUDENT','TEACHER'):raise ApiError('ROLE_NOT_SUPPORTED','无有效本地预约身份',403)
+        with transaction.atomic():
+            session=SessionStore();session['channel']='campus-mini-v1';session['mini_user_id']=user.pk;session.set_expiry(SESSION_SECONDS);session.create()
+            s.audit(user,user,'LOGIN',new={'identity':'SCHOOL','channel':'WECHAT_MINIPROGRAM'},reason='学校小程序适配器核验一次性凭据')
+        return {'token':session.session_key,'expires_in':SESSION_SECONDS,'user':user_data(user)}
     data = payload(request, {"username", "password"})
     values = cleaned(DemoLoginForm(data))
     identity = (request.META.get("REMOTE_ADDR", "") + ":" + values["username"]).encode()
@@ -232,7 +245,7 @@ def resources(request):
     if values["lab"]:
         qs = qs.filter(lab=values["lab"])
     times = (values["starts_at"], values["ends_at"]) if values["starts_at"] else None
-    result = page_data(request, qs, lambda item: resource_data(item, times))
+    result = page_data(request, qs, lambda item: resource_data(item, times, request.mini_user))
     result["labs"] = list(Lab.objects.order_by("code").values("id", "name", "location"))
     return result
 
@@ -242,7 +255,7 @@ def resource_detail(request, pk):
     resource = get_object_or_404(resources_qs(), pk=pk)
     values = cleaned(QueryForm(request.GET))
     times = (values["starts_at"], values["ends_at"]) if values["starts_at"] else None
-    result = resource_data(resource, times)
+    result = resource_data(resource, times, request.mini_user)
     result["policy"] = policy_data()
     result["can_apply"] = request.mini_user.has_role("TEACHER") if resource.kind == "ROOM" else True
     result["accessories"] = list(resource.accessories.filter(is_active=True).order_by("code").values("code", "name", "quantity"))

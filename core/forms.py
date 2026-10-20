@@ -81,6 +81,9 @@ class ResourceForm(forms.Form):
     category=forms.CharField(label="设备类别（设备必填）",required=False,max_length=60)
     risk=forms.ChoiceField(label="设备分级",choices=EquipmentDetail._meta.get_field("risk").choices)
     qualification=forms.ModelChoiceField(label="要求培训资质",queryset=QualificationType.objects.all(),required=False)
+    portable=forms.BooleanField(label="可独立外借（固定设备取消勾选）",required=False,initial=True)
+    access_room=forms.ModelChoiceField(label="固定设备关联场地",queryset=Resource.objects.filter(kind='ROOM'),required=False)
+    handover_location=forms.CharField(label="设备交接地点",max_length=120,required=False)
     capacity=forms.IntegerField(label="场地容量",required=False,min_value=1)
     accessories=forms.CharField(label="配件（每行：编码,名称,数量；保留历史交接快照）",required=False,widget=forms.Textarea(attrs={"rows":3}))
     reason=forms.CharField(label="变更依据",max_length=1000)
@@ -116,3 +119,25 @@ class OpeningForm(forms.Form):
     ends_at=forms.TimeField(label="关闭时间",widget=forms.TimeInput(attrs={"type":"time"}))
     effective=forms.DateField(label="生效日期（至少为明天）",widget=forms.DateInput(attrs={"type":"date"}))
     reason=forms.CharField(label="变更原因",max_length=1000)
+
+
+class CoordinationForm(ActionForm):
+    action=forms.ChoiceField(label="协调方式",choices=[('WAIT','前序延误：登记到场并保留原结束时间'),('CANCEL','协调取消未使用预约')])
+    arrived_at=LocalDateTime(label="实际到场时间（等待时必填）",required=False)
+
+
+class RecheckForm(ActionForm):
+    accepted=forms.ChoiceField(label="复核结论",choices=[('yes','复核通过'),('no','不能执行，协调取消')])
+    version=forms.IntegerField(min_value=1,widget=forms.HiddenInput)
+
+
+class CalendarExceptionForm(ActionForm):
+    lab=forms.ModelChoiceField(label="实验室",queryset=Lab.objects.all())
+    day=forms.DateField(label="生效日期",widget=forms.DateInput(attrs={'type':'date'}))
+    closed=forms.BooleanField(label="全天关闭（取消勾选时填写例外开放时段）",required=False,initial=True)
+    starts_at=forms.TimeField(label="例外开放时间",required=False,widget=forms.TimeInput(attrs={'type':'time'}))
+    ends_at=forms.TimeField(label="例外关闭时间",required=False,widget=forms.TimeInput(attrs={'type':'time'}))
+
+
+class IncidentResponseForm(ActionForm):
+    kind=forms.ChoiceField(label="记录类型",choices=IncidentResponse._meta.get_field('kind').choices)

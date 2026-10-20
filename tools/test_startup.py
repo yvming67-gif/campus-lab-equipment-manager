@@ -67,7 +67,7 @@ class StartupTests(unittest.TestCase):
             source=Path(launcher.ROOT)/"config/settings.py"
             target=root/"config/settings.py";target.write_text(source.read_text("utf-8"),encoding="utf-8")
             (root/".local/database.json").write_text(json.dumps({"host":"127.0.0.1","port":55440,"name":"private_demo","user":"campus","password":"simulated-test-only"}),encoding="utf-8")
-            env=os.environ.copy();env.update({"PGUSER":"unrelated_global_user","PGPORT":"1"})
+            env=os.environ.copy();env.pop("CAMPUS_LOCAL_DIR",None);env.update({"PGUSER":"unrelated_global_user","PGPORT":"1"})
             if external:env["CAMPUS_USE_EXTERNAL_DATABASE"]="1"
             else:env.pop("CAMPUS_USE_EXTERNAL_DATABASE",None)
             code="import runpy,json;d=runpy.run_path('config/settings.py')['DATABASES']['default'];print(json.dumps({'user':d['USER'],'port':d['PORT']}))"

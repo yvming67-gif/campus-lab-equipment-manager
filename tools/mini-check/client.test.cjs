@@ -32,6 +32,27 @@ function page(name) {
 const values = () => ({ resource_id: 1, starts_at: '2027-01-01T10:00:00', ends_at: '2027-01-01T11:00:00', purpose: '模拟用途', participants: 1 });
 test.beforeEach(setup);
 
+test('AUD-0017 older notification reads cannot overwrite a newer result',async()=>{
+  signedIn();const pending=[];reply=r=>pending.push(r);const p=page('notifications');
+  const first=p.load(1),second=p.load(1);
+  pending[1].success({statusCode:200,data:{ok:true,data:{items:[{id:1,read_at:'2026-10-20'}],page:1,has_more:false,unread:0}}});await second;
+  pending[0].success({statusCode:200,data:{ok:true,data:{items:[{id:1,read_at:null}],page:1,has_more:false,unread:1}}});await first;
+  assert.equal(p.data.unread,0);assert.equal(p.data.items[0].unread,false);
+});
+
+test('AUD-0018 changing dates invalidates an outstanding availability response',async()=>{
+  signedIn();const pending=[];reply=r=>pending.push(r);const p=page('resource');p.data.id=1;
+  const checking=p.checkAvailability();p.chooseDate({detail:{value:'2027-01-15'}});
+  pending[0].success({statusCode:200,data:{ok:true,data:{available:true,available_label:'时段可预约'}}});await checking;
+  assert.equal(p.data.available,null);assert.equal(p.data.availability,'');
+});
+
+test('AUD-0036 offline logout clears local credentials and reaches address settings',async()=>{
+  signedIn();reply=r=>r.fail({errMsg:'offline'});const p=page('profile');await p.signout();
+  assert.equal(api.session(),null);assert.ok(navigations.includes('/pages/login/index'));
+  const login=page('login');const count=navigations.length;login.onShow();assert.equal(navigations.length,count);
+});
+
 test('all seven native pages and lifecycle entry files exist', () => {
   const config = JSON.parse(fs.readFileSync(path.join(root, 'app.json'), 'utf8'));
   assert.equal(config.pages.length, 7);
@@ -111,8 +132,8 @@ test('marking one notification updates only that row and unread count', async ()
   signedIn();const p = page('notifications');p.setData({ unread: 2, items: [{ id: 3, unread: true, booking_id: null }, { id: 4, unread: true, booking_id: null }] });
   await p.open({ currentTarget: { dataset: { id: '3' } } });assert.equal(p.data.items[0].unread, false);assert.equal(p.data.items[1].unread, true);assert.equal(p.data.unread, 1);
 });
-test('failed logout preserves session until server confirms revocation', async () => {
-  signedIn();reply = r => r.fail({});await assert.rejects(api.logout());assert.ok(api.session());
+test('failed remote logout still clears the local session', async () => {
+  signedIn();reply = r => r.fail({});await assert.rejects(api.logout());assert.equal(api.session(),null);
 });
 test('China date formatting is independent of the computer timezone', () => {
   const fmt = require(path.join(root, 'utils/format'));assert.equal(fmt.day(Date.parse('2026-10-19T20:00:00Z')), '2026-10-20');

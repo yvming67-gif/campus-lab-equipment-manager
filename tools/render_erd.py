@@ -15,11 +15,11 @@ MODEL=ROOT/"models";DEST=MODEL/"ERD";SOURCE=MODEL/"图形源文件"
 INK="#263136";MUTED="#69737a";LINE="#bdc5c8";BLUE="#287a9a";GOLD="#ad842b";PAPER="#f5f5f2"
 DOMAINS=[
  ("A","身份与权限","共享身份、岗位和管理范围",["User","Role","UserRole","LabGrant","QualificationType","UserQualification"],"#e8edf2","#526c83",[["User","Role","LabGrant"],["UserRole","QualificationType","UserQualification"]]),
- ("B","资源与开放","资源主档、类型明细和日历",["Lab","Resource","EquipmentDetail","RoomDetail","Accessory","OpeningPeriod"],"#e5eee7","#52765f",[["Lab","OpeningPeriod","Accessory"],["Resource","EquipmentDetail","RoomDetail"]]),
- ("C","预约与规则","申请、最终决定和规则版本",["Reservation","ApprovalDecision","ReviewNote","Policy","PolicyRevision"],"#f3eedc","#8d7948",[["Reservation","ApprovalDecision"],["Policy","PolicyRevision","ReviewNote"]]),
- ("D","现场使用","设备交接与场地实际使用",["Loan","ReturnRecord","HandoverItem","RoomUse"],"#e6eef5","#50778c",[["Loan","ReturnRecord"],["RoomUse","HandoverItem"]]),
- ("E","异常与维修","证据、工单和独立验收",["Incident","Evidence","WorkOrder","WorkOrderEvent"],"#f3e8e1","#936c56",[["Incident","Evidence"],["WorkOrder","WorkOrderEvent"]]),
- ("F","审计与通知","状态区间和可追踪投递",["AuditEvent","ServicePeriod","Notification","Delivery","DeliveryAttempt","MockReceipt"],"#ece9f2","#776785",[["AuditEvent","ServicePeriod","MockReceipt"],["Notification","Delivery","DeliveryAttempt"]])]
+ ("B","资源与开放","资源主档、类型明细和日历",["Lab","Resource","EquipmentDetail","RoomDetail","Accessory","OpeningPeriod","CalendarException"],"#e5eee7","#52765f",[["Lab","OpeningPeriod","Accessory","CalendarException"],["Resource","EquipmentDetail","RoomDetail"]]),
+ ("C","预约与规则","申请、最终决定和规则版本",["Reservation","ApprovalDecision","ReviewNote","Policy","PolicyRevision","ReservationReview"],"#f3eedc","#8d7948",[["Reservation","ApprovalDecision","ReservationReview"],["Policy","PolicyRevision","ReviewNote"]]),
+ ("D","现场使用","设备交接与场地实际使用",["Loan","ReturnRecord","HandoverItem","RoomUse","Coordination"],"#e6eef5","#50778c",[["Loan","ReturnRecord"],["RoomUse","HandoverItem","Coordination"]]),
+ ("E","异常与维修","证据、工单和独立验收",["Incident","Evidence","WorkOrder","WorkOrderEvent","IncidentResponse"],"#f3e8e1","#936c56",[["Incident","Evidence","IncidentResponse"],["WorkOrder","WorkOrderEvent"]]),
+ ("F","审计与通知","状态区间和可追踪投递",["AuditEvent","ServicePeriod","Notification","Delivery","DeliveryAttempt","MockReceipt","JobHeartbeat"],"#ece9f2","#776785",[["AuditEvent","ServicePeriod","MockReceipt"],["Notification","Delivery","DeliveryAttempt","JobHeartbeat"]])]
 BY_DOMAIN={d[0]:d for d in DOMAINS}
 SCHEMA=json.loads((MODEL/"schema.json").read_text("utf-8"));BY={m["model"]:m for m in SCHEMA["models"]};TABLE={m["table"]:m for m in SCHEMA["models"]}
 CODES={n:d[0]+str(i+1).zfill(2) for d in DOMAINS for i,n in enumerate(d[3])}
@@ -28,6 +28,8 @@ REL=[]
 for i,e in enumerate(SCHEMA["relationships"],1):
  r=dict(e);r.update(id=f"R{i:02d}",child=TABLE[e["from_table"]]["model"],parent=TABLE[e["to_table"]]["model"]);REL.append(r)
 REL_BY={(r["child"],r["from_field"]):r for r in REL}
+ENTITY_COUNT=len(BY);FIELD_COUNT=sum(len(m['fields']) for m in BY.values());FK_COUNT=len(REL)
+
 
 def fonts():
     windows=Path(os.environ.get("WINDIR","C:/Windows"))/"Fonts"
@@ -271,19 +273,19 @@ def paint(scene,p,shared=False):
     if not scene.small:
         p.text(65,58,"校园实验室设备预约与借用管理系统",31,INK,"ERDCJK")
         p.text(65,93,"完整实体关系图谱",21,INK,"ERDCJK")
-        p.text(65,121,"31个实体  /  245个字段  /  52条物理外键  /  PostgreSQL",12,MUTED,"ERDCJK")
+        p.text(65,121,f"{ENTITY_COUNT}个实体  /  {FIELD_COUNT}个字段  /  {FK_COUNT}条物理外键  /  PostgreSQL",12,MUTED,"ERDCJK")
         key(p,1640,56,1.15);p.text(1660,59,"主键",12,INK,"ERDCJK")
         p.text(1745,59,"›  R01 → Parent.id",12,BLUE,"ERDCJK");p.text(1970,59,"外键与目标实体",12,INK,"ERDCJK")
         p.text(2190,59,"? 可空  ·  UQ 单列唯一",12,MUTED,"ERDCJK")
         p.text(1640,86,"实线：域内及主业务外键；共享责任主体引用以字段目标完整展开。",11,MUTED,"ERDCJK")
-        p.text(1640,111,"可编辑源文件可切换“共享引用”图层，检查全部52条连接。",11,MUTED,"ERDCJK")
+        p.text(1640,111,f"可编辑源文件可切换“共享引用”图层，检查全部{FK_COUNT}条连接。",11,MUTED,"ERDCJK")
         p.line([(65,143),(2735,143)],"#aeb9bd",1)
-        p.text(65,2036,"阅读顺序：资源 → 预约 → 现场使用 → 异常维修；身份、规则与审计为共用支撑。",12,INK,"ERDCJK")
-        p.text(65,2061,"实体代码用于跨域定位；R01—R52对应完整关系索引。实体、字段及外键由实际模型导出。",10.8,MUTED,"ERDCJK")
-        p.text(2735,2061,"2026-10-19  /  ERD 1.0",10.5,MUTED,"ERDSans","right")
-        p.text(1790,1960,"关键约束",12,INK,"ERDCJK")
-        p.text(1790,1980,"待审核不占资源；确认与使用中的重叠区间互斥。",10.5,MUTED,"ERDCJK")
-        p.text(1790,1998,"设备与场地分别记录实际使用；审计逻辑引用不伪装为外键。",10.5,MUTED,"ERDCJK")
+        p.text(65,scene.height-65,"阅读顺序：资源 → 预约 → 现场使用 → 异常维修；身份、规则与审计为共用支撑。",12,INK,"ERDCJK")
+        p.text(65,scene.height-40,f"实体代码用于跨域定位；R01-R{FK_COUNT:02d}对应完整关系索引。实体、字段及外键由实际模型导出。",10.8,MUTED,"ERDCJK")
+        p.text(2735,scene.height-40,"2026-10-20  /  ERD 2.1",10.5,MUTED,"ERDSans","right")
+        p.text(1790,scene.height-100,"关键约束",12,INK,"ERDCJK")
+        p.text(1790,scene.height-80,"待审核不占资源；确认与使用中的重叠区间互斥。",10.5,MUTED,"ERDCJK")
+        p.text(1790,scene.height-62,"设备与场地分别记录实际使用；审计逻辑引用不伪装为外键。",10.5,MUTED,"ERDCJK")
     else:
         external=sorted({r["parent"] for r in REL if r["child"] in scene.cards and r["parent"] not in scene.cards},key=lambda n:CODES[n])
         p.text(10,scene.height-33,"域外引用："+" · ".join(CODES[n]+" "+n for n in external[:3]),7.1,BLUE,"ERDCJK")
@@ -292,9 +294,10 @@ def paint(scene,p,shared=False):
 
 def make_scenes():
     master=Scene(2800,2080,"校园实验室设备预约与借用管理系统 · 完整ERD")
-    positions={"A":(70,170),"B":(990,170),"C":(1910,170),"F":(70,1100),"E":(990,1120),"D":(1910,1120)}
-    for d in DOMAINS:
-        x,y=positions[d[0]];master.group(d[0],x,y,820,d[6])
+    for index,key in enumerate(['A','B','C']):master.group(key,70+index*920,170,820,BY_DOMAIN[key][6])
+    second=max(g['y']+g['h'] for g in master.groups)+90
+    for index,key in enumerate(['F','E','D']):master.group(key,70+index*920,second,820,BY_DOMAIN[key][6])
+    master.height=max(g['y']+g['h'] for g in master.groups)+150
     master.route()
     domains=[]
     for d in DOMAINS:
@@ -335,8 +338,8 @@ def drawio(scene,path):
         geo=SubElement(c,"mxGeometry",relative="1",**{"as":"geometry"});pts=SubElement(geo,"Array",**{"as":"points"})
         for xx,yy in r["points"][1:-1]:SubElement(pts,"mxPoint",x=str(xx),y=str(yy))
     if not scene.small:
-        vertex("title",scene.title+"<br/><font style='font-size:13px'>31 entities / 245 fields / 52 physical foreign keys</font>",65,30,1400,100,"text;html=1;align=left;fontSize=30;fontFamily=Microsoft YaHei;","notes")
-        vertex("legend","金色PK / 蓝色FK目标 / ?可空 / UQ单列唯一<br/>共享责任引用在字段行完整标注，可切换共享引用图层。<br/>R01—R52见关系索引；审计entity_type+entity_id为逻辑引用。",1640,30,1080,100,"text;html=1;align=left;fontSize=16;fontFamily=Microsoft YaHei;","notes")
+        vertex("title",scene.title+f"<br/><font style='font-size:13px'>{ENTITY_COUNT} entities / {FIELD_COUNT} fields / {FK_COUNT} physical foreign keys</font>",65,30,1400,100,"text;html=1;align=left;fontSize=30;fontFamily=Microsoft YaHei;","notes")
+        vertex("legend","金色PK / 蓝色FK目标 / ?可空 / UQ单列唯一<br/>共享责任引用在字段行完整标注，可切换共享引用图层。<br/>R01-R61见关系索引；审计entity_type+entity_id为逻辑引用。",1640,30,1080,100,"text;html=1;align=left;fontSize=16;fontFamily=Microsoft YaHei;","notes")
     path.parent.mkdir(parents=True,exist_ok=True);ElementTree(root).write(path,encoding="utf-8",xml_declaration=True)
 
 def export_scene(scene,stem):
@@ -362,8 +365,9 @@ def export_pdfs(master,domains):
     for i,s in enumerate(domains,1):
         w,h=A4;c.setFillColor(color(INK));c.setFont("ERDCJK",15);c.drawString(44,h-43,"实体关系图册 / "+s.title)
         c.setFillColor(color(MUTED));c.setFont("ERDCJK",8);c.drawString(44,h-64,"完整字段、主外键与目标实体；编号与完整ERD总图一致。")
-        c.saveState();c.translate(44,h-87-s.height);paint(s,PDFPaint(c,s.height));c.restoreState()
-        note_y=h-101-s.height
+        scale=min(1,650/s.height)
+        c.saveState();c.translate(44,h-87-s.height*scale);c.scale(scale,scale);paint(s,PDFPaint(c,s.height));c.restoreState()
+        note_y=h-101-s.height*scale
         if note_y>90:
             c.setFont("ERDCJK",9);c.setFillColor(color(BY_DOMAIN[s.groups[0]["key"]][5]));c.drawString(44,note_y,"建模要点")
             c.setFont("ERDCJK",8)
@@ -385,7 +389,7 @@ def export_viewer():
 </style><header><strong>校园实验室 · 完整ERD</strong><button id="out">−</button><span id="zoom">100%</span><button id="in">＋</button><button id="fit">适合窗口</button><input id="search" aria-label="搜索实体或字段" placeholder="搜索实体、中文名或字段"><label><input type="checkbox" id="shared" style="width:auto">显示共享引用</label><span class="status" id="status">31实体 · 245字段 · 52物理外键 · 可离线查看</span></header><div id="viewport"><div id="stage">'''+svg+'''</div></div><script>
 const stage=document.querySelector('#stage'),viewport=document.querySelector('#viewport');let scale=1;function setScale(s){scale=Math.max(.2,Math.min(2.5,s));stage.style.width=(2800*scale)+'px';document.querySelector('#zoom').textContent=Math.round(scale*100)+'%'}document.querySelector('#in').onclick=()=>setScale(scale*1.2);document.querySelector('#out').onclick=()=>setScale(scale/1.2);document.querySelector('#fit').onclick=()=>setScale((viewport.clientWidth-45)/2800);document.querySelector('#shared').onchange=e=>document.querySelector('#shared-references').style.display=e.target.checked?'':'none';document.querySelector('#search').oninput=e=>{const q=e.target.value.trim().toLowerCase();let found=0;document.querySelectorAll('.entity').forEach(n=>{let hit=q&&n.textContent.toLowerCase().includes(q);n.classList.toggle('dim',!!q&&!hit);n.classList.toggle('hit',!!hit);if(hit)found++});document.querySelector('#status').textContent=q?'匹配 '+found+' 个实体':'31实体 · 245字段 · 52物理外键 · 可离线查看'};document.querySelector('#fit').click();
 </script></html>'''
-    (DEST/"交互图谱.html").write_text(page,"utf-8")
+    (DEST/"交互图谱.html").write_text(page.replace("31实体 · 245字段 · 52物理外键",f"{ENTITY_COUNT}实体 · {FIELD_COUNT}字段 · {FK_COUNT}物理外键"),"utf-8")
 
 def navigation_paint(p):
     p.rect(0,0,507,470,PAPER)
@@ -408,7 +412,7 @@ def main():
     import argparse
     parser=argparse.ArgumentParser();parser.add_argument("--preview",action="store_true",help="Also render PNG previews when PyMuPDF is installed.");args=parser.parse_args()
     fonts();DEST.mkdir(parents=True,exist_ok=True);SOURCE.mkdir(parents=True,exist_ok=True)
-    master,domains=make_scenes();print("Routed complete schema: 31 entities / 245 fields / 52 relationships",flush=True)
+    master,domains=make_scenes();print(f"Routed complete schema: {ENTITY_COUNT} entities / {FIELD_COUNT} fields / {FK_COUNT} relationships",flush=True)
     export_scene(master,"ERD-00-完整实体关系总图")
     for i,s in enumerate(domains,2):export_scene(s,f"图D-{i}-{s.groups[0]['title']}ERD")
     navigation_export();export_pdfs(master,domains);export_index(master,domains);export_viewer()

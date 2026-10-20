@@ -95,6 +95,9 @@ class EquipmentDetail(models.Model):
     risk = models.CharField("受限级别", max_length=20, choices=[("NORMAL", "普通"), ("HIGH_VALUE", "高价值"), ("HAZARDOUS", "危险")], default="NORMAL")
     qualification = models.ForeignKey(QualificationType, null=True, blank=True, on_delete=models.PROTECT)
     physical_status = models.CharField("实物状态", max_length=16, choices=[("IN_STOCK", "在库"), ("BORROWED", "借出中")], default="IN_STOCK")
+    portable = models.BooleanField("可独立外借", default=True)
+    access_room = models.ForeignKey(Resource, null=True, blank=True, on_delete=models.PROTECT, related_name="dependent_equipment")
+    handover_location = models.CharField("交接地点", max_length=120, blank=True)
     class Meta: verbose_name = "设备属性"
 
 class RoomDetail(models.Model):
@@ -172,6 +175,10 @@ class Reservation(models.Model):
     policy_snapshot = models.JSONField(default=dict)
     reason = models.TextField(blank=True)
     version = models.PositiveIntegerField(default=1)
+    review_required = models.BooleanField("暂停交接待复核", default=False)
+    review_reason = models.TextField("待复核原因", blank=True)
+    arrived_at = models.DateTimeField("已核实到场时间", null=True, blank=True)
+    late_start_until = models.DateTimeField("协调后的最晚开始时间", null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     class Meta:
         verbose_name = "资源预约"
@@ -257,6 +264,7 @@ class Incident(models.Model):
     reservation = models.ForeignKey(Reservation, null=True, blank=True, on_delete=models.PROTECT)
     kind = models.CharField(max_length=20, choices=[("DAMAGE", "损坏"), ("MISSING", "缺件"), ("FAULT", "运行或场地异常")])
     description = models.TextField()
+    blocks_service = models.BooleanField("阻断服务", default=True)
     occurred_at = models.DateTimeField()
     reported_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=16, choices=STATUS, default="PENDING")
@@ -371,3 +379,68 @@ class MockReceipt(models.Model):
     delivery = models.OneToOneField(Delivery, on_delete=models.PROTECT)
     received_at = models.DateTimeField(default=timezone.now)
     class Meta: verbose_name = "模拟投递去重凭据"
+
+
+class ReservationReview(models.Model):
+    reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, related_name="rechecks")
+    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+    accepted = models.BooleanField()
+    reason = models.TextField()
+    snapshot = models.JSONField(default=dict)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "预约复核历史"
+
+
+class Coordination(models.Model):
+    reservation = models.ForeignKey(Reservation, on_delete=models.PROTECT, related_name="coordinations")
+    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+    action = models.CharField(max_length=20, choices=[("WAIT", "前序延误等待"), ("CANCEL", "协调取消")])
+    reason = models.TextField()
+    old_state = models.JSONField(default=dict)
+    new_state = models.JSONField(default=dict)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "预约协调凭据"
+
+
+class CalendarException(models.Model):
+    lab = models.ForeignKey(Lab, on_delete=models.PROTECT, related_name="calendar_exceptions")
+    day = models.DateField()
+    closed = models.BooleanField(default=True)
+    starts_at = models.TimeField(null=True, blank=True)
+    ends_at = models.TimeField(null=True, blank=True)
+    active = models.BooleanField(default=True)
+    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+    reason = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "单日开放例外版本"
+        constraints = [
+            models.UniqueConstraint(fields=["lab", "day"], condition=Q(active=True), name="one_active_calendar_exception"),
+            models.CheckConstraint(condition=Q(closed=True) | Q(starts_at__isnull=False, ends_at__isnull=False, starts_at__lt=F("ends_at")), name="calendar_exception_order"),
+        ]
+
+
+class IncidentResponse(models.Model):
+    incident = models.ForeignKey(Incident, on_delete=models.PROTECT, related_name="responses")
+    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+    kind = models.CharField(max_length=20, choices=[("ACK", "确认知悉"), ("DISPUTE", "提出异议"), ("SUPPLEMENT", "追加事实"), ("REVIEW", "独立复核结论")])
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "异常确认与异议记录"
+
+
+class JobHeartbeat(models.Model):
+    name = models.CharField(max_length=40, unique=True)
+    last_success = models.DateTimeField(null=True, blank=True)
+    last_error_at = models.DateTimeField(null=True, blank=True)
+    error_code = models.CharField(max_length=80, blank=True)
+
+    class Meta:
+        verbose_name = "后台任务健康记录"

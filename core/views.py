@@ -8,7 +8,7 @@ from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from django.core import signing
 from django.core.paginator import Paginator
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied,ImproperlyConfigured
 from django.db import IntegrityError,transaction
 from django.db.models import Q,Count
 from django.http import FileResponse,Http404,JsonResponse
@@ -22,6 +22,12 @@ from . import services as s
 from .reports import utilization
 from .demo_identity import verify_demo_password
 
+def paginate(request,queryset,size=30):
+    page=Paginator(queryset,size).get_page(request.GET.get('page',1))
+    query=request.GET.copy();query.pop('page',None)
+    return page,query.urlencode()
+
+
 def protected(ok):
     if not ok:raise PermissionDenied
 
@@ -31,7 +37,7 @@ def scoped_bookings(user):
     return qs.filter(applicant=user)
 
 def scoped_incidents(user):
-    q=Q(reporter=user)
+    q=Q(reporter=user)|Q(reservation__applicant=user)
     if user.has_role("LAB_ADMIN"):q|=Q(resource__lab__labgrant__user=user)
     if user.has_role("TECHNICIAN"):q|=Q(work_orders__assigned_to=user)
     return Incident.objects.filter(q).select_related("resource__lab","reporter").distinct()
@@ -51,7 +57,17 @@ def login_page(request):
     return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE})
 
 def identity(request):
-    if not settings.DEMO_MODE:raise Http404("学校认证适配器尚未配置")
+    if not settings.DEMO_MODE:
+        if not request.session.get("idp_nonce"):return redirect("login")
+        try:
+            from .adapters import identity_adapter
+            url=identity_adapter().begin(request,request.session["idp_nonce"],request.build_absolute_uri(reverse("callback")))
+            from urllib.parse import urlsplit
+            target=urlsplit(url)
+            if target.scheme!='https' or not target.hostname or target.username or target.password:raise ValueError('不安全的身份跳转地址')
+            return redirect(url)
+        except (ImproperlyConfigured,ValueError):
+            return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员"},status=503)
     if not request.session.get("idp_nonce"):return redirect("login")
     accounts=User.objects.filter(is_active=True).order_by("pk")
     error=""
@@ -65,6 +81,19 @@ def identity(request):
     return render(request,"identity.html",{"title":"模拟学校身份认证","accounts":accounts,"error":error})
 
 def callback(request):
+    if not settings.DEMO_MODE:
+        nonce=request.session.pop("idp_nonce",None)
+        protected(bool(nonce))
+        try:
+            from .adapters import identity_adapter
+            # Provider must verify signature, issuer, audience, expiry and one-use code/state.
+            assertion=identity_adapter().complete(request,nonce,request.build_absolute_uri(reverse("callback")))
+            protected(assertion.get("state")==nonce and isinstance(assertion.get("school_no"),str))
+            user=get_object_or_404(User,school_no=assertion["school_no"],is_active=True)
+        except (ImproperlyConfigured,ValueError,KeyError):raise PermissionDenied
+        login(request,user,backend="django.contrib.auth.backends.ModelBackend")
+        s.audit(user,user,"LOGIN",new={"identity":"SCHOOL"},reason="学校身份适配器校验通过；使用既有本地授权")
+        return redirect("dashboard")
     try:
         assertion=signing.loads(request.GET.get("ticket",""),key=settings.MOCK_IDP_KEY,salt="mock-idp",max_age=60)
         protected(assertion["nonce"]==request.session.pop("idp_nonce",None))
@@ -94,12 +123,13 @@ def resources(request):
         if d["kind"]:qs=qs.filter(kind=d["kind"])
         if d["lab"]:qs=qs.filter(lab=d["lab"])
         if d["starts_at"]:times=(d["starts_at"],d["ends_at"])
-    items=list(qs[:100])
+    page,filters=paginate(request,qs)
+    items=list(page.object_list)
     for r in items:
         r.available_label="请选择目标时段查询"
         r.available=None
-        if times:r.available,r.available_label=s.availability(r,*times)
-    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"times":times,"policy":Policy.objects.get(pk=1)})
+        if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
+    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1)})
 
 @login_required
 def resource_detail(request,pk):
@@ -124,7 +154,8 @@ def bookings(request):
     if day:
         try:qs=qs.filter(starts_at__date=datetime.strptime(day,"%Y-%m-%d").date())
         except ValueError:messages.error(request,"日期格式应为年-月-日")
-    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":qs[:100],"statuses":Reservation.STATUS,"labs":Lab.objects.all()})
+    page,filters=paginate(request,qs.order_by("-created_at","-pk"))
+    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":Lab.objects.all()})
 
 @login_required
 def booking(request,pk):
@@ -166,7 +197,9 @@ def booking_action(request,pk,action):
     return render(request,"form.html",{"title":titles[action],"form":form,"subtitle":f"{b.code} · {b.resource.name} · {b.applicant.display_name}","back":reverse("booking",args=[pk]),"booking":b,"action":action})
 
 @login_required
-def incidents(request):return render(request,"incidents.html",{"title":"异常追踪","incidents":scoped_incidents(request.user).order_by("-reported_at")[:100]})
+def incidents(request):
+    page,filters=paginate(request,scoped_incidents(request.user).order_by("-reported_at","-pk"))
+    return render(request,"incidents.html",{"title":"异常追踪","incidents":page.object_list,"page":page,"filters":filters})
 
 @login_required
 def incident_new(request):
@@ -178,7 +211,7 @@ def incident_new(request):
         try:
             s.require(d["occurred_at"]<=timezone.now(),"发现时间不得晚于当前时间")
             item=s.report_incident(request.user,d["resource"].pk,d["kind"],d["description"],d["reservation"].pk if d["reservation"] else None,occurred_at=d["occurred_at"])
-            messages.success(request,"异常已上报，资源暂时隔离并通知负责人");return redirect("incident",pk=item.pk)
+            messages.success(request,"异常已记录并通知负责人；是否隔离以核实和资源状态为准");return redirect("incident",pk=item.pk)
         except s.BusinessError as e:form.add_error(None,str(e))
     return render(request,"form.html",{"title":"提交资源异常","form":form,"subtitle":"请描述可核查的事实，场地和设备分别记录。"})
 
@@ -212,7 +245,9 @@ def evidence_download(request,pk):
     return FileResponse(ev.file.open("rb"),as_attachment=True,filename=ev.original_name)
 
 @login_required
-def work_list(request):return render(request,"work.html",{"title":"维修任务","work":scoped_work(request.user).order_by("-created_at")[:100]})
+def work_list(request):
+    page,filters=paginate(request,scoped_work(request.user).order_by("-created_at","-pk"))
+    return render(request,"work.html",{"title":"维修任务","work":page.object_list,"page":page,"filters":filters})
 
 @login_required
 def work_detail(request,pk):
@@ -238,7 +273,8 @@ def work_action(request,pk,action):
 def notifications(request):
     if request.method=="POST":
         request.user.notifications.filter(read_at__isnull=True).update(read_at=timezone.now());return redirect("notifications")
-    return render(request,"notifications.html",{"title":"消息中心","notifications":request.user.notifications.prefetch_related("deliveries").order_by("-created_at")[:100]})
+    page,filters=paginate(request,request.user.notifications.prefetch_related("deliveries").order_by("-created_at","-pk"))
+    return render(request,"notifications.html",{"title":"消息中心","notifications":page.object_list,"page":page,"filters":filters})
 
 @login_required
 def audit_list(request):
@@ -246,7 +282,8 @@ def audit_list(request):
     qs=AuditEvent.objects.select_related("actor","lab")
     if not request.user.has_role("SYS_ADMIN","DIRECTOR"):qs=qs.filter(lab__labgrant__user=request.user)
     if request.GET.get("q"):qs=qs.filter(Q(action__icontains=request.GET["q"])|Q(reason__icontains=request.GET["q"])|Q(entity_type__icontains=request.GET["q"]))
-    return render(request,"audit.html",{"title":"审计记录","events":qs[:100]})
+    page,filters=paginate(request,qs.order_by("-created_at","-pk"))
+    return render(request,"audit.html",{"title":"审计记录","events":page.object_list,"page":page,"filters":filters})
 
 @login_required
 def reports(request):
@@ -275,7 +312,7 @@ def manage_form(request,action,pk=None):
         r=get_object_or_404(Resource,pk=pk);protected(s.manager(request.user,r))
         initial={"code":r.code,"name":r.name,"kind":r.kind,"lab":r.lab,"description":r.description}
         if r.kind=="ROOM":initial["capacity"]=r.room.capacity
-        else:initial.update({"category":r.equipment.category,"risk":r.equipment.risk,"qualification":r.equipment.qualification,"accessories":"\n".join(f"{a.code},{a.name},{a.quantity}" for a in r.accessories.filter(is_active=True))})
+        else:initial.update({"category":r.equipment.category,"risk":r.equipment.risk,"qualification":r.equipment.qualification,"portable":r.equipment.portable,"access_room":r.equipment.access_room,"handover_location":r.equipment.handover_location,"accessories":"\n".join(f"{a.code},{a.name},{a.quantity}" for a in r.accessories.filter(is_active=True))})
     if action=="grant" and pk:
         u=get_object_or_404(User,pk=pk);initial={"user":u,"roles":u.roles.all(),"labs":Lab.objects.filter(labgrant__user=u),"active":u.is_active}
     if action=="policy":initial=Policy.objects.get(pk=1).snapshot()
@@ -312,4 +349,5 @@ def deliveries(request):
         try:s.record_manual_contact(request.user,task.pk,request.POST.get("reason",""));messages.success(request,"人工联系结果已追加至审计")
         except s.BusinessError as e:messages.error(request,str(e))
         return redirect("deliveries")
-    return render(request,"deliveries.html",{"title":"外部通知投递","deliveries":qs.order_by("-pk")[:100]})
+    page,filters=paginate(request,qs.order_by("-pk"))
+    return render(request,"deliveries.html",{"title":"外部通知投递","deliveries":page.object_list,"page":page,"filters":filters})

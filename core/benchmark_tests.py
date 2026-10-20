@@ -56,6 +56,37 @@ class HttpBenchmark(TransactionTestCase):
                 self.assertIn("资源目录" if kind=="query" else "预约详情",body)
                 if kind=="submit":self.assertIn("已确认",body)
                 self.assertLessEqual(elapsed,3 if kind=="query" else 5)
+            # Broader workload: existing precision-search sample is retained unchanged.
+            from django.contrib.sessions.backends.db import SessionStore
+            mini=SessionStore();mini['channel']='campus-mini-v1';mini['mini_user_id']=users[0].pk;mini.set_expiry(7200);mini.create()
+            for username in ['admin','director']:
+                c=Client();c.force_login(User.objects.get(username=username));cookies.append('sessionid='+c.cookies['sessionid'].value)
+            paths=[('directory','/resources/',0),('times','/resources/?'+urllib.parse.urlencode({'starts_at':start.strftime('%Y-%m-%dT%H:%M'),'ends_at':end.strftime('%Y-%m-%dT%H:%M')}),0),('pending','/bookings/?status=PENDING',50),('report','/reports/',51)]
+            def mixed_sample(i):
+                if i%5==4:
+                    url='/api/mini/v1/resources/' if i%2 else '/api/mini/v1/bookings/'
+                    req=urllib.request.Request(f'http://127.0.0.1:{port}'+url,headers={'Authorization':'Bearer '+mini.session_key})
+                    tick=time.perf_counter()
+                    with urllib.request.urlopen(req,timeout=10) as response:body=json.loads(response.read())
+                    self.assertTrue(body['ok']);self.assertIsInstance(body['data']['items'],list)
+                    return ('mini',time.perf_counter()-tick)
+                kind,path,who=paths[i%5];elapsed,body=request(path,who)
+                self.assertIn({'directory':'资源目录','times':'资源目录','pending':'预约与使用记录','report':'利用与运行报表'}[kind],body)
+                return kind,elapsed
+            mixed=[];begin=time.monotonic()
+            with ThreadPoolExecutor(max_workers=50) as pool:
+                futures=[]
+                for i in range(200):
+                    delay=begin+i*.1-time.monotonic()
+                    if delay>0:time.sleep(delay)
+                    futures.append(pool.submit(mixed_sample,i))
+                mixed=[f.result() for f in futures]
+            distributions={}
+            for kind in ['directory','times','pending','report','mini']:
+                values=sorted(t for name,t in mixed if name==kind)
+                p95=values[max(0,__import__('math').ceil(len(values)*.95)-1)]
+                self.assertLessEqual(p95,3,kind)
+                distributions[kind]={'samples':len(values),'p50':round(values[len(values)//2],4),'p95':round(p95,4),'max':round(max(values),4),'errors':0}
             sync=[]
             for b in Reservation.objects.filter(resource__code__startswith="LOAD-EQ-",status="CONFIRMED"):
                 tick=time.perf_counter();s.cancel(b.applicant,b.pk,"状态同步模拟")
@@ -71,7 +102,7 @@ class HttpBenchmark(TransactionTestCase):
                 tick=time.perf_counter();s.accept_work(admin,work.pk,True,"复测通过")
                 _,body=request("/resources/?"+urllib.parse.urlencode({"q":r.code,"starts_at":start.strftime("%Y-%m-%dT%H:%M"),"ends_at":end.strftime("%Y-%m-%dT%H:%M")}),0);self.assertIn("时段可预约",body);maintenance_sync.append(time.perf_counter()-tick)
             self.assertEqual(len(maintenance_sync),100);self.assertLessEqual(max(maintenance_sync),2)
-            result={"equipment_count":10008,"history_count":100000,"sessions":50,"arrival_rate_requests_second":10,"query_samples":len(query),"submit_samples":len(submit),"query_max_seconds":round(max(query),4),"submit_max_seconds":round(max(submit),4),"sync_samples":len(sync),"sync_max_seconds":round(max(sync),4),"maintenance_sync_samples":len(maintenance_sync),"maintenance_sync_max_seconds":round(max(maintenance_sync),4),"scope":"真实本机HTTP与PostgreSQL，模拟数据；非真实校园网络与真实用户调研"}
+            result={"mixed":distributions,"mixed_arrival_rate_requests_second":10,"mixed_samples":200,"mixed_error_rate":0,"equipment_count":10008,"history_count":100000,"sessions":50,"arrival_rate_requests_second":10,"query_samples":len(query),"submit_samples":len(submit),"query_max_seconds":round(max(query),4),"submit_max_seconds":round(max(submit),4),"sync_samples":len(sync),"sync_max_seconds":round(max(sync),4),"maintenance_sync_samples":len(maintenance_sync),"maintenance_sync_max_seconds":round(max(maintenance_sync),4),"scope":"真实本机HTTP与PostgreSQL，模拟数据；非真实校园网络与真实用户调研"}
             (settings.LOCAL/"benchmark-result.json").write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding="utf-8");print("BENCHMARK "+json.dumps(result,ensure_ascii=True))
         finally:
             proc.terminate();proc.wait(timeout=10);log.close()

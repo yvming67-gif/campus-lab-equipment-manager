@@ -68,15 +68,16 @@ const screens = {
       } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
     },
     input,
-    chooseDate(e) { this.setData({ 'form.date': e.detail.value, availability: '', available: null }); },
-    chooseStart(e) { this.setData({ 'form.start': e.detail.value, availability: '', available: null }); },
-    chooseEnd(e) { this.setData({ 'form.end': e.detail.value, availability: '', available: null }); },
+    chooseDate(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.date': e.detail.value, availability: '', available: null }); },
+    chooseStart(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.start': e.detail.value, availability: '', available: null }); },
+    chooseEnd(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.end': e.detail.value, availability: '', available: null }); },
     async checkAvailability() {
-      const f = this.data.form;
+      const f = Object.assign({},this.data.form);
+      const serial=(this._availabilitySerial||0)+1;this._availabilitySerial=serial;
       this.setData({ loading: true, error: '' });
       try {
         const item = await api.request('/resources/' + this.data.id + '/', 'GET', { starts_at: f.date + 'T' + f.start + ':00', ends_at: f.date + 'T' + f.end + ':00' });
-        this.setData({ availability: item.available_label, available: item.available });
+        if(serial===this._availabilitySerial)this.setData({ availability: item.available_label, available: item.available });
       } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
     },
     async submit() {
@@ -144,17 +145,20 @@ const screens = {
     data: { items: [], loading: false, busy: false, error: '', unread: 0, page: 1, hasMore: false },
     onShow() { if (api.requireLogin()) return this.load(1); },
     async load(page) {
+      const serial=(this._serial||0)+1;this._serial=serial;
       this.setData({ loading: true, error: '' });
       try {
         const result = await api.request('/notifications/', 'GET', { page: page || 1 });
+        if(serial!==this._serial)return;
         this.setData({ items: (page && page > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread });
-      } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
+      } catch (e) { if(serial===this._serial)error(this, e); } finally { if(serial===this._serial)this.setData({ loading: false }); }
     },
     async open(e) {
       const id = Number(e.currentTarget.dataset.id);const item = this.data.items.find(x => x.id === id);
       if (!item || this.data.busy) return;
       this.setData({ busy: true, error: '' });
       try {
+        this._serial=(this._serial||0)+1;
         if (item.unread) await api.request('/notifications/' + id + '/read/', 'POST', {});
         this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
         if (item.booking_id) wx.navigateTo({ url: '/pages/booking/index?id=' + item.booking_id });
@@ -163,6 +167,7 @@ const screens = {
     async markAll() {
       if (this.data.busy) return;
       this.setData({ busy: true, error: '' });
+      this._serial=(this._serial||0)+1;
       try { await api.request('/notifications/read-all/', 'POST', {}); await this.load(1); }
       catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
     },
@@ -182,7 +187,7 @@ const screens = {
       if (this.data.busy || !await confirm({ title: '退出当前账号？', content: '已有预约会保留，登录后可继续查询。', confirmText: '退出' })) return;
       this.setData({ busy: true, error: '' });
       try { await api.logout(); wx.reLaunch({ url: '/pages/login/index' }); }
-      catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
+      catch (e) { wx.reLaunch({ url: '/pages/login/index' }); wx.showToast({title:'已本地退出，远端会话将到期',icon:'none'}); } finally { this.setData({ busy: false }); }
     }
   }
 };

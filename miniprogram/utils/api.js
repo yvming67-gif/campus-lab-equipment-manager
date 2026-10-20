@@ -64,7 +64,7 @@ async function login(username, password) {
   wx.removeStorageSync(DRAFT_KEY);
   return data;
 }
-async function logout() { await request('/auth/logout/', 'POST', {}); clearSession(); }
+async function logout() { try { await request('/auth/logout/', 'POST', {}); } finally { clearSession(); } }
 function uuid() { return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const n = Math.floor(Math.random() * 16); return (c === 'x' ? n : (n & 3) | 8).toString(16); }); }
 function draft() {
   const value = wx.getStorageSync(DRAFT_KEY), saved = session();

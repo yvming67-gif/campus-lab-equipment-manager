@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 d=json.loads((ROOT/"docs/specification.json").read_text("utf-8"));schema=json.loads((ROOT/"models/schema.json").read_text("utf-8"));mapping=json.loads((ROOT/"docs/implementation_map.json").read_text("utf-8"))
 ids=lambda key:{x["id"] for x in d[key]}
 uc=ids("cases");br=ids("rules");qr=ids("quality");ac=ids("acceptance");fr={c["fr"] for c in d["cases"]};spec={c["spec"] for c in d["cases"]};problems=ids("problems")
-assert len(uc)==26 and len(fr)==26 and len(spec)==26 and len(br)==35 and len(qr)==11 and len(ac)==52
+assert len(uc)==26 and len(fr)==26 and len(spec)==26 and len(br)==47 and len(qr)==11 and len(ac)==64
 assert set(mapping)==uc
 for case in d["cases"]:
     assert set(case["rules"])<=br and set(case["quality"])<=qr
@@ -18,11 +18,17 @@ for row in d["trace"]:assert row["problem"] in problems and row["fr"] in fr and 
 assert {r["problem"] for r in d["trace"]}==problems
 assert {r["fr"] for r in d["trace"]}==fr
 assert {b for c in d["cases"] for b in c["rules"]}==br
-assert len(schema["models"])==31 and len(schema["relationships"])==52
+# Compare exported entities with actual model declarations, not a fixed legacy count.
+model_tree=ast.parse((ROOT/'core/models.py').read_text('utf-8'))
+declared={n.name for n in model_tree.body if isinstance(n,ast.ClassDef) and any((isinstance(b,ast.Attribute) and b.attr=='Model') or (isinstance(b,ast.Name) and b.id=='AbstractUser') for b in n.bases)}
+assert {m['model'] for m in schema['models']}==declared
+assert len(declared)==len(schema['models'])
+assert len({m['table'] for m in schema['models']})==len(declared)
+assert all(m['fields'] and len({f['column'] for f in m['fields']})==len(m['fields']) for m in schema['models'])
 names={m["table"] for m in schema["models"]}
 for e in schema["relationships"]:assert e["from_table"] in names and e["to_table"] in names
-assert (ROOT/"models/campus_lab.dbml").read_text("utf-8").count("Ref: ")==52
-assert (ROOT/"models/campus_lab.mmd").read_text("utf-8").count("--")==52
+assert (ROOT/"models/campus_lab.dbml").read_text("utf-8").count("Ref: ")==len(schema["relationships"])
+assert (ROOT/"models/campus_lab.mmd").read_text("utf-8").count("--")==len(schema["relationships"])
 fig=ROOT/"models/图形源文件/图4-1-系统总用例图.drawio";tree=ET.parse(fig);cells={c.attrib["id"]:c for c in tree.iter("mxCell")};assert uc<=set(cells)
 for uid in uc:
     c=cells[uid];assert "ellipse" in c.attrib["style"];g=c.find("mxGeometry");x,y,w,h=[float(g.attrib[k]) for k in ["x","y","width","height"]];assert 85<=x and x+w<=423 and 4<=y and y+h<=664
@@ -31,16 +37,16 @@ for f in (ROOT/"models/图形源文件").glob("*.drawio"):ET.parse(f)
 # 源码定位确实存在，不仅是编号匹配。
 for key,ref in mapping.items():
     for path in re.findall(r"core/[A-Za-z0-9_/]+\.py",ref):assert (ROOT/path).exists(),(key,path)
-print("PASS: 26 FR/UC/SPEC, 35 BR, 11 QR, 52 AC; full trace, 31 models/52 FK, editable UML and source locations")
+print("PASS: 26 FR/UC/SPEC, 47 BR, 11 QR, 64 AC; full trace, exported models/FK, editable UML and source locations")
 
 # Full-field ERD is verified against the exported application model, not a manual table list.
 import hashlib
 manifest=json.loads((ROOT/"models/ERD/manifest.json").read_text("utf-8"))
 assert manifest["schema_sha256"]==hashlib.sha256(json.dumps(schema,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest()
 actual={m["model"]:m for m in schema["models"]}
-assert manifest["entity_count"]==len(actual)==31
-assert manifest["field_count"]==sum(len(m["fields"]) for m in actual.values())==245
-assert manifest["relationship_count"]==len(schema["relationships"])==52
+assert manifest["entity_count"]==len(actual)==len(schema["models"])
+assert manifest["field_count"]==sum(len(m["fields"]) for m in actual.values())==sum(len(m["fields"]) for m in schema["models"])
+assert manifest["relationship_count"]==len(schema["relationships"])==len(schema["relationships"])
 assert {e["model"] for e in manifest["entities"]}==set(actual)
 for e in manifest["entities"]:
     m=actual[e["model"]];assert e["table"]==m["table"]
@@ -48,12 +54,12 @@ for e in manifest["entities"]:
 from_table={m["table"]:m["model"] for m in actual.values()}
 expected={(from_table[r["from_table"]],r["from_field"],from_table[r["to_table"]],r["to_field"],r["null"],r["unique"]) for r in schema["relationships"]}
 assert {(r["child"],r["from_field"],r["parent"],r["to_field"],r["null"],r["unique"]) for r in manifest["relationships"]}==expected
-assert {r["id"] for r in manifest["relationships"]}=={f"R{i:02d}" for i in range(1,53)}
+assert {r["id"] for r in manifest["relationships"]}=={f"R{i:02d}" for i in range(1,len(schema["relationships"])+1)}
 svg=ET.parse(ROOT/"models/图形源文件/ERD-00-完整实体关系总图.svg")
 svgids={n.attrib.get("id") for n in svg.iter() if n.attrib.get("id")}
-assert sum(i.startswith("entity-") for i in svgids)==31
-assert sum(i.startswith("field-") for i in svgids)==245
-assert sum(i.startswith("edge-") for i in svgids)==52
+assert sum(i.startswith("entity-") for i in svgids)==len(schema["models"])
+assert sum(i.startswith("field-") for i in svgids)==sum(len(m["fields"]) for m in schema["models"])
+assert sum(i.startswith("edge-") for i in svgids)==len(schema["relationships"])
 full=ET.parse(ROOT/"models/图形源文件/ERD-00-完整实体关系总图.drawio")
 fullcells={c.attrib["id"]:c for c in full.iter("mxCell")}
 assert fullcells["shared"].attrib.get("visible")=="0"
@@ -76,4 +82,4 @@ for d in manifest["domains"]:
     domain_svg=ET.parse(matches[0]);groups={n.attrib.get("id") for n in domain_svg.iter()}
     for name in d["entities"]:
         for field in actual[name]["fields"]:assert "field-"+actual[name]["table"]+"-"+field["column"] in groups
-print("PASS: vector ERD has all 31 entities / 245 fields / 52 field-attached FK; six complete domains; no card-crossing connectors")
+print("PASS: vector ERD has all exported entities / fields / field-attached FK; six complete domains; no card-crossing connectors")

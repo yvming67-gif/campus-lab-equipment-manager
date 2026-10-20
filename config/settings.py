@@ -42,3 +42,15 @@ X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 DATA_UPLOAD_MAX_MEMORY_SIZE = 6 * 1024 * 1024
+
+
+LOGGING = {
+    'version':1,'disable_existing_loggers':False,
+    'formatters':{'safe':{'format':'{asctime} {levelname} {message}','style':'{'}},
+    'handlers':{'campus_file':{'class':'logging.handlers.RotatingFileHandler','filename':str(LOCAL/'application.log'),'maxBytes':5*1024*1024,'backupCount':5,'encoding':'utf-8','formatter':'safe'}},
+    'loggers':{'campus':{'handlers':['campus_file'],'level':'INFO','propagate':False},'django.server':{'handlers':[],'level':'CRITICAL','propagate':False}},
+}
+
+CAMPUS_IDENTITY_ADAPTER = os.environ.get('CAMPUS_IDENTITY_ADAPTER','')
+CAMPUS_MINI_IDENTITY_ADAPTER = os.environ.get('CAMPUS_MINI_IDENTITY_ADAPTER','')
+CAMPUS_MESSAGE_ADAPTER = os.environ.get('CAMPUS_MESSAGE_ADAPTER','')

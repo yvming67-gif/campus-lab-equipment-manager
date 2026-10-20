@@ -9,6 +9,13 @@ PG_URL="https://sbp.enterprisedb.com/getfile.jsp?fileid=1260616"
 PG_SHA="80379b2c04d51c30225532e0ae04509899141e9957ed096fe749d7fd9df8f82f"
 class StartupError(Exception):pass
 
+def rotate_log(path,maximum=5*1024*1024,keep=5):
+    if not path.exists() or path.stat().st_size<maximum:return
+    for index in range(keep,0,-1):
+        source=path if index==1 else path.with_name(path.name+'.'+str(index-1))
+        destination=path.with_name(path.name+'.'+str(index))
+        if source.exists():source.replace(destination)
+
 def run(args,**kwargs):
     return subprocess.run([str(a) for a in args],check=True,creationflags=NO_WINDOW,**kwargs)
 
@@ -124,6 +131,7 @@ def main():
     try:
         print("[6/6] 启动网页和后台任务，检查实际HTTP响应。",flush=True)
         for name,command in [("web",["runserver",f"127.0.0.1:{port}","--noreload"]),("jobs",["run_jobs","--loop"])]:
+            rotate_log(LOCAL/(name+".log"))
             log=(LOCAL/(name+".log")).open("ab");logs.append(log)
             children.append(subprocess.Popen([python,str(ROOT/"manage.py")]+command,cwd=ROOT,env=env,stdout=log,stderr=log,creationflags=NO_WINDOW))
         deadline=time.monotonic()+45
@@ -137,8 +145,16 @@ def main():
         if args.smoke_test:print("PASS：安装/启动、数据库迁移、模拟主数据及真实HTTP响应检查通过。",flush=True);return
         if not args.no_browser:webbrowser.open(url)
         print("请保留本窗口。按Ctrl+C停止网页和后台任务。",flush=True)
-        while all(child.poll() is None for child in children):time.sleep(1)
-        raise StartupError("网页或后台意外退出，请查看.local中的日志。")
+        restarts=[0,0]
+        commands=[["runserver",f"127.0.0.1:{port}","--noreload"],["run_jobs","--loop"]]
+        while True:
+            for index,child in enumerate(children):
+                if child.poll() is None:continue
+                if restarts[index]>=3:raise StartupError("子进程连续退出已重试3次，请查看日志并处理原因。")
+                restarts[index]+=1;time.sleep(min(2**restarts[index],8))
+                print(f"{'网页' if index==0 else '后台'}意外退出，正在进行第{restarts[index]}次受限重启。",flush=True)
+                children[index]=subprocess.Popen([python,str(ROOT/"manage.py")]+commands[index],cwd=ROOT,env=env,stdout=logs[index],stderr=logs[index],creationflags=NO_WINDOW)
+            time.sleep(1)
     except KeyboardInterrupt:print("正在停止本项目网页和后台。",flush=True)
     finally:
         for child in children:

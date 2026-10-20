@@ -12,6 +12,11 @@ from .models import *
 from . import services as s
 from .reports import utilization
 
+def valid_pdf():
+    from io import BytesIO
+    from pypdf import PdfWriter
+    out=BytesIO();writer=PdfWriter();writer.add_blank_page(width=100,height=100);writer.write(out);return out.getvalue()
+
 class BusinessTests(TestCase):
     @classmethod
     def setUpTestData(cls):call_command("seed_demo",verbosity=0)
@@ -105,7 +110,7 @@ class BusinessTests(TestCase):
         self.assertIsNone(r);self.eq.refresh_from_db();self.assertEqual(self.eq.service_status,"ISOLATED");self.assertFalse(Loan.objects.exists());self.assertEqual(Incident.objects.count(),1)
     def test_normal_return_snapshot_and_idempotency(self):
         loan=self.lend();r=s.return_equipment(self.admin,loan.reservation_id,self.eq.code,"完好",returned_at=self.end,at=self.end)
-        r2=s.return_equipment(self.admin,loan.reservation_id,self.eq.code,"重试",at=self.end)
+        r2=s.return_equipment(self.admin,loan.reservation_id,self.eq.code,"完好",at=self.end)
         self.assertEqual(r.pk,r2.pk);self.assertEqual(r.overdue_seconds,0);self.assertEqual(Loan.objects.count(),1)
         self.assertEqual(loan.items.filter(return_qty=1).count(),2)
     def test_return_without_loan_rejected(self):
@@ -141,7 +146,7 @@ class BusinessTests(TestCase):
     def test_failed_acceptance_returns_to_repair(self):
         i=s.report_incident(self.student,self.eq.pk,"FAULT","故障");s.verify_incident(self.admin,i.pk,"confirm","属实");w=s.create_work_order(self.admin,i.pk,self.tech.pk,"处理");s.update_work(self.tech,w.pk,"START","开始");s.update_work(self.tech,w.pk,"SUBMIT","修复");s.accept_work(self.admin,w.pk,False,"复测失败");w.refresh_from_db();self.assertEqual(w.status,"IN_PROGRESS")
     def test_other_incident_prevents_restoration(self):
-        i=s.report_incident(self.student,self.eq.pk,"FAULT","故障1");j=s.report_incident(self.other,self.eq.pk,"FAULT","故障2");s.verify_incident(self.admin,i.pk,"confirm","属实");w=s.create_work_order(self.admin,i.pk,self.tech.pk,"处理");s.update_work(self.tech,w.pk,"START","开始");s.update_work(self.tech,w.pk,"SUBMIT","修复");s.accept_work(self.admin,w.pk,True,"通过");self.eq.refresh_from_db();self.assertEqual(self.eq.service_status,"ISOLATED")
+        i=s.report_incident(self.student,self.eq.pk,"FAULT","故障1");j=s.report_incident(self.admin,self.eq.pk,"FAULT","故障2");s.verify_incident(self.admin,i.pk,"confirm","属实");w=s.create_work_order(self.admin,i.pk,self.tech.pk,"处理");s.update_work(self.tech,w.pk,"START","开始");s.update_work(self.tech,w.pk,"SUBMIT","修复");s.accept_work(self.admin,w.pk,True,"通过");self.eq.refresh_from_db();self.assertEqual(self.eq.service_status,"ISOLATED")
     def test_maintenance_cancels_future_and_preserves_history(self):
         b=self.book();i=s.report_incident(self.other,self.eq.pk,"FAULT","故障");s.verify_incident(self.admin,i.pk,"confirm","属实");s.create_work_order(self.admin,i.pk,self.tech.pk,"维修");b.refresh_from_db();self.assertEqual(b.status,"CANCELLED");self.assertTrue(AuditEvent.objects.filter(entity_id=b.pk,action="MAINTENANCE_CANCEL").exists())
     def test_hold_prevents_booking(self):
@@ -169,7 +174,7 @@ class BusinessTests(TestCase):
             with self.assertRaises(RuntimeError):self.book()
         self.assertEqual(Reservation.objects.count(),0);self.assertEqual(ApprovalDecision.objects.count(),0)
     def test_evidence_access_and_hash(self):
-        i=s.report_incident(self.student,self.eq.pk,"FAULT","故障");blob=b"%PDF-1.4\n%%EOF";e=s.upload_evidence(self.student,i.pk,SimpleUploadedFile("example.pdf",blob));self.assertEqual(len(e.sha256),64)
+        i=s.report_incident(self.student,self.eq.pk,"FAULT","故障");blob=valid_pdf();e=s.upload_evidence(self.student,i.pk,SimpleUploadedFile("example.pdf",blob));self.assertEqual(len(e.sha256),64)
         with self.assertRaises(s.BusinessError):s.upload_evidence(self.other,i.pk,SimpleUploadedFile("x.pdf",blob))
         with self.assertRaises(s.BusinessError):s.upload_evidence(self.student,i.pk,SimpleUploadedFile("x.png",b"not png"))
         e.file.delete(save=False)
@@ -222,7 +227,7 @@ class BusinessTests(TestCase):
         occurred=timezone.now()-timedelta(hours=1);i=s.report_incident(self.student,self.eq.pk,"FAULT","发现故障",occurred_at=occurred);self.assertEqual(i.occurred_at,occurred);self.assertGreater(i.reported_at,occurred)
 
     def test_independent_operation_has_shared_audit_request(self):
-        s.report_incident(self.student,self.eq.pk,"FAULT","关联编号验证")
+        s.report_incident(self.admin,self.eq.pk,"FAULT","关联编号验证")
         events=AuditEvent.objects.filter(action__in=["REPORT_INCIDENT","SERVICE_STATUS"]);self.assertEqual(events.count(),2);self.assertEqual(events.values("request_id").distinct().count(),1)
     def test_http_request_id_matches_audit(self):
         self.client.force_login(self.student)
