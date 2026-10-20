@@ -151,7 +151,11 @@ def booking_action(request,pk,action):
                 else:s.approve(request.user,pk,d["choice"]=="approve",d["reason"],d["version"])
             elif action=="cancel":s.cancel(request.user,pk,d["reason"],request.POST.get("version"))
             elif action=="supplement":s.review_note(request.user,pk,d["reason"])
-            elif action=="checkout":s.checkout(request.user,pk,**d)
+            elif action=="checkout":
+                result=s.checkout(request.user,pk,**d)
+                if result is None:
+                    messages.warning(request,"未借出：检查未通过，资源已隔离，请查看关联异常并处理")
+                    return redirect("booking",pk=pk)
             elif action=="return":
                 quantities={int(k[4:]):v for k,v in d.items() if k.startswith("qty_")};d={k:v for k,v in d.items() if not k.startswith("qty_")};s.return_equipment(request.user,pk,return_quantities=quantities,**d)
             elif action=="room-start":s.start_room(request.user,pk,d["school_no"],d["participants"],d["note"],d["arrived_at"])
@@ -300,7 +304,11 @@ def deliveries(request):
     qs=Delivery.objects.filter(channel="MOCK_EXTERNAL").select_related("notification__recipient","notification__audit")
     if not request.user.has_role("SYS_ADMIN"):qs=qs.filter(notification__audit__lab__labgrant__user=request.user)
     if request.method=="POST":
-        task=get_object_or_404(qs,pk=request.POST.get("pk"))
+        raw_pk=request.POST.get("pk", "")
+        if not raw_pk.isdigit() or len(raw_pk)>18:
+            messages.error(request,"请选择有效投递记录")
+            return redirect("deliveries")
+        task=get_object_or_404(qs,pk=int(raw_pk))
         try:s.record_manual_contact(request.user,task.pk,request.POST.get("reason",""));messages.success(request,"人工联系结果已追加至审计")
         except s.BusinessError as e:messages.error(request,str(e))
         return redirect("deliveries")

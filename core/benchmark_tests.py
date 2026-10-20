@@ -22,12 +22,14 @@ class HttpBenchmark(TransactionTestCase):
         cookies=[]
         for u in users:
             c=Client();c.force_login(u);cookies.append("sessionid="+c.cookies["sessionid"].value+"; csrftoken="+("A"*32))
-        env=os.environ.copy();db=connection.settings_dict;env.update({"PGDATABASE":db["NAME"],"PGHOST":db["HOST"],"PGPORT":str(db["PORT"]),"PGUSER":db["USER"],"PGPASSWORD":db["PASSWORD"],"DEBUG":"1"})
-        import sys
-        log=(settings.LOCAL/"benchmark-web.log").open("wb");proc=subprocess.Popen([sys.executable,str(settings.BASE_DIR/"manage.py"),"runserver","127.0.0.1:8001","--noreload"],env=env,cwd=settings.BASE_DIR,stdout=log,stderr=log,creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
+        env=os.environ.copy();db=connection.settings_dict;env.update({"PGDATABASE":db["NAME"],"PGHOST":db["HOST"],"PGPORT":str(db["PORT"]),"PGUSER":db["USER"],"PGPASSWORD":db["PASSWORD"],"DEBUG":"1","CAMPUS_USE_EXTERNAL_DATABASE":"1","CAMPUS_LOCAL_DIR":str(settings.LOCAL)})
+        import sys,socket
+        with socket.socket() as probe:
+            probe.bind(("127.0.0.1",0));port=probe.getsockname()[1]
+        log=(settings.LOCAL/"benchmark-web.log").open("wb");proc=subprocess.Popen([sys.executable,str(settings.BASE_DIR/"manage.py"),"runserver",f"127.0.0.1:{port}","--noreload"],env=env,cwd=settings.BASE_DIR,stdout=log,stderr=log,creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
         def request(path,who=0,data=None):
             headers={"Cookie":cookies[who],"X-CSRFToken":"A"*32};blob=urllib.parse.urlencode(data).encode() if data else None
-            req=urllib.request.Request("http://127.0.0.1:8001"+path,data=blob,headers=headers);start=time.perf_counter()
+            req=urllib.request.Request(f"http://127.0.0.1:{port}"+path,data=blob,headers=headers);start=time.perf_counter()
             with urllib.request.urlopen(req,timeout=10) as response:body=response.read()
             return time.perf_counter()-start,body.decode("utf-8")
         try:

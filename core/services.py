@@ -57,7 +57,10 @@ def _booking_lock(pk):
     return booking, user, resource
 
 def _version(booking, expected):
-    if expected is not None: require(booking.version == int(expected), "记录已变化，请刷新后重试")
+    if expected is not None:
+        try: value = int(expected)
+        except (ValueError, TypeError, OverflowError): raise BusinessError("版本号必须为正整数，请刷新后重试")
+        require(value > 0 and booking.version == value, "记录已变化，请刷新后重试")
 
 def overdue_for(user, at):
     equipment = Loan.objects.filter(reservation__applicant=user, return_record__isnull=True, due_at__lt=at).exists()
@@ -79,11 +82,7 @@ def maximum_overlap(start, end, intervals):
         current += change; best = max(best, current)
     return best
 
-def validate(booking, policy, at, exclude=None):
-    user, resource = booking.applicant, booking.resource
-    require(user.is_active, "账号已停用")
-    require(user.has_role("TEACHER") if resource.kind == "ROOM" else user.has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
-    start, end = booking.starts_at, booking.ends_at
+def validate_time(resource, start, end, policy, at):
     require(timezone.is_aware(start) and timezone.is_aware(end), "时间必须具有时区")
     require(start < end and start >= at, "开始必须早于结束，且不得早于当前时间")
     require(end <= at + timedelta(days=policy.window_days), f"起止时段须位于未来{policy.window_days}天预约窗口内")
@@ -92,6 +91,14 @@ def validate(booking, policy, at, exclude=None):
     require(a.date() == b.date(), "日间预约不能跨日")
     require(all(x.minute % policy.slot_minutes == 0 and x.second == 0 and x.microsecond == 0 for x in [a,b]), f"起止时间必须符合{policy.slot_minutes}分钟粒度")
     require(OpeningPeriod.objects.filter(lab=resource.lab, weekday=a.isoweekday(), valid_from__lte=a.date(), starts_at__lte=a.time().replace(tzinfo=None), ends_at__gte=b.time().replace(tzinfo=None)).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists(), "目标时段超出实验室开放时间")
+
+
+def validate(booking, policy, at, exclude=None):
+    user, resource = booking.applicant, booking.resource
+    require(user.is_active, "账号已停用")
+    require(user.has_role("TEACHER") if resource.kind == "ROOM" else user.has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
+    start, end = booking.starts_at, booking.ends_at
+    validate_time(resource, start, end, policy, at)
     require(resource.lab.is_active and resource.service_status == "NORMAL", "资源停用、维护或异常隔离，不可预约")
     require(not overdue_for(user, at), "存在逾期未结束使用，不能新预约或获得确认")
     require(not overdue_resource(resource, at), "资源存在超期未归还或未结束使用，暂不能承诺新预约")
@@ -118,7 +125,10 @@ def validate(booking, policy, at, exclude=None):
 
 def availability(resource, start, end, at=None):
     at = at or timezone.now()
-    if start >= end: return False, "开始时间必须早于结束时间"
+    try:
+        validate_time(resource, start, end, Policy.objects.get(pk=1), at)
+    except BusinessError as error:
+        return False, str(error)
     if not resource.lab.is_active or resource.service_status != "NORMAL": return False, resource.get_service_status_display()
     if overdue_resource(resource, at): return False, "超期使用待处理"
     a,b = start.astimezone(TZ), end.astimezone(TZ)
@@ -198,8 +208,10 @@ def cancel(actor, booking_id, reason, expected=None, at=None):
 
 def _check_start(booking, resource, at):
     policy=Policy.objects.get(pk=1)
+    require(booking.applicant.is_active, "申请人账号已停用，不能开始使用")
+    require(booking.applicant.has_role("TEACHER") if resource.kind=="ROOM" else booking.applicant.has_role("STUDENT","TEACHER"), "申请人当前角色不具备使用资格")
     require(booking.status=="CONFIRMED", "预约尚未确认或已经结束")
-    require(booking.starts_at<=at<booking.ends_at and at<=booking.starts_at+timedelta(minutes=policy.grace_minutes), "未到使用时间或已超过30分钟领取/入场宽限")
+    require(booking.starts_at<=at<booking.ends_at and at<=booking.starts_at+timedelta(minutes=policy.grace_minutes), f"未到使用时间或已超过{policy.grace_minutes}分钟领取/入场宽限")
     require(resource.service_status=="NORMAL" and resource.lab.is_active,"资源异常、维护或停用，不能开始使用")
     require(not overdue_for(booking.applicant,at),"存在逾期未结束使用，不能再次领取或入场")
     if resource.kind=="EQUIPMENT" and resource.equipment.qualification_id:
@@ -218,7 +230,7 @@ def checkout(actor, booking_id, school_no, tag, accessories_ok=True, condition="
     if hasattr(booking,"loan"):return booking.loan
     _check_start(booking,resource,at)
     require(not Loan.objects.filter(reservation__resource=resource,return_record__isnull=True).exists(),"设备仍有未归还借出")
-    require(Loan.objects.filter(reservation__applicant=user,return_record__isnull=True).count()<Policy.objects.get(pk=1).simultaneous_equipment,"同一人最多同时借3台或套设备")
+    require(Loan.objects.filter(reservation__applicant=user,return_record__isnull=True).count()<Policy.objects.get(pk=1).simultaneous_equipment,f"同一人最多同时借{Policy.objects.get(pk=1).simultaneous_equipment}台或套设备")
     if not accessories_ok:
         _new_incident(actor,resource,"MISSING","借出核验发现缺件或异常："+condition,at,booking,confirmed=True)
         return None
@@ -410,7 +422,7 @@ def expire_booking(booking_id,at=None):
     at=at or timezone.now();booking,user,resource=_booking_lock(booking_id);p=Policy.objects.get(pk=1)
     expired=(booking.status=="PENDING" and at>=booking.starts_at) or (booking.status=="CONFIRMED" and (at>=booking.ends_at or at>booking.starts_at+timedelta(minutes=p.grace_minutes)))
     if not expired:return False
-    old=booking.status;booking.status="EXPIRED";booking.reason="到开始仍未批准或超过30分钟未领取/入场";booking.version+=1;booking.save(update_fields=["status","reason","version"])
+    old=booking.status;booking.status="EXPIRED";booking.reason=f"到开始仍未批准或超过{p.grace_minutes}分钟未领取/入场";booking.version+=1;booking.save(update_fields=["status","reason","version"])
     event=audit(None,booking,"EXPIRE",{"status":old},{"status":"EXPIRED"},booking.reason,at)
     notify(event,[user]+list(lab_managers(resource)),"EXPIRE",f"预约{booking.code}已失效",at);return True
 
@@ -491,6 +503,15 @@ def set_resource_hold(actor,resource_id,hold,reason,at=None):
             ev=audit(actor,b,"RESOURCE_HOLD_CANCEL",{"status":old},{"status":"CANCELLED"},reason,at);notify(ev,[b.applicant],"MAINTENANCE_IMPACT",reason,at)
     return resource
 
+def resource_snapshot(resource):
+    state={"name":resource.name,"description":resource.description,"lab_id":resource.lab_id,"kind":resource.kind,"code":resource.code}
+    if resource.kind=="EQUIPMENT":
+        state["equipment"]={"category":resource.equipment.category,"risk":resource.equipment.risk,"qualification_id":resource.equipment.qualification_id}
+        state["accessories"]=list(resource.accessories.order_by("code").values("code","name","quantity","is_active"))
+    else:
+        state["room"]={"capacity":resource.room.capacity,"safety_note":resource.room.safety_note}
+    return state
+
 @correlated
 @transaction.atomic
 def save_resource(actor, data, resource_id=None, at=None):
@@ -507,7 +528,7 @@ def save_resource(actor, data, resource_id=None, at=None):
     if resource_id:
         r=Resource.objects.select_for_update(no_key=True).get(pk=resource_id);check_manager(actor,r)
         require(r.kind==data["kind"] and r.code==data["code"] and r.lab_id==lab.pk,"已有资源的编号、类型和所属实验室不可变更；请新建资源")
-        old={"name":r.name,"description":r.description}
+        old=resource_snapshot(r)
         if r.kind=="ROOM":require(not Reservation.objects.filter(resource=r,status__in=ACTIVE,participants__gt=data.get("capacity",0)).exists(),"容量小于已确认预约人数，请先协调预约")
         r.name=data["name"];r.description=data["description"];r.updated_at=at;r.save(update_fields=["name","description","updated_at"])
     else:
@@ -520,7 +541,7 @@ def save_resource(actor, data, resource_id=None, at=None):
         for code,name,quantity in parsed:Accessory.objects.update_or_create(resource=r,code=code,defaults={"name":name,"quantity":int(quantity),"is_active":True})
     else:
         require(bool(data.get("capacity")),"场地容量必填");RoomDetail.objects.update_or_create(resource=r,defaults={"capacity":data["capacity"]})
-    ev=audit(actor,r,"RESOURCE_EDIT" if resource_id else "RESOURCE_CREATE",old,{k:str(v) for k,v in data.items() if k!="reason"},data["reason"],at)
+    ev=audit(actor,r,"RESOURCE_EDIT" if resource_id else "RESOURCE_CREATE",old,resource_snapshot(Resource.objects.get(pk=r.pk)),data["reason"],at)
     if not resource_id:ServicePeriod.objects.create(resource=r,audit=ev,status="NORMAL",starts_at=at)
     return r
 

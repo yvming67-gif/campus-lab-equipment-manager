@@ -1,8 +1,8 @@
 import os, json, secrets
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
-LOCAL = BASE_DIR / ".local"
-LOCAL.mkdir(exist_ok=True)
+LOCAL = Path(os.environ.get("CAMPUS_LOCAL_DIR", str(BASE_DIR / ".local"))).resolve()
+LOCAL.mkdir(parents=True, exist_ok=True)
 key_file = LOCAL / "keys.json"
 if not key_file.exists():
     key_file.write_text(json.dumps({"django": secrets.token_urlsafe(48), "idp": secrets.token_urlsafe(48)}), encoding="utf-8")

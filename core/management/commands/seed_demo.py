@@ -15,15 +15,17 @@ class Command(BaseCommand):
         roles = [("STUDENT","学生"),("TEACHER","教师"),("LAB_ADMIN","实验室管理员"),("TECHNICIAN","维修人员"),("SYS_ADMIN","系统管理员"),("DIRECTOR","实验教学中心主任")]
         for code,name in roles: Role.objects.get_or_create(code=code,defaults={"name":name})
         people=[("student","S-DEMO-01","演示学生","STUDENT"),("student2","S-DEMO-02","另一位学生","STUDENT"),("teacher","T-DEMO-01","演示教师","TEACHER"),("admin","A-DEMO-01","资源管理员","LAB_ADMIN"),("tech","M-DEMO-01","维修工程师","TECHNICIAN"),("sysadmin","Y-DEMO-01","系统管理员","SYS_ADMIN"),("director","D-DEMO-01","中心主任","DIRECTOR")]
+        created_users=set()
         for username,no,name,role in people:
             u,new=User.objects.get_or_create(username=username,defaults={"school_no":no,"display_name":name})
-            if new: u.set_unusable_password();u.save()
-            UserRole.objects.get_or_create(user=u,role=Role.objects.get(code=role))
+            if new:
+                created_users.add(u.pk);u.set_unusable_password();u.save()
+                UserRole.objects.get_or_create(user=u,role=Role.objects.get(code=role))
         lab1,_=Lab.objects.get_or_create(code="LAB-101",defaults={"name":"电子与传感实验室","location":"实验楼 A101","description":"示波器与传感器教学。全部为模拟资源。"})
         lab2,_=Lab.objects.get_or_create(code="LAB-202",defaults={"name":"机器人与数字影像实验室","location":"实验楼 B202","description":"机器人、摄影与协同课程。"})
         admin=User.objects.get(username="admin")
         for lab in [lab1,lab2]:
-            LabGrant.objects.get_or_create(user=admin,lab=lab)
+            if admin.pk in created_users:LabGrant.objects.get_or_create(user=admin,lab=lab)
             for day in range(1,8): OpeningPeriod.objects.get_or_create(lab=lab,weekday=day,starts_at=time(8),valid_from=timezone.localdate()-timedelta(days=365),defaults={"ends_at":time(20)})
         qual,_=QualificationType.objects.get_or_create(code="ROBOT-SAFE",defaults={"name":"机器人平台安全培训（模拟）"})
         for username in ["student","teacher"]:UserQualification.objects.get_or_create(user=User.objects.get(username=username),qualification=qual,defaults={"expires_at":timezone.now()+timedelta(days=365),"granted_by":admin})
