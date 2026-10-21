@@ -1,38 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="507" height="450" viewBox="0 0 507 450">
-<rect width="100%" height="100%" fill="white"/>
-<rect x="94" y="8" width="320" height="420" fill="none" stroke="#24384b"/>
-<text x="254.0" y="221.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436"></text>
-<text x="254" y="29.85" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#2a3436">某高校实验教学中心</text>
-<ellipse cx="253.0" cy="90.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="93.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">获得设备预约服务</text>
-<ellipse cx="253.0" cy="148.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="151.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">完成设备领取</text>
-<ellipse cx="253.0" cy="206.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="209.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">完成设备归还</text>
-<ellipse cx="253.0" cy="264.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="267.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">获得场地使用服务</text>
-<ellipse cx="253.0" cy="322.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="325.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">恢复资源可用状态</text>
-<circle cx="34.0" cy="110" r="5" fill="none" stroke="#24384b"/>
-<path d="M34.0,115 V133 M23.0,123 H45.0 M34.0,133 L24.0,147 M34.0,133 L44.0,147" fill="none" stroke="#24384b"/>
-<text x="34.0" y="164.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学生、教师</text>
-<circle cx="34.0" cy="250" r="5" fill="none" stroke="#24384b"/>
-<path d="M34.0,255 V273 M23.0,263 H45.0 M34.0,273 L24.0,287 M34.0,273 L44.0,287" fill="none" stroke="#24384b"/>
-<text x="34.0" y="304.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教师</text>
-<circle cx="475.0" cy="307" r="5" fill="none" stroke="#24384b"/>
-<path d="M475.0,312 V330 M464.0,320 H486.0 M475.0,330 L465.0,344 M475.0,330 L485.0,344" fill="none" stroke="#24384b"/>
-<text x="475.0" y="355.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学校维修</text>
-<text x="475.0" y="367.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">支持岗位</text>
-<polyline points="45,125 74,125 74,90 151,90" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="45,125 74,125 74,148 151,148" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="45,125 74,125 74,206 151,206" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="45,265 151,264" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="355,322 459,322" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<ellipse cx="253.0" cy="400.0" rx="102.0" ry="18.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="253.0" y="403.29" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.4" fill="#2a3436">掌握资源利用情况</text>
-<circle cx="475.0" cy="385" r="5" fill="none" stroke="#24384b"/>
-<path d="M475.0,390 V408 M464.0,398 H486.0 M475.0,408 L465.0,422 M475.0,408 L485.0,422" fill="none" stroke="#24384b"/>
-<text x="475.0" y="433.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教学管理</text>
-<text x="475.0" y="445.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">部门</text>
-<polyline points="355,400 459,400" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="465" viewBox="0 0 507 465"><rect width="100%" height="100%" fill="white"/>
+<rect x="96" y="5" width="318" height="445" fill="none" stroke="#24384b"/>
+<text x="255" y="28.85" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#2a3436">某高校实验教学中心</text>
+<ellipse cx="255.0" cy="81.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="78.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-01</text>
+<text x="255.0" y="91.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">获得设备预约结果</text>
+<ellipse cx="255.0" cy="143.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="140.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-02</text>
+<text x="255.0" y="153.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">完成设备领取</text>
+<ellipse cx="255.0" cy="205.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="202.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-03</text>
+<text x="255.0" y="215.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">完成设备归还</text>
+<ellipse cx="255.0" cy="267.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="264.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-04</text>
+<text x="255.0" y="277.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">获得场地使用服务</text>
+<ellipse cx="255.0" cy="329.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="326.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-05</text>
+<text x="255.0" y="339.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">获得资源异常处置结果</text>
+<ellipse cx="255.0" cy="391.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
+<text x="255.0" y="388.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-06</text>
+<text x="255.0" y="401.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">获得资源利用信息</text>
+<circle cx="30.0" cy="137" r="5" fill="none" stroke="#24384b"/>
+<polyline points="30.0,142 30.0,160" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="19.0,150 41.0,150" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="20.0,174 30.0,160 40.0,174" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="30.0" y="191.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学生、教师</text>
+<polyline points="46,152 76,152 76,81.5 144,81.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="46,152 76,152 76,143.5 144,143.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="46,152 76,152 76,205.5 144,205.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="46,152 76,152 76,329.5 144,329.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="30.0" cy="280" r="5" fill="none" stroke="#24384b"/>
+<polyline points="30.0,285 30.0,303" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="19.0,293 41.0,293" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="20.0,317 30.0,303 40.0,317" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="30.0" y="334.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教师</text>
+<polyline points="46,295 76,295 76,267.5 144,267.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="475.0" cy="296" r="5" fill="none" stroke="#24384b"/>
+<polyline points="475.0,301 475.0,319" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="464.0,309 486.0,309" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="465.0,333 475.0,319 485.0,333" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="475.0" y="344.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">维修支持</text>
+<text x="475.0" y="356.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">岗位〔假设〕</text>
+<polyline points="366,329.5 435,329.5 435,311 459,311" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="475.0" cy="392" r="5" fill="none" stroke="#24384b"/>
+<polyline points="475.0,397 475.0,415" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="464.0,405 486.0,405" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="465.0,429 475.0,415 485.0,429" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="475.0" y="440.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教学管理</text>
+<text x="475.0" y="452.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">部门〔假设〕</text>
+<polyline points="366,391.5 435,391.5 435,407 459,407" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<text x="255" y="445.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#356f69">管理员、主任为内部业务工人；维修恢复为支持过程SP-01</text>
 </svg>

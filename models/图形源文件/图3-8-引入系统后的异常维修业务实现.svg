@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="511" viewBox="0 0 507 511"><rect width="100%" height="100%" fill="white"/>
+<rect x="2.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="39.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">报告人</text>
+<polyline points="39.0,36 39.0,506" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="109.25" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="146.25" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">统一预约系统</text>
+<polyline points="146.25,36 146.25,506" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="216.5" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="253.5" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">实验室管理员</text>
+<polyline points="253.5,36 253.5,506" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="323.75" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="360.75" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">维修人员</text>
+<polyline points="360.75,36 360.75,506" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="431.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="468.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">消息服务</text>
+<polyline points="468.0,36 468.0,506" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="2" y="80" width="503" height="91" fill="none" stroke="#6d7778"/>
+<rect x="2" y="80" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="90.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="36" y="91.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">普通无关联／授权或使用中关联安全报告</text>
+<rect x="5" y="371" width="497" height="91" fill="none" stroke="#6d7778"/>
+<rect x="5" y="371" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="19.0" y="381.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="39" y="382.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">验收通过／不通过</text>
+<rect x="2" y="227" width="503" height="241" fill="none" stroke="#6d7778"/>
+<rect x="2" y="227" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="237.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="36" y="238.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">已确认且需维修</text>
+<polyline points="39.0,67 146.25,67" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,69.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,64.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="-1.0057291666666686" y="49.9" width="193.66145833333334" height="12.2" fill="white"/>
+<text x="95.825" y="59.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M01 提交现象、发现时间和可选使用关联</text>
+<polyline points="146.25,111 164.25,111 164.25,117 146.25,117" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,117 150.7522355117634,114.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,117 150.7522355117634,119.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="54.41927083333333" y="93.9" width="183.66145833333334" height="12.2" fill="white"/>
+<text x="146.25" y="103.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M02 [普通无关联] 待核实，不自动阻断</text>
+<polyline points="4,124 503,124" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="136.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[管理员报告或使用中关联安全事件]</text>
+<polyline points="146.25,158 164.25,158 164.25,164 146.25,164" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,164 150.7522355117634,161.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,164 150.7522355117634,166.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="21.41927083333333" y="140.9" width="249.66145833333334" height="12.2" fill="white"/>
+<text x="146.25" y="150.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M03 待核实但先阻断；受影响预约待复核，不伪记结束</text>
+<polyline points="146.25,189 253.5,189" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,189 248.9977644882366,191.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,189 248.9977644882366,186.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="93.7109375" y="171.9" width="212.328125" height="12.2" fill="white"/>
+<text x="199.875" y="181.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M04 路由核实任务；报告人可补充事实和证据</text>
+<polyline points="253.5,214 146.25,214" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,214 150.7522355117634,211.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,214 150.7522355117634,216.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="89.04427083333333" y="196.9" width="221.66145833333334" height="12.2" fill="white"/>
+<text x="199.875" y="206.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M05 现场核实，确认、排除或无维修结案并说明</text>
+<polyline points="253.5,258 146.25,258" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,258 150.7522355117634,255.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,258 150.7522355117634,260.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="75.04427083333333" y="240.9" width="249.66145833333334" height="12.2" fill="white"/>
+<text x="199.875" y="250.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M06 创建并指派工单；未开始预约取消，实际使用保留</text>
+<polyline points="146.25,283 360.75,283" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,283 356.2477644882366,285.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,283 356.2477644882366,280.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="142.66927083333331" y="265.9" width="221.66145833333334" height="12.2" fill="white"/>
+<text x="253.5" y="275.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M07 提供明确任务与授权证据；可留痕重新指派</text>
+<polyline points="360.75,308 378.75,308 378.75,314 360.75,314" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,314 365.2522355117634,311.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,314 365.2522355117634,316.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="296.5859375" y="290.9" width="128.328125" height="12.2" fill="white"/>
+<text x="360.75" y="300.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M08 实际检测和技术维修</text>
+<polyline points="360.75,333 146.25,333" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,333 150.7522355117634,330.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,333 150.7522355117634,335.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="152.00260416666669" y="315.9" width="202.99479166666666" height="12.2" fill="white"/>
+<text x="253.5" y="325.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M09 追加过程并提交结果；待验收仍维护中</text>
+<polyline points="253.5,358 360.75,358" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,358 356.2477644882366,360.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,358 356.2477644882366,355.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="238.29427083333331" y="340.9" width="137.66145833333334" height="12.2" fill="white"/>
+<text x="307.125" y="350.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M10 不同职责人员现场复测</text>
+<polyline points="253.5,402 146.25,402" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,402 150.7522355117634,399.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,402 150.7522355117634,404.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="80.04427083333333" y="384.9" width="239.66145833333334" height="12.2" fill="white"/>
+<text x="199.875" y="394.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M11 [通过] 关闭本工单、结案本异常；复核其他限制</text>
+<polyline points="7,415 500,415" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="427.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[不通过]</text>
+<polyline points="253.5,449 146.25,449" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,449 150.7522355117634,446.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,449 150.7522355117634,451.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="95.37760416666667" y="431.9" width="208.99479166666666" height="12.2" fill="white"/>
+<text x="199.875" y="441.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M11b 退回处理中；保留失败复测记录与阻断</text>
+<polyline points="146.25,486 468.0,486" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,486 463.4977644882366,488.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,486 463.4977644882366,483.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="200.9609375" y="468.9" width="212.328125" height="12.2" fill="white"/>
+<text x="307.125" y="478.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-M12 发送结果；站内、审计与状态历史可追踪</text>
+</svg>

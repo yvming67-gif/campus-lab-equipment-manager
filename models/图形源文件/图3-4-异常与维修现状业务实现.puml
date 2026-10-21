@@ -1,0 +1,24 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 异常与维修现状业务实现
+participant "报告人" as L0
+participant "实验室管理员" as L1
+participant "异常记录" as L2
+participant "维修支持岗位" as L3
+participant "维修记录" as L4
+L0 -> L1: AS-M01 电话、即时消息或归还时报告现象
+L1 -> L2: AS-M02 登记资源、现象与时间（实际表式待核实）
+L1 -> L1: AS-M03 核实现象及是否需维修（职责待核实）
+alt 需维修／无需维修
+L1 -> L3: AS-M04 [需维修] 电话联系并交付故障信息
+L3 -> L4: AS-M05 人工记录检测和维修情况
+L3 -> L1: AS-M06 交回处理结果；与原异常关联方式未知
+opt 存在复测或接收安排 尚待核实
+L1 -> L1: AS-M07 复测、接收结果；是否独立验收未知
+end
+else [无需维修]
+L1 -> L2: AS-M06b 登记核实或处置结果（载体未知）
+end
+L1 -> L0: AS-M08 通知处理结果；与预约表状态同步方式未知
+@enduml

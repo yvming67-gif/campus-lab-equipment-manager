@@ -1,0 +1,31 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 引入系统后的异常维修业务实现
+participant "报告人" as L0
+participant "统一预约系统" as L1
+participant "实验室管理员" as L2
+participant "维修人员" as L3
+participant "消息服务" as L4
+L0 -> L1: TO-M01 提交现象、发现时间和可选使用关联
+alt 普通无关联／授权或使用中关联安全报告
+L1 -> L1: TO-M02 [普通无关联] 待核实，不自动阻断
+else [管理员报告或使用中关联安全事件]
+L1 -> L1: TO-M03 待核实但先阻断；受影响预约待复核，不伪记结束
+end
+L1 -> L2: TO-M04 路由核实任务；报告人可补充事实和证据
+L2 -> L1: TO-M05 现场核实，确认、排除或无维修结案并说明
+opt 已确认且需维修
+L2 -> L1: TO-M06 创建并指派工单；未开始预约取消，实际使用保留
+L1 -> L3: TO-M07 提供明确任务与授权证据；可留痕重新指派
+L3 -> L3: TO-M08 实际检测和技术维修
+L3 -> L1: TO-M09 追加过程并提交结果；待验收仍维护中
+L2 -> L3: TO-M10 不同职责人员现场复测
+alt 验收通过／不通过
+L2 -> L1: TO-M11 [通过] 关闭本工单、结案本异常；复核其他限制
+else [不通过]
+L2 -> L1: TO-M11b 退回处理中；保留失败复测记录与阻断
+end
+end
+L1 -> L4: TO-M12 发送结果；站内、审计与状态历史可追踪
+@enduml

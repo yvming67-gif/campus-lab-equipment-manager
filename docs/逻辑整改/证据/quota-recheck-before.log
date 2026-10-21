@@ -1,0 +1,62 @@
+Creating test database for alias 'default'...
+EE
+======================================================================
+ERROR: test_current_recheck_does_not_add_to_full_future_category_quota (core.logic_alignment_tests.LogicAlignmentTests.test_current_recheck_does_not_add_to_full_future_category_quota) (kind='EQUIPMENT')
+A commitment at its original start no longer consumes a future slot.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\logic_alignment_tests.py", line 160, in test_current_recheck_does_not_add_to_full_future_category_quota
+    review = c.recheck(self.admin, booking.pk, True,
+             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      '原宽限内，当前条件满足', at=now)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\request_context.py", line 12, in call
+    try:return func(*args,**kwargs)
+               ~~~~^^^^^^^^^^^^^^^^
+  File "D:\Python\Lib\contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\coordination.py", line 74, in recheck
+    s.validate(booking,policy,at,exclude=booking.pk,time_at=min(at,booking.starts_at))
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\services.py", line 126, in validate
+    require(future.count() < quota, f"未来此类预约额度已满（最多{quota}项）")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\services.py", line 17, in require
+    if not ok: raise BusinessError(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core.services.BusinessError: 未来此类预约额度已满（最多3项）
+
+======================================================================
+ERROR: test_current_recheck_does_not_add_to_full_future_category_quota (core.logic_alignment_tests.LogicAlignmentTests.test_current_recheck_does_not_add_to_full_future_category_quota) (kind='ROOM')
+A commitment at its original start no longer consumes a future slot.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\logic_alignment_tests.py", line 160, in test_current_recheck_does_not_add_to_full_future_category_quota
+    review = c.recheck(self.admin, booking.pk, True,
+             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      '原宽限内，当前条件满足', at=now)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\request_context.py", line 12, in call
+    try:return func(*args,**kwargs)
+               ~~~~^^^^^^^^^^^^^^^^
+  File "D:\Python\Lib\contextlib.py", line 85, in inner
+    return func(*args, **kwds)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\coordination.py", line 74, in recheck
+    s.validate(booking,policy,at,exclude=booking.pk,time_at=min(at,booking.starts_at))
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\services.py", line 126, in validate
+    require(future.count() < quota, f"未来此类预约额度已满（最多{quota}项）")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\services.py", line 17, in require
+    if not ok: raise BusinessError(message)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+core.services.BusinessError: 未来此类预约额度已满（最多3项）
+
+----------------------------------------------------------------------
+Ran 1 test in 0.398s
+
+FAILED (errors=2)
+Destroying test database for alias 'default'...
+Found 1 test(s).
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

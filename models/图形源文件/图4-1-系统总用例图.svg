@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="507" height="665" viewBox="0 0 507 665">
-<rect width="100%" height="100%" fill="white"/>
-<rect x="85" y="4" width="338" height="660" fill="none" stroke="#24384b"/>
-<text x="254.0" y="337.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436"></text>
-<text x="254" y="22.57" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10.2" fill="#2a3436">校园实验室设备预约与借用管理系统</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="720" viewBox="0 0 507 720"><rect width="100%" height="100%" fill="white"/>
+<rect x="85" y="4" width="338" height="715" fill="none" stroke="#24384b"/>
+<text x="254" y="22.57" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10.2" fill="#24384b">校园实验室设备预约与借用管理系统</text>
 <rect x="89" y="38" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
 <text x="254.0" y="50.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">预约服务</text>
 <ellipse cx="173.0" cy="83.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
@@ -43,119 +41,148 @@
 <ellipse cx="337.0" cy="294.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
 <text x="337.0" y="291.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-12</text>
 <text x="337.0" y="303.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">登记场地使用结束</text>
-<rect x="89" y="317" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
-<text x="254.0" y="329.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">资源维护</text>
-<ellipse cx="173.0" cy="362.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="359.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-13</text>
-<text x="173.0" y="371.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">提交资源异常说明</text>
+<rect x="89" y="353" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
+<text x="254.0" y="365.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">资源维护</text>
 <ellipse cx="173.0" cy="398.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="395.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-14</text>
-<text x="173.0" y="407.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">核实与处置资源异常</text>
+<text x="173.0" y="395.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-13</text>
+<text x="173.0" y="407.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">提交资源异常说明</text>
 <ellipse cx="173.0" cy="434.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="431.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-15</text>
-<text x="173.0" y="443.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">创建与指派维修工单</text>
+<text x="173.0" y="431.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-14</text>
+<text x="173.0" y="443.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">核实与处置资源异常</text>
 <ellipse cx="173.0" cy="470.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="467.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-17</text>
-<text x="173.0" y="479.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">验收维修与恢复资源</text>
-<ellipse cx="337.0" cy="362.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="359.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-16</text>
-<text x="337.0" y="371.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">处理维修任务</text>
+<text x="173.0" y="467.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-15</text>
+<text x="173.0" y="479.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">创建与指派维修工单</text>
+<ellipse cx="173.0" cy="506.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="503.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-17</text>
+<text x="173.0" y="515.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">验收维修与恢复资源</text>
 <ellipse cx="337.0" cy="398.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="395.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-18</text>
-<text x="337.0" y="407.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护实验室与设备档案</text>
+<text x="337.0" y="395.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-16</text>
+<text x="337.0" y="407.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">处理维修任务</text>
 <ellipse cx="337.0" cy="434.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="431.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-25</text>
-<text x="337.0" y="443.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">提交与读取异常证据</text>
-<rect x="89" y="492" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
-<text x="254.0" y="504.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">统计、审计与支撑</text>
-<ellipse cx="173.0" cy="537.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="534.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-19</text>
-<text x="173.0" y="546.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护用户角色与管理范围</text>
+<text x="337.0" y="431.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-18</text>
+<text x="337.0" y="443.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护实验室与设备档案</text>
+<ellipse cx="337.0" cy="470.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="467.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-25</text>
+<text x="337.0" y="479.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">提交与读取异常证据</text>
+<rect x="89" y="528" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
+<text x="254.0" y="540.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">统计、审计与支撑</text>
 <ellipse cx="173.0" cy="573.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="570.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-20</text>
-<text x="173.0" y="582.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护开放时间及预约参数</text>
+<text x="173.0" y="570.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-19</text>
+<text x="173.0" y="582.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护用户角色与管理范围</text>
 <ellipse cx="173.0" cy="609.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="606.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-21</text>
-<text x="173.0" y="618.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查询审计记录</text>
+<text x="173.0" y="606.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-20</text>
+<text x="173.0" y="618.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">维护开放时间及预约参数</text>
 <ellipse cx="173.0" cy="645.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="173.0" y="642.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-24</text>
-<text x="173.0" y="654.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查看资源利用与运行报表</text>
-<ellipse cx="337.0" cy="537.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="534.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-22</text>
-<text x="337.0" y="546.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查看本人通知</text>
+<text x="173.0" y="642.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-21</text>
+<text x="173.0" y="654.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查询审计记录</text>
+<ellipse cx="173.0" cy="681.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="678.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-24</text>
+<text x="173.0" y="690.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查看资源利用与运行报表</text>
 <ellipse cx="337.0" cy="573.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="570.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-23</text>
-<text x="337.0" y="582.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">投递通知与失败重试</text>
+<text x="337.0" y="570.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-22</text>
+<text x="337.0" y="582.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查看本人通知</text>
 <ellipse cx="337.0" cy="609.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
-<text x="337.0" y="606.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-26</text>
-<text x="337.0" y="618.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查询预约与使用历史</text>
+<text x="337.0" y="606.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-23</text>
+<text x="337.0" y="618.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">投递通知与失败重试</text>
+<ellipse cx="337.0" cy="645.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="337.0" y="642.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">UC-26</text>
+<text x="337.0" y="654.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.0" fill="#2a3436">查询预约与使用历史</text>
 <circle cx="28.0" cy="101" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,106 V124 M17.0,114 H39.0 M28.0,124 L18.0,138 M28.0,124 L38.0,138" fill="none" stroke="#24384b"/>
+<polyline points="28.0,106 28.0,124" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,114 39.0,114" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,138 28.0,124 38.0,138" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="28.0" y="149.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">预约申请人</text>
 <text x="28.0" y="161.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学生、教师</text>
-<polyline points="44,116 69,116 69,83.0 104,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,119.0 104,119.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,155.0 104,155.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,191.0 104,191.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,60 244,60 244,83.0 268,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,60 244,60 244,119.0 268,119.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,116 69,116 69,60 244,60 244,155.0 268,155.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,116 69,116 69,83.0 104,83.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,119.0 104,119.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,155.0 104,155.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,191.0 104,191.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,60 244,60 244,83.0 268,83.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,60 244,60 244,119.0 268,119.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,116 69,116 69,60 244,60 244,155.0 268,155.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="479.0" cy="60" r="5" fill="none" stroke="#24384b"/>
-<path d="M479.0,65 V83 M468.0,73 H490.0 M479.0,83 L469.0,97 M479.0,83 L489.0,97" fill="none" stroke="#24384b"/>
+<polyline points="479.0,65 479.0,83" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="468.0,73 490.0,73" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="469.0,97 479.0,83 489.0,97" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="479.0" y="108.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学校统一</text>
 <text x="479.0" y="120.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">身份认证系统</text>
-<polyline points="463,75 440,75 440,60 264,60 264,83.0 242,83.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="463,75 440,75 440,60 264,60 264,83.0 242,83.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="479.0" cy="161" r="5" fill="none" stroke="#24384b"/>
-<path d="M479.0,166 V184 M468.0,174 H490.0 M479.0,184 L469.0,198 M479.0,184 L489.0,198" fill="none" stroke="#24384b"/>
+<polyline points="479.0,166 479.0,184" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="468.0,174 490.0,174" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="469.0,198 479.0,184 489.0,198" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="479.0" y="209.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验室</text>
 <text x="479.0" y="221.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
-<polyline points="463,176 440,176 440,191.0 406,191.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="463,176 440,176 440,191.0 406,191.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="28.0" cy="256" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,261 V279 M17.0,269 H39.0 M28.0,279 L18.0,293 M28.0,279 L38.0,293" fill="none" stroke="#24384b"/>
+<polyline points="28.0,261 28.0,279" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,269 39.0,269" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,293 28.0,279 38.0,293" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="28.0" y="304.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验室</text>
 <text x="28.0" y="316.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
-<polyline points="44,271 69,271 69,258.0 104,258.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,271 69,271 69,294.0 104,294.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,271 69,271 69,235 244,235 244,258.0 268,258.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,271 69,271 69,235 244,235 244,294.0 268,294.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="28.0" cy="360" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,365 V383 M17.0,373 H39.0 M28.0,383 L18.0,397 M28.0,383 L38.0,397" fill="none" stroke="#24384b"/>
-<text x="28.0" y="408.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验室</text>
-<text x="28.0" y="420.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
-<polyline points="44,375 69,375 69,398.0 104,398.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,375 69,375 69,434.0 104,434.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,375 69,375 69,470.0 104,470.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,375 69,375 69,339 244,339 244,398.0 268,398.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="28.0" cy="439" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,444 V462 M17.0,452 H39.0 M28.0,462 L18.0,476 M28.0,462 L38.0,476" fill="none" stroke="#24384b"/>
-<text x="28.0" y="493.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">预约申请人</text>
-<polyline points="44,454 55,454 55,362.0 104,362.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,454 55,454 55,343 252,343 252,434.0 268,434.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="479.0" cy="384" r="5" fill="none" stroke="#24384b"/>
-<path d="M479.0,389 V407 M468.0,397 H490.0 M479.0,407 L469.0,421 M479.0,407 L489.0,421" fill="none" stroke="#24384b"/>
-<text x="479.0" y="438.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">维修人员</text>
-<polyline points="463,399 440,399 440,362.0 406,362.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="463,399 440,399 440,434.0 406,434.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="28.0" cy="536" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,541 V559 M17.0,549 H39.0 M28.0,559 L18.0,573 M28.0,559 L38.0,573" fill="none" stroke="#24384b"/>
-<text x="28.0" y="584.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">系统</text>
-<text x="28.0" y="596.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
-<polyline points="44,551 69,551 69,537.0 104,537.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,551 69,551 69,573.0 104,573.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,551 69,551 69,609.0 104,609.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="28.0" cy="609" r="5" fill="none" stroke="#24384b"/>
-<path d="M28.0,614 V632 M17.0,622 H39.0 M28.0,632 L18.0,646 M28.0,632 L38.0,646" fill="none" stroke="#24384b"/>
-<text x="28.0" y="663.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">业务用户</text>
-<polyline points="44,624 55,624 55,518 252,518 252,537.0 268,537.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="44,624 55,624 55,518 252,518 252,609.0 268,609.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="479.0" cy="521" r="5" fill="none" stroke="#24384b"/>
-<path d="M479.0,526 V544 M468.0,534 H490.0 M479.0,544 L469.0,558 M479.0,544 L489.0,558" fill="none" stroke="#24384b"/>
-<text x="479.0" y="569.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验教学</text>
-<text x="479.0" y="581.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">中心主任</text>
-<polyline points="463,536 440,536 440,514 264,514 264,609.0 242,609.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<polyline points="463,536 440,536 440,514 264,514 264,645.0 242,645.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
-<circle cx="479.0" cy="595" r="5" fill="none" stroke="#24384b"/>
-<path d="M479.0,600 V618 M468.0,608 H490.0 M479.0,618 L469.0,632 M479.0,618 L489.0,632" fill="none" stroke="#24384b"/>
-<text x="479.0" y="649.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">消息服务</text>
-<polyline points="463,610 454,610 454,573.0 406,573.0" fill="none" stroke="#6d7778" stroke-width="0.8"/>
+<polyline points="44,271 69,271 69,258.0 104,258.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,271 69,271 69,294.0 104,294.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,271 69,271 69,235 244,235 244,258.0 268,258.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,271 69,271 69,235 244,235 244,294.0 268,294.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="28.0" cy="396" r="5" fill="none" stroke="#24384b"/>
+<polyline points="28.0,401 28.0,419" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,409 39.0,409" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,433 28.0,419 38.0,433" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="28.0" y="444.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验室</text>
+<text x="28.0" y="456.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
+<polyline points="44,411 69,411 69,434.0 104,434.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,411 69,411 69,470.0 104,470.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,411 69,411 69,506.0 104,506.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,411 69,411 69,375 244,375 244,434.0 268,434.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="28.0" cy="475" r="5" fill="none" stroke="#24384b"/>
+<polyline points="28.0,480 28.0,498" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,488 39.0,488" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,512 28.0,498 38.0,512" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="28.0" y="529.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">预约申请人</text>
+<polyline points="44,490 55,490 55,398.0 104,398.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,490 55,490 55,379 252,379 252,470.0 268,470.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="479.0" cy="420" r="5" fill="none" stroke="#24384b"/>
+<polyline points="479.0,425 479.0,443" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="468.0,433 490.0,433" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="469.0,457 479.0,443 489.0,457" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="479.0" y="474.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">维修人员</text>
+<polyline points="463,435 440,435 440,398.0 406,398.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="463,435 440,435 440,470.0 406,470.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="28.0" cy="572" r="5" fill="none" stroke="#24384b"/>
+<polyline points="28.0,577 28.0,595" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,585 39.0,585" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,609 28.0,595 38.0,609" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="28.0" y="620.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">系统</text>
+<text x="28.0" y="632.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">管理员</text>
+<polyline points="44,587 69,587 69,573.0 104,573.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,587 69,587 69,609.0 104,609.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,587 69,587 69,645.0 104,645.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="28.0" cy="645" r="5" fill="none" stroke="#24384b"/>
+<polyline points="28.0,650 28.0,668" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="17.0,658 39.0,658" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="18.0,682 28.0,668 38.0,682" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="28.0" y="699.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">业务用户</text>
+<polyline points="44,660 55,660 55,554 252,554 252,573.0 268,573.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,660 55,660 55,554 252,554 252,645.0 268,645.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="479.0" cy="557" r="5" fill="none" stroke="#24384b"/>
+<polyline points="479.0,562 479.0,580" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="468.0,570 490.0,570" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="469.0,594 479.0,580 489.0,594" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="479.0" y="605.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">实验教学</text>
+<text x="479.0" y="617.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">中心主任</text>
+<polyline points="463,572 440,572 440,550 264,550 264,645.0 242,645.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="463,572 440,572 440,550 264,550 264,681.0 242,681.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<circle cx="479.0" cy="631" r="5" fill="none" stroke="#24384b"/>
+<polyline points="479.0,636 479.0,654" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="468.0,644 490.0,644" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<polyline points="469.0,668 479.0,654 489.0,668" fill="none" stroke="#24384b" stroke-width="0.7"/>
+<text x="479.0" y="685.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">消息服务</text>
+<polyline points="463,646 454,646 454,609.0 406,609.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<ellipse cx="173.0" cy="330.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
+<text x="173.0" y="327.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">UC-27</text>
+<text x="173.0" y="339.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">复核受影响预约</text>
+<polyline points="44,271 69,271 69,330.0 104,330.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,490 55,490 55,434.0 104,434.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,411 69,411 69,398.0 104,398.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="44,587 62,587 62,377 248,377 248,434.0 268,434.0" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 </svg>

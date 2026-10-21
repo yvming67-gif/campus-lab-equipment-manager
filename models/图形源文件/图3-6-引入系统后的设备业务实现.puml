@@ -1,0 +1,39 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 引入系统后的设备业务实现
+participant "学生或教师" as L0
+participant "统一预约系统" as L1
+participant "实验室管理员" as L2
+participant "设备实物" as L3
+participant "消息服务" as L4
+L0 -> L1: TO-E01 认证后查询设备及目标时段
+L1 -> L1: TO-E02 读集中档案、开放日历和有效承诺；给出原因
+L0 -> L1: TO-E03 提交设备、用途、时段与请求标识
+L1 -> L1: TO-E04 集中检查身份资格、配额、时间及固定设备依赖
+alt 普通设备／受限设备 规则失败另拒绝
+L1 -> L1: TO-E05 [普通] 冲突复核后形成确认与系统决定
+else [受限]
+L1 -> L2: TO-E06 建立待审核；不占时段但计未来配额
+L2 -> L1: TO-E06a 作出决定；批准前再次检查冲突和资格
+end
+L1 -> L0: TO-E07 返回编号和状态；同事务留审计、站内消息
+L1 -> L4: TO-E07a 异步投递；失败重试不撤销业务
+opt 已确认且到场
+L0 -> L2: TO-E08 出示本人身份，请求领取
+L2 -> L1: TO-E09 核验当前资格、复核标志及前序实际占用
+L2 -> L3: TO-E09a 逐项检查标签、配件和运行状态
+alt 检查通过／不通过
+L2 -> L0: TO-E10 [通过] 实际交付设备与配件
+L2 -> L1: TO-E11 登记借出凭据、配件快照及三类交接时间
+else [不通过]
+L2 -> L1: TO-E10b 不生成借出凭据；按事实登记异常或延误协调
+end
+opt 已实际借出并归还
+L0 -> L2: TO-E12 实际归还设备与配件
+L2 -> L3: TO-E13 核对借出快照、实收数量和状态
+L2 -> L1: TO-E14 登记真实归还、逾期及异常
+L1 -> L1: TO-E15 原子结束使用、更新实物状态与审计；复核服务限制
+end
+end
+@enduml

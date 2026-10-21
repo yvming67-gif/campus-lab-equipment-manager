@@ -1,5 +1,5 @@
 {
-  "version": "2.1",
+  "version": "2.2",
   "project": "校园实验室设备预约与借用管理系统",
   "confirmed": {
     "objects": [
@@ -24,7 +24,8 @@
     "future_equipment_quota": 3,
     "future_room_quota": 3,
     "simultaneous_equipment": 3,
-    "room_registration": "LAB_ADMIN_START_AND_END"
+    "room_registration": "LAB_ADMIN_START_AND_END",
+    "future_quota_definition": "starts_at > 当前时刻，PENDING/CONFIRMED，设备与场地分别计数；等待项已到计划开始不计未来但保留占用。"
   },
   "recommended_assumptions": {
     "opening": "每日08:00—20:00，日间不跨日",
@@ -34,19 +35,20 @@
     "simultaneous_rooms_per_teacher": 1,
     "future_in_use_resource": "允许未来空闲预约；实际领取前再核验；逾期未归还阻断新建、批准和领取",
     "room_capacity": "申请和入场人数均不得超容量",
-    "isolation": "普通无关联报告待核实；授权或核实安全事件阻断；验收后复核全部限制",
-    "resource_independence": "可移动设备独立；固定设备及取放区域按关联场地限制，并核对未结束实际使用",
+    "isolation": "异常临时隔离；工单关闭并验收、所有阻断解除后恢复",
+    "resource_independence": "房间预约或故障不隐式占用或停用室内设备，独立异常独立处置",
     "notifications": "提前1小时、逾期每日；首次0及1/5/15分钟重试1至3",
-    "authentication": "演示为独立模拟身份；正式适配器缺失安全拒绝，真实学校未联调",
+    "authentication": "仅本地模拟身份提供方，业务用户无可用学校密码",
     "privacy": "模拟业务数据；课程报告按作者明确授权范围公开，本地运行数据不公开",
-    "quality": "每次查询3秒、提交5秒；100组并发/100次状态同步；RPO24h/RTO4h为初步目标"
+    "quality": "每次查询3秒、提交5秒；100组并发/100次状态同步；RPO24h/RTO4h为初步目标",
+    "parameter_effect": "申请/批准按当前申请规则；交接按当前交接条件；不把原计划作为过去新申请。"
   },
   "use_cases": [
     {
       "id": "UC-01",
       "spec": "SPEC-01",
       "name": "登录系统",
-      "actors": "学生、教师及管理岗位"
+      "actors": "学生、教师及各管理岗位"
     },
     {
       "id": "UC-02",
@@ -76,13 +78,13 @@
       "id": "UC-06",
       "spec": "SPEC-06",
       "name": "查看预约进度",
-      "actors": "本人、授权管理员"
+      "actors": "申请人、授权实验室管理员"
     },
     {
       "id": "UC-07",
       "spec": "SPEC-07",
       "name": "取消预约",
-      "actors": "本人"
+      "actors": "预约申请人"
     },
     {
       "id": "UC-08",
@@ -118,13 +120,13 @@
       "id": "UC-13",
       "spec": "SPEC-13",
       "name": "提交资源异常说明",
-      "actors": "学生、教师"
+      "actors": "学生、教师、实验室管理员"
     },
     {
       "id": "UC-14",
       "spec": "SPEC-14",
       "name": "核实与处置资源异常",
-      "actors": "实验室管理员"
+      "actors": "实验室管理员（核实或独立复核）；报告人或关联借用人（仅追加回应）"
     },
     {
       "id": "UC-15",
@@ -148,7 +150,7 @@
       "id": "UC-18",
       "spec": "SPEC-18",
       "name": "维护实验室与设备档案",
-      "actors": "实验室管理员"
+      "actors": "实验室管理员、系统管理员（仅实验室基础档案）"
     },
     {
       "id": "UC-19",
@@ -166,37 +168,43 @@
       "id": "UC-21",
       "spec": "SPEC-21",
       "name": "查询审计记录",
-      "actors": "系统管理员、授权实验室管理员"
+      "actors": "实验室管理员、系统管理员、实验教学中心主任"
     },
     {
       "id": "UC-22",
       "spec": "SPEC-22",
       "name": "查看本人通知",
-      "actors": "学生、教师及管理岗位"
+      "actors": "所有已登录业务用户"
     },
     {
       "id": "UC-23",
       "spec": "SPEC-23",
       "name": "投递通知与失败重试",
-      "actors": "内部事件触发；消息服务协作"
+      "actors": "消息服务（外部协作）；授权管理员（失败人工跟进）"
     },
     {
       "id": "UC-24",
       "spec": "SPEC-24",
       "name": "查看资源利用与运行报表",
-      "actors": "授权实验室管理员"
+      "actors": "实验教学中心主任、授权实验室管理员"
     },
     {
       "id": "UC-25",
       "spec": "SPEC-25",
       "name": "提交与读取异常证据",
-      "actors": "报告人、授权管理员或维修人员"
+      "actors": "报告人、关联借用人、授权实验室管理员、当前被指派维修人员"
     },
     {
       "id": "UC-26",
       "spec": "SPEC-26",
       "name": "查询预约与使用历史",
-      "actors": "本人、授权实验室管理员"
+      "actors": "申请人、实验室管理员"
+    },
+    {
+      "id": "UC-27",
+      "spec": "SPEC-27",
+      "name": "复核受影响预约",
+      "actors": "实验室管理员"
     }
   ],
   "references": [

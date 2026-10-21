@@ -18,7 +18,8 @@ __pycache__/
 !models/ERD/分域ERD图册.pdf
 
 # Analysis report explicitly selected for publication by the project author
-!docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf
+*.docx
+!docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx
 !docs/ERD与数据设计说明.pdf
 !docs/整改/证据/*.log
 
@@ -26,3 +27,5 @@ __pycache__/
 node_modules/
 miniprogram/project.private.config.json
 miniprogram/.debugger/
+
+!docs/逻辑整改/证据/*.log

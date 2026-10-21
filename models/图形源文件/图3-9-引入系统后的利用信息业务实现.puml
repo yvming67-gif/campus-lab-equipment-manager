@@ -1,0 +1,15 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 引入系统后的利用信息业务实现
+participant "教学管理部门" as L0
+participant "中心主任" as L1
+participant "统一预约系统" as L2
+participant "历史业务事实" as L3
+L0 -> L1: TO-S01 提出期间与资源信息需求
+L1 -> L2: TO-S02 查询授权范围内过去不超过31天的运行报表
+L2 -> L3: TO-S03 读取计划、借还、场地开始结束、服务及开放历史
+L2 -> L2: TO-S04 同口径裁剪：实际使用／可服务；计划单列
+L2 -> L1: TO-S05 给出口径、分子分母、零分母不适用及模拟性质
+L1 -> L0: TO-S06 人工复核后提供汇总；不向外自动公开明细
+@enduml

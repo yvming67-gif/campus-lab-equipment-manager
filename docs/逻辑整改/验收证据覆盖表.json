@@ -1,0 +1,4356 @@
+[
+  {
+    "ac": "AC-01",
+    "scenario": "给定已建立且有效的模拟账号；当通过身份入口完成认证；那么创建会话并进入角色工作台，业务用户没有可用学校密码。",
+    "fr": [
+      "FR-01"
+    ],
+    "uc": [
+      "UC-01"
+    ],
+    "spec": [
+      "SPEC-01"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-30",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-01",
+      "fr": [
+        "FR-01"
+      ],
+      "uc": [
+        "UC-01"
+      ],
+      "spec": [
+        "SPEC-01"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-29",
+        "BR-30"
+      ],
+      "scenario": "给定已建立且有效的模拟账号；当通过身份入口完成认证；那么创建会话并进入角色工作台，业务用户没有可用学校密码。",
+      "implementation": "core/views.py: login_page、identity、callback",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_login_and_csrf_protection",
+          "line": 188,
+          "assertion_lines": [
+            189,
+            190
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "原引用只验证认证跳转及CSRF，不证明完整会话建立与密码不可用；相关实现与其它登录测试分开核对。"
+  },
+  {
+    "ac": "AC-02",
+    "scenario": "给定断言已被消费；当重复访问回调；那么返回拒绝访问且不再次登录。",
+    "fr": [
+      "FR-01"
+    ],
+    "uc": [
+      "UC-01"
+    ],
+    "spec": [
+      "SPEC-01"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-30",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-02",
+      "fr": [
+        "FR-01"
+      ],
+      "uc": [
+        "UC-01"
+      ],
+      "spec": [
+        "SPEC-01"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-29",
+        "BR-30"
+      ],
+      "scenario": "给定断言已被消费；当重复访问回调；那么返回拒绝访问且不再次登录。",
+      "implementation": "core/views.py: login_page、identity、callback",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_identity_ticket_cannot_be_replayed",
+          "line": 191,
+          "assertion_lines": [
+            192
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-03",
+    "scenario": "给定存在模拟实验室与设备；当按实验室或编号查询；那么只显示匹配资源及其明确类型。",
+    "fr": [
+      "FR-02"
+    ],
+    "uc": [
+      "UC-02"
+    ],
+    "spec": [
+      "SPEC-02"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-31"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-03",
+      "fr": [
+        "FR-02"
+      ],
+      "uc": [
+        "UC-02"
+      ],
+      "spec": [
+        "SPEC-02"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-29",
+        "BR-31"
+      ],
+      "scenario": "给定存在模拟实验室与设备；当按实验室或编号查询；那么只显示匹配资源及其明确类型。",
+      "implementation": "core/views.py: resources、resource_detail",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_query_form_and_all_role_pages",
+          "line": 181,
+          "assertion_lines": [
+            184,
+            185
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "原引用只验证页面200，不证明筛选；目录筛选另见miniapi_tests的资源筛选断言。"
+  },
+  {
+    "ac": "AC-04",
+    "scenario": "给定不存在的设备编号；当打开详情；那么显示不存在，不能创建空资源预约。",
+    "fr": [
+      "FR-02"
+    ],
+    "uc": [
+      "UC-02"
+    ],
+    "spec": [
+      "SPEC-02"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-31"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-04",
+      "fr": [
+        "FR-02"
+      ],
+      "uc": [
+        "UC-02"
+      ],
+      "spec": [
+        "SPEC-02"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-29",
+        "BR-31"
+      ],
+      "scenario": "给定不存在的设备编号；当打开详情；那么显示不存在，不能创建空资源预约。",
+      "implementation": "core/views.py: resources、resource_detail",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_invalid_query_time_reports_field_errors",
+          "line": 117,
+          "assertion_lines": [
+            119
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "本轮补上网页与小程序不存在资源404且无新预约；不能用非法时间测试替代。",
+    "current_test": "core/logic_alignment_tests.py:36 test_ac04_missing_resource_is_404_in_web_and_mini",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-05",
+    "scenario": "给定服务正常且时段开放无有效占用；当查询该时段；那么返回时段可预约，响应满足QR-01。",
+    "fr": [
+      "FR-03"
+    ],
+    "uc": [
+      "UC-03"
+    ],
+    "spec": [
+      "SPEC-03"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-29",
+      "BR-39",
+      "BR-40",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-05",
+      "fr": [
+        "FR-03"
+      ],
+      "uc": [
+        "UC-03"
+      ],
+      "spec": [
+        "SPEC-03"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-29"
+      ],
+      "scenario": "给定服务正常且时段开放无有效占用；当查询该时段；那么返回时段可预约，响应满足QR-01。",
+      "implementation": "core/services.py: availability；core/views.py: resources",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_adjacent_half_open_times_allowed",
+          "line": 64,
+          "assertion_lines": [
+            65
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "本轮证明时段空闲与资格提示边界；QR-01性能另由历史负载证据评估，不由本功能测试证明。",
+    "current_test": "core/logic_alignment_tests.py:50 test_ac05_availability_is_not_personal_training_eligibility",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-06",
+    "scenario": "给定该时段已有有效占用或设备维护中；当查询；那么分别返回时段占用或维护阻断，不显示可预约。",
+    "fr": [
+      "FR-03"
+    ],
+    "uc": [
+      "UC-03"
+    ],
+    "spec": [
+      "SPEC-03"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-29",
+      "BR-39",
+      "BR-40",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-06",
+      "fr": [
+        "FR-03"
+      ],
+      "uc": [
+        "UC-03"
+      ],
+      "spec": [
+        "SPEC-03"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-29"
+      ],
+      "scenario": "给定该时段已有有效占用或设备维护中；当查询；那么分别返回时段占用或维护阻断，不显示可预约。",
+      "implementation": "core/services.py: availability；core/views.py: resources",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0006_query_rejects_objective_invalid_times",
+          "line": 48,
+          "assertion_lines": [
+            50
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-07",
+    "scenario": "给定普通设备正常且全部规则通过；当提交完整设备申请；那么仅创建一份已确认预约和系统决定，并返回同一业务编号。",
+    "fr": [
+      "FR-04"
+    ],
+    "uc": [
+      "UC-04"
+    ],
+    "spec": [
+      "SPEC-04"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-07",
+      "fr": [
+        "FR-04"
+      ],
+      "uc": [
+        "UC-04"
+      ],
+      "spec": [
+        "SPEC-04"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-02",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-10",
+        "BR-12",
+        "BR-13",
+        "BR-14",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定普通设备正常且全部规则通过；当提交完整设备申请；那么仅创建一份已确认预约和系统决定，并返回同一业务编号。",
+      "implementation": "core/services.py: create_reservation、validate",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_ordinary_auto_confirmation",
+          "line": 30,
+          "assertion_lines": [
+            31
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-08",
+    "scenario": "给定目标设备有重叠有效预约；当提交冲突申请或并发竞争；那么最多一份有效，失败者得到冲突原因且无部分记录。",
+    "fr": [
+      "FR-04"
+    ],
+    "uc": [
+      "UC-04"
+    ],
+    "spec": [
+      "SPEC-04"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-08",
+      "fr": [
+        "FR-04"
+      ],
+      "uc": [
+        "UC-04"
+      ],
+      "spec": [
+        "SPEC-04"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-02",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-10",
+        "BR-12",
+        "BR-13",
+        "BR-14",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定目标设备有重叠有效预约；当提交冲突申请或并发竞争；那么最多一份有效，失败者得到冲突原因且无部分记录。",
+      "implementation": "core/services.py: create_reservation、validate",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_exact_conflict_blocked",
+          "line": 66,
+          "assertion_lines": [
+            68
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-09",
+    "scenario": "给定教师、场地正常且人数与规则合规；当提交；那么创建待审核场地预约，不自动占用室内设备。",
+    "fr": [
+      "FR-05"
+    ],
+    "uc": [
+      "UC-05"
+    ],
+    "spec": [
+      "SPEC-05"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-11",
+      "BR-12",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-09",
+      "fr": [
+        "FR-05"
+      ],
+      "uc": [
+        "UC-05"
+      ],
+      "spec": [
+        "SPEC-05"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-02",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-11",
+        "BR-12",
+        "BR-14",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定教师、场地正常且人数与规则合规；当提交；那么创建待审核场地预约，不自动占用室内设备。",
+      "implementation": "core/services.py: create_reservation、validate",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_teacher_room_pending_and_student_room_blocked",
+          "line": 147,
+          "assertion_lines": [
+            149,
+            150
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-10",
+    "scenario": "给定学生账号或超容量人数；当提交场地申请；那么拒绝并说明身份或容量原因。",
+    "fr": [
+      "FR-05"
+    ],
+    "uc": [
+      "UC-05"
+    ],
+    "spec": [
+      "SPEC-05"
+    ],
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-11",
+      "BR-12",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-10",
+      "fr": [
+        "FR-05"
+      ],
+      "uc": [
+        "UC-05"
+      ],
+      "spec": [
+        "SPEC-05"
+      ],
+      "rules": [
+        "BR-01",
+        "BR-02",
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-11",
+        "BR-12",
+        "BR-14",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定学生账号或超容量人数；当提交场地申请；那么拒绝并说明身份或容量原因。",
+      "implementation": "core/services.py: create_reservation、validate",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_student_cannot_book_room",
+          "line": 41,
+          "assertion_lines": [
+            42
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-11",
+    "scenario": "给定本人预约已保存；当打开进度；那么可看到提交、决定及后续状态的连续记录。",
+    "fr": [
+      "FR-06"
+    ],
+    "uc": [
+      "UC-06"
+    ],
+    "spec": [
+      "SPEC-06"
+    ],
+    "rules": [
+      "BR-08",
+      "BR-15",
+      "BR-26",
+      "BR-29",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-11",
+      "fr": [
+        "FR-06"
+      ],
+      "uc": [
+        "UC-06"
+      ],
+      "spec": [
+        "SPEC-06"
+      ],
+      "rules": [
+        "BR-08",
+        "BR-15",
+        "BR-26",
+        "BR-29"
+      ],
+      "scenario": "给定本人预约已保存；当打开进度；那么可看到提交、决定及后续状态的连续记录。",
+      "implementation": "core/views.py: booking；core/services.py: review_note",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_detail_timeline_includes_submit",
+          "line": 221,
+          "assertion_lines": [
+            224
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-12",
+    "scenario": "给定另一普通用户的预约；当猜测编号访问；那么返回不可访问并不泄露用途与申请人。",
+    "fr": [
+      "FR-06"
+    ],
+    "uc": [
+      "UC-06"
+    ],
+    "spec": [
+      "SPEC-06"
+    ],
+    "rules": [
+      "BR-08",
+      "BR-15",
+      "BR-26",
+      "BR-29",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-12",
+      "fr": [
+        "FR-06"
+      ],
+      "uc": [
+        "UC-06"
+      ],
+      "spec": [
+        "SPEC-06"
+      ],
+      "rules": [
+        "BR-08",
+        "BR-15",
+        "BR-26",
+        "BR-29"
+      ],
+      "scenario": "给定另一普通用户的预约；当猜测编号访问；那么返回不可访问并不泄露用途与申请人。",
+      "implementation": "core/views.py: booking；core/services.py: review_note",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_foreign_booking_is_neither_visible_nor_cancellable",
+          "line": 186,
+          "assertion_lines": [
+            188,
+            189,
+            190
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-13",
+    "scenario": "给定本人尚未开始的已确认预约；当取消并说明原因；那么状态已取消，后续申请可使用原时段。",
+    "fr": [
+      "FR-07"
+    ],
+    "uc": [
+      "UC-07"
+    ],
+    "spec": [
+      "SPEC-07"
+    ],
+    "rules": [
+      "BR-07",
+      "BR-09",
+      "BR-16",
+      "BR-26",
+      "BR-27",
+      "BR-35"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-13",
+      "fr": [
+        "FR-07"
+      ],
+      "uc": [
+        "UC-07"
+      ],
+      "spec": [
+        "SPEC-07"
+      ],
+      "rules": [
+        "BR-07",
+        "BR-09",
+        "BR-16",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定本人尚未开始的已确认预约；当取消并说明原因；那么状态已取消，后续申请可使用原时段。",
+      "implementation": "core/services.py: cancel",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_cancel_and_release",
+          "line": 85,
+          "assertion_lines": [
+            86
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-14",
+    "scenario": "给定预约已开始或属于他人；当尝试取消；那么拒绝且原预约状态不变。",
+    "fr": [
+      "FR-07"
+    ],
+    "uc": [
+      "UC-07"
+    ],
+    "spec": [
+      "SPEC-07"
+    ],
+    "rules": [
+      "BR-07",
+      "BR-09",
+      "BR-16",
+      "BR-26",
+      "BR-27",
+      "BR-35"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-14",
+      "fr": [
+        "FR-07"
+      ],
+      "uc": [
+        "UC-07"
+      ],
+      "spec": [
+        "SPEC-07"
+      ],
+      "rules": [
+        "BR-07",
+        "BR-09",
+        "BR-16",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定预约已开始或属于他人；当尝试取消；那么拒绝且原预约状态不变。",
+      "implementation": "core/services.py: cancel",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_cancel_after_start_rejected",
+          "line": 87,
+          "assertion_lines": [
+            89
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-15",
+    "scenario": "给定受限设备或场地待审核且复核通过；当管理员批准；那么成为已确认，保存审核人、时间和原因并生成通知。",
+    "fr": [
+      "FR-08"
+    ],
+    "uc": [
+      "UC-08"
+    ],
+    "spec": [
+      "SPEC-08"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-11",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-39",
+      "BR-40",
+      "BR-41"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-15",
+      "fr": [
+        "FR-08"
+      ],
+      "uc": [
+        "UC-08"
+      ],
+      "spec": [
+        "SPEC-08"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-10",
+        "BR-11",
+        "BR-12",
+        "BR-13",
+        "BR-14",
+        "BR-15",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定受限设备或场地待审核且复核通过；当管理员批准；那么成为已确认，保存审核人、时间和原因并生成通知。",
+      "implementation": "core/services.py: approve",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_manual_approval_rechecks_conflict",
+          "line": 34,
+          "assertion_lines": [
+            36,
+            37
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-16",
+    "scenario": "给定两份待审核竞争同一时段；当先后或并发批准；那么最多一份确认，其余保留待审核并提示新冲突。",
+    "fr": [
+      "FR-08"
+    ],
+    "uc": [
+      "UC-08"
+    ],
+    "spec": [
+      "SPEC-08"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-11",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-39",
+      "BR-40",
+      "BR-41"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-16",
+      "fr": [
+        "FR-08"
+      ],
+      "uc": [
+        "UC-08"
+      ],
+      "spec": [
+        "SPEC-08"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-05",
+        "BR-06",
+        "BR-07",
+        "BR-08",
+        "BR-09",
+        "BR-10",
+        "BR-11",
+        "BR-12",
+        "BR-13",
+        "BR-14",
+        "BR-15",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定两份待审核竞争同一时段；当先后或并发批准；那么最多一份确认，其余保留待审核并提示新冲突。",
+      "implementation": "core/services.py: approve",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "ConcurrencyTests",
+          "function": "test_concurrent_approval_has_single_winner",
+          "line": 261,
+          "assertion_lines": [
+            263
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-17",
+    "scenario": "给定已确认设备预约且现场核验通过；当办理借出；那么保存唯一借出凭据、交接快照与实际交付，预约转使用中。",
+    "fr": [
+      "FR-09"
+    ],
+    "uc": [
+      "UC-09"
+    ],
+    "spec": [
+      "SPEC-09"
+    ],
+    "rules": [
+      "BR-12",
+      "BR-13",
+      "BR-17",
+      "BR-18",
+      "BR-19",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-17",
+      "fr": [
+        "FR-09"
+      ],
+      "uc": [
+        "UC-09"
+      ],
+      "spec": [
+        "SPEC-09"
+      ],
+      "rules": [
+        "BR-12",
+        "BR-13",
+        "BR-17",
+        "BR-18",
+        "BR-19",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定已确认设备预约且现场核验通过；当办理借出；那么保存唯一借出凭据、交接快照与实际交付，预约转使用中。",
+      "implementation": "core/services.py: checkout",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_normal_return_snapshot_and_idempotency",
+          "line": 111,
+          "assertion_lines": [
+            114,
+            115
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-18",
+    "scenario": "给定现场编号与申请人不符或配件缺失；当办理；那么不生成借出凭据；缺件情形还须登记异常并隔离。",
+    "fr": [
+      "FR-09"
+    ],
+    "uc": [
+      "UC-09"
+    ],
+    "spec": [
+      "SPEC-09"
+    ],
+    "rules": [
+      "BR-12",
+      "BR-13",
+      "BR-17",
+      "BR-18",
+      "BR-19",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-18",
+      "fr": [
+        "FR-09"
+      ],
+      "uc": [
+        "UC-09"
+      ],
+      "spec": [
+        "SPEC-09"
+      ],
+      "rules": [
+        "BR-12",
+        "BR-13",
+        "BR-17",
+        "BR-18",
+        "BR-19",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定现场编号与申请人不符或配件缺失；当办理；那么不生成借出凭据；缺件情形还须登记异常并隔离。",
+      "implementation": "core/services.py: checkout",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_checkout_identity_mismatch",
+          "line": 101,
+          "assertion_lines": [
+            103,
+            104
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-19",
+    "scenario": "给定设备有未归还借出且完好；当管理员核对标签与配件并归还；那么保存归还凭据，结束使用且释放剩余计划占用。",
+    "fr": [
+      "FR-10"
+    ],
+    "uc": [
+      "UC-10"
+    ],
+    "spec": [
+      "SPEC-10"
+    ],
+    "rules": [
+      "BR-18",
+      "BR-20",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-42",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-19",
+      "fr": [
+        "FR-10"
+      ],
+      "uc": [
+        "UC-10"
+      ],
+      "spec": [
+        "SPEC-10"
+      ],
+      "rules": [
+        "BR-18",
+        "BR-20",
+        "BR-21",
+        "BR-22",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定设备有未归还借出且完好；当管理员核对标签与配件并归还；那么保存归还凭据，结束使用且释放剩余计划占用。",
+      "implementation": "core/services.py: return_equipment",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_normal_return_snapshot_and_idempotency",
+          "line": 111,
+          "assertion_lines": [
+            114,
+            115
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-20",
+    "scenario": "给定设备逾期且损坏或缺件；当归还；那么仍保存真实归还和逾期事实，同时登记异常并隔离；无借出记录则拒绝伪造凭据。",
+    "fr": [
+      "FR-10"
+    ],
+    "uc": [
+      "UC-10"
+    ],
+    "spec": [
+      "SPEC-10"
+    ],
+    "rules": [
+      "BR-18",
+      "BR-20",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-42",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-20",
+      "fr": [
+        "FR-10"
+      ],
+      "uc": [
+        "UC-10"
+      ],
+      "spec": [
+        "SPEC-10"
+      ],
+      "rules": [
+        "BR-18",
+        "BR-20",
+        "BR-21",
+        "BR-22",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定设备逾期且损坏或缺件；当归还；那么仍保存真实归还和逾期事实，同时登记异常并隔离；无借出记录则拒绝伪造凭据。",
+      "implementation": "core/services.py: return_equipment",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_return_without_loan_rejected",
+          "line": 116,
+          "assertion_lines": [
+            118
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-21",
+    "scenario": "给定场地已确认且教师身份、人数与时段合规；当管理员登记开始；那么保存实际开始及负责教师，场地预约转使用中。",
+    "fr": [
+      "FR-11"
+    ],
+    "uc": [
+      "UC-11"
+    ],
+    "spec": [
+      "SPEC-11"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-11",
+      "BR-12",
+      "BR-17",
+      "BR-18",
+      "BR-21",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-21",
+      "fr": [
+        "FR-11"
+      ],
+      "uc": [
+        "UC-11"
+      ],
+      "spec": [
+        "SPEC-11"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-11",
+        "BR-12",
+        "BR-17",
+        "BR-18",
+        "BR-21",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定场地已确认且教师身份、人数与时段合规；当管理员登记开始；那么保存实际开始及负责教师，场地预约转使用中。",
+      "implementation": "core/services.py: start_room",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_room_start_and_end",
+          "line": 129,
+          "assertion_lines": [
+            131
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-22",
+    "scenario": "给定教师不匹配、人数超容量或前次使用未结束；当开始登记；那么拒绝且不生成场地使用记录。",
+    "fr": [
+      "FR-11"
+    ],
+    "uc": [
+      "UC-11"
+    ],
+    "spec": [
+      "SPEC-11"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-11",
+      "BR-12",
+      "BR-17",
+      "BR-18",
+      "BR-21",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-22",
+      "fr": [
+        "FR-11"
+      ],
+      "uc": [
+        "UC-11"
+      ],
+      "spec": [
+        "SPEC-11"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-11",
+        "BR-12",
+        "BR-17",
+        "BR-18",
+        "BR-21",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定教师不匹配、人数超容量或前次使用未结束；当开始登记；那么拒绝且不生成场地使用记录。",
+      "implementation": "core/services.py: start_room",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_room_over_capacity_on_arrival",
+          "line": 132,
+          "assertion_lines": [
+            134
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-23",
+    "scenario": "给定场地已有实际开始；当管理员核验后登记结束；那么保存结束事实与检查结论，释放场地剩余占用。",
+    "fr": [
+      "FR-12"
+    ],
+    "uc": [
+      "UC-12"
+    ],
+    "spec": [
+      "SPEC-12"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-12",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-23",
+      "fr": [
+        "FR-12"
+      ],
+      "uc": [
+        "UC-12"
+      ],
+      "spec": [
+        "SPEC-12"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-12",
+        "BR-21",
+        "BR-22",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定场地已有实际开始；当管理员核验后登记结束；那么保存结束事实与检查结论，释放场地剩余占用。",
+      "implementation": "core/services.py: end_room",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_room_start_and_end",
+          "line": 129,
+          "assertion_lines": [
+            131
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-24",
+    "scenario": "给定结束检查发现门禁或现场异常；当确认结束；那么保存离场事实并隔离场地，室内设备状态保持各自独立。",
+    "fr": [
+      "FR-12"
+    ],
+    "uc": [
+      "UC-12"
+    ],
+    "spec": [
+      "SPEC-12"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-12",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-44",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-24",
+      "fr": [
+        "FR-12"
+      ],
+      "uc": [
+        "UC-12"
+      ],
+      "spec": [
+        "SPEC-12"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-12",
+        "BR-21",
+        "BR-22",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-35"
+      ],
+      "scenario": "给定结束检查发现门禁或现场异常；当确认结束；那么保存离场事实并隔离场地，室内设备状态保持各自独立。",
+      "implementation": "core/services.py: end_room",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_room_abnormal_end",
+          "line": 135,
+          "assertion_lines": [
+            137
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-25",
+    "scenario": "给定普通无关联资源报告；当合法上报现象和发现时间；那么创建PENDING且blocks_service=False的记录并通知管理员；给定管理员报告或本人使用中关联报告时，则先阻断并标记受影响预约待复核。",
+    "fr": [
+      "FR-13"
+    ],
+    "uc": [
+      "UC-13"
+    ],
+    "spec": [
+      "SPEC-13"
+    ],
+    "rules": [
+      "BR-22",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-32",
+      "BR-37",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-25",
+      "fr": [
+        "FR-13"
+      ],
+      "uc": [
+        "UC-13"
+      ],
+      "spec": [
+        "SPEC-13"
+      ],
+      "rules": [
+        "BR-22",
+        "BR-26",
+        "BR-27",
+        "BR-29",
+        "BR-32"
+      ],
+      "scenario": "给定用户发现资源异常；当填写事实与发现时间上报；那么创建待核实记录并暂时隔离目标资源，通知管理员。",
+      "implementation": "core/services.py: report_incident",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_occurrence_and_report_times_are_separate",
+          "line": 226,
+          "assertion_lines": [
+            227
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_test": "core/logic_alignment_tests.py:73 test_ac25_unrelated_report_does_not_isolate_until_confirmed",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-26",
+    "scenario": "给定报告关联另一用户的预约或不同资源；当提交；那么拒绝关联且不泄露他人记录。",
+    "fr": [
+      "FR-13"
+    ],
+    "uc": [
+      "UC-13"
+    ],
+    "spec": [
+      "SPEC-13"
+    ],
+    "rules": [
+      "BR-22",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-32",
+      "BR-37",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-26",
+      "fr": [
+        "FR-13"
+      ],
+      "uc": [
+        "UC-13"
+      ],
+      "spec": [
+        "SPEC-13"
+      ],
+      "rules": [
+        "BR-22",
+        "BR-26",
+        "BR-27",
+        "BR-29",
+        "BR-32"
+      ],
+      "scenario": "给定报告关联另一用户的预约或不同资源；当提交；那么拒绝关联且不泄露他人记录。",
+      "implementation": "core/services.py: report_incident",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0005_unrelated_report_does_not_block_but_authorized_report_does",
+          "line": 92,
+          "assertion_lines": [
+            94,
+            96
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-27",
+    "scenario": "给定待核实异常及授权管理员；当确认属实并说明依据；那么保留核实记录且资源按确认结论阻断或保持阻断，可进入维修。",
+    "fr": [
+      "FR-14"
+    ],
+    "uc": [
+      "UC-14"
+    ],
+    "spec": [
+      "SPEC-14"
+    ],
+    "rules": [
+      "BR-22",
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-37",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-27",
+      "fr": [
+        "FR-14"
+      ],
+      "uc": [
+        "UC-14"
+      ],
+      "spec": [
+        "SPEC-14"
+      ],
+      "rules": [
+        "BR-22",
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定待核实异常及授权管理员；当确认属实并说明依据；那么保留核实记录且资源继续隔离，可进入维修。",
+      "implementation": "core/services.py: verify_incident",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_full_maintenance_cycle",
+          "line": 142,
+          "assertion_lines": [
+            144,
+            145
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-28",
+    "scenario": "给定异常已有未关闭工单；当尝试直接处置结案；那么拒绝，资源不会绕过验收恢复。",
+    "fr": [
+      "FR-14"
+    ],
+    "uc": [
+      "UC-14"
+    ],
+    "spec": [
+      "SPEC-14"
+    ],
+    "rules": [
+      "BR-22",
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-37",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-28",
+      "fr": [
+        "FR-14"
+      ],
+      "uc": [
+        "UC-14"
+      ],
+      "spec": [
+        "SPEC-14"
+      ],
+      "rules": [
+        "BR-22",
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定异常已有未关闭工单；当尝试直接处置结案；那么拒绝，资源不会绕过验收恢复。",
+      "implementation": "core/services.py: verify_incident",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_incident_requires_confirmation_before_work",
+          "line": 138,
+          "assertion_lines": [
+            140,
+            141
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-29",
+    "scenario": "给定确认异常且无开放工单；当指派维修人员；那么创建唯一开放工单，资源维护中，未开始预约取消并通知。",
+    "fr": [
+      "FR-15"
+    ],
+    "uc": [
+      "UC-15"
+    ],
+    "spec": [
+      "SPEC-15"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-22",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-29",
+      "fr": [
+        "FR-15"
+      ],
+      "uc": [
+        "UC-15"
+      ],
+      "spec": [
+        "SPEC-15"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-22",
+        "BR-23",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-28",
+        "BR-35"
+      ],
+      "scenario": "给定确认异常且无开放工单；当指派维修人员；那么创建唯一开放工单，资源维护中，未开始预约取消并通知。",
+      "implementation": "core/services.py: create_work_order",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_full_maintenance_cycle",
+          "line": 142,
+          "assertion_lines": [
+            144,
+            145
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-30",
+    "scenario": "给定重复创建请求或异常未确认；当提交；那么分别返回既有工单或拒绝，不出现多张同时开放工单。",
+    "fr": [
+      "FR-15"
+    ],
+    "uc": [
+      "UC-15"
+    ],
+    "spec": [
+      "SPEC-15"
+    ],
+    "rules": [
+      "BR-02",
+      "BR-22",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-30",
+      "fr": [
+        "FR-15"
+      ],
+      "uc": [
+        "UC-15"
+      ],
+      "spec": [
+        "SPEC-15"
+      ],
+      "rules": [
+        "BR-02",
+        "BR-22",
+        "BR-23",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-28",
+        "BR-35"
+      ],
+      "scenario": "给定重复创建请求或异常未确认；当提交；那么分别返回既有工单或拒绝，不出现多张同时开放工单。",
+      "implementation": "core/services.py: create_work_order",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0025_reassignment_after_technician_deactivation",
+          "line": 149,
+          "assertion_lines": [
+            156
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-31",
+    "scenario": "给定本人待处理工单；当开始、记录过程并提交结果；那么工单待验收，资源仍维护中并通知管理员。",
+    "fr": [
+      "FR-16"
+    ],
+    "uc": [
+      "UC-16"
+    ],
+    "spec": [
+      "SPEC-16"
+    ],
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-31",
+      "fr": [
+        "FR-16"
+      ],
+      "uc": [
+        "UC-16"
+      ],
+      "spec": [
+        "SPEC-16"
+      ],
+      "rules": [
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定本人待处理工单；当开始、记录过程并提交结果；那么工单待验收，资源仍维护中并通知管理员。",
+      "implementation": "core/services.py: update_work",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_full_maintenance_cycle",
+          "line": 142,
+          "assertion_lines": [
+            144,
+            145
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-32",
+    "scenario": "给定未被指派的维修人员或已关闭工单；当更新；那么拒绝且原过程与状态不变。",
+    "fr": [
+      "FR-16"
+    ],
+    "uc": [
+      "UC-16"
+    ],
+    "spec": [
+      "SPEC-16"
+    ],
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-32",
+      "fr": [
+        "FR-16"
+      ],
+      "uc": [
+        "UC-16"
+      ],
+      "spec": [
+        "SPEC-16"
+      ],
+      "rules": [
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定未被指派的维修人员或已关闭工单；当更新；那么拒绝且原过程与状态不变。",
+      "implementation": "core/services.py: update_work",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_failed_acceptance_returns_to_repair",
+          "line": 146,
+          "assertion_lines": [
+            147
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-33",
+    "scenario": "给定待验收工单且复测通过、无其他阻断；当管理员验收；那么工单关闭、异常解决、资源恢复正常。",
+    "fr": [
+      "FR-17"
+    ],
+    "uc": [
+      "UC-17"
+    ],
+    "spec": [
+      "SPEC-17"
+    ],
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-33",
+      "fr": [
+        "FR-17"
+      ],
+      "uc": [
+        "UC-17"
+      ],
+      "spec": [
+        "SPEC-17"
+      ],
+      "rules": [
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定待验收工单且复测通过、无其他阻断；当管理员验收；那么工单关闭、异常解决、资源恢复正常。",
+      "implementation": "core/services.py: accept_work",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_full_maintenance_cycle",
+          "line": 142,
+          "assertion_lines": [
+            144,
+            145
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-34",
+    "scenario": "给定另有未解决异常或停用限制；当验收通过；那么该工单关闭但资源仍阻断；复测失败则退回维修。 给定工单已重新指派但验收者曾实际执行本工单维修；当请求验收；那么仍拒绝，原维修责任不因改派而消失。",
+    "fr": [
+      "FR-17"
+    ],
+    "uc": [
+      "UC-17"
+    ],
+    "spec": [
+      "SPEC-17"
+    ],
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-34",
+      "fr": [
+        "FR-17"
+      ],
+      "uc": [
+        "UC-17"
+      ],
+      "spec": [
+        "SPEC-17"
+      ],
+      "rules": [
+        "BR-24",
+        "BR-25",
+        "BR-26",
+        "BR-27",
+        "BR-29"
+      ],
+      "scenario": "给定另有未解决异常或停用限制；当验收通过；那么该工单关闭但资源仍阻断；复测失败则退回维修。",
+      "implementation": "core/services.py: accept_work",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_other_incident_prevents_restoration",
+          "line": 148,
+          "assertion_lines": [
+            149
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_test": "core/logic_alignment_tests.py:116 test_former_repair_executor_cannot_accept_after_reassignment",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-35",
+    "scenario": "给定管理员获授权实验室；当新增设备及配件；那么建立唯一资源、设备明细及初始服务历史。",
+    "fr": [
+      "FR-18"
+    ],
+    "uc": [
+      "UC-18"
+    ],
+    "spec": [
+      "SPEC-18"
+    ],
+    "rules": [
+      "BR-06",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-36",
+      "BR-39"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-35",
+      "fr": [
+        "FR-18"
+      ],
+      "uc": [
+        "UC-18"
+      ],
+      "spec": [
+        "SPEC-18"
+      ],
+      "rules": [
+        "BR-06",
+        "BR-23",
+        "BR-25",
+        "BR-26",
+        "BR-29",
+        "BR-31",
+        "BR-35"
+      ],
+      "scenario": "给定管理员获授权实验室；当新增设备及配件；那么建立唯一资源、设备明细及初始服务历史。",
+      "implementation": "core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_resource_create_and_historical_accessory_snapshot",
+          "line": 200,
+          "assertion_lines": [
+            202,
+            203
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-36",
+    "scenario": "给定已有历史资源；当更改标签、类型或越权维护；那么拒绝，原凭据仍可关联原资源。",
+    "fr": [
+      "FR-18"
+    ],
+    "uc": [
+      "UC-18"
+    ],
+    "spec": [
+      "SPEC-18"
+    ],
+    "rules": [
+      "BR-06",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-36",
+      "BR-39"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-36",
+      "fr": [
+        "FR-18"
+      ],
+      "uc": [
+        "UC-18"
+      ],
+      "spec": [
+        "SPEC-18"
+      ],
+      "rules": [
+        "BR-06",
+        "BR-23",
+        "BR-25",
+        "BR-26",
+        "BR-29",
+        "BR-31",
+        "BR-35"
+      ],
+      "scenario": "给定已有历史资源；当更改标签、类型或越权维护；那么拒绝，原凭据仍可关联原资源。",
+      "implementation": "core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0028_resource_audit_contains_old_details",
+          "line": 69,
+          "assertion_lines": [
+            73,
+            74
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-37",
+    "scenario": "给定系统管理员；当按依据调整用户实验室范围；那么后续请求按新范围授权并留原新记录。",
+    "fr": [
+      "FR-19"
+    ],
+    "uc": [
+      "UC-19"
+    ],
+    "spec": [
+      "SPEC-19"
+    ],
+    "rules": [
+      "BR-13",
+      "BR-26",
+      "BR-29",
+      "BR-30",
+      "BR-41",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-37",
+      "fr": [
+        "FR-19"
+      ],
+      "uc": [
+        "UC-19"
+      ],
+      "spec": [
+        "SPEC-19"
+      ],
+      "rules": [
+        "BR-13",
+        "BR-26",
+        "BR-29",
+        "BR-30"
+      ],
+      "scenario": "给定系统管理员；当按依据调整用户实验室范围；那么后续请求按新范围授权并留原新记录。",
+      "implementation": "core/services.py: grant_user",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_authorization_change_and_revocation",
+          "line": 204,
+          "assertion_lines": [
+            206
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-38",
+    "scenario": "给定普通用户或拟撤销本人最后系统管理能力；当提交；那么拒绝且不产生无法管理状态。",
+    "fr": [
+      "FR-19"
+    ],
+    "uc": [
+      "UC-19"
+    ],
+    "spec": [
+      "SPEC-19"
+    ],
+    "rules": [
+      "BR-13",
+      "BR-26",
+      "BR-29",
+      "BR-30",
+      "BR-41",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-38",
+      "fr": [
+        "FR-19"
+      ],
+      "uc": [
+        "UC-19"
+      ],
+      "spec": [
+        "SPEC-19"
+      ],
+      "rules": [
+        "BR-13",
+        "BR-26",
+        "BR-29",
+        "BR-30"
+      ],
+      "scenario": "给定普通用户或拟撤销本人最后系统管理能力；当提交；那么拒绝且不产生无法管理状态。",
+      "implementation": "core/services.py: grant_user",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_restart_seed_preserves_revoked_permissions",
+          "line": 241,
+          "assertion_lines": [
+            242
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-39",
+    "scenario": "给定合法新参数与变更原因；当保存；那么版本递增、历史保留，新操作按新规则检查。",
+    "fr": [
+      "FR-20"
+    ],
+    "uc": [
+      "UC-20"
+    ],
+    "spec": [
+      "SPEC-20"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-09",
+      "BR-10",
+      "BR-17",
+      "BR-26",
+      "BR-28",
+      "BR-33",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-39",
+      "fr": [
+        "FR-20"
+      ],
+      "uc": [
+        "UC-20"
+      ],
+      "spec": [
+        "SPEC-20"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-09",
+        "BR-10",
+        "BR-17",
+        "BR-26",
+        "BR-28",
+        "BR-33"
+      ],
+      "scenario": "给定合法新参数与变更原因；当保存；那么版本递增、历史保留，新操作按新规则检查。",
+      "implementation": "core/services.py: save_policy、change_opening",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_opening_preserves_versions",
+          "line": 207,
+          "assertion_lines": [
+            209
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-40",
+    "scenario": "给定每周开放计划变更将截断已确认预约；当保存；那么拒绝并要求先协调，历史统计口径不被覆盖。",
+    "fr": [
+      "FR-20"
+    ],
+    "uc": [
+      "UC-20"
+    ],
+    "spec": [
+      "SPEC-20"
+    ],
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-09",
+      "BR-10",
+      "BR-17",
+      "BR-26",
+      "BR-28",
+      "BR-33",
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-40",
+      "fr": [
+        "FR-20"
+      ],
+      "uc": [
+        "UC-20"
+      ],
+      "spec": [
+        "SPEC-20"
+      ],
+      "rules": [
+        "BR-03",
+        "BR-04",
+        "BR-05",
+        "BR-09",
+        "BR-10",
+        "BR-17",
+        "BR-26",
+        "BR-28",
+        "BR-33"
+      ],
+      "scenario": "给定开放日历变更将截断已确认预约；当保存；那么拒绝并要求先协调，历史统计口径不被覆盖。",
+      "implementation": "core/services.py: save_policy、change_opening",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_opening_does_not_break_confirmed_booking",
+          "line": 210,
+          "assertion_lines": [
+            212
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-41",
+    "scenario": "给定授权审计角色及业务事件；当查询；那么显示完整主体、时间、原因与原新状态。",
+    "fr": [
+      "FR-21"
+    ],
+    "uc": [
+      "UC-21"
+    ],
+    "spec": [
+      "SPEC-21"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-41",
+      "fr": [
+        "FR-21"
+      ],
+      "uc": [
+        "UC-21"
+      ],
+      "spec": [
+        "SPEC-21"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29"
+      ],
+      "scenario": "给定授权审计角色及业务事件；当查询；那么显示完整主体、时间、原因与原新状态。",
+      "implementation": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_http_request_id_matches_audit",
+          "line": 232,
+          "assertion_lines": [
+            235
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-42",
+    "scenario": "给定普通用户或修改历史尝试；当访问/改删；那么拒绝且数据库事件不变。",
+    "fr": [
+      "FR-21"
+    ],
+    "uc": [
+      "UC-21"
+    ],
+    "spec": [
+      "SPEC-21"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-42",
+      "fr": [
+        "FR-21"
+      ],
+      "uc": [
+        "UC-21"
+      ],
+      "spec": [
+        "SPEC-21"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29"
+      ],
+      "scenario": "给定普通用户或修改历史尝试；当访问/改删；那么拒绝且数据库事件不变。",
+      "implementation": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_audit_database_rejects_update_and_delete",
+          "line": 163,
+          "assertion_lines": [
+            166
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-43",
+    "scenario": "给定本人有未读通知；当标记已读；那么仅本人通知保存已读时间，外部任务状态不被篡改。",
+    "fr": [
+      "FR-22"
+    ],
+    "uc": [
+      "UC-22"
+    ],
+    "spec": [
+      "SPEC-22"
+    ],
+    "rules": [
+      "BR-27",
+      "BR-28",
+      "BR-29",
+      "BR-35",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-43",
+      "fr": [
+        "FR-22"
+      ],
+      "uc": [
+        "UC-22"
+      ],
+      "spec": [
+        "SPEC-22"
+      ],
+      "rules": [
+        "BR-27",
+        "BR-28",
+        "BR-29",
+        "BR-35"
+      ],
+      "scenario": "给定本人有未读通知；当标记已读；那么仅本人通知保存已读时间，外部任务状态不被篡改。",
+      "implementation": "core/views.py: notifications",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_notification_owner_and_read",
+          "line": 213,
+          "assertion_lines": [
+            214,
+            215
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-44",
+    "scenario": "给定另一普通用户身份；当读取通知列表；那么不会显示原用户通知或内容。",
+    "fr": [
+      "FR-22"
+    ],
+    "uc": [
+      "UC-22"
+    ],
+    "spec": [
+      "SPEC-22"
+    ],
+    "rules": [
+      "BR-27",
+      "BR-28",
+      "BR-29",
+      "BR-35",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-44",
+      "fr": [
+        "FR-22"
+      ],
+      "uc": [
+        "UC-22"
+      ],
+      "spec": [
+        "SPEC-22"
+      ],
+      "rules": [
+        "BR-27",
+        "BR-28",
+        "BR-29",
+        "BR-35"
+      ],
+      "scenario": "给定另一普通用户身份；当读取通知列表；那么不会显示原用户通知或内容。",
+      "implementation": "core/views.py: notifications",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_only_owned_notifications_can_be_read",
+          "line": 208,
+          "assertion_lines": [
+            211,
+            212
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-45",
+    "scenario": "给定外部消息任务到期且服务可用；当调度投递；那么按稳定标识发送并记录成功尝试。",
+    "fr": [
+      "FR-23"
+    ],
+    "uc": [
+      "UC-23"
+    ],
+    "spec": [
+      "SPEC-23"
+    ],
+    "rules": [
+      "BR-17",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-41",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-45",
+      "fr": [
+        "FR-23"
+      ],
+      "uc": [
+        "UC-23"
+      ],
+      "spec": [
+        "SPEC-23"
+      ],
+      "rules": [
+        "BR-17",
+        "BR-26",
+        "BR-27",
+        "BR-28",
+        "BR-35"
+      ],
+      "scenario": "给定外部消息任务到期且服务可用；当调度投递；那么按稳定标识发送并记录成功尝试。",
+      "implementation": "core/services.py: run_jobs、process_delivery、record_manual_contact",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_manual_contact_is_append_only_and_scoped",
+          "line": 216,
+          "assertion_lines": [
+            217,
+            218
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-46",
+    "scenario": "给定外部服务连续不可用；当完成首发及3次重试；那么任务失败且4次尝试可查，原预约仍有效并可追加人工联系。",
+    "fr": [
+      "FR-23"
+    ],
+    "uc": [
+      "UC-23"
+    ],
+    "spec": [
+      "SPEC-23"
+    ],
+    "rules": [
+      "BR-17",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-41",
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-46",
+      "fr": [
+        "FR-23"
+      ],
+      "uc": [
+        "UC-23"
+      ],
+      "spec": [
+        "SPEC-23"
+      ],
+      "rules": [
+        "BR-17",
+        "BR-26",
+        "BR-27",
+        "BR-28",
+        "BR-35"
+      ],
+      "scenario": "给定外部服务连续不可用；当完成首发及3次重试；那么任务失败且4次尝试可查，原预约仍有效并可追加人工联系。",
+      "implementation": "core/services.py: run_jobs、process_delivery、record_manual_contact",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_delivery_failure_does_not_rollback_business",
+          "line": 159,
+          "assertion_lines": [
+            162
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-47",
+    "scenario": "给定已有真实时间结构的模拟借还与日历状态；当计算合法区间；那么计划与实际分列，分子分母按同一可服务口径计算。",
+    "fr": [
+      "FR-24"
+    ],
+    "uc": [
+      "UC-24"
+    ],
+    "spec": [
+      "SPEC-24"
+    ],
+    "rules": [
+      "BR-05",
+      "BR-25",
+      "BR-29",
+      "BR-33",
+      "BR-34"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-47",
+      "fr": [
+        "FR-24"
+      ],
+      "uc": [
+        "UC-24"
+      ],
+      "spec": [
+        "SPEC-24"
+      ],
+      "rules": [
+        "BR-05",
+        "BR-25",
+        "BR-29",
+        "BR-33",
+        "BR-34"
+      ],
+      "scenario": "给定已有真实时间结构的模拟借还与日历状态；当计算合法区间；那么计划与实际分列，分子分母按同一可服务口径计算。",
+      "implementation": "core/reports.py: utilization；core/views.py: reports",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_numeric_utilization_distinguishes_actual_and_planned",
+          "line": 219,
+          "assertion_lines": [
+            221
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-48",
+    "scenario": "给定可服务时数为零或非法区间；当计算；那么分别显示不适用或拒绝非法区间，不产生虚假利用率。",
+    "fr": [
+      "FR-24"
+    ],
+    "uc": [
+      "UC-24"
+    ],
+    "spec": [
+      "SPEC-24"
+    ],
+    "rules": [
+      "BR-05",
+      "BR-25",
+      "BR-29",
+      "BR-33",
+      "BR-34"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-48",
+      "fr": [
+        "FR-24"
+      ],
+      "uc": [
+        "UC-24"
+      ],
+      "spec": [
+        "SPEC-24"
+      ],
+      "rules": [
+        "BR-05",
+        "BR-25",
+        "BR-29",
+        "BR-33",
+        "BR-34"
+      ],
+      "scenario": "给定可服务时数为零或非法区间；当计算；那么分别显示不适用或拒绝非法区间，不产生虚假利用率。",
+      "implementation": "core/reports.py: utilization；core/views.py: reports",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_report_zero_denominator",
+          "line": 197,
+          "assertion_lines": [
+            198
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "原断言只有capacity>=0，不证明零分母显示不适用或全部非法窗口；保留待补验范围。"
+  },
+  {
+    "ac": "AC-49",
+    "scenario": "给定有权限的异常及合法附件；当上传再读取；那么摘要一致，下载须认证且保留读写事件。",
+    "fr": [
+      "FR-25"
+    ],
+    "uc": [
+      "UC-25"
+    ],
+    "spec": [
+      "SPEC-25"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-32",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-49",
+      "fr": [
+        "FR-25"
+      ],
+      "uc": [
+        "UC-25"
+      ],
+      "spec": [
+        "SPEC-25"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29",
+        "BR-32"
+      ],
+      "scenario": "给定有权限的异常及合法附件；当上传再读取；那么摘要一致，下载须认证且保留读写事件。",
+      "implementation": "core/services.py: upload_evidence；core/views.py: evidence_download",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_evidence_access_and_hash",
+          "line": 176,
+          "assertion_lines": [
+            177,
+            178,
+            179
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "原引用验证上传摘要与部分越权，不证明下载内容摘要及全部读取审计；保留待补验范围。"
+  },
+  {
+    "ac": "AC-50",
+    "scenario": "给定其他普通用户或伪装扩展名文件；当下载/上传；那么拒绝，未生成公开证据地址。",
+    "fr": [
+      "FR-25"
+    ],
+    "uc": [
+      "UC-25"
+    ],
+    "spec": [
+      "SPEC-25"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-32",
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-50",
+      "fr": [
+        "FR-25"
+      ],
+      "uc": [
+        "UC-25"
+      ],
+      "spec": [
+        "SPEC-25"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29",
+        "BR-32"
+      ],
+      "scenario": "给定其他普通用户或伪装扩展名文件；当下载/上传；那么拒绝，未生成公开证据地址。",
+      "implementation": "core/services.py: upload_evidence；core/views.py: evidence_download",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0020_invalid_header_only_pdf_rejected",
+          "line": 171,
+          "assertion_lines": [
+            174,
+            175
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-51",
+    "scenario": "给定本人存在多种历史预约；当按设备、实验室、日期和状态筛选；那么仅返回匹配且可访问的记录。",
+    "fr": [
+      "FR-26"
+    ],
+    "uc": [
+      "UC-26"
+    ],
+    "spec": [
+      "SPEC-26"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-51",
+      "fr": [
+        "FR-26"
+      ],
+      "uc": [
+        "UC-26"
+      ],
+      "spec": [
+        "SPEC-26"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29",
+        "BR-31",
+        "BR-35"
+      ],
+      "scenario": "给定本人存在多种历史预约；当按设备、实验室、日期和状态筛选；那么仅返回匹配且可访问的记录。",
+      "implementation": "core/views.py: bookings、booking",
+      "tests": [
+        {
+          "path": "core/miniapi_tests.py",
+          "class": "MiniApiTests",
+          "function": "test_resource_search_and_lab_filter",
+          "line": 112,
+          "assertion_lines": [
+            114,
+            115
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "本轮改用预约历史组合筛选和本人隔离断言，不再以资源目录筛选代替。",
+    "current_test": "core/logic_alignment_tests.py:61 test_ac51_history_filters_apply_to_bookings_and_owner",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-52",
+    "scenario": "给定另一普通用户预约编号；当直接访问；那么返回不可访问，不泄露借还事实。",
+    "fr": [
+      "FR-26"
+    ],
+    "uc": [
+      "UC-26"
+    ],
+    "spec": [
+      "SPEC-26"
+    ],
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-52",
+      "fr": [
+        "FR-26"
+      ],
+      "uc": [
+        "UC-26"
+      ],
+      "spec": [
+        "SPEC-26"
+      ],
+      "rules": [
+        "BR-26",
+        "BR-29",
+        "BR-31",
+        "BR-35"
+      ],
+      "scenario": "给定另一普通用户预约编号；当直接访问；那么返回不可访问，不泄露借还事实。",
+      "implementation": "core/views.py: bookings、booking",
+      "tests": [
+        {
+          "path": "core/tests.py",
+          "class": "BusinessTests",
+          "function": "test_object_privacy",
+          "line": 186,
+          "assertion_lines": [
+            187
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-53",
+    "scenario": "给定设备已有普通自动确认预约；当管理员升级风险或资格要求；那么预约仍占用原时段并标记待复核，不能交接，复核历史追加且原决定保持不变。",
+    "fr": [
+      "FR-08",
+      "FR-09",
+      "FR-11",
+      "FR-18",
+      "FR-27"
+    ],
+    "uc": [
+      "UC-08",
+      "UC-09",
+      "UC-11",
+      "UC-18",
+      "UC-27"
+    ],
+    "spec": [
+      "SPEC-08",
+      "SPEC-09",
+      "SPEC-11",
+      "SPEC-18",
+      "SPEC-27"
+    ],
+    "rules": [
+      "BR-36"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-53",
+      "fr": [
+        "FR-08",
+        "FR-09",
+        "FR-11",
+        "FR-18"
+      ],
+      "uc": [
+        "UC-08",
+        "UC-09",
+        "UC-11",
+        "UC-18"
+      ],
+      "spec": [
+        "SPEC-08",
+        "SPEC-09",
+        "SPEC-11",
+        "SPEC-18"
+      ],
+      "rules": [
+        "BR-36"
+      ],
+      "scenario": "给定设备已有普通自动确认预约；当管理员升级风险或资格要求；那么预约仍占用原时段并标记待复核，不能交接，复核历史追加且原决定保持不变。",
+      "implementation": "core/services.py: approve; core/services.py: checkout; core/services.py: start_room; core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0002_upgrade_requires_recheck_preserves_original_decision",
+          "line": 81,
+          "assertion_lines": [
+            85,
+            86,
+            88,
+            89,
+            90
+          ]
+        },
+        {
+          "path": "core/independent_tests.py",
+          "class": "IndependentAcceptance",
+          "function": "test_recheck_during_existing_pickup_grace",
+          "line": 37,
+          "assertion_lines": [
+            43
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-54",
+    "scenario": "给定普通用户报告无关联故障；当管理员尚未核实；那么保留报告但不无条件阻断资源；核实确认后阻断并通知受影响人。",
+    "fr": [
+      "FR-13",
+      "FR-14"
+    ],
+    "uc": [
+      "UC-13",
+      "UC-14"
+    ],
+    "spec": [
+      "SPEC-13",
+      "SPEC-14"
+    ],
+    "rules": [
+      "BR-37"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-54",
+      "fr": [
+        "FR-13",
+        "FR-14"
+      ],
+      "uc": [
+        "UC-13",
+        "UC-14"
+      ],
+      "spec": [
+        "SPEC-13",
+        "SPEC-14"
+      ],
+      "rules": [
+        "BR-37"
+      ],
+      "scenario": "给定普通用户报告无关联故障；当管理员尚未核实；那么保留报告但不无条件阻断资源；核实确认后阻断并通知受影响人。",
+      "implementation": "core/services.py: report_incident; core/services.py: verify_incident",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0005_unrelated_report_does_not_block_but_authorized_report_does",
+          "line": 92,
+          "assertion_lines": [
+            94,
+            96
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-55",
+    "scenario": "给定前人逾期且后人原宽限内到场；当管理员登记延误等待；那么保留到场和前序依据，原结束不变；前人真实归还后可于原结束前交接。",
+    "fr": [
+      "FR-09",
+      "FR-11"
+    ],
+    "uc": [
+      "UC-09",
+      "UC-11"
+    ],
+    "spec": [
+      "SPEC-09",
+      "SPEC-11"
+    ],
+    "rules": [
+      "BR-38"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-55",
+      "fr": [
+        "FR-09",
+        "FR-11"
+      ],
+      "uc": [
+        "UC-09",
+        "UC-11"
+      ],
+      "spec": [
+        "SPEC-09",
+        "SPEC-11"
+      ],
+      "rules": [
+        "BR-38"
+      ],
+      "scenario": "给定前人逾期且后人原宽限内到场；当管理员登记延误等待；那么保留到场和前序依据，原结束不变；前人真实归还后可于原结束前交接。",
+      "implementation": "core/services.py: checkout; core/services.py: start_room",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0007_delay_coordination_releases_no_extra_time",
+          "line": 98,
+          "assertion_lines": [
+            104,
+            107
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-56",
+    "scenario": "给定固定设备依赖一间场地；当不同申请人先后或并发申请重叠设备与场地；那么最多一项形成有效承诺；可移动设备不自动占场地。",
+    "fr": [
+      "FR-03",
+      "FR-04",
+      "FR-05",
+      "FR-08",
+      "FR-18"
+    ],
+    "uc": [
+      "UC-03",
+      "UC-04",
+      "UC-05",
+      "UC-08",
+      "UC-18"
+    ],
+    "spec": [
+      "SPEC-03",
+      "SPEC-04",
+      "SPEC-05",
+      "SPEC-08",
+      "SPEC-18"
+    ],
+    "rules": [
+      "BR-39"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-56",
+      "fr": [
+        "FR-03",
+        "FR-04",
+        "FR-05",
+        "FR-08",
+        "FR-18"
+      ],
+      "uc": [
+        "UC-03",
+        "UC-04",
+        "UC-05",
+        "UC-08",
+        "UC-18"
+      ],
+      "spec": [
+        "SPEC-03",
+        "SPEC-04",
+        "SPEC-05",
+        "SPEC-08",
+        "SPEC-18"
+      ],
+      "rules": [
+        "BR-39"
+      ],
+      "scenario": "给定固定设备依赖一间场地；当不同申请人先后或并发申请重叠设备与场地；那么最多一项形成有效承诺；可移动设备不自动占场地。",
+      "implementation": "core/services.py: availability；core/views.py: resources; core/services.py: create_reservation、validate; core/services.py: create_reservation、validate; core/services.py: approve; core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0022_fixed_equipment_checks_both_booking_directions",
+          "line": 134,
+          "assertion_lines": [
+            137,
+            140
+          ]
+        },
+        {
+          "path": "core/independent_tests.py",
+          "class": "IndependentAcceptance",
+          "function": "test_lab_lock_serializes_cross_resource_conflict",
+          "line": 58,
+          "assertion_lines": [
+            70
+          ]
+        },
+        {
+          "path": "core/independent_tests.py",
+          "class": "IndependentAcceptance",
+          "function": "test_overdue_fixed_equipment_blocks_next_room_start",
+          "line": 52,
+          "assertion_lines": [
+            55
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-57",
+    "scenario": "给定当天存在已确认预约；当系统管理员登记单日关闭；那么新增查询和申请拒绝，原预约待协调并通知，禁止交接。",
+    "fr": [
+      "FR-03",
+      "FR-04",
+      "FR-05",
+      "FR-08",
+      "FR-09",
+      "FR-11",
+      "FR-20",
+      "FR-27"
+    ],
+    "uc": [
+      "UC-03",
+      "UC-04",
+      "UC-05",
+      "UC-08",
+      "UC-09",
+      "UC-11",
+      "UC-20",
+      "UC-27"
+    ],
+    "spec": [
+      "SPEC-03",
+      "SPEC-04",
+      "SPEC-05",
+      "SPEC-08",
+      "SPEC-09",
+      "SPEC-11",
+      "SPEC-20",
+      "SPEC-27"
+    ],
+    "rules": [
+      "BR-40"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-57",
+      "fr": [
+        "FR-03",
+        "FR-04",
+        "FR-05",
+        "FR-08",
+        "FR-09",
+        "FR-11",
+        "FR-20"
+      ],
+      "uc": [
+        "UC-03",
+        "UC-04",
+        "UC-05",
+        "UC-08",
+        "UC-09",
+        "UC-11",
+        "UC-20"
+      ],
+      "spec": [
+        "SPEC-03",
+        "SPEC-04",
+        "SPEC-05",
+        "SPEC-08",
+        "SPEC-09",
+        "SPEC-11",
+        "SPEC-20"
+      ],
+      "rules": [
+        "BR-40"
+      ],
+      "scenario": "给定当天存在已确认预约；当系统管理员登记单日关闭；那么新增查询和申请拒绝，原预约待协调并通知，禁止交接。",
+      "implementation": "core/services.py: availability；core/views.py: resources; core/services.py: create_reservation、validate; core/services.py: create_reservation、validate; core/services.py: approve; core/services.py: checkout; core/services.py: start_room; core/services.py: save_policy、change_opening",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0021_single_day_closure_preserves_other_days",
+          "line": 126,
+          "assertion_lines": [
+            130,
+            131,
+            132
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-58",
+    "scenario": "给定申请临近开始且仍待审核；当后台扫描或重启补扫；那么主岗和备岗收到待办通知，同日不重复生成。",
+    "fr": [
+      "FR-08",
+      "FR-19",
+      "FR-23"
+    ],
+    "uc": [
+      "UC-08",
+      "UC-19",
+      "UC-23"
+    ],
+    "spec": [
+      "SPEC-08",
+      "SPEC-19",
+      "SPEC-23"
+    ],
+    "rules": [
+      "BR-41"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-58",
+      "fr": [
+        "FR-08",
+        "FR-19",
+        "FR-23"
+      ],
+      "uc": [
+        "UC-08",
+        "UC-19",
+        "UC-23"
+      ],
+      "spec": [
+        "SPEC-08",
+        "SPEC-19",
+        "SPEC-23"
+      ],
+      "rules": [
+        "BR-41"
+      ],
+      "scenario": "给定申请临近开始且仍待审核；当后台扫描或重启补扫；那么主岗和备岗收到待办通知，同日不重复生成。",
+      "implementation": "core/services.py: approve; core/services.py: grant_user; core/services.py: run_jobs、process_delivery、record_manual_contact",
+      "tests": [
+        {
+          "path": "core/operations_tests.py",
+          "class": "OperationsRegression",
+          "function": "test_escalation_is_deduplicated_and_visible_to_backup_manager",
+          "line": 79,
+          "assertion_lines": [
+            85,
+            86
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-59",
+    "scenario": "给定归还登记缺件；当本人查看异常并追加异议；那么可见本人必要事实与证据，追加记录保留原事实，不能访问他人异常或编辑内部工单。",
+    "fr": [
+      "FR-10",
+      "FR-13",
+      "FR-14",
+      "FR-25"
+    ],
+    "uc": [
+      "UC-10",
+      "UC-13",
+      "UC-14",
+      "UC-25"
+    ],
+    "spec": [
+      "SPEC-10",
+      "SPEC-13",
+      "SPEC-14",
+      "SPEC-25"
+    ],
+    "rules": [
+      "BR-42"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-59",
+      "fr": [
+        "FR-10",
+        "FR-13",
+        "FR-14",
+        "FR-25"
+      ],
+      "uc": [
+        "UC-10",
+        "UC-13",
+        "UC-14",
+        "UC-25"
+      ],
+      "spec": [
+        "SPEC-10",
+        "SPEC-13",
+        "SPEC-14",
+        "SPEC-25"
+      ],
+      "rules": [
+        "BR-42"
+      ],
+      "scenario": "给定归还登记缺件；当本人查看异常并追加异议；那么可见本人必要事实与证据，追加记录保留原事实，不能访问他人异常或编辑内部工单。",
+      "implementation": "core/services.py: return_equipment; core/services.py: report_incident; core/services.py: verify_incident; core/services.py: upload_evidence；core/views.py: evidence_download",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0024_responses_append_and_reviewer_is_independent",
+          "line": 142,
+          "assertion_lines": [
+            146,
+            147
+          ]
+        },
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0019_borrower_can_access_own_return_incident_only",
+          "line": 119,
+          "assertion_lines": [
+            123,
+            124
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-60",
+    "scenario": "给定原维修人员停用且工单未关闭；当管理员重新指派有效人员；那么追加指派事件并通知，新执行人可继续，原过程不覆盖。",
+    "fr": [
+      "FR-15",
+      "FR-16",
+      "FR-17"
+    ],
+    "uc": [
+      "UC-15",
+      "UC-16",
+      "UC-17"
+    ],
+    "spec": [
+      "SPEC-15",
+      "SPEC-16",
+      "SPEC-17"
+    ],
+    "rules": [
+      "BR-43"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-60",
+      "fr": [
+        "FR-15",
+        "FR-16",
+        "FR-17"
+      ],
+      "uc": [
+        "UC-15",
+        "UC-16",
+        "UC-17"
+      ],
+      "spec": [
+        "SPEC-15",
+        "SPEC-16",
+        "SPEC-17"
+      ],
+      "rules": [
+        "BR-43"
+      ],
+      "scenario": "给定原维修人员停用且工单未关闭；当管理员重新指派有效人员；那么追加指派事件并通知，新执行人可继续，原过程不覆盖。",
+      "implementation": "core/services.py: create_work_order; core/services.py: update_work; core/services.py: accept_work",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0025_reassignment_after_technician_deactivation",
+          "line": 149,
+          "assertion_lines": [
+            156
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-61",
+    "scenario": "给定已确认预约后撤销角色、账号或培训；当办理交接；那么拒绝开始；若已使用则允许管理员接收真实归还。",
+    "fr": [
+      "FR-03",
+      "FR-09",
+      "FR-10",
+      "FR-11",
+      "FR-12",
+      "FR-19",
+      "FR-27"
+    ],
+    "uc": [
+      "UC-03",
+      "UC-09",
+      "UC-10",
+      "UC-11",
+      "UC-12",
+      "UC-19",
+      "UC-27"
+    ],
+    "spec": [
+      "SPEC-03",
+      "SPEC-09",
+      "SPEC-10",
+      "SPEC-11",
+      "SPEC-12",
+      "SPEC-19",
+      "SPEC-27"
+    ],
+    "rules": [
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-61",
+      "fr": [
+        "FR-03",
+        "FR-09",
+        "FR-10",
+        "FR-11",
+        "FR-12",
+        "FR-19"
+      ],
+      "uc": [
+        "UC-03",
+        "UC-09",
+        "UC-10",
+        "UC-11",
+        "UC-12",
+        "UC-19"
+      ],
+      "spec": [
+        "SPEC-03",
+        "SPEC-09",
+        "SPEC-10",
+        "SPEC-11",
+        "SPEC-12",
+        "SPEC-19"
+      ],
+      "rules": [
+        "BR-44"
+      ],
+      "scenario": "给定已确认预约后撤销角色、账号或培训；当办理交接；那么拒绝开始；若已使用则允许管理员接收真实归还。",
+      "implementation": "core/services.py: availability；core/views.py: resources; core/services.py: checkout; core/services.py: return_equipment; core/services.py: start_room; core/services.py: end_room; core/services.py: grant_user",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0001_inactive_borrower_cannot_collect",
+          "line": 29,
+          "assertion_lines": [
+            31,
+            33
+          ]
+        },
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0043_revocation_notifies_and_blocks",
+          "line": 158,
+          "assertion_lines": [
+            162,
+            163
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-62",
+    "scenario": "给定已有归还记录；当用不同检查结果重试；那么说明本次内容未保存并引导追加异议；相同内容返回原凭据。",
+    "fr": [
+      "FR-06",
+      "FR-09",
+      "FR-10",
+      "FR-11",
+      "FR-12",
+      "FR-26"
+    ],
+    "uc": [
+      "UC-06",
+      "UC-09",
+      "UC-10",
+      "UC-11",
+      "UC-12",
+      "UC-26"
+    ],
+    "spec": [
+      "SPEC-06",
+      "SPEC-09",
+      "SPEC-10",
+      "SPEC-11",
+      "SPEC-12",
+      "SPEC-26"
+    ],
+    "rules": [
+      "BR-45"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-62",
+      "fr": [
+        "FR-06",
+        "FR-09",
+        "FR-10",
+        "FR-11",
+        "FR-12",
+        "FR-26"
+      ],
+      "uc": [
+        "UC-06",
+        "UC-09",
+        "UC-10",
+        "UC-11",
+        "UC-12",
+        "UC-26"
+      ],
+      "spec": [
+        "SPEC-06",
+        "SPEC-09",
+        "SPEC-10",
+        "SPEC-11",
+        "SPEC-12",
+        "SPEC-26"
+      ],
+      "rules": [
+        "BR-45"
+      ],
+      "scenario": "给定已有归还记录；当用不同检查结果重试；那么说明本次内容未保存并引导追加异议；相同内容返回原凭据。",
+      "implementation": "core/views.py: booking；core/services.py: review_note; core/services.py: checkout; core/services.py: return_equipment; core/services.py: start_room; core/services.py: end_room; core/views.py: bookings、booking",
+      "tests": [
+        {
+          "path": "core/remediation_tests.py",
+          "class": "RemediationTests",
+          "function": "test_aud0014_changed_return_is_not_silently_accepted",
+          "line": 165,
+          "assertion_lines": [
+            168,
+            169
+          ]
+        },
+        {
+          "path": "core/operations_tests.py",
+          "class": "OperationsRegression",
+          "function": "test_missing_quantity_retry_preserves_one_return_fact",
+          "line": 41,
+          "assertion_lines": [
+            43,
+            47
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-63",
+    "scenario": "给定业务已提交且真实消息适配器缺失；当后台发送；那么记录失败重试且预约保留，不生成模拟成功回执。",
+    "fr": [
+      "FR-01",
+      "FR-22",
+      "FR-23"
+    ],
+    "uc": [
+      "UC-01",
+      "UC-22",
+      "UC-23"
+    ],
+    "spec": [
+      "SPEC-01",
+      "SPEC-22",
+      "SPEC-23"
+    ],
+    "rules": [
+      "BR-46"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": {
+      "ac": "AC-63",
+      "fr": [
+        "FR-01",
+        "FR-22",
+        "FR-23"
+      ],
+      "uc": [
+        "UC-01",
+        "UC-22",
+        "UC-23"
+      ],
+      "spec": [
+        "SPEC-01",
+        "SPEC-22",
+        "SPEC-23"
+      ],
+      "rules": [
+        "BR-46"
+      ],
+      "scenario": "给定业务已提交且真实消息适配器缺失；当后台发送；那么记录失败重试且预约保留，不生成模拟成功回执。",
+      "implementation": "core/views.py: login_page、identity、callback; core/views.py: notifications; core/services.py: run_jobs、process_delivery、record_manual_contact",
+      "tests": [
+        {
+          "path": "core/operations_tests.py",
+          "class": "OperationsRegression",
+          "function": "test_unconfigured_external_send_retries_without_mock_success",
+          "line": 66,
+          "assertion_lines": [
+            68,
+            69,
+            70,
+            71
+          ]
+        },
+        {
+          "path": "core/operations_tests.py",
+          "class": "OperationsRegression",
+          "function": "test_missing_school_adapter_fails_closed",
+          "line": 49,
+          "assertion_lines": [
+            51,
+            53,
+            54
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": null
+    },
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+  },
+  {
+    "ac": "AC-64",
+    "scenario": "给定源库配置不可用且存在已验证归档；当指定新目标恢复；那么关键表与附件摘要一致、无会话且审计保护仍有效，已有目标拒绝覆盖。",
+    "fr": [],
+    "uc": [],
+    "spec": [],
+    "rules": [],
+    "quality": [
+      "QR-07",
+      "QR-09"
+    ],
+    "constraints": [
+      "DC-01"
+    ],
+    "historical": {
+      "ac": "AC-64",
+      "fr": [
+        "FR-21",
+        "FR-25"
+      ],
+      "uc": [
+        "UC-21",
+        "UC-25"
+      ],
+      "spec": [
+        "SPEC-21",
+        "SPEC-25"
+      ],
+      "rules": [
+        "BR-47"
+      ],
+      "scenario": "给定源库配置不可用且存在已验证归档；当指定新目标恢复；那么关键表与附件摘要一致、无会话且审计保护仍有效，已有目标拒绝覆盖。",
+      "implementation": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py; core/services.py: upload_evidence；core/views.py: evidence_download",
+      "tests": [
+        {
+          "path": "core/operations_tests.py",
+          "class": "OperationsRegression",
+          "function": "test_restore_archive_rejects_escape_and_tampering",
+          "line": 96,
+          "assertion_lines": [
+            108
+          ]
+        }
+      ],
+      "result": "通过（相关关键断言；不等同真实环境全面验收）",
+      "evidence": "证据/final-backend.log",
+      "additional_evidence": "证据/offline-recovery-result.json"
+    },
+    "coverage": "运维约束历史证据，非用户目标用例",
+    "limits": "关联运行恢复DC-01/QR-07/09；历史同实例恢复证据，不计本轮实际执行，不证明跨主机灾难恢复。",
+    "implementation": "tools/restore_archive.py: restore；tools/backup_restore.py；tools/provision_app_role.py"
+  },
+  {
+    "ac": "AC-65",
+    "scenario": "给定已确认且待复核预约仍在原领取截止内、当前条件满足；当非本人授权管理员复核通过；那么追加复核记录并解除当前标记，保留原计划与初始决定，不新增占用。",
+    "fr": [
+      "FR-27"
+    ],
+    "uc": [
+      "UC-27"
+    ],
+    "spec": [
+      "SPEC-27"
+    ],
+    "rules": [
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-33",
+      "BR-36",
+      "BR-37",
+      "BR-40",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_test": "core/logic_alignment_tests.py:83 test_ac65_recheck_appends_without_replacing_initial_decision",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log",
+    "additional_current_tests": [
+      {
+        "location": "core/logic_alignment_tests.py:138 test_current_recheck_does_not_add_to_full_future_category_quota",
+        "scope": "设备及场地：原开始后宽限内，另有3项合法未来预约时复核通过；未来数仍为3。",
+        "evidence": "证据/quota-recheck-before.log；证据/logic-final-backend.log"
+      }
+    ]
+  },
+  {
+    "ac": "AC-66",
+    "scenario": "给定待复核预约条件仍不满足或已超过领取截止；当请求通过；那么拒绝通过且保留原占用和待复核，除非管理员明确作出取消决定；不覆盖原审批。",
+    "fr": [
+      "FR-27"
+    ],
+    "uc": [
+      "UC-27"
+    ],
+    "spec": [
+      "SPEC-27"
+    ],
+    "rules": [
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-33",
+      "BR-36",
+      "BR-37",
+      "BR-40",
+      "BR-44"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_test": "core/logic_alignment_tests.py:101 test_ac66_failed_recheck_keeps_commitment_until_explicit_cancel",
+    "current_result": "本轮针对性运行通过",
+    "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  }
+]

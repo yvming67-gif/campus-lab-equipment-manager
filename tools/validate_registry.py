@@ -6,14 +6,24 @@ ROOT=Path(__file__).resolve().parents[1]
 d=json.loads((ROOT/"docs/specification.json").read_text("utf-8"));schema=json.loads((ROOT/"models/schema.json").read_text("utf-8"));mapping=json.loads((ROOT/"docs/implementation_map.json").read_text("utf-8"))
 ids=lambda key:{x["id"] for x in d[key]}
 uc=ids("cases");br=ids("rules");qr=ids("quality");ac=ids("acceptance");fr={c["fr"] for c in d["cases"]};spec={c["spec"] for c in d["cases"]};problems=ids("problems")
-assert len(uc)==26 and len(fr)==26 and len(spec)==26 and len(br)==47 and len(qr)==11 and len(ac)==64
+assert uc=={f'UC-{n:02d}' for n in range(1,28)}
+assert len(fr)==len(spec)==27 and len(br)==46 and len(qr)==11 and len(ac)==66
+assert {c['id'] for c in d['constraints']}=={'DC-01'} and d['constraints'][0]['legacy_id']=='BR-47'
 assert set(mapping)==uc
+baseline=json.loads((ROOT/'docs/baseline.json').read_text('utf-8'))
+assert {c['id']:c['actors'] for c in baseline['use_cases']}=={c['id']:c['actors'] for c in d['cases']}
+for key,value in mapping.items():
+    locations=[x.strip() for x in value.split('；') if x.strip()]
+    assert len(locations)==len(set(locations)),(key,'duplicate implementation locations')
 for case in d["cases"]:
     assert set(case["rules"])<=br and set(case["quality"])<=qr
     assert case["ac_normal"] in ac and case["ac_exception"] in ac
     assert case["steps"] and case["alternatives"] and case["errors"]
     steps={int(re.match(r"(\d+)",x).group(1)) for x in case["steps"]}
+    labels=[re.match(r'(\d+[a-z]) ',p).group(1) for p in case['alternatives']+case['errors']]
+    assert len(labels)==len(set(labels)),case['id']
     for path in case["alternatives"]+case["errors"]:assert int(re.match(r"(\d+)",path).group(1)) in steps
+    assert all(case.get(key) for key in ['version','goal','primary','secondary','stakeholders','business_cases','improved_steps','trigger','pre','post','minimum_guarantee','field_ids','outputs','entities','permissions','time_constraints','quality','constraints','acceptance_ids','sources','pending'])
 for row in d["trace"]:assert row["problem"] in problems and row["fr"] in fr and row["uc"] in uc and row["spec"] in spec and set(row["rules"])<=br and set(row["ac"])<=ac
 assert {r["problem"] for r in d["trace"]}==problems
 assert {r["fr"] for r in d["trace"]}==fr
@@ -31,13 +41,33 @@ assert (ROOT/"models/campus_lab.dbml").read_text("utf-8").count("Ref: ")==len(sc
 assert (ROOT/"models/campus_lab.mmd").read_text("utf-8").count("--")==len(schema["relationships"])
 fig=ROOT/"models/图形源文件/图4-1-系统总用例图.drawio";tree=ET.parse(fig);cells={c.attrib["id"]:c for c in tree.iter("mxCell")};assert uc<=set(cells)
 for uid in uc:
-    c=cells[uid];assert "ellipse" in c.attrib["style"];g=c.find("mxGeometry");x,y,w,h=[float(g.attrib[k]) for k in ["x","y","width","height"]];assert 85<=x and x+w<=423 and 4<=y and y+h<=664
+    c=cells[uid];assert "ellipse" in c.attrib["style"];g=c.find("mxGeometry");x,y,w,h=[float(g.attrib[k]) for k in ["x","y","width","height"]];assert 85<=x and x+w<=423 and 4<=y and y+h<=700
 for f in (ROOT/"core").rglob("*.py"):ast.parse(f.read_text("utf-8"))
 for f in (ROOT/"models/图形源文件").glob("*.drawio"):ET.parse(f)
 # 源码定位确实存在，不仅是编号匹配。
 for key,ref in mapping.items():
     for path in re.findall(r"core/[A-Za-z0-9_/]+\.py",ref):assert (ROOT/path).exists(),(key,path)
-print("PASS: 26 FR/UC/SPEC, 47 BR, 11 QR, 64 AC; full trace, exported models/FK, editable UML and source locations")
+sources={s['id'] for s in d['sources']};bucs={b['id'] for b in d['business_use_cases']}
+messages={r['id'] for f in d['business_flows'] for r in f['rows'] if r['kind']=='message'}
+improved={m for m in messages if m.startswith('TO-')}
+# This one interaction remains external to the software: the department asks
+# the director for information. All other improved messages have a software goal.
+manual_only={'TO-S01'}
+assert {m for c in d['cases'] for m in c['improved_steps']}==improved-manual_only
+fields={f['name'] for f in d['fields']};model_names={m['model'] for m in schema['models']}
+for c in d['cases']:
+    assert set(c['sources'])<=sources and set(c['business_cases'])<=bucs
+    assert set(c['improved_steps'])<=messages and set(c['entities'])<=model_names
+    assert set(c['field_ids'])<=fields
+    for bid in c['business_cases']:
+        b=next(x for x in d['business_use_cases'] if x['id']==bid)
+        assert int(c['id'][3:]) in b['ucs']
+for a in d['acceptance']:
+    assert all(term in a['scenario'] for term in ['给定','当','那么'])
+    if a['id']=='AC-64':
+        assert not a['uc'] and not a['fr'] and a['constraints']==['DC-01'] and 'QR-07' in a['quality']
+    else:assert a['uc'] and set(a['uc'])<=uc and set(a['rules'])<=br
+print("PASS: 27 FR/UC/SPEC, 46 BR + DC-01, 11 QR, 66 AC; source/business/message/field/model references and explicit operational trace")
 
 # Full-field ERD is verified against the exported application model, not a manual table list.
 import hashlib

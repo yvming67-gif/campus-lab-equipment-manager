@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="364" viewBox="0 0 507 364"><rect width="100%" height="100%" fill="white"/>
+<rect x="2.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="39.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">报告人</text>
+<polyline points="39.0,36 39.0,359" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="109.25" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="146.25" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">实验室管理员</text>
+<polyline points="146.25,36 146.25,359" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="216.5" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="253.5" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">异常记录</text>
+<polyline points="253.5,36 253.5,359" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="323.75" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="360.75" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">维修支持岗位</text>
+<polyline points="360.75,36 360.75,359" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="431.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="468.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">维修记录</text>
+<polyline points="468.0,36 468.0,359" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="5" y="224" width="497" height="44" fill="none" stroke="#6d7778"/>
+<rect x="5" y="224" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="19.0" y="234.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="39" y="235.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">存在复测或接收安排 尚待核实</text>
+<rect x="2" y="130" width="503" height="191" fill="none" stroke="#6d7778"/>
+<rect x="2" y="130" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="140.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="36" y="141.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">需维修／无需维修</text>
+<polyline points="39.0,67 146.25,67" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,69.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,64.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="0.9583333333333286" y="49.9" width="183.33333333333334" height="12.2" fill="white"/>
+<text x="92.625" y="59.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M01 电话、即时消息或归还时报告现象</text>
+<polyline points="146.25,92 253.5,92" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,92 248.9977644882366,94.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,92 248.9977644882366,89.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="89.54166666666667" y="74.9" width="220.66666666666666" height="12.2" fill="white"/>
+<text x="199.875" y="84.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M02 登记资源、现象与时间（实际表式待核实）</text>
+<polyline points="146.25,117 164.25,117 164.25,123 146.25,123" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,123 150.7522355117634,120.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,123 150.7522355117634,125.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="45.25" y="99.9" width="202.0" height="12.2" fill="white"/>
+<text x="146.25" y="109.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M03 核实现象及是否需维修（职责待核实）</text>
+<polyline points="146.25,161 360.75,161" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,161 356.2477644882366,163.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,161 356.2477644882366,158.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="162.16666666666669" y="143.9" width="182.66666666666666" height="12.2" fill="white"/>
+<text x="253.5" y="153.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M04 [需维修] 电话联系并交付故障信息</text>
+<polyline points="360.75,186 468.0,186" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,186 463.4977644882366,188.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,186 463.4977644882366,183.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="341.375" y="168.9" width="146.0" height="12.2" fill="white"/>
+<text x="414.375" y="178.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M05 人工记录检测和维修情况</text>
+<polyline points="360.75,211 146.25,211" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,211 150.7522355117634,208.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,211 150.7522355117634,213.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="152.5" y="193.9" width="202.0" height="12.2" fill="white"/>
+<text x="253.5" y="203.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M06 交回处理结果；与原异常关联方式未知</text>
+<polyline points="146.25,255 164.25,255 164.25,261 146.25,261" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,261 150.7522355117634,258.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,261 150.7522355117634,263.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="49.91666666666667" y="237.9" width="192.66666666666666" height="12.2" fill="white"/>
+<text x="146.25" y="247.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M07 复测、接收结果；是否独立验收未知</text>
+<polyline points="4,274 503,274" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="286.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[无需维修]</text>
+<polyline points="146.25,308 253.5,308" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,308 248.9977644882366,310.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,308 248.9977644882366,305.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="105.20833333333333" y="290.9" width="189.33333333333334" height="12.2" fill="white"/>
+<text x="199.875" y="300.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M06b 登记核实或处置结果（载体未知）</text>
+<polyline points="146.25,339 39.0,339" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,339 43.50223551176339,336.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,339 43.50223551176339,341.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="-1.0083333333333258" y="321.9" width="220.66666666666666" height="12.2" fill="white"/>
+<text x="109.325" y="331.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-M08 通知处理结果；与预约表状态同步方式未知</text>
+</svg>

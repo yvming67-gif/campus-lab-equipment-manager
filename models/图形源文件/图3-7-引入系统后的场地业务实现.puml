@@ -1,0 +1,30 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 引入系统后的场地业务实现
+participant "负责教师" as L0
+participant "统一预约系统" as L1
+participant "实验室管理员" as L2
+participant "场地实物" as L3
+participant "消息服务" as L4
+L0 -> L1: TO-R01 查询场地时段和容量；设备另申请
+L0 -> L1: TO-R02 提交场地、用途、人数及请求标识
+L1 -> L1: TO-R03 核对教师资格、开放、时段、配额和固定设备依赖
+L1 -> L2: TO-R04 生成待审核任务；不占时段但占个人场地配额
+alt 管理员通过／不通过
+L2 -> L1: TO-R05 [通过] 再校验；竞争成功才形成场地承诺
+else [不通过或出现冲突]
+L1 -> L0: TO-R05b 驳回有决定；冲突失败保持待审核并说明原因
+end
+L1 -> L4: TO-R06 结果与责任记录保存后独立通知
+opt 已确认且负责教师到场
+L0 -> L2: TO-R07 出示负责教师身份和实际人数
+L2 -> L1: TO-R08 复核当前资格、宽限、容量及前序场地/固定设备实际占用
+L2 -> L3: TO-R09 检查初始现场条件；不由软件代替
+opt 条件通过且实际开始
+L2 -> L1: TO-R10 登记实际开始、人数与检查结论
+L0 -> L2: TO-R11 实际结束并交场；管理员现场检查
+L2 -> L1: TO-R12 记录实际结束；异常另记，释放剩余计划占用
+end
+end
+@enduml

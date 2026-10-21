@@ -1,0 +1,15 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 利用信息现状业务实现
+participant "教学管理部门" as L0
+participant "中心主任" as L1
+participant "实验室管理员" as L2
+participant "计划与使用材料" as L3
+L0 -> L1: AS-S01 提出资源利用信息需求（接收方待确认）
+L1 -> L2: AS-S02 说明期间、对象和汇总要求
+L2 -> L3: AS-S03 人工汇集预约表、借还和场地使用记录
+L2 -> L2: AS-S04 核对缺失、重复和口径；能否复原实际时数待核实
+L2 -> L1: AS-S05 提供汇总及缺失资料说明
+L1 -> L0: AS-S06 复核后提供信息及其限制
+@enduml

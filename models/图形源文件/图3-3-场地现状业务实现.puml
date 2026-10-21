@@ -1,0 +1,37 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 场地现状业务实现
+participant "教师" as L0
+participant "实验室管理员" as L1
+participant "场地申请材料" as L2
+participant "场地使用记录" as L3
+participant "场地实物" as L4
+L0 -> L1: AS-R01 询问整间场地、日期与人数
+L1 -> L3: AS-R02 人工查阅场地计划记录
+alt 可安排／不可安排
+L1 -> L0: AS-R03 [可安排] 告知申请要求
+else [不可安排]
+L1 -> L0: AS-R03b 另选时段或结束申请
+end
+opt 继续申请
+L0 -> L2: AS-R04 形成场地用途、时段、负责人与人数材料
+L0 -> L1: AS-R05 交付申请；管理员人工核对安排和容量
+alt 通过／不通过
+L1 -> L3: AS-R06 [通过] 登记批准计划
+L1 -> L0: AS-R06a 告知场地安排；设备是否另借需沟通
+else [不通过]
+L1 -> L0: AS-R06b 告知不通过；结束申请
+end
+opt 已批准且实际到场
+L0 -> L1: AS-R07 负责教师到场交接
+L1 -> L4: AS-R08 现场核对容量及初始状态
+L1 -> L3: AS-R08a 记录实际开始（现状载体与责任待核实）
+opt 已实际开始并请求结束
+L0 -> L1: AS-R09 通知使用结束并交场
+L1 -> L4: AS-R10 现场结束检查
+L1 -> L3: AS-R10a 记录结束及异常（待核实是否实施）
+end
+end
+end
+@enduml

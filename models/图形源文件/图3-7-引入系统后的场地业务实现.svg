@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="489" viewBox="0 0 507 489"><rect width="100%" height="100%" fill="white"/>
+<rect x="2.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="39.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">负责教师</text>
+<polyline points="39.0,36 39.0,484" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="109.25" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="146.25" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">统一预约系统</text>
+<polyline points="146.25,36 146.25,484" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="216.5" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="253.5" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">实验室管理员</text>
+<polyline points="253.5,36 253.5,484" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="323.75" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="360.75" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">场地实物</text>
+<polyline points="360.75,36 360.75,484" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="431.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="468.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">消息服务</text>
+<polyline points="468.0,36 468.0,484" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="2" y="155" width="503" height="91" fill="none" stroke="#6d7778"/>
+<rect x="2" y="155" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="165.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="36" y="166.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">管理员通过／不通过</text>
+<rect x="5" y="371" width="497" height="94" fill="none" stroke="#6d7778"/>
+<rect x="5" y="371" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="19.0" y="381.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="39" y="382.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">条件通过且实际开始</text>
+<rect x="2" y="277" width="503" height="194" fill="none" stroke="#6d7778"/>
+<rect x="2" y="277" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="287.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="36" y="288.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">已确认且负责教师到场</text>
+<polyline points="39.0,67 146.25,67" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,69.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,67 141.7477644882366,64.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="1.9609375" y="49.9" width="181.328125" height="12.2" fill="white"/>
+<text x="92.625" y="59.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R01 查询场地时段和容量；设备另申请</text>
+<polyline points="39.0,92 146.25,92" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,92 141.7477644882366,94.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,92 141.7477644882366,89.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="1.9609375" y="74.9" width="181.328125" height="12.2" fill="white"/>
+<text x="92.625" y="84.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R02 提交场地、用途、人数及请求标识</text>
+<polyline points="146.25,117 164.25,117 164.25,123 146.25,123" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,123 150.7522355117634,120.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,123 150.7522355117634,125.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="22.91927083333333" y="99.9" width="246.66145833333334" height="12.2" fill="white"/>
+<text x="146.25" y="109.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R03 核对教师资格、开放、时段、配额和固定设备依赖</text>
+<polyline points="146.25,142 253.5,142" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,142 248.9977644882366,144.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,142 248.9977644882366,139.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="85.87760416666667" y="124.9" width="227.99479166666666" height="12.2" fill="white"/>
+<text x="199.875" y="134.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R04 生成待审核任务；不占时段但占个人场地配额</text>
+<polyline points="253.5,186 146.25,186" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,186 150.7522355117634,183.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,186 150.7522355117634,188.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="95.54427083333333" y="168.9" width="208.66145833333334" height="12.2" fill="white"/>
+<text x="199.875" y="178.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R05 [通过] 再校验；竞争成功才形成场地承诺</text>
+<polyline points="4,199 503,199" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="211.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[不通过或出现冲突]</text>
+<polyline points="146.25,233 39.0,233" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,233 43.50223551176339,230.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,233 43.50223551176339,235.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="-0.6973958333333314" y="215.9" width="233.99479166666666" height="12.2" fill="white"/>
+<text x="116.3" y="225.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R05b 驳回有决定；冲突失败保持待审核并说明原因</text>
+<polyline points="146.25,264 468.0,264" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,264 463.4977644882366,266.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,264 463.4977644882366,261.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="221.12760416666669" y="246.9" width="171.99479166666666" height="12.2" fill="white"/>
+<text x="307.125" y="256.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R06 结果与责任记录保存后独立通知</text>
+<polyline points="39.0,308 253.5,308" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,308 248.9977644882366,310.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,308 248.9977644882366,305.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="64.91927083333333" y="290.9" width="162.66145833333334" height="12.2" fill="white"/>
+<text x="146.25" y="300.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R07 出示负责教师身份和实际人数</text>
+<polyline points="253.5,333 146.25,333" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,333 150.7522355117634,330.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,333 150.7522355117634,335.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="60.54427083333334" y="315.9" width="278.6614583333333" height="12.2" fill="white"/>
+<text x="199.875" y="325.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R08 复核当前资格、宽限、容量及前序场地/固定设备实际占用</text>
+<polyline points="253.5,358 360.75,358" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,358 356.2477644882366,360.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="360.75,358 356.2477644882366,355.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="216.4609375" y="340.9" width="181.328125" height="12.2" fill="white"/>
+<text x="307.125" y="350.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R09 检查初始现场条件；不由软件代替</text>
+<polyline points="253.5,402 146.25,402" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,402 150.7522355117634,399.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,402 150.7522355117634,404.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="113.87760416666667" y="384.9" width="171.99479166666666" height="12.2" fill="white"/>
+<text x="199.875" y="394.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R10 登记实际开始、人数与检查结论</text>
+<polyline points="39.0,427 253.5,427" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,427 248.9977644882366,429.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="253.5,427 248.9977644882366,424.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="55.5859375" y="409.9" width="181.328125" height="12.2" fill="white"/>
+<text x="146.25" y="419.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R11 实际结束并交场；管理员现场检查</text>
+<polyline points="253.5,452 146.25,452" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,452 150.7522355117634,449.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="146.25,452 150.7522355117634,454.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="85.87760416666667" y="434.9" width="227.99479166666666" height="12.2" fill="white"/>
+<text x="199.875" y="444.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-R12 记录实际结束；异常另记，释放剩余计划占用</text>
+</svg>

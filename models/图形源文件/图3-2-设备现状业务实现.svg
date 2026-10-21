@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="661" viewBox="0 0 507 661"><rect width="100%" height="100%" fill="white"/>
+<rect x="2.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="39.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">学生或教师</text>
+<polyline points="39.0,36 39.0,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="87.8" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="124.8" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">实验室管理员</text>
+<polyline points="124.8,36 124.8,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="173.6" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="210.6" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">纸质申请表</text>
+<polyline points="210.6,36 210.6,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="259.4" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="296.4" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">共享预约表</text>
+<polyline points="296.4,36 296.4,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="345.2" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="382.2" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">借还登记册</text>
+<polyline points="382.2,36 382.2,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="431.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="468.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">设备实物</text>
+<polyline points="468.0,36 468.0,656" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="2" y="105" width="503" height="91" fill="none" stroke="#6d7778"/>
+<rect x="2" y="105" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="115.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="36" y="116.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">可答复有空闲／无空闲</text>
+<rect x="5" y="296" width="497" height="116" fill="none" stroke="#6d7778"/>
+<rect x="5" y="296" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="19.0" y="306.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">alt</text>
+<text x="39" y="307.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">管理员决定通过／不通过</text>
+<rect x="8" y="537" width="491" height="94" fill="none" stroke="#6d7778"/>
+<rect x="8" y="537" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="22.0" y="547.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="42" y="548.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">已完成实际借出并归还</text>
+<rect x="5" y="418" width="497" height="219" fill="none" stroke="#6d7778"/>
+<rect x="5" y="418" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="19.0" y="428.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="39" y="429.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">已获准且实际到场</text>
+<rect x="2" y="202" width="503" height="441" fill="none" stroke="#6d7778"/>
+<rect x="2" y="202" width="28" height="15" fill="white" stroke="#6d7778"/>
+<text x="16.0" y="212.58" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">opt</text>
+<text x="36" y="213.08" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.8" fill="#2a3436">有空闲且申请人继续</text>
+<polyline points="39.0,67 124.8,67" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,67 120.29776448823661,69.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,67 120.29776448823661,64.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="1.8250000000000028" y="49.9" width="170.0" height="12.2" fill="white"/>
+<text x="86.825" y="59.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E01 电话或即时消息询问设备及时段</text>
+<polyline points="124.8,92 296.4,92" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="296.4,92 291.8977644882366,94.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="296.4,92 291.8977644882366,89.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="153.6" y="74.9" width="114.0" height="12.2" fill="white"/>
+<text x="210.6" y="84.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E02 人工查阅计划登记</text>
+<polyline points="124.8,136 39.0,136" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,136 43.50223551176339,133.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,136 43.50223551176339,138.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="4.083333333333329" y="118.9" width="225.33333333333334" height="12.2" fill="white"/>
+<text x="116.75" y="128.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E03 [有空闲] 口头或消息答复，可用答复尚非承诺</text>
+<polyline points="4,149 503,149" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="161.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[无空闲]</text>
+<polyline points="124.8,183 39.0,183" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,183 43.50223551176339,180.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,183 43.50223551176339,185.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="3.2333333333333343" y="165.9" width="157.33333333333334" height="12.2" fill="white"/>
+<text x="81.9" y="175.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E03b 告知无空闲；本次申请结束</text>
+<polyline points="39.0,233 210.6,233" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="210.6,233 206.0977644882366,235.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="210.6,233 206.0977644882366,230.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="77.13333333333333" y="215.9" width="95.33333333333333" height="12.2" fill="white"/>
+<text x="124.8" y="225.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E04 填写纸质材料</text>
+<polyline points="39.0,258 124.8,258" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,258 120.29776448823661,260.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,258 120.29776448823661,255.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="1.8250000000000028" y="240.9" width="170.0" height="12.2" fill="white"/>
+<text x="86.825" y="250.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E05 提交纸表；管理员查阅申请材料</text>
+<polyline points="124.8,283 142.8,283 142.8,289 124.8,289" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,289 129.30223551176337,286.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,289 129.30223551176337,291.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="39.8" y="265.9" width="170.0" height="12.2" fill="white"/>
+<text x="124.8" y="275.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E06 人工核对资格、时段与现有登记</text>
+<polyline points="124.8,327 296.4,327" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="296.4,327 291.8977644882366,329.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="296.4,327 291.8977644882366,324.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="139.93333333333334" y="309.9" width="141.33333333333334" height="12.2" fill="white"/>
+<text x="210.6" y="319.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E07 [通过] 另行录入预约结果</text>
+<polyline points="124.8,352 39.0,352" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,352 43.50223551176339,349.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,352 43.50223551176339,354.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="0.7999999999999972" y="334.9" width="231.0" height="12.2" fill="white"/>
+<text x="116.3" y="344.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E07a 电话或消息告知结果；纸表与共享表分别保留</text>
+<polyline points="7,365 500,365" fill="none" stroke="#6d7778" stroke-width="0.7" stroke-dasharray="3 3"/>
+<text x="50" y="377.115" text-anchor="start" font-family="Microsoft YaHei,sans-serif" font-size="8.9" fill="#2a3436">[不通过]</text>
+<polyline points="124.8,399 39.0,399" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,399 43.50223551176339,396.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,399 43.50223551176339,401.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="3.2333333333333343" y="381.9" width="157.33333333333334" height="12.2" fill="white"/>
+<text x="81.9" y="391.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E07b 告知原因；本次不进入领取</text>
+<polyline points="39.0,449 124.8,449" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,449 120.29776448823661,451.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,449 120.29776448823661,446.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="10.900000000000006" y="431.9" width="142.0" height="12.2" fill="white"/>
+<text x="81.9" y="441.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E08 出示申请依据并请求领取</text>
+<polyline points="124.8,474 468.0,474" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,474 463.4977644882366,476.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,474 463.4977644882366,471.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="216.06666666666666" y="456.9" width="160.66666666666666" height="12.2" fill="white"/>
+<text x="296.4" y="466.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E09 从保管位置取设备并核对实物</text>
+<polyline points="124.8,499 39.0,499" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,499 43.50223551176339,496.82517232944383" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,499 43.50223551176339,501.17482767055617" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="17.73333333333335" y="481.9" width="128.33333333333331" height="12.2" fill="white"/>
+<text x="81.9" y="491.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E09a 实物交接设备与配件</text>
+<polyline points="124.8,524 382.2,524" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="382.2,524 377.6977644882366,526.1748276705562" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="382.2,524 377.6977644882366,521.8251723294438" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="173.16666666666669" y="506.9" width="160.66666666666666" height="12.2" fill="white"/>
+<text x="253.5" y="516.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E10 单独登记借出、借用人及时间</text>
+<polyline points="39.0,568 124.8,568" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,568 120.29776448823661,570.1748276705562" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="124.8,568 120.29776448823661,565.8251723294438" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="29.56666666666667" y="550.9" width="104.66666666666667" height="12.2" fill="white"/>
+<text x="81.9" y="560.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E11 交还设备与配件</text>
+<polyline points="124.8,593 468.0,593" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,593 463.4977644882366,595.1748276705562" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,593 463.4977644882366,590.8251723294438" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="239.39999999999998" y="575.9" width="114.0" height="12.2" fill="white"/>
+<text x="296.4" y="585.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E12 人工检查实际状态</text>
+<polyline points="124.8,618 382.2,618" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="382.2,618 377.6977644882366,620.1748276705562" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="382.2,618 377.6977644882366,615.8251723294438" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="149.83333333333331" y="600.9" width="207.33333333333334" height="12.2" fill="white"/>
+<text x="253.5" y="610.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">AS-E13 登记接收及异常；共享表是否同步待核实</text>
+</svg>

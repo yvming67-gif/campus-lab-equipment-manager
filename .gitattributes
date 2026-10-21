@@ -9,6 +9,10 @@
 *.cmd text eol=crlf
 *.png binary
 *.pdf binary
+*.docx binary
+
+# Preserve the exact bytes and Windows newline sequences of test evidence.
+docs/逻辑整改/证据/*.log -text whitespace=-blank-at-eol,-blank-at-eof
 
 *.js text eol=lf
 *.cjs text eol=lf

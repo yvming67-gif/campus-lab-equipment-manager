@@ -1,0 +1,1538 @@
+[
+  {
+    "id": "TRACE-01",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E01",
+      "TO-R01"
+    ],
+    "fr": "FR-01",
+    "uc": "UC-01",
+    "spec": "SPEC-01",
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-30",
+      "BR-46"
+    ],
+    "data": [
+      "User",
+      "UserRole",
+      "LabGrant",
+      "UserQualification",
+      "AuditEvent"
+    ],
+    "implementation": "core/views.py: login_page、identity、callback",
+    "acceptance": [
+      "AC-01",
+      "AC-02",
+      "AC-63"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-02",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-01"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E01",
+      "TO-R01"
+    ],
+    "fr": "FR-02",
+    "uc": "UC-02",
+    "spec": "SPEC-02",
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-31"
+    ],
+    "data": [
+      "Lab",
+      "Resource",
+      "EquipmentDetail",
+      "RoomDetail",
+      "Accessory"
+    ],
+    "implementation": "core/views.py: resources、resource_detail",
+    "acceptance": [
+      "AC-03",
+      "AC-04"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-03",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-01",
+      "P-02"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E01",
+      "TO-E02",
+      "TO-R01"
+    ],
+    "fr": "FR-03",
+    "uc": "UC-03",
+    "spec": "SPEC-03",
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-29",
+      "BR-39",
+      "BR-40",
+      "BR-44"
+    ],
+    "data": [
+      "Resource",
+      "OpeningPeriod",
+      "CalendarException",
+      "ServicePeriod",
+      "Reservation",
+      "Loan",
+      "RoomUse",
+      "UserQualification"
+    ],
+    "implementation": "core/services.py: availability；core/views.py: resources",
+    "acceptance": [
+      "AC-05",
+      "AC-06",
+      "AC-56",
+      "AC-57",
+      "AC-61"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-04",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-02",
+      "P-03",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07"
+    ],
+    "improved": [
+      "TO-E03",
+      "TO-E04",
+      "TO-E05",
+      "TO-E06",
+      "TO-E07"
+    ],
+    "fr": "FR-04",
+    "uc": "UC-04",
+    "spec": "SPEC-04",
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "data": [
+      "Reservation",
+      "ApprovalDecision",
+      "Policy",
+      "UserQualification",
+      "AuditEvent",
+      "Notification",
+      "Delivery"
+    ],
+    "implementation": "core/services.py: create_reservation、validate",
+    "acceptance": [
+      "AC-07",
+      "AC-08",
+      "AC-56",
+      "AC-57"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-05",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-02",
+      "P-03",
+      "P-07",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-R02",
+      "TO-R03",
+      "TO-R04"
+    ],
+    "fr": "FR-05",
+    "uc": "UC-05",
+    "spec": "SPEC-05",
+    "rules": [
+      "BR-01",
+      "BR-02",
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-11",
+      "BR-12",
+      "BR-14",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-39",
+      "BR-40"
+    ],
+    "data": [
+      "Reservation",
+      "RoomDetail",
+      "Policy",
+      "AuditEvent",
+      "Notification",
+      "Delivery"
+    ],
+    "implementation": "core/services.py: create_reservation、validate",
+    "acceptance": [
+      "AC-09",
+      "AC-10",
+      "AC-56",
+      "AC-57"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-06",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-03",
+      "P-04",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E07",
+      "TO-R06"
+    ],
+    "fr": "FR-06",
+    "uc": "UC-06",
+    "spec": "SPEC-06",
+    "rules": [
+      "BR-08",
+      "BR-15",
+      "BR-26",
+      "BR-29",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "ApprovalDecision",
+      "ReservationReview",
+      "ReviewNote",
+      "Coordination",
+      "AuditEvent"
+    ],
+    "implementation": "core/views.py: booking；core/services.py: review_note",
+    "acceptance": [
+      "AC-11",
+      "AC-12",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-07",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-02",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E07",
+      "TO-R06"
+    ],
+    "fr": "FR-07",
+    "uc": "UC-07",
+    "spec": "SPEC-07",
+    "rules": [
+      "BR-07",
+      "BR-09",
+      "BR-16",
+      "BR-26",
+      "BR-27",
+      "BR-35"
+    ],
+    "data": [
+      "Reservation",
+      "AuditEvent",
+      "Notification",
+      "Delivery"
+    ],
+    "implementation": "core/services.py: cancel",
+    "acceptance": [
+      "AC-13",
+      "AC-14"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-08",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-02",
+      "P-04",
+      "P-08",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E06a",
+      "TO-R05",
+      "TO-R05b"
+    ],
+    "fr": "FR-08",
+    "uc": "UC-08",
+    "spec": "SPEC-08",
+    "rules": [
+      "BR-03",
+      "BR-05",
+      "BR-06",
+      "BR-07",
+      "BR-08",
+      "BR-09",
+      "BR-10",
+      "BR-11",
+      "BR-12",
+      "BR-13",
+      "BR-14",
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-39",
+      "BR-40",
+      "BR-41"
+    ],
+    "data": [
+      "Reservation",
+      "ApprovalDecision",
+      "ReviewNote",
+      "AuditEvent",
+      "Notification",
+      "Delivery"
+    ],
+    "implementation": "core/services.py: approve",
+    "acceptance": [
+      "AC-15",
+      "AC-16",
+      "AC-53",
+      "AC-56",
+      "AC-57",
+      "AC-58"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-09",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-05",
+      "P-08",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-02"
+    ],
+    "as_is": [
+      "AS-E08至AS-E10"
+    ],
+    "improved": [
+      "TO-E08",
+      "TO-E09",
+      "TO-E09a",
+      "TO-E10",
+      "TO-E11",
+      "TO-E10b"
+    ],
+    "fr": "FR-09",
+    "uc": "UC-09",
+    "spec": "SPEC-09",
+    "rules": [
+      "BR-12",
+      "BR-13",
+      "BR-17",
+      "BR-18",
+      "BR-19",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "Loan",
+      "HandoverItem",
+      "EquipmentDetail",
+      "Incident",
+      "Coordination",
+      "AuditEvent",
+      "Notification"
+    ],
+    "implementation": "core/services.py: checkout；core/coordination.py: coordinate、check_dependency",
+    "acceptance": [
+      "AC-17",
+      "AC-18",
+      "AC-53",
+      "AC-55",
+      "AC-57",
+      "AC-61",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-10",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-05",
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-03"
+    ],
+    "as_is": [
+      "AS-E11至AS-E13"
+    ],
+    "improved": [
+      "TO-E12",
+      "TO-E13",
+      "TO-E14",
+      "TO-E15"
+    ],
+    "fr": "FR-10",
+    "uc": "UC-10",
+    "spec": "SPEC-10",
+    "rules": [
+      "BR-18",
+      "BR-20",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-42",
+      "BR-44",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "Loan",
+      "ReturnRecord",
+      "HandoverItem",
+      "EquipmentDetail",
+      "Incident",
+      "IncidentResponse",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: return_equipment",
+    "acceptance": [
+      "AC-19",
+      "AC-20",
+      "AC-59",
+      "AC-61",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-11",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-05",
+      "P-07",
+      "P-08",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-R07",
+      "TO-R08",
+      "TO-R09",
+      "TO-R10"
+    ],
+    "fr": "FR-11",
+    "uc": "UC-11",
+    "spec": "SPEC-11",
+    "rules": [
+      "BR-02",
+      "BR-11",
+      "BR-12",
+      "BR-17",
+      "BR-18",
+      "BR-21",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-36",
+      "BR-38",
+      "BR-40",
+      "BR-44",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "RoomUse",
+      "RoomDetail",
+      "Loan",
+      "Coordination",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: start_room；core/coordination.py: coordinate、check_dependency",
+    "acceptance": [
+      "AC-21",
+      "AC-22",
+      "AC-53",
+      "AC-55",
+      "AC-57",
+      "AC-61",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-12",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-07",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-R11",
+      "TO-R12"
+    ],
+    "fr": "FR-12",
+    "uc": "UC-12",
+    "spec": "SPEC-12",
+    "rules": [
+      "BR-02",
+      "BR-12",
+      "BR-21",
+      "BR-22",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-35",
+      "BR-44",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "RoomUse",
+      "Incident",
+      "AuditEvent",
+      "Notification"
+    ],
+    "implementation": "core/services.py: end_room",
+    "acceptance": [
+      "AC-23",
+      "AC-24",
+      "AC-61",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-13",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M01",
+      "TO-M02",
+      "TO-M03",
+      "TO-M04"
+    ],
+    "fr": "FR-13",
+    "uc": "UC-13",
+    "spec": "SPEC-13",
+    "rules": [
+      "BR-22",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-32",
+      "BR-37",
+      "BR-42"
+    ],
+    "data": [
+      "Incident",
+      "Reservation",
+      "AuditEvent",
+      "Notification",
+      "Delivery"
+    ],
+    "implementation": "core/services.py: report_incident",
+    "acceptance": [
+      "AC-25",
+      "AC-26",
+      "AC-54",
+      "AC-59"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-14",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M04",
+      "TO-M05",
+      "TO-M11"
+    ],
+    "fr": "FR-14",
+    "uc": "UC-14",
+    "spec": "SPEC-14",
+    "rules": [
+      "BR-22",
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-37",
+      "BR-42"
+    ],
+    "data": [
+      "Incident",
+      "IncidentResponse",
+      "Evidence",
+      "WorkOrder",
+      "ServicePeriod",
+      "Reservation",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: verify_incident；core/coordination.py: respond_incident",
+    "acceptance": [
+      "AC-27",
+      "AC-28",
+      "AC-54",
+      "AC-59"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-15",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M06",
+      "TO-M07"
+    ],
+    "fr": "FR-15",
+    "uc": "UC-15",
+    "spec": "SPEC-15",
+    "rules": [
+      "BR-02",
+      "BR-22",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-43"
+    ],
+    "data": [
+      "Incident",
+      "WorkOrder",
+      "WorkOrderEvent",
+      "Reservation",
+      "ServicePeriod",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: create_work_order；core/coordination.py: reassign_work",
+    "acceptance": [
+      "AC-29",
+      "AC-30",
+      "AC-60"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-16",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M07",
+      "TO-M08",
+      "TO-M09"
+    ],
+    "fr": "FR-16",
+    "uc": "UC-16",
+    "spec": "SPEC-16",
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "data": [
+      "WorkOrder",
+      "WorkOrderEvent",
+      "Incident",
+      "AuditEvent",
+      "Notification"
+    ],
+    "implementation": "core/services.py: update_work",
+    "acceptance": [
+      "AC-31",
+      "AC-32",
+      "AC-60"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-17",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M10",
+      "TO-M11",
+      "TO-M11b"
+    ],
+    "fr": "FR-17",
+    "uc": "UC-17",
+    "spec": "SPEC-17",
+    "rules": [
+      "BR-24",
+      "BR-25",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-43"
+    ],
+    "data": [
+      "WorkOrder",
+      "WorkOrderEvent",
+      "Incident",
+      "Resource",
+      "ServicePeriod",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: accept_work",
+    "acceptance": [
+      "AC-33",
+      "AC-34",
+      "AC-60"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-18",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-01",
+      "P-06",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04",
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10",
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-E02",
+      "TO-E04",
+      "TO-R03",
+      "TO-M11"
+    ],
+    "fr": "FR-18",
+    "uc": "UC-18",
+    "spec": "SPEC-18",
+    "rules": [
+      "BR-06",
+      "BR-23",
+      "BR-25",
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-36",
+      "BR-39"
+    ],
+    "data": [
+      "Lab",
+      "Resource",
+      "EquipmentDetail",
+      "RoomDetail",
+      "Accessory",
+      "ServicePeriod",
+      "Reservation",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+    "acceptance": [
+      "AC-35",
+      "AC-36",
+      "AC-53",
+      "AC-56"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-19",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E04",
+      "TO-E09",
+      "TO-R03",
+      "TO-R08"
+    ],
+    "fr": "FR-19",
+    "uc": "UC-19",
+    "spec": "SPEC-19",
+    "rules": [
+      "BR-13",
+      "BR-26",
+      "BR-29",
+      "BR-30",
+      "BR-41",
+      "BR-44"
+    ],
+    "data": [
+      "User",
+      "UserRole",
+      "LabGrant",
+      "UserQualification",
+      "Reservation",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: grant_user",
+    "acceptance": [
+      "AC-37",
+      "AC-38",
+      "AC-58",
+      "AC-61"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-20",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E02",
+      "TO-E04",
+      "TO-R03",
+      "TO-R08"
+    ],
+    "fr": "FR-20",
+    "uc": "UC-20",
+    "spec": "SPEC-20",
+    "rules": [
+      "BR-03",
+      "BR-04",
+      "BR-05",
+      "BR-09",
+      "BR-10",
+      "BR-17",
+      "BR-26",
+      "BR-28",
+      "BR-33",
+      "BR-40"
+    ],
+    "data": [
+      "Policy",
+      "PolicyRevision",
+      "OpeningPeriod",
+      "CalendarException",
+      "Reservation",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception",
+    "acceptance": [
+      "AC-39",
+      "AC-40",
+      "AC-57"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-21",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-04",
+      "P-09",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-06"
+    ],
+    "as_is": [
+      "AS-S01至AS-S06"
+    ],
+    "improved": [
+      "TO-S03",
+      "TO-S05"
+    ],
+    "fr": "FR-21",
+    "uc": "UC-21",
+    "spec": "SPEC-21",
+    "rules": [
+      "BR-26",
+      "BR-29"
+    ],
+    "data": [
+      "AuditEvent",
+      "Reservation",
+      "Loan",
+      "ReturnRecord",
+      "RoomUse",
+      "WorkOrder"
+    ],
+    "implementation": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py",
+    "acceptance": [
+      "AC-41",
+      "AC-42"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-22",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04",
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10",
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-E07",
+      "TO-R06",
+      "TO-M12"
+    ],
+    "fr": "FR-22",
+    "uc": "UC-22",
+    "spec": "SPEC-22",
+    "rules": [
+      "BR-27",
+      "BR-28",
+      "BR-29",
+      "BR-35",
+      "BR-46"
+    ],
+    "data": [
+      "Notification",
+      "Delivery",
+      "DeliveryAttempt"
+    ],
+    "implementation": "core/views.py: notifications",
+    "acceptance": [
+      "AC-43",
+      "AC-44",
+      "AC-63"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-23",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-08"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-04",
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-R01至AS-R10",
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-E07a",
+      "TO-R06",
+      "TO-M12"
+    ],
+    "fr": "FR-23",
+    "uc": "UC-23",
+    "spec": "SPEC-23",
+    "rules": [
+      "BR-17",
+      "BR-26",
+      "BR-27",
+      "BR-28",
+      "BR-35",
+      "BR-41",
+      "BR-46"
+    ],
+    "data": [
+      "AuditEvent",
+      "Notification",
+      "Delivery",
+      "DeliveryAttempt",
+      "JobHeartbeat",
+      "Reservation"
+    ],
+    "implementation": "core/services.py: run_jobs、process_delivery、record_manual_contact",
+    "acceptance": [
+      "AC-45",
+      "AC-46",
+      "AC-58",
+      "AC-63"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-24",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-09"
+    ],
+    "business_cases": [
+      "BUC-06"
+    ],
+    "as_is": [
+      "AS-S01至AS-S06"
+    ],
+    "improved": [
+      "TO-S02",
+      "TO-S03",
+      "TO-S04",
+      "TO-S05",
+      "TO-S06"
+    ],
+    "fr": "FR-24",
+    "uc": "UC-24",
+    "spec": "SPEC-24",
+    "rules": [
+      "BR-05",
+      "BR-25",
+      "BR-29",
+      "BR-33",
+      "BR-34"
+    ],
+    "data": [
+      "Resource",
+      "OpeningPeriod",
+      "CalendarException",
+      "ServicePeriod",
+      "Reservation",
+      "Loan",
+      "ReturnRecord",
+      "RoomUse"
+    ],
+    "implementation": "core/reports.py: utilization；core/views.py: reports",
+    "acceptance": [
+      "AC-47",
+      "AC-48"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-25",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-D01"
+    ],
+    "problems": [
+      "P-06",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-05"
+    ],
+    "as_is": [
+      "AS-M01至AS-M08"
+    ],
+    "improved": [
+      "TO-M04",
+      "TO-M05",
+      "TO-M07"
+    ],
+    "fr": "FR-25",
+    "uc": "UC-25",
+    "spec": "SPEC-25",
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-32",
+      "BR-42"
+    ],
+    "data": [
+      "Incident",
+      "Evidence",
+      "IncidentResponse",
+      "WorkOrder",
+      "AuditEvent"
+    ],
+    "implementation": "core/services.py: upload_evidence；core/views.py: evidence_download",
+    "acceptance": [
+      "AC-49",
+      "AC-50",
+      "AC-59"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-26",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-03",
+      "P-09"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-03",
+      "BUC-04",
+      "BUC-06"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-E11至AS-E13",
+      "AS-R01至AS-R10",
+      "AS-S01至AS-S06"
+    ],
+    "improved": [
+      "TO-E07",
+      "TO-E15",
+      "TO-R12",
+      "TO-S03"
+    ],
+    "fr": "FR-26",
+    "uc": "UC-26",
+    "spec": "SPEC-26",
+    "rules": [
+      "BR-26",
+      "BR-29",
+      "BR-31",
+      "BR-35",
+      "BR-45"
+    ],
+    "data": [
+      "Reservation",
+      "Loan",
+      "ReturnRecord",
+      "RoomUse",
+      "ApprovalDecision",
+      "ReservationReview",
+      "AuditEvent"
+    ],
+    "implementation": "core/views.py: bookings、booking",
+    "acceptance": [
+      "AC-51",
+      "AC-52",
+      "AC-62"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-27",
+    "sources": [
+      "SRC-A01",
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-A02"
+    ],
+    "problems": [
+      "P-02",
+      "P-04",
+      "P-06",
+      "P-10"
+    ],
+    "business_cases": [
+      "BUC-01",
+      "BUC-02",
+      "BUC-04"
+    ],
+    "as_is": [
+      "AS-E01至AS-E07",
+      "AS-E08至AS-E10",
+      "AS-R01至AS-R10"
+    ],
+    "improved": [
+      "TO-E09",
+      "TO-R08",
+      "TO-M03",
+      "TO-M05"
+    ],
+    "fr": "FR-27",
+    "uc": "UC-27",
+    "spec": "SPEC-27",
+    "rules": [
+      "BR-15",
+      "BR-26",
+      "BR-27",
+      "BR-29",
+      "BR-33",
+      "BR-36",
+      "BR-37",
+      "BR-40",
+      "BR-44"
+    ],
+    "data": [
+      "Reservation",
+      "ReservationReview",
+      "ApprovalDecision",
+      "AuditEvent",
+      "Notification"
+    ],
+    "implementation": "core/coordination.py: recheck；core/coordination_views.py: booking_operation",
+    "acceptance": [
+      "AC-65",
+      "AC-66",
+      "AC-53",
+      "AC-57",
+      "AC-61"
+    ],
+    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+  },
+  {
+    "id": "TRACE-OPS-01",
+    "sources": [
+      "SRC-D02",
+      "SRC-E01",
+      "SRC-E02"
+    ],
+    "problems": [
+      "P-04",
+      "P-06"
+    ],
+    "business_cases": [
+      "BUC-03",
+      "BUC-04",
+      "BUC-05",
+      "BUC-06"
+    ],
+    "as_is": [
+      "历史凭据及附件的保全需求；现状学校备份安排未知"
+    ],
+    "improved": [
+      "持久业务事实恢复约束；不伪造软件用户目标"
+    ],
+    "fr": "QR-07/QR-09",
+    "uc": "不适用（运维恢复）",
+    "spec": "DC-01（历史BR-47）",
+    "rules": [
+      "DC-01"
+    ],
+    "data": [
+      "Reservation",
+      "Loan",
+      "ReturnRecord",
+      "RoomUse",
+      "Incident",
+      "Evidence",
+      "AuditEvent"
+    ],
+    "implementation": "tools/restore_archive.py: restore；tools/backup_restore.py；tools/provision_app_role.py",
+    "acceptance": [
+      "AC-64"
+    ],
+    "evidence": "历史offline-recovery-result.json；本轮核对，不宣称跨主机灾难恢复"
+  }
+]

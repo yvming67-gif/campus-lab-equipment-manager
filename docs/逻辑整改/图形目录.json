@@ -1,0 +1,100 @@
+[
+  {
+    "name": "图3-1-业务用例图",
+    "width": 507,
+    "height": 465,
+    "source": "models/图形源文件/图3-1-业务用例图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-1-业务用例图.png"
+  },
+  {
+    "name": "图3-2-设备现状业务实现",
+    "width": 507,
+    "height": 661,
+    "source": "models/图形源文件/图3-2-设备现状业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-2-设备现状业务实现.png"
+  },
+  {
+    "name": "图3-3-场地现状业务实现",
+    "width": 507,
+    "height": 611,
+    "source": "models/图形源文件/图3-3-场地现状业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-3-场地现状业务实现.png"
+  },
+  {
+    "name": "图3-4-异常与维修现状业务实现",
+    "width": 507,
+    "height": 364,
+    "source": "models/图形源文件/图3-4-异常与维修现状业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-4-异常与维修现状业务实现.png"
+  },
+  {
+    "name": "图3-5-利用信息现状业务实现",
+    "width": 507,
+    "height": 217,
+    "source": "models/图形源文件/图3-5-利用信息现状业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-5-利用信息现状业务实现.png"
+  },
+  {
+    "name": "图3-6-引入系统后的设备业务实现",
+    "width": 507,
+    "height": 686,
+    "source": "models/图形源文件/图3-6-引入系统后的设备业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-6-引入系统后的设备业务实现.png"
+  },
+  {
+    "name": "图3-7-引入系统后的场地业务实现",
+    "width": 507,
+    "height": 489,
+    "source": "models/图形源文件/图3-7-引入系统后的场地业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-7-引入系统后的场地业务实现.png"
+  },
+  {
+    "name": "图3-8-引入系统后的异常维修业务实现",
+    "width": 507,
+    "height": 511,
+    "source": "models/图形源文件/图3-8-引入系统后的异常维修业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-8-引入系统后的异常维修业务实现.png"
+  },
+  {
+    "name": "图3-9-引入系统后的利用信息业务实现",
+    "width": 507,
+    "height": 217,
+    "source": "models/图形源文件/图3-9-引入系统后的利用信息业务实现.drawio",
+    "preview": "docs/逻辑整改/图形预览/图3-9-引入系统后的利用信息业务实现.png"
+  },
+  {
+    "name": "图4-1-系统总用例图",
+    "width": 507,
+    "height": 720,
+    "source": "models/图形源文件/图4-1-系统总用例图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图4-1-系统总用例图.png"
+  },
+  {
+    "name": "图4-2-预约服务用例分图",
+    "width": 507,
+    "height": 420,
+    "source": "models/图形源文件/图4-2-预约服务用例分图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图4-2-预约服务用例分图.png"
+  },
+  {
+    "name": "图4-3-借还场地用例分图",
+    "width": 507,
+    "height": 230,
+    "source": "models/图形源文件/图4-3-借还场地用例分图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图4-3-借还场地用例分图.png"
+  },
+  {
+    "name": "图4-4-维护用例分图",
+    "width": 507,
+    "height": 335,
+    "source": "models/图形源文件/图4-4-维护用例分图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图4-4-维护用例分图.png"
+  },
+  {
+    "name": "图4-5-统计支撑用例分图",
+    "width": 507,
+    "height": 315,
+    "source": "models/图形源文件/图4-5-统计支撑用例分图.drawio",
+    "preview": "docs/逻辑整改/图形预览/图4-5-统计支撑用例分图.png"
+  }
+]

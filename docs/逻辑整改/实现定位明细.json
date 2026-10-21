@@ -1,0 +1,602 @@
+[
+  {
+    "uc": "UC-01",
+    "file": "core/views.py",
+    "symbol": "login_page",
+    "lines": [
+      {
+        "start": 52,
+        "end": 57
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-01",
+    "file": "core/views.py",
+    "symbol": "identity",
+    "lines": [
+      {
+        "start": 59,
+        "end": 81
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-01",
+    "file": "core/views.py",
+    "symbol": "callback",
+    "lines": [
+      {
+        "start": 83,
+        "end": 103
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "core/views.py",
+    "symbol": "resources",
+    "lines": [
+      {
+        "start": 117,
+        "end": 132
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "core/views.py",
+    "symbol": "resource_detail",
+    "lines": [
+      {
+        "start": 135,
+        "end": 146
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/services.py",
+    "symbol": "availability",
+    "lines": [
+      {
+        "start": 142,
+        "end": 154
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/views.py",
+    "symbol": "resources",
+    "lines": [
+      {
+        "start": 117,
+        "end": 132
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-04",
+    "file": "core/services.py",
+    "symbol": "create_reservation",
+    "lines": [
+      {
+        "start": 162,
+        "end": 184
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-04",
+    "file": "core/services.py",
+    "symbol": "validate",
+    "lines": [
+      {
+        "start": 106,
+        "end": 140
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-05",
+    "file": "core/services.py",
+    "symbol": "create_reservation",
+    "lines": [
+      {
+        "start": 162,
+        "end": 184
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-05",
+    "file": "core/services.py",
+    "symbol": "validate",
+    "lines": [
+      {
+        "start": 106,
+        "end": 140
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/views.py",
+    "symbol": "booking",
+    "lines": [
+      {
+        "start": 161,
+        "end": 163
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/services.py",
+    "symbol": "review_note",
+    "lines": [
+      {
+        "start": 205,
+        "end": 215
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-07",
+    "file": "core/services.py",
+    "symbol": "cancel",
+    "lines": [
+      {
+        "start": 219,
+        "end": 227
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-08",
+    "file": "core/services.py",
+    "symbol": "approve",
+    "lines": [
+      {
+        "start": 188,
+        "end": 201
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-09",
+    "file": "core/services.py",
+    "symbol": "checkout",
+    "lines": [
+      {
+        "start": 255,
+        "end": 277
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-09",
+    "file": "core/coordination.py",
+    "symbol": "coordinate",
+    "lines": [
+      {
+        "start": 87,
+        "end": 108
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-09",
+    "file": "core/coordination.py",
+    "symbol": "check_dependency",
+    "lines": [
+      {
+        "start": 28,
+        "end": 50
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-10",
+    "file": "core/services.py",
+    "symbol": "return_equipment",
+    "lines": [
+      {
+        "start": 281,
+        "end": 309
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-11",
+    "file": "core/services.py",
+    "symbol": "start_room",
+    "lines": [
+      {
+        "start": 313,
+        "end": 330
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-11",
+    "file": "core/coordination.py",
+    "symbol": "coordinate",
+    "lines": [
+      {
+        "start": 87,
+        "end": 108
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-11",
+    "file": "core/coordination.py",
+    "symbol": "check_dependency",
+    "lines": [
+      {
+        "start": 28,
+        "end": 50
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-12",
+    "file": "core/services.py",
+    "symbol": "end_room",
+    "lines": [
+      {
+        "start": 334,
+        "end": 348
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-13",
+    "file": "core/services.py",
+    "symbol": "report_incident",
+    "lines": [
+      {
+        "start": 382,
+        "end": 392
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-14",
+    "file": "core/services.py",
+    "symbol": "verify_incident",
+    "lines": [
+      {
+        "start": 396,
+        "end": 416
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-14",
+    "file": "core/coordination.py",
+    "symbol": "respond_incident",
+    "lines": [
+      {
+        "start": 147,
+        "end": 159
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-15",
+    "file": "core/services.py",
+    "symbol": "create_work_order",
+    "lines": [
+      {
+        "start": 420,
+        "end": 440
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-15",
+    "file": "core/coordination.py",
+    "symbol": "reassign_work",
+    "lines": [
+      {
+        "start": 133,
+        "end": 142
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-16",
+    "file": "core/services.py",
+    "symbol": "update_work",
+    "lines": [
+      {
+        "start": 444,
+        "end": 459
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-17",
+    "file": "core/services.py",
+    "symbol": "accept_work",
+    "lines": [
+      {
+        "start": 463,
+        "end": 483
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-18",
+    "file": "core/services.py",
+    "symbol": "save_resource",
+    "lines": [
+      {
+        "start": 599,
+        "end": 637
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-18",
+    "file": "core/services.py",
+    "symbol": "set_resource_hold",
+    "lines": [
+      {
+        "start": 577,
+        "end": 586
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-18",
+    "file": "core/views.py",
+    "symbol": "manage_form",
+    "lines": [
+      {
+        "start": 307,
+        "end": 336
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-19",
+    "file": "core/services.py",
+    "symbol": "grant_user",
+    "lines": [
+      {
+        "start": 641,
+        "end": 664
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-20",
+    "file": "core/services.py",
+    "symbol": "save_policy",
+    "lines": [
+      {
+        "start": 563,
+        "end": 573
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-20",
+    "file": "core/services.py",
+    "symbol": "change_opening",
+    "lines": [
+      {
+        "start": 668,
+        "end": 683
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-20",
+    "file": "core/coordination.py",
+    "symbol": "calendar_exception",
+    "lines": [
+      {
+        "start": 113,
+        "end": 128
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-21",
+    "file": "core/views.py",
+    "symbol": "audit_list",
+    "lines": [
+      {
+        "start": 280,
+        "end": 286
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-22",
+    "file": "core/views.py",
+    "symbol": "notifications",
+    "lines": [
+      {
+        "start": 273,
+        "end": 277
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-23",
+    "file": "core/services.py",
+    "symbol": "run_jobs",
+    "lines": [
+      {
+        "start": 546,
+        "end": 559
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-23",
+    "file": "core/services.py",
+    "symbol": "process_delivery",
+    "lines": [
+      {
+        "start": 512,
+        "end": 544
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-23",
+    "file": "core/services.py",
+    "symbol": "record_manual_contact",
+    "lines": [
+      {
+        "start": 709,
+        "end": 715
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-24",
+    "file": "core/reports.py",
+    "symbol": "utilization",
+    "lines": [
+      {
+        "start": 8,
+        "end": 36
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-24",
+    "file": "core/views.py",
+    "symbol": "reports",
+    "lines": [
+      {
+        "start": 289,
+        "end": 299
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-25",
+    "file": "core/services.py",
+    "symbol": "upload_evidence",
+    "lines": [
+      {
+        "start": 690,
+        "end": 705
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-25",
+    "file": "core/views.py",
+    "symbol": "evidence_download",
+    "lines": [
+      {
+        "start": 242,
+        "end": 245
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/views.py",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 149,
+        "end": 158
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/views.py",
+    "symbol": "booking",
+    "lines": [
+      {
+        "start": 161,
+        "end": 163
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-27",
+    "file": "core/coordination.py",
+    "symbol": "recheck",
+    "lines": [
+      {
+        "start": 65,
+        "end": 82
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-27",
+    "file": "core/coordination_views.py",
+    "symbol": "booking_operation",
+    "lines": [
+      {
+        "start": 13,
+        "end": 24
+      }
+    ],
+    "status": "源码定位"
+  }
+]

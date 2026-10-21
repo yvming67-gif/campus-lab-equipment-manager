@@ -1,0 +1,40 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+skinparam monochrome true
+title 设备现状业务实现
+participant "学生或教师" as L0
+participant "实验室管理员" as L1
+participant "纸质申请表" as L2
+participant "共享预约表" as L3
+participant "借还登记册" as L4
+participant "设备实物" as L5
+L0 -> L1: AS-E01 电话或即时消息询问设备及时段
+L1 -> L3: AS-E02 人工查阅计划登记
+alt 可答复有空闲／无空闲
+L1 -> L0: AS-E03 [有空闲] 口头或消息答复，可用答复尚非承诺
+else [无空闲]
+L1 -> L0: AS-E03b 告知无空闲；本次申请结束
+end
+opt 有空闲且申请人继续
+L0 -> L2: AS-E04 填写纸质材料
+L0 -> L1: AS-E05 提交纸表；管理员查阅申请材料
+L1 -> L1: AS-E06 人工核对资格、时段与现有登记
+alt 管理员决定通过／不通过
+L1 -> L3: AS-E07 [通过] 另行录入预约结果
+L1 -> L0: AS-E07a 电话或消息告知结果；纸表与共享表分别保留
+else [不通过]
+L1 -> L0: AS-E07b 告知原因；本次不进入领取
+end
+opt 已获准且实际到场
+L0 -> L1: AS-E08 出示申请依据并请求领取
+L1 -> L5: AS-E09 从保管位置取设备并核对实物
+L1 -> L0: AS-E09a 实物交接设备与配件
+L1 -> L4: AS-E10 单独登记借出、借用人及时间
+opt 已完成实际借出并归还
+L0 -> L1: AS-E11 交还设备与配件
+L1 -> L5: AS-E12 人工检查实际状态
+L1 -> L4: AS-E13 登记接收及异常；共享表是否同步待核实
+end
+end
+end
+@enduml

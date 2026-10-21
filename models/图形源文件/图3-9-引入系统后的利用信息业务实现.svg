@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="217" viewBox="0 0 507 217"><rect width="100%" height="100%" fill="white"/>
+<rect x="2.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="39.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">教学管理部门</text>
+<polyline points="39.0,36 39.0,212" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="145.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="182.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">中心主任</text>
+<polyline points="182.0,36 182.0,212" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="288.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="325.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">统一预约系统</text>
+<polyline points="325.0,36 325.0,212" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<rect x="431.0" y="2" width="74" height="34" fill="#eef3ef" stroke="#356f69"/>
+<text x="468.0" y="22.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">历史业务事实</text>
+<polyline points="468.0,36 468.0,212" fill="none" stroke="#b7c3c0" stroke-width="0.7" stroke-dasharray="3 3"/>
+<polyline points="39.0,67 182.0,67" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="182.0,67 177.4977644882366,69.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="182.0,67 177.4977644882366,64.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="38.8359375" y="49.9" width="143.328125" height="12.2" fill="white"/>
+<text x="110.5" y="59.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S01 提出期间与资源信息需求</text>
+<polyline points="182.0,92 325.0,92" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="325.0,92 320.4977644882366,94.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="325.0,92 320.4977644882366,89.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="143.8359375" y="74.9" width="219.328125" height="12.2" fill="white"/>
+<text x="253.5" y="84.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S02 查询授权范围内过去不超过31天的运行报表</text>
+<polyline points="325.0,117 468.0,117" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,117 463.4977644882366,119.17482767055616" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="468.0,117 463.4977644882366,114.82517232944384" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="261.1776041666667" y="99.9" width="245.99479166666666" height="12.2" fill="white"/>
+<text x="384.175" y="109.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S03 读取计划、借还、场地开始结束、服务及开放历史</text>
+<polyline points="325.0,142 343.0,142 343.0,148 325.0,148" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="325.0,148 329.5022355117634,145.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="325.0,148 329.5022355117634,150.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="216.00260416666669" y="124.9" width="217.99479166666666" height="12.2" fill="white"/>
+<text x="325.0" y="134.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S04 同口径裁剪：实际使用／可服务；计划单列</text>
+<polyline points="325.0,167 182.0,167" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="182.0,167 186.5022355117634,164.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="182.0,167 186.5022355117634,169.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="135.16927083333331" y="149.9" width="236.66145833333334" height="12.2" fill="white"/>
+<text x="253.5" y="159.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S05 给出口径、分子分母、零分母不适用及模拟性质</text>
+<polyline points="182.0,192 39.0,192" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,192 43.50223551176339,189.82517232944386" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<polyline points="39.0,192 43.50223551176339,194.17482767055614" fill="none" stroke="#6d7778" stroke-width="0.7"/>
+<rect x="1.5026041666666714" y="174.9" width="217.99479166666666" height="12.2" fill="white"/>
+<text x="110.5" y="184.22" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.2" fill="#2a3436">TO-S06 人工复核后提供汇总；不向外自动公开明细</text>
+</svg>

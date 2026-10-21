@@ -1,0 +1,61 @@
+[
+  {
+    "path": "docs\\分析报告\\校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf",
+    "sha256": "b7c824c078d4c98458b9854c9d1dc734b370e6ec0bc4c8c3020e577e84728097",
+    "pages": 60,
+    "characters": 57878
+  },
+  {
+    "path": "docs\\ERD与数据设计说明.pdf",
+    "sha256": "c17bd6125d7841fc48ba9101cbbf93fc63c5f9b12bee812654152374f7896030",
+    "pages": 31,
+    "characters": 33498
+  },
+  {
+    "path": "models\\ERD\\分域ERD图册.pdf",
+    "sha256": "88f223e065b51feeb96fb6d2d2a8e51798136efc7c23e71e4aec12a431dc8dbb",
+    "pages": 6,
+    "characters": 10812
+  },
+  {
+    "path": "models\\ERD\\完整ERD总图.pdf",
+    "sha256": "aca47a3a58b5a914639d27b4309437bb3a89ce4942069869953ee2849b08243e",
+    "pages": 1,
+    "characters": 9611
+  },
+  {
+    "path": "docs\\specification.json",
+    "sha256": "673ab25748357ef1f34491a5e47fbc08df8e1da47166320bae3dd59c2ef5eb0e",
+    "characters": 120158
+  },
+  {
+    "path": "docs\\baseline.json",
+    "sha256": "3a32d2b1b7a05f6613dbaab3deb1723930fda6c3cb3e7a076758379d745c8d56",
+    "characters": 4708
+  },
+  {
+    "path": "docs\\implementation_map.json",
+    "sha256": "0292f197e5831e0cd265dab06e800c0ae9590d31cce91a3e7ad00b28276b3e2b",
+    "characters": 1448
+  },
+  {
+    "path": "models\\schema.json",
+    "sha256": "8b2e646a5d1891aba09a294ec9dc756543b21f051b057f7f9e5ee8fe4041ab91",
+    "characters": 146741
+  },
+  {
+    "path": "docs\\整改\\问题整改台账.md",
+    "sha256": "152bc5c10962abef7e0b500a2287dcd7ac563843f298400f77d5802a12e1cefd",
+    "characters": 49626
+  },
+  {
+    "path": "docs\\整改\\独立复验报告.md",
+    "sha256": "dc2e17cce23464ccec2a4ce3d58e1a7cd7776785225053fb6e1c61c1cb70e973",
+    "characters": 6214
+  },
+  {
+    "path": "docs\\整改\\需求行为追踪.md",
+    "sha256": "ef3beac8e322de459be0df378d5bb50ca61a017dfce40442a545ba490351c5b9",
+    "characters": 23017
+  }
+]

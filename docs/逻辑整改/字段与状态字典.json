@@ -1,0 +1,744 @@
+{
+  "fields": [
+    {
+      "name": "身份凭据",
+      "meaning": "提供方确认身份的材料；模拟与正式分开",
+      "type": "一次性断言/代码或演示凭据",
+      "required": "认证时",
+      "values": "提供方协议；演示断言60秒",
+      "source": "用户/学校提供方或独立演示服务",
+      "validation": "签名、时效、回放和身份映射；不保存学校密码",
+      "privacy": "认证通道；日志不记录原凭据"
+    },
+    {
+      "name": "会话绑定",
+      "meaning": "把返回身份绑定本次认证请求",
+      "type": "不可预测随机标识",
+      "required": "网页认证时",
+      "values": "单次有效",
+      "source": "系统",
+      "validation": "请求/回调绑定并消费",
+      "privacy": "仅认证过程，不公开"
+    },
+    {
+      "name": "资源编号",
+      "meaning": "唯一设备或整间场地标识",
+      "type": "业务标识",
+      "required": "查询详情/预约/报告时",
+      "values": "既有资源；类型由档案决定",
+      "source": "目录或受控URL",
+      "validation": "存在、类型一致；设备标签不因普通编辑变更",
+      "privacy": "资源公共业务属性，不含他人申请"
+    },
+    {
+      "name": "预约编号",
+      "meaning": "定位原申请及其使用事实",
+      "type": "业务标识",
+      "required": "交接/取消/审核等时；异常关联可选",
+      "values": "存在预约",
+      "source": "系统结果/受控URL",
+      "validation": "本人或授权实验室；报告关联资源一致",
+      "privacy": "本人及授权岗位"
+    },
+    {
+      "name": "开始时间",
+      "meaning": "申请的计划开始",
+      "type": "本地日期时刻，含时区解释",
+      "required": "时段查询与申请时",
+      "values": "Asia/Shanghai；未来14天窗口",
+      "source": "用户选择",
+      "validation": "开始<结束；30分钟粒度；同日；执行时再校验",
+      "privacy": "本人、授权管理员；对外只显示占用区间"
+    },
+    {
+      "name": "结束时间",
+      "meaning": "申请的计划结束和应还依据",
+      "type": "日期时刻",
+      "required": "时段查询与申请时",
+      "values": "不超过检查时刻后14天",
+      "source": "用户选择",
+      "validation": "同日，时长≤8小时，位于有效开放区间",
+      "privacy": "同开始时间"
+    },
+    {
+      "name": "用途",
+      "meaning": "借用或场地活动的具体目的",
+      "type": "非空文本",
+      "required": "申请时",
+      "values": "界面最多1000字",
+      "source": "申请人",
+      "validation": "去除首尾空白后非空；不得由客户端指定审批结果",
+      "privacy": "本人及授权管理员"
+    },
+    {
+      "name": "请求标识",
+      "meaning": "区分一次提交与网络重试",
+      "type": "UUID",
+      "required": "创建预约时",
+      "values": "本申请人范围内唯一",
+      "source": "客户端首次生成并重试沿用",
+      "validation": "同标识同内容返回原记录；不同内容拒绝",
+      "privacy": "本人客户端与服务端，不作认证凭据"
+    },
+    {
+      "name": "人数",
+      "meaning": "场地申请人数或实际到场人数",
+      "type": "正整数",
+      "required": "场地申请/开始时",
+      "values": "1至场地容量；设备人数按单台请求",
+      "source": "负责教师/现场管理员",
+      "validation": "申请与实际分别保存；不超过容量",
+      "privacy": "本人及授权管理岗位"
+    },
+    {
+      "name": "原因",
+      "meaning": "决定、取消、配置或处置依据",
+      "type": "非空文本",
+      "required": "状态/权限/规则变化时",
+      "values": "具体字段界面1000或1500字上限",
+      "source": "承担责任的操作人",
+      "validation": "与动作相符，保存操作者与时刻；不覆盖旧原因",
+      "privacy": "对象授权范围；敏感内容不得向他人公开"
+    },
+    {
+      "name": "决定",
+      "meaning": "通过/拒绝或验收结论",
+      "type": "受控枚举",
+      "required": "审核/复核/验收时",
+      "values": "通过、驳回/不能执行、验收退回，依用例",
+      "source": "有范围管理员",
+      "validation": "只在允许状态及角色下接受；初始/后续决定分开",
+      "privacy": "本人必要结果；内部完整理由限授权"
+    },
+    {
+      "name": "版本",
+      "meaning": "防止基于过期页面覆盖决定",
+      "type": "正整数",
+      "required": "审核、取消、复核提交时",
+      "values": "当前记录版本",
+      "source": "系统页面提供，提交时带回",
+      "validation": "格式合法且与当前版本一致",
+      "privacy": "对象授权范围"
+    },
+    {
+      "name": "学校编号",
+      "meaning": "现场出示的借用人或负责教师身份编号",
+      "type": "短文本",
+      "required": "借出/入场时",
+      "values": "须等于原预约主体编号；界面≤32字符",
+      "source": "本人证件/身份凭据，管理员核验",
+      "validation": "当前账号角色仍有效；不允许管理员任意改借用人",
+      "privacy": "仅现场与授权记录，不向其他用户展示"
+    },
+    {
+      "name": "设备标签",
+      "meaning": "现场设备唯一标识",
+      "type": "短文本",
+      "required": "设备借出与归还时",
+      "values": "与设备/借出标签快照一致；≤40字符",
+      "source": "设备实物",
+      "validation": "核对设备，归还用原快照",
+      "privacy": "本人该次借用与授权岗位"
+    },
+    {
+      "name": "配件检查",
+      "meaning": "借出前整机及清单核验结论",
+      "type": "布尔及明细快照",
+      "required": "借出时",
+      "values": "全部核对通过/不通过",
+      "source": "现场管理员",
+      "validation": "不通过不产生Loan，保留异常；主档变更不改快照",
+      "privacy": "交接双方及授权管理员"
+    },
+    {
+      "name": "检查结论",
+      "meaning": "现场状态、配件或结束检查的事实描述",
+      "type": "非空文本",
+      "required": "设备借还及场地开始结束时",
+      "values": "界面1000或1500字，依具体表单",
+      "source": "现场管理员",
+      "validation": "说明实物/空间检查；不能仅用计划时间推算",
+      "privacy": "本人必要事实及授权岗位"
+    },
+    {
+      "name": "到场时间",
+      "meaning": "实际到达现场的时刻",
+      "type": "带时区日期时刻",
+      "required": "交接时；等待协调时必须",
+      "values": "不晚于当前/实际交付",
+      "source": "现场管理员核对后登记",
+      "validation": "设备到场≤开始办理≤交付；等待须在原宽限内",
+      "privacy": "本人及现场管理岗位"
+    },
+    {
+      "name": "开始办理时间",
+      "meaning": "管理员开始处理领取的时刻",
+      "type": "带时区日期时刻",
+      "required": "设备借出时",
+      "values": "到场至实际交付之间",
+      "source": "现场管理员",
+      "validation": "与到场分开，不能以交付时刻替代等待测量",
+      "privacy": "本人及授权管理员"
+    },
+    {
+      "name": "实际结束时间",
+      "meaning": "真实归还或场地结束时刻",
+      "type": "带时区日期时刻",
+      "required": "设备归还/场地结束时",
+      "values": "对应实际开始≤该值≤当前",
+      "source": "现场接收人",
+      "validation": "逾期仍接收；保持原计划不变",
+      "privacy": "本人及授权管理岗位"
+    },
+    {
+      "name": "损坏标志",
+      "meaning": "归还检查确认设备损坏",
+      "type": "布尔",
+      "required": "对应归还/结束检查时，默认否",
+      "values": "是/否",
+      "source": "现场管理员",
+      "validation": "与数量、结论一致；不掩盖真实结束",
+      "privacy": "本人必要检查事实及授权岗位"
+    },
+    {
+      "name": "缺件标志",
+      "meaning": "人工勾选或根据实收数量归一化的配件缺失",
+      "type": "布尔",
+      "required": "对应归还/结束检查时，默认否",
+      "values": "是/否",
+      "source": "现场管理员",
+      "validation": "与数量、结论一致；不掩盖真实结束",
+      "privacy": "本人必要检查事实及授权岗位"
+    },
+    {
+      "name": "异常标志",
+      "meaning": "设备运行或场地检查异常",
+      "type": "布尔",
+      "required": "对应归还/结束检查时，默认否",
+      "values": "是/否",
+      "source": "现场管理员",
+      "validation": "与数量、结论一致；不掩盖真实结束",
+      "privacy": "本人必要检查事实及授权岗位"
+    },
+    {
+      "name": "实收数量",
+      "meaning": "每项借出快照配件的实际接收数",
+      "type": "非负整数集合",
+      "required": "有配件时逐项",
+      "values": "0至该项借出数量",
+      "source": "现场管理员逐项核对",
+      "validation": "短缺自动归一化缺件；不得超过借出数",
+      "privacy": "本人该次交接及授权管理员"
+    },
+    {
+      "name": "异常类型",
+      "meaning": "所观察的损坏、缺件或运行/场地异常",
+      "type": "枚举",
+      "required": "报告时",
+      "values": "DAMAGE/MISSING/FAULT",
+      "source": "报告人/现场检查人",
+      "validation": "不把普通报告直接当已确认安全故障",
+      "privacy": "对象授权范围"
+    },
+    {
+      "name": "异常描述",
+      "meaning": "可以核实的现象和经过",
+      "type": "非空文本",
+      "required": "报告时",
+      "values": "界面≤2000字",
+      "source": "报告人",
+      "validation": "非空，不替代核实结论；不自动判责",
+      "privacy": "报告人、关联借用人及授权岗位"
+    },
+    {
+      "name": "发现时间",
+      "meaning": "报告人观察到现象的时刻",
+      "type": "日期时刻",
+      "required": "报告时",
+      "values": "不晚于当前；不必等于提交时间",
+      "source": "报告人",
+      "validation": "不得未来；原报告与系统记录时刻分开",
+      "privacy": "对象授权范围"
+    },
+    {
+      "name": "异常编号",
+      "meaning": "关联核实、维修、证据与回应",
+      "type": "业务标识",
+      "required": "对应异常处理时",
+      "values": "已存在异常",
+      "source": "系统",
+      "validation": "授权与状态校验，不能串联别的资源",
+      "privacy": "报告人/关联本人及授权岗位"
+    },
+    {
+      "name": "工单编号",
+      "meaning": "唯一维修安排",
+      "type": "业务标识",
+      "required": "过程/验收/重指派时",
+      "values": "已存在工单",
+      "source": "系统",
+      "validation": "当前指派/实验室范围；状态适用",
+      "privacy": "授权管理员、当前维修人；本人仅必要状态"
+    },
+    {
+      "name": "处置动作",
+      "meaning": "管理员核实或解决异常的意图",
+      "type": "枚举",
+      "required": "核实时",
+      "values": "确认、排除、无需维修已处置",
+      "source": "有范围管理员",
+      "validation": "开放工单不能绕过验收排除/解决",
+      "privacy": "授权对象范围"
+    },
+    {
+      "name": "回应类型",
+      "meaning": "追加事实与独立复核类别",
+      "type": "枚举",
+      "required": "追加回应时",
+      "values": "ACK/DISPUTE/SUPPLEMENT/REVIEW",
+      "source": "报告人、关联本人或授权管理员",
+      "validation": "REVIEW需管理员且非报告人/借用人",
+      "privacy": "对象授权范围；无内部维修写权"
+    },
+    {
+      "name": "补充说明",
+      "meaning": "补充材料、异议或复核事实",
+      "type": "非空文本",
+      "required": "提交补充/回应时",
+      "values": "对应界面文本上限",
+      "source": "申请人/授权岗位",
+      "validation": "只追加；待审核补充与异常回应不同记录",
+      "privacy": "对象授权范围"
+    },
+    {
+      "name": "证据引用",
+      "meaning": "补充材料的引用说明",
+      "type": "文本或受控关联",
+      "required": "有材料时可选",
+      "values": "不等于公开文件URL",
+      "source": "提交人",
+      "validation": "可选，附件仍需对象授权下载",
+      "privacy": "对象授权范围"
+    },
+    {
+      "name": "维修人员",
+      "meaning": "承担当前维修任务的人员",
+      "type": "用户标识",
+      "required": "创建或重新指派时",
+      "values": "有效且有维修角色",
+      "source": "管理员选择",
+      "validation": "范围、角色有效；原责任事件保留",
+      "privacy": "管理员与当前执行人"
+    },
+    {
+      "name": "维修动作",
+      "meaning": "接单、追加过程或提交结果",
+      "type": "枚举",
+      "required": "处理工单时",
+      "values": "START/PROGRESS/SUBMIT",
+      "source": "当前被指派维修人",
+      "validation": "OPEN可接单；IN_PROGRESS可追加/提交",
+      "privacy": "管理员与当前执行人"
+    },
+    {
+      "name": "维修结果",
+      "meaning": "检测、维修过程或提交的结果依据",
+      "type": "非空文本",
+      "required": "维修动作时",
+      "values": "具体过程与结果",
+      "source": "维修人员",
+      "validation": "非空；旧事件不覆盖；提交仍待独立验收",
+      "privacy": "授权岗位；本人仅必要结果"
+    },
+    {
+      "name": "资源档案",
+      "meaning": "实验室/设备/场地资料的业务字段组",
+      "type": "结构化明细",
+      "required": "新增或修改档案时",
+      "values": "编号、名称、类型、实验室、分级、资质、配件、容量、移动性、依赖场地、交接地点",
+      "source": "授权管理员；基础实验室由SYS_ADMIN",
+      "validation": "编号唯一及不可变；类型一致；固定依赖同实验室；容量不损现有承诺",
+      "privacy": "目录可见属性与内部依据按权限分开"
+    },
+    {
+      "name": "授权配置",
+      "meaning": "身份映射当前授权与培训字段组",
+      "type": "结构化明细",
+      "required": "授权调整时",
+      "values": "用户、角色集合、实验室集合、有效性、资格、到期、撤销",
+      "source": "SYS_ADMIN依业务依据",
+      "validation": "角色/实验室存在；到期合法；不得自撤SYS_ADMIN能力",
+      "privacy": "系统管理角色；业务只见必要资格结论"
+    },
+    {
+      "name": "参数配置",
+      "meaning": "可调课程参数组",
+      "type": "带版本整数集合",
+      "required": "参数修改时",
+      "values": "窗口1—365天；粒度15/30/60；时长1—24小时；配额/同时数1—100；宽限1—120分钟",
+      "source": "SYS_ADMIN依负责人决定",
+      "validation": "当前默认仍14/30/8/3/3/3/30；保留版本与依据",
+      "privacy": "默认规则可公开，配置写权限单独控制"
+    },
+    {
+      "name": "开放配置",
+      "meaning": "每周开放或单日例外字段组",
+      "type": "日期、时间、布尔",
+      "required": "日历修改时",
+      "values": "实验室、星期、生效日期、起止；或单日、关闭标志",
+      "source": "SYS_ADMIN",
+      "validation": "周计划明天起；单日不早于今天；开始<结束，同日一生效例外",
+      "privacy": "可用结论可见，内部变更依据限授权"
+    },
+    {
+      "name": "检索条件",
+      "meaning": "目录搜索字段组",
+      "type": "可选文本/标识/枚举",
+      "required": "可选",
+      "values": "名称/编号、实验室、设备/场地类型",
+      "source": "用户",
+      "validation": "合法字段及对象编号；保留筛选",
+      "privacy": "不包含他人申请条件"
+    },
+    {
+      "name": "历史筛选",
+      "meaning": "预约历史检索字段组",
+      "type": "可选文本/日期/枚举",
+      "required": "可选",
+      "values": "资源或业务编号、实验室、日期、状态",
+      "source": "用户",
+      "validation": "正确日期状态；本人/范围过滤独立执行",
+      "privacy": "本人或授权实验室"
+    },
+    {
+      "name": "审计筛选",
+      "meaning": "事件动作、原因及对象条件",
+      "type": "可选文本",
+      "required": "可选",
+      "values": "动作、原因、对象类型/编号",
+      "source": "审计查询者",
+      "validation": "数据范围优先，不因搜索越权",
+      "privacy": "仅授权审计角色"
+    },
+    {
+      "name": "统计日期",
+      "meaning": "资源报表查询期间",
+      "type": "日期区间",
+      "required": "报表时",
+      "values": "过去不超过31天；终点按当前时间裁剪",
+      "source": "报表用户",
+      "validation": "先后合法，分子分母同口径",
+      "privacy": "主任或授权实验室管理员"
+    },
+    {
+      "name": "分页",
+      "meaning": "可重复定位的列表页码",
+      "type": "正整数",
+      "required": "可选，默认1",
+      "values": "网页常用30条；报表50条；小程序20条",
+      "source": "用户/系统分页链接",
+      "validation": "稳定排序并保留筛选；不以页码绕过权限",
+      "privacy": "沿用对象权限"
+    },
+    {
+      "name": "通知编号",
+      "meaning": "本人通知标识",
+      "type": "业务标识",
+      "required": "小程序单条标读时；网页批量本人标读无需指定",
+      "values": "存在且属于本人",
+      "source": "系统",
+      "validation": "只能更新本人阅读状态，不改投递事实",
+      "privacy": "仅本人"
+    },
+    {
+      "name": "投递编号",
+      "meaning": "已生成的外部投递任务",
+      "type": "业务标识",
+      "required": "人工跟进时",
+      "values": "已存在任务",
+      "source": "系统",
+      "validation": "关联事件实验室范围或授权配置角色",
+      "privacy": "授权管理员"
+    },
+    {
+      "name": "人工联系结果",
+      "meaning": "失败后的实际联系方法与结果",
+      "type": "非空文本",
+      "required": "人工补救时",
+      "values": "真实发生的方式、时刻与结果",
+      "source": "授权管理员",
+      "validation": "追加审计，不改作外部渠道成功",
+      "privacy": "授权管理范围，不公开联系方式"
+    },
+    {
+      "name": "证据文件",
+      "meaning": "支持事实的附件",
+      "type": "PNG/JPEG/PDF字节",
+      "required": "上传时",
+      "values": "≤5MB",
+      "source": "用户上传",
+      "validation": "扩展名、可解析结构和摘要；失败清理新文件",
+      "privacy": "受控下载；不提交真实证据到公开仓库"
+    },
+    {
+      "name": "证据编号",
+      "meaning": "定位已上传材料",
+      "type": "业务标识",
+      "required": "下载时",
+      "values": "存在证据",
+      "source": "系统",
+      "validation": "每次重验当前异常对象权限",
+      "privacy": "本人关联及授权岗位"
+    }
+  ],
+  "states": [
+    {
+      "dimension": "资源服务状态",
+      "location": "Resource.service_status",
+      "values": "NORMAL／ISOLATED／MAINTENANCE／DISABLED／SCRAPPED",
+      "meaning": "由手工限制、开放工单、阻断异常依次推导；不是计划时段空闲"
+    },
+    {
+      "dimension": "设备实际状态",
+      "location": "EquipmentDetail.physical_status",
+      "values": "IN_STOCK／BORROWED",
+      "meaning": "由真实借出归还改变；服务恢复不自动归还"
+    },
+    {
+      "dimension": "预约生命周期",
+      "location": "Reservation.status",
+      "values": "PENDING／CONFIRMED／REJECTED／CANCELLED／EXPIRED／IN_USE／COMPLETED",
+      "meaning": "初始决定、占用及实际使用分开；终态不保留当前复核标记"
+    },
+    {
+      "dimension": "时段可申请性",
+      "location": "availability派生结果",
+      "values": "可申请／时段冲突／服务阻断／开放不符等原因",
+      "meaning": "取决于指定时间、资源及依赖；非完整本人资格承诺，无独立存储状态"
+    },
+    {
+      "dimension": "当前复核标志",
+      "location": "Reservation.review_required",
+      "values": "真／假及原因",
+      "meaning": "CONFIRMED标记不改变原时段占用；到原开始前仍计未来配额；过开始后按BR-09不属未来项"
+    },
+    {
+      "dimension": "异常处理状态",
+      "location": "Incident.status + blocks_service",
+      "values": "PENDING／CONFIRMED／DISMISSED／RESOLVED；是否当前阻断单列",
+      "meaning": "普通无关联PENDING可不阻断；结案False；历史阻断由事件保留"
+    },
+    {
+      "dimension": "维修生命周期",
+      "location": "WorkOrder.status",
+      "values": "OPEN／IN_PROGRESS／AWAITING_ACCEPTANCE／CLOSED",
+      "meaning": "提交待验收仍维护；退回继续处理；通过后还核查其他限制"
+    },
+    {
+      "dimension": "通知与投递",
+      "location": "Notification.read_at；Delivery.status",
+      "values": "站内未读/已读；PENDING／PROCESSING／RETRY／SENT／FAILED",
+      "meaning": "生成、阅读、提供方接收是不同事实；SENT非必然人已读"
+    }
+  ],
+  "events": [
+    {
+      "event": "EV-01 提交普通设备",
+      "from": "无预约",
+      "condition": "身份和申请规则全通过",
+      "owner": "申请人触发、系统决定",
+      "to": "CONFIRMED",
+      "occupation": "新增原时段占用",
+      "quota": "开始前设备未来+1",
+      "receipt": "预约、系统决定、规则快照",
+      "audit_notice": "SUBMIT与站内/投递任务"
+    },
+    {
+      "event": "EV-02 提交受限/场地",
+      "from": "无预约",
+      "condition": "申请校验通过",
+      "owner": "申请人",
+      "to": "PENDING",
+      "occupation": "无资源占用",
+      "quota": "开始前对应类别+1",
+      "receipt": "申请与审核任务",
+      "audit_notice": "SUBMIT，通知管理员"
+    },
+    {
+      "event": "EV-03 初始批准",
+      "from": "PENDING",
+      "condition": "非本人有范围；当前规则与竞争通过",
+      "owner": "管理员",
+      "to": "CONFIRMED",
+      "occupation": "新增原时段占用",
+      "quota": "不重复计入已有申请",
+      "receipt": "ApprovalDecision",
+      "audit_notice": "APPROVE与结果通知"
+    },
+    {
+      "event": "EV-04 驳回/本人取消",
+      "from": "PENDING；或开始前CONFIRMED",
+      "condition": "权限、状态、时间及理由合法",
+      "owner": "管理员/本人",
+      "to": "REJECTED或CANCELLED",
+      "occupation": "已有占用释放",
+      "quota": "未来项-1",
+      "receipt": "决定或取消事件",
+      "audit_notice": "历史保留；终态清当前复核标记"
+    },
+    {
+      "event": "EV-05 条件变化待复核",
+      "from": "PENDING或CONFIRMED未开始使用",
+      "condition": "风险、资格、开放或阻断事件影响",
+      "owner": "授权岗位/系统",
+      "to": "原状态＋review_required",
+      "occupation": "CONFIRMED原占用保留；PENDING仍不占",
+      "quota": "开始前原未来项保留，不重复加",
+      "receipt": "影响事件、版本",
+      "audit_notice": "通知申请人与管理岗；原决定不覆盖"
+    },
+    {
+      "event": "EV-06 复核通过",
+      "from": "CONFIRMED且待复核",
+      "condition": "当前条件、原领取截止及版本合法",
+      "owner": "非本人管理员",
+      "to": "CONFIRMED，标志False",
+      "occupation": "保持原占用",
+      "quota": "按未来口径不变",
+      "receipt": "ReservationReview",
+      "audit_notice": "RECHECK与通知"
+    },
+    {
+      "event": "EV-07 复核拒绝/协调取消",
+      "from": "未开始使用",
+      "condition": "明确不能执行且有依据",
+      "owner": "管理员",
+      "to": "CANCELLED，标志False",
+      "occupation": "释放原占用",
+      "quota": "原未来项释放",
+      "receipt": "复核或协调事件",
+      "audit_notice": "原审批和原因保留，通知"
+    },
+    {
+      "event": "EV-08 延误等待",
+      "from": "CONFIRMED未使用",
+      "condition": "同资源前序逾期事实且原宽限内到场",
+      "owner": "管理员",
+      "to": "原状态；领取截止至原结束前",
+      "occupation": "原时段继续，不延长",
+      "quota": "已到计划开始，不计未来；同时使用约束仍适用",
+      "receipt": "Coordination、到场与前序依据",
+      "audit_notice": "COORDINATE及通知"
+    },
+    {
+      "event": "EV-09 借出",
+      "from": "CONFIRMED",
+      "condition": "资格、时间、实际空闲及现场检查通过",
+      "owner": "管理员实际交付",
+      "to": "IN_USE；BORROWED",
+      "occupation": "原计划占用；实际未归还另保护",
+      "quota": "退出未来口径；实际同时借用+1",
+      "receipt": "Loan、配件快照",
+      "audit_notice": "CHECKOUT及通知"
+    },
+    {
+      "event": "EV-10 借出检查失败",
+      "from": "CONFIRMED",
+      "condition": "现场缺件/故障",
+      "owner": "管理员",
+      "to": "预约待复核，异常CONFIRMED；服务隔离",
+      "occupation": "原CONFIRMED占用直至另行终止",
+      "quota": "按未来口径不变",
+      "receipt": "Incident，无Loan",
+      "audit_notice": "合法异常与隔离审计；非技术失败"
+    },
+    {
+      "event": "EV-11 归还",
+      "from": "存在Loan且未归还",
+      "condition": "标签、实收数量、时间合法",
+      "owner": "管理员实际接收",
+      "to": "COMPLETED；IN_STOCK",
+      "occupation": "释放剩余计划；结束实际借用",
+      "quota": "实际同时借用-1；历史逾期留存",
+      "receipt": "ReturnRecord，必要Incident",
+      "audit_notice": "RETURN及服务历史、通知"
+    },
+    {
+      "event": "EV-12 场地开始/结束",
+      "from": "CONFIRMED／IN_USE",
+      "condition": "开始须条件通过；结束须真实开始和检查",
+      "owner": "管理员",
+      "to": "IN_USE／COMPLETED",
+      "occupation": "开始保持原承诺；结束释放余段",
+      "quota": "开始退出未来口径；结束释放实际负责",
+      "receipt": "RoomUse开始/结束及检查",
+      "audit_notice": "分别ROOM_START/ROOM_END，异常另记"
+    },
+    {
+      "event": "EV-13 自动失效",
+      "from": "PENDING／CONFIRMED未使用",
+      "condition": "到开始未批；超过宽限或到原结束",
+      "owner": "后台系统；交接即时阻止",
+      "to": "EXPIRED，标志False",
+      "occupation": "释放原占用",
+      "quota": "未来口径释放（到开始后本已不计）",
+      "receipt": "失效事件，不是归还",
+      "audit_notice": "EXPIRE与通知；停机恢复补扫"
+    },
+    {
+      "event": "EV-14 普通/安全报告",
+      "from": "无异常",
+      "condition": "普通无关联／管理员或使用中关联",
+      "owner": "报告人、系统分级",
+      "to": "PENDING；blocks_service按条件",
+      "occupation": "普通报告不改承诺；阻断则标记待复核",
+      "quota": "不因报告重复增减配额",
+      "receipt": "Incident",
+      "audit_notice": "REPORT_INCIDENT；安全事件通知现场"
+    },
+    {
+      "event": "EV-15 核实异常",
+      "from": "PENDING或CONFIRMED未结案",
+      "condition": "证据与权限，开放工单约束",
+      "owner": "管理员",
+      "to": "CONFIRMED／DISMISSED／RESOLVED",
+      "occupation": "确认影响预约；排除不自动解除待复核",
+      "quota": "依后续预约决定",
+      "receipt": "核实结论/追加回应",
+      "audit_notice": "VERIFY_INCIDENT及通知"
+    },
+    {
+      "event": "EV-16 建工单",
+      "from": "CONFIRMED异常",
+      "condition": "有效执行人，无开放重复工单",
+      "owner": "管理员",
+      "to": "WorkOrder OPEN；服务维护",
+      "occupation": "未开始预约取消；实际使用保留召回",
+      "quota": "对应未来项释放",
+      "receipt": "WorkOrder及事件",
+      "audit_notice": "CREATE_WORK、取消/召回通知"
+    },
+    {
+      "event": "EV-17 维修提交/退回/通过",
+      "from": "处理中／待验收",
+      "condition": "当前指派；独立有范围验收",
+      "owner": "维修人／管理员",
+      "to": "待验收／处理中／CLOSED",
+      "occupation": "维修关闭不新增承诺",
+      "quota": "不自动恢复已取消配额",
+      "receipt": "维修和验收事件；异常结案",
+      "audit_notice": "全部限制重算；通知"
+    },
+    {
+      "event": "EV-18 外部消息失败",
+      "from": "已保存业务；PENDING/PROCESSING投递",
+      "condition": "提供方失败或中断",
+      "owner": "后台系统",
+      "to": "RETRY或FAILED",
+      "occupation": "业务占用不变",
+      "quota": "业务配额不变",
+      "receipt": "DeliveryAttempt",
+      "audit_notice": "独立重试/人工联系；无反向回滚"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-21",
+  "report": "docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx",
+  "sha256": "81c8b924fb61efc4a7393f8d62452f7e4583896e0ef57ae39429be4c6f88ca32",
+  "render_pages": 82,
+  "toc_entries": 37,
+  "tables": 45,
+  "figures": 14,
+  "editable_tables": true,
+  "render_engine": "已有工作区便携LibreOffice；配套render_docx.py；Windows字体",
+  "data_pdf_pages": 33,
+  "current_analysis_pdf": false,
+  "old_input_sha256": "b7c824c078d4c98458b9854c9d1dc734b370e6ec0bc4c8c3020e577e84728097",
+  "old_input_commit": "a6bc7a593d0b122f9e7ee72eee774bf85996cf13",
+  "limits": "不是Microsoft Word另一台电脑的实际分页；不是微信真机或真实学校外部能力验收",
+  "final_delivery_date": "2026-10-22",
+  "independent_review_input_sha256": "b0c877d9b5d9bf73e8cc449f4b74960ddd170d6a01d3636384bd7620f20227c7",
+  "metadata_only_change": [
+    "docProps/core.xml"
+  ],
+  "body_sha256": "c9c31e6c67ea0ebb40fda6d2b58dd25945cf8fcc7a4dc30c8a0671e3731df8a2"
+}

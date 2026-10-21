@@ -123,7 +123,11 @@ def validate(booking, policy, at, exclude=None, time_at=None):
     future = Reservation.objects.filter(applicant=user, resource__kind=resource.kind, status__in=FUTURE, starts_at__gt=at)
     if exclude: future = future.exclude(pk=exclude)
     quota = policy.room_quota if resource.kind == "ROOM" else policy.equipment_quota
-    require(future.count() < quota, f"未来此类预约额度已满（最多{quota}项）")
+    # Only a candidate still in the future consumes a future quota slot.
+    # Reviewing a current commitment within its original handover grace period
+    # must not count it as a fourth future reservation.
+    if start > at:
+        require(future.count() < quota, f"未来此类预约额度已满（最多{quota}项）")
     conflict = Reservation.objects.filter(resource=resource, status__in=ACTIVE, starts_at__lt=end, ends_at__gt=start)
     personal = Reservation.objects.filter(applicant=user, resource__kind=resource.kind, status__in=ACTIVE, starts_at__lt=end, ends_at__gt=start)
     if exclude: conflict = conflict.exclude(pk=exclude); personal = personal.exclude(pk=exclude)
@@ -460,6 +464,11 @@ def accept_work(actor,work_id,passed,reason,at=None):
     at=at or timezone.now();initial=WorkOrder.objects.select_related("incident").get(pk=work_id);resource=Resource.objects.select_for_update(no_key=True).select_related("lab").get(pk=initial.incident.resource_id);check_manager(actor,resource)
     work=WorkOrder.objects.select_for_update().select_related("incident").get(pk=work_id)
     require(actor.pk!=work.assigned_to_id,"维修人员不能验收自己的维修结果")
+    performed_repair = AuditEvent.objects.filter(
+        entity_type=work._meta.model_name, entity_id=work.pk, actor=actor,
+        action__in=["START", "PROGRESS", "SUBMIT"],
+    ).exists()
+    require(not performed_repair,"曾参与本工单维修的人员不能验收自己的维修结果")
     require(work.status=="AWAITING_ACCEPTANCE","工单尚未提交验收")
     require(bool(reason.strip()),"验收检查及理由不能为空")
     old=work.status;work.status="CLOSED" if passed else "IN_PROGRESS"

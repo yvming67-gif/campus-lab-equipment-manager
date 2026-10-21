@@ -1,6 +1,6 @@
 # 校园实验室设备预约与借用管理系统
 
-[公开源码](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [系统分析报告（PDF）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf) · [持续检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)
+[公开源码](https://github.com/yvming67-gif/campus-lab-equipment-manager) · [系统分析报告（Word）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx) · [持续检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)
 
 面向课程展示的完整本地演示项目，支持设备借用与整间实验室场地预约。新增原生微信小程序用户端，支持查询、预约、取消、进度和通知，管理业务继续使用网页。业务、身份、消息和资源数据均为模拟示例；本地验证不代表真实学校上线效果。
 
@@ -60,18 +60,20 @@ python tools/start_local.py --setup --no-browser --smoke-test
 - 初始14天窗口、30分钟粒度、最长8小时、08:00至20:00、不跨日；每类未来申请3项，同时最多3台或套设备。
 - 身份、培训资格、实验室范围、逾期、配额及现场前次未完成使用逐项检查。
 - 设备标签、配件与交接时间保留快照；场地有独立实际开始/结束记录。
-- 异常隔离、指派维修、提交结果、独立验收与全部阻断检查构成闭环。
+- 普通无关联报告先核实，安全事件按规则阻断；维修执行人（含改派前实际执行者）不得自验收，恢复需核查全部阻断。
 - 审计只追加；站内通知和业务同事务保存，模拟外部发送独立重试。
 
 ## 技术与数据
 
 Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和响应式CSS，无额外前端构建步骤。状态规则集中在 `core/services.py`，权限同时检查角色与对象范围，区间互斥由PostgreSQL条件排斥约束兜底。
 
-`models/`包含36个实体、289个字段、61条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含26项FR、26项UC、47条BR、11项QR、64条AC。系统分析报告以独立PDF随仓库提供，包含项目愿景、业务建模、系统需求、用例规约与需求追踪。
+`models/`包含36个实体、289个字段、61条物理外键的JSON、DBML、Mermaid、可编辑draw.io/SVG，以及公开的矢量ERD总图与A4分域图册。`docs/specification.json` 是统一需求基线，包含27项FR/UC、46条业务规则、运行恢复约束DC-01（历史BR-47）、11项质量需求和66条验收场景。系统分析报告以可编辑Word随仓库提供，包含项目愿景、业务建模、系统需求、用例规约与需求追踪。
 
-## 本轮质量与适用范围
+## 业务分析与验证范围
 
-原43项审查及新增5项均保留在[完整整改台账](docs/整改/问题整改台账.md)：38项复验关闭，5项等待制度确认，5项等待外部环境验证。19项已确认缺陷均已修复并复验。后端154项、控制器24项、Windows启动11项通过；独立验收8项原断言通过。性能与恢复结论仅限记录的本机模拟环境。
+当前分析基线2.2区分题设、课程约定、业务假设、公开资料和实现证据；设备、场地、异常维修及利用信息分别建立现状与改进实现，所有系统用例都有结构化规约。
+
+[业务分析材料与完整追踪](docs/逻辑整改/README.md)记录来源、职责迁移、状态和证据覆盖边界。本轮完整后端162项通过，修复了维修改派后原执行人仍可自验收，以及原开始后复核误计未来配额的问题；原始失败与回归证据保留。历史154项及既有24项客户端、11项启动和8项独立场景记录保留批次与环境，不能把不同运行合并为同一次验收。
 
 支持风险变化后追加复核、前序延误到场协调、固定设备场地依赖、单日闭馆例外、维修改派及损坏异议；默认日间教学短借。真实学校身份、消息提供方、微信容器/真机及正式HTTPS部署仍需验收，不能把配置入口当作上线证明。
 
@@ -92,7 +94,7 @@ python manage.py check
 python manage.py migrate
 python manage.py seed_demo
 python manage.py prepare_demo
-python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests --noinput
+python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests core.logic_alignment_tests --noinput
 python manage.py test core.benchmark_tests --noinput
 python tools/export_model.py
 python tools/validate_registry.py
@@ -109,6 +111,8 @@ python tools/backup_restore.py --restore-test
 
 ## 文档导航
 
+- [需求来源、全部用例规约与三类追踪矩阵](docs/逻辑整改/README.md)
+
 - [整改概览与证据](docs/整改/整改概览.md)
 - [独立复验报告](docs/整改/独立复验报告.md)
 - [版本与迁移说明](docs/整改/版本与迁移说明.md)
@@ -121,7 +125,7 @@ python tools/backup_restore.py --restore-test
 - [测试与验收记录](docs/测试与验收记录.md)
 - [独立验收报告](docs/独立验收报告.md)
 - [运行指南](docs/运行指南.md)
-- [系统分析报告（PDF）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.pdf)
+- [系统分析报告（Word）](docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx)
 - [模型源文件说明](models/README.md)
 
 代码采用MIT许可证。演示系统绑定本机回环地址；正式校园接口、备份保留策略及真实业务制度仍需由目标学校确认。
