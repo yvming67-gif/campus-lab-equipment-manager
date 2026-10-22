@@ -1,7 +1,7 @@
 """HTTPS cloud-profile integration using an isolated test database, not Neon."""
 from django.conf import settings
 from django.core.management import call_command
-from django.test import Client, TestCase
+from django.test import Client, TestCase, TransactionTestCase
 
 
 class CloudProfileTests(TestCase):
@@ -65,3 +65,65 @@ class CloudProfileTests(TestCase):
             response = client.get("/health/")
         self.assertEqual(response.status_code, 503)
         self.assertEqual(response.json()["status"], "unavailable")
+
+
+class CloudJobRecoveryTests(TransactionTestCase):
+    def test_worker_reconnects_after_terminated_scan_and_catchup_is_not_duplicated(self):
+        if settings.SETTINGS_MODULE != "config.cloud_settings":
+            from unittest import SkipTest
+            raise SkipTest("This integration suite requires the explicit cloud profile")
+        from datetime import timedelta
+        from io import StringIO
+        from unittest.mock import patch
+        import psycopg
+        from django.db import connection
+        from django.utils import timezone
+        from core import services
+        from core.models import AuditEvent, Delivery, JobHeartbeat, Reservation, Resource, User
+
+        self.addCleanup(connection.close)
+        call_command("seed_demo", if_empty=True, stdout=StringIO())
+        start = timezone.localtime(timezone.now() + timedelta(days=1)).replace(hour=10, minute=0, second=0, microsecond=0)
+        booking = services.create_reservation(User.objects.get(username="student"), Resource.objects.get(code="EQ-OSC-01").pk, start, start + timedelta(hours=1), "断连恢复隔离验证")
+        scan_at = start + timedelta(hours=2)
+        scans = 0
+        sleeps = 0
+        snapshots = []
+
+        class StopAfterThreeScans(Exception):
+            pass
+
+        def scan():
+            nonlocal scans
+            scans += 1
+            if scans == 1:
+                # Terminate only this isolated test worker's connection. The scan
+                # then encounters a real server-side disconnect, not a mock error.
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT pg_backend_pid()")
+                    worker_pid = cursor.fetchone()[0]
+                with psycopg.connect(**connection.get_connection_params(), autocommit=True) as killer:
+                    self.assertTrue(killer.execute("SELECT pg_terminate_backend(%s)", [worker_pid]).fetchone()[0])
+            return services.run_jobs(scan_at)
+
+        def sleep(seconds):
+            nonlocal sleeps
+            sleeps += 1
+            heartbeat = JobHeartbeat.objects.get(name="business-jobs")
+            if sleeps == 1:
+                self.assertIsNotNone(heartbeat.last_error_at)
+                self.assertTrue(heartbeat.error_code)
+                self.assertIsNone(heartbeat.last_success)
+            else:
+                self.assertEqual(heartbeat.last_success, scan_at)
+                self.assertEqual(heartbeat.error_code, "")
+                self.assertEqual(Reservation.objects.get(pk=booking.pk).status, "EXPIRED")
+                snapshots.append((AuditEvent.objects.filter(action="EXPIRE").count(), Delivery.objects.count()))
+            if sleeps == 3:
+                raise StopAfterThreeScans
+
+        with patch("core.management.commands.run_jobs.run_jobs", side_effect=scan), patch("core.management.commands.run_jobs.time.sleep", side_effect=sleep), self.assertLogs("campus.jobs", level="ERROR"), self.assertRaises(StopAfterThreeScans):
+            call_command("run_jobs", loop=True, stdout=StringIO())
+        self.assertEqual(scans, 3)
+        self.assertEqual(snapshots[0][0], 1)
+        self.assertEqual(snapshots[0], snapshots[1])

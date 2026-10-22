@@ -2,6 +2,7 @@ import json,subprocess,sys,time,logging,os
 from datetime import timedelta
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db import close_old_connections, connections
 from django.utils import timezone
 from core.services import run_jobs
 class Command(BaseCommand):
@@ -11,15 +12,21 @@ class Command(BaseCommand):
         backup=None;log=None;retry_after=None;marker=settings.LOCAL/"last-backup.json"
         while True:
             try:
+                # A management loop has no HTTP request boundaries to retire
+                # expired or disconnected database connections for us.
+                close_old_connections()
                 result=run_jobs()
                 if opts['loop']:logging.getLogger('campus.jobs').info('scan counts=%s',result)
                 else:self.stdout.write(str(result));self.stdout.flush()
             except Exception as error:
                 logging.getLogger('campus.jobs').error('scan_failed code=%s',type(error).__name__)
+                connections.close_all()
                 from core.models import JobHeartbeat
                 try:JobHeartbeat.objects.update_or_create(name='business-jobs',defaults={'last_error_at':timezone.now(),'error_code':type(error).__name__})
                 except Exception:pass
                 if not opts['loop']:raise
+            finally:
+                close_old_connections()
             now=timezone.now()
             if backup is not None and backup.poll() is not None:
                 if backup.returncode!=0:

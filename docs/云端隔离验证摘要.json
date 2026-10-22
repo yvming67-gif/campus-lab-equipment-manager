@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-22",
+  "baseline": "a9f0203972fa0ce81ad99f3cb09ff04db6da1c56",
+  "issue": "AUD-0073",
+  "scope": "仅隔离PostgreSQL 17.11/TLS；不是真实Neon或Render验收",
+  "configuration_tests": {
+    "command": "python tools/test_cloud.py",
+    "tests": 8,
+    "result": "通过"
+  },
+  "integration": {
+    "command": "python manage.py test core.cloud_tests --noinput",
+    "tests": 6,
+    "result": "通过",
+    "profile": "config.cloud_settings",
+    "disconnect": "另一psycopg连接仅终止测试工作会话自己的pg_backend_pid",
+    "assertions": [
+      "首轮真实断连与错误心跳",
+      "第二轮重连、过期及成功心跳",
+      "第三轮补扫EXPIRE和Delivery计数不增加"
+    ]
+  },
+  "before": {
+    "result": "恢复场景失败并有同根因清理连锁报错；其余5项通过",
+    "log_sha256": "4233489ffd0b6bc4ba31fc3fad889cbb304d0cc9f50784926d7f1aa6c971064b"
+  },
+  "after": {
+    "log_sha256": "c43238ab9cd282d0815d04df125967ec1e29fa68defee3ee5844f8d3eff44c06"
+  },
+  "code": [
+    {
+      "path": "core/cloud_tests.py",
+      "sha256": "738ce4fdc68766a61b47641cc908d93990e5e8fb66ac70222bda18fdd6fc6340"
+    },
+    {
+      "path": "core/management/commands/run_jobs.py",
+      "sha256": "db148ea9a47a7263c4e0643ea35225d0bab458c933459d486e0ee78715ec3815"
+    }
+  ],
+  "cloud_live": "待外部环境验证"
+}
