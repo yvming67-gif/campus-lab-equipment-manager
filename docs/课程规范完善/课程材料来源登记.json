@@ -1,0 +1,23 @@
+[
+  {
+    "source": "SRC-A03",
+    "name": "课程总结.txt",
+    "bytes": 3845,
+    "sha256": "9bce77de9f7f987e9ed4c8d124f496a37e012da30e4d976bd014757e188f80ea",
+    "received": "2026-10-22"
+  },
+  {
+    "source": "SRC-A04",
+    "name": "共享单车租赁系统-系统用例规约.txt",
+    "bytes": 1918,
+    "sha256": "a063590b17aad45004be5f119f6cda740ab2dd1011a499dc7c7fd4240a3bee73",
+    "received": "2026-10-22"
+  },
+  {
+    "source": "SRC-A05",
+    "name": "umlexercise.pdf",
+    "bytes": 1259660,
+    "sha256": "b080382af95bd49eae99b9e2c9eea059b7ff2e0a399c61ffca1a2386d0c94b3f",
+    "received": "2026-10-22"
+  }
+]

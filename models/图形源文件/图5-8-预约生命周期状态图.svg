@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="570" viewBox="0 0 507 570"><rect width="100%" height="100%" fill="white"/>
+<rect x="35" y="102" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="115.0" y="131.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">PENDING 待审核</text>
+<rect x="312" y="102" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="392.0" y="131.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">CONFIRMED 已确认</text>
+<rect x="35" y="269" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="115.0" y="298.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">REJECTED 已驳回</text>
+<rect x="312" y="269" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="392.0" y="298.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">IN_USE 实际使用中</text>
+<rect x="35" y="449" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="115.0" y="478.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">CANCELLED 已取消</text>
+<rect x="312" y="449" width="160" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="392.0" y="478.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">COMPLETED 已完成</text>
+<rect x="181" y="365" width="145" height="52" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="394.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">EXPIRED 已失效</text>
+<circle cx="253" cy="10" r="5" fill="#24384B" stroke="#24384B"/>
+<polyline points="253,15 253,54" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253,54 251.04265509649946,49.947988039412955 254.95734490350054,49.947988039412955" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="217.33333333333334" y="25.9" width="71.33333333333333" height="12.2" fill="white"/>
+<text x="253" y="35.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">提交且规则通过</text>
+<polygon points="253,54 259,60 253,66 247,60" fill="white" stroke="#24384B"/>
+<polyline points="247,60 115,60 115,102" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="115,102 113.04265509649946,97.94798803941295 116.95734490350054,97.94798803941295" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="79.33333333333334" y="36.9" width="77.33333333333333" height="12.2" fill="white"/>
+<text x="118" y="46.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">[受限设备／场地]</text>
+<polyline points="259,60 392,60 392,102" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="392,102 390.04265509649946,97.94798803941295 393.95734490350054,97.94798803941295" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="374.3333333333333" y="36.9" width="49.333333333333336" height="12.2" fill="white"/>
+<text x="399" y="46.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">[普通设备]</text>
+<polyline points="195,128 312,128" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="312,128 307.94798803941296,129.95734490350054 307.94798803941296,126.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="209.66666666666666" y="104.9" width="86.66666666666667" height="12.2" fill="white"/>
+<text x="253" y="114.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">批准[当前检查通过]</text>
+<polyline points="115,154 115,269" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="115,269 113.04265509649946,264.94798803941296 116.95734490350054,264.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="129.66666666666666" y="209.9" width="24.666666666666668" height="12.2" fill="white"/>
+<text x="142" y="219.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">驳回</text>
+<polyline points="392,154 392,269" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="392,269 390.04265509649946,264.94798803941296 393.95734490350054,264.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="373.3333333333333" y="209.9" width="71.33333333333333" height="12.2" fill="white"/>
+<text x="409" y="219.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">实际借出／入场</text>
+<polyline points="392,321 392,449" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="392,449 390.04265509649946,444.94798803941296 393.95734490350054,444.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="372.3333333333333" y="384.9" width="71.33333333333333" height="12.2" fill="white"/>
+<text x="408" y="394.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">真实归还／离场</text>
+<polyline points="35,128 14,128 14,475 35,475" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="35,475 30.947988039412955,476.95734490350054 30.947988039412955,473.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="30.666666666666664" y="335.9" width="108.66666666666667" height="12.2" fill="white"/>
+<text x="85" y="345.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">本人／维护／管理员取消</text>
+<polyline points="472,128 493,128 493,535 115,535 115,501" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="115,501 116.95734490350054,505.05201196058704 113.04265509649946,505.05201196058704" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="221.66666666666669" y="522.9" width="164.66666666666666" height="12.2" fill="white"/>
+<text x="304" y="532.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">本人／维护／协调取消；复核不能执行</text>
+<polyline points="195,147 224,147 224,365" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="224,365 222.04265509649946,360.94798803941296 225.95734490350054,360.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="192.0" y="239.9" width="62.0" height="12.2" fill="white"/>
+<text x="223" y="249.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">待审核到开始</text>
+<polyline points="312,147 281,147 281,365" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="281,365 279.04265509649946,360.94798803941296 282.95734490350054,360.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="281.3333333333333" y="335.9" width="127.33333333333333" height="12.2" fill="white"/>
+<text x="345" y="345.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">未使用且过领取截止／原结束</text>
+<text x="252" y="566.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="middle" fill="#24384B">复核标志、合法等待独立于预约生命周期；实际使用中不自动失效</text>
+</svg>

@@ -1,0 +1,27 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+hide footbox
+actor "管理员" as L0
+participant "«boundary»\n维修边界" as L1
+participant "«control»\n异常维修控制" as L2
+participant "«entity»\n维修工单" as L3
+participant "«entity»\n审计" as L4
+participant "«entity»\n异常" as L5
+participant "«entity»\n资源" as L6
+L0 -> L1: S17-01 提交验收结论〔2〕\n真实复测结论及依据
+L1 -> L2: S17-02 验收维修〔1〕
+critical 验收状态及恢复结论的一致性边界
+L2 -> L3: S17-03 读取当前工单〔1〕\n须为AWAITING_ACCEPTANCE
+L2 -> L4: S17-04 核对历史执行者〔1a〕\n当前及曾START/PROGRESS/SUBMIT均回避
+L2 -> L2: S17-05 核对范围与独立性〔1〕\n范围内非实际维修执行人
+alt 合法独立验收通过／不通过
+L2 -> L3: S17-06 保存验收结论〔3〕\nCLOSED，追加过程与审计
+L2 -> L5: S17-07 按剩余工单结案〔4〕\n无其它开放工单才解决本异常
+L2 -> L6: S17-08 重算服务限制〔5〕\n其它工单、阻断异常、手工限制仍检查
+else 合法验收不通过
+L2 -> L3: S17-09 保存验收结论〔2a〕\n回IN_PROGRESS，保留失败依据与维修阻断
+end
+L2 -> L2: S17-11 记录验收事件及通知〔5〕\n过程、审计与站内任务一并保存
+end
+L2 -> L1: S17-10 呈现验收结果〔5〕\n无独立性者在前置检查拒绝；不产生验收
+@enduml

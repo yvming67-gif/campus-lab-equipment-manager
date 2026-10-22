@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="633" viewBox="0 0 507 633"><rect width="100%" height="100%" fill="white"/>
+<rect x="0.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="34.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«actor»</text>
+<text x="34.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">管理员</text>
+<polyline points="34.0,48 34.0,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="73.16666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="107.16666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«boundary»</text>
+<text x="107.16666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">维修边界</text>
+<polyline points="107.16666666666667,48 107.16666666666667,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="146.33333333333334" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="180.33333333333334" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«control»</text>
+<text x="180.33333333333334" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">异常维修控制</text>
+<polyline points="180.33333333333334,48 180.33333333333334,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="219.5" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="253.5" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">维修工单</text>
+<polyline points="253.5,48 253.5,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="292.6666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="326.6666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="326.6666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">审计</text>
+<polyline points="326.6666666666667,48 326.6666666666667,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="365.8333333333333" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="399.8333333333333" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="399.8333333333333" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">异常</text>
+<polyline points="399.8333333333333,48 399.8333333333333,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="439.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="473.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="473.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">资源</text>
+<polyline points="473.0,48 473.0,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="5" y="296" width="497" height="223" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="10" y="300.1" width="129.0" height="11.8" fill="white"/>
+<text x="10" y="309.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [合法独立验收通过／不通过]</text>
+<rect x="2" y="140" width="503" height="430" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="7" y="144.1" width="171.66666666666666" height="11.8" fill="white"/>
+<text x="7" y="153.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">critical [验收状态及恢复结论的一致性边界]</text>
+<polyline points="34.0,94 107.16666666666667,94" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,94 103.11465470607962,95.95734490350054 103.11465470607962,92.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="12.250000000000007" y="62.9" width="116.66666666666667" height="24.2" fill="white"/>
+<text x="70.58333333333334" y="72.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-01 提交验收结论〔2〕</text>
+<text x="70.58333333333334" y="84.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">真实复测结论及依据</text>
+<polyline points="107.16666666666667,124 180.33333333333334,124" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,124 176.2813213727463,125.95734490350054 176.2813213727463,122.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="94.41666666666666" y="104.95" width="98.66666666666667" height="12.1" fill="white"/>
+<text x="143.75" y="114.185" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-02 验收维修〔1〕</text>
+<polyline points="180.33333333333334,192 253.5,192" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253.5,192 249.44798803941296,193.95734490350054 249.44798803941296,190.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="150.59635416666669" y="160.9" width="132.640625" height="24.2" fill="white"/>
+<text x="216.91666666666669" y="170.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-03 读取当前工单〔1〕</text>
+<text x="216.91666666666669" y="182.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">须为AWAITING_ACCEPTANCE</text>
+<polyline points="180.33333333333334,236 326.6666666666667,236" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="326.6666666666667,236 322.61465470607965,237.95734490350054 322.61465470607965,234.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="160.5078125" y="204.9" width="185.984375" height="24.2" fill="white"/>
+<text x="253.5" y="214.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-04 核对历史执行者〔1a〕</text>
+<text x="253.5" y="226.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">当前及曾START/PROGRESS/SUBMIT均回避</text>
+<polyline points="180.33333333333334,280 196.33333333333334,280 196.33333333333334,287 180.33333333333334,287" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,287 184.38534529392038,285.04265509649946 184.38534529392038,288.95734490350054" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="113.00000000000001" y="248.9" width="134.66666666666666" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="258.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-05 核对范围与独立性〔1〕</text>
+<text x="180.33333333333334" y="270.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">范围内非实际维修执行人</text>
+<polyline points="180.33333333333334,348 253.5,348" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253.5,348 249.44798803941296,349.95734490350054 249.44798803941296,346.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="158.58333333333334" y="316.9" width="116.66666666666667" height="24.2" fill="white"/>
+<text x="216.91666666666669" y="326.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-06 保存验收结论〔3〕</text>
+<text x="216.91666666666669" y="338.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">CLOSED，追加过程与审计</text>
+<polyline points="180.33333333333334,392 399.8333333333333,392" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="399.8333333333333,392 395.7813213727463,393.95734490350054 395.7813213727463,390.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="227.24999999999997" y="360.9" width="125.66666666666667" height="24.2" fill="white"/>
+<text x="290.0833333333333" y="370.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-07 按剩余工单结案〔4〕</text>
+<text x="290.0833333333333" y="382.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">无其它开放工单才解决本异常</text>
+<polyline points="180.33333333333334,436 473.0,436" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="473.0,436 468.94798803941296,437.95734490350054 468.94798803941296,434.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="247.16666666666669" y="404.9" width="159.0" height="24.2" fill="white"/>
+<text x="326.6666666666667" y="414.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-08 重算服务限制〔5〕</text>
+<text x="326.6666666666667" y="426.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">其它工单、阻断异常、手工限制仍检查</text>
+<polyline points="8,452 499,452" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="14" y="456.1" width="72.66666666666667" height="11.8" fill="white"/>
+<text x="14" y="465.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">[合法验收不通过]</text>
+<polyline points="180.33333333333334,503 253.5,503" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253.5,503 249.44798803941296,504.95734490350054 249.44798803941296,501.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="124.75000000000001" y="471.9" width="184.33333333333334" height="24.2" fill="white"/>
+<text x="216.91666666666669" y="481.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-09 保存验收结论〔2a〕</text>
+<text x="216.91666666666669" y="493.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">回IN_PROGRESS，保留失败依据与维修阻断</text>
+<polyline points="180.33333333333334,554 196.33333333333334,554 196.33333333333334,561 180.33333333333334,561" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,561 184.38534529392038,559.0426550964995 184.38534529392038,562.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="108.50000000000001" y="522.9" width="143.66666666666666" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="532.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-11 记录验收事件及通知〔5〕</text>
+<text x="180.33333333333334" y="544.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">过程、审计与站内任务一并保存</text>
+<polyline points="180.33333333333334,605 107.16666666666667,605" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,605 111.21867862725372,603.0426550964995 111.21867862725372,606.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="59.75" y="573.9" width="168.0" height="24.2" fill="white"/>
+<text x="143.75" y="583.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S17-10 呈现验收结果〔5〕</text>
+<text x="143.75" y="595.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">无独立性者在前置检查拒绝；不产生验收</text>
+</svg>

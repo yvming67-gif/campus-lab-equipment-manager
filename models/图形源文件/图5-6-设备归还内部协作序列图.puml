@@ -1,0 +1,28 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+hide footbox
+actor "管理员" as L0
+participant "«boundary»\n交接边界" as L1
+participant "«control»\n交接控制" as L2
+participant "«entity»\n设备借出" as L3
+participant "«entity»\n归还凭据" as L4
+participant "«entity»\n异常" as L5
+participant "«control»\n业务事件控制" as L6
+L0 -> L1: S10-01 提交归还检查〔3〕\n标签、实收、现象及真实时刻
+L1 -> L2: S10-02 接收真实归还〔1〕
+critical 真实归还及相关事实一起保存
+L2 -> L3: S10-03 读取借出及配件快照〔2〕\n核对开放借出和原设备标签
+L2 -> L2: S10-04 核对当前归还条件〔4〕\n范围、时间和实收；失效账号仍接收
+alt 存在对应借出且检查可登记／无借出
+L2 -> L4: S10-05 追加真实接收〔5〕\n正常、提前或逾期均保存真实结束
+opt 损坏、缺件或运行异常
+L2 -> L5: S10-06 保存异常事实〔5a〕\n先保留阻断；不自动判赔或恢复
+end
+L2 -> L2: S10-06b 同步使用与服务结论〔5〕\n预约完成、实物回库，另查全部服务限制
+L2 -> L6: S10-07 追加审计与通知任务〔6〕\n不由通知控制作出归还领域决定
+else 没有对应借出
+L2 -> L2: S10-08 拒绝本次操作〔1b〕\n不伪造归还；引导异常登记待核实
+end
+end
+L2 -> L1: S10-09 呈现归还结果〔6〕\n返回凭据或明确失败，无部分成功
+@enduml

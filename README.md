@@ -71,9 +71,9 @@ Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和
 
 ## 业务分析与验证范围
 
-当前分析基线2.2区分题设、课程约定、业务假设、公开资料和实现证据；设备、场地、异常维修及利用信息分别建立现状与改进实现，所有系统用例都有结构化规约。
+当前分析基线2.3区分题设、课程约定、业务假设、公开资料和实现证据；设备、场地、异常维修及利用信息分别建立现状与改进实现，所有系统用例都有结构化规约。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。
 
-[业务分析材料与完整追踪](docs/逻辑整改/README.md)记录来源、职责迁移、状态和证据覆盖边界。本轮完整后端162项通过，修复了维修改派后原执行人仍可自验收，以及原开始后复核误计未来配额的问题；原始失败与回归证据保留。历史154项及既有24项客户端、11项启动和8项独立场景记录保留批次与环境，不能把不同运行合并为同一次验收。
+[业务分析材料与完整追踪](docs/逻辑整改/README.md)记录来源、职责迁移、状态和证据覆盖边界。2.2批次完整后端162项通过，修复了维修改派后原执行人仍可自验收，以及原开始后复核误计未来配额的问题；原始失败与回归证据保留。历史154项及既有24项客户端、11项启动和8项独立场景记录保留批次与环境，不能把不同运行合并为同一次验收。
 
 支持风险变化后追加复核、前序延误到场协调、固定设备场地依赖、单日闭馆例外、维修改派及损坏异议；默认日间教学短借。真实学校身份、消息提供方、微信容器/真机及正式HTTPS部署仍需验收，不能把配置入口当作上线证明。
 
@@ -98,6 +98,11 @@ python manage.py test core.tests core.miniapi_tests core.remediation_tests core.
 python manage.py test core.benchmark_tests --noinput
 python tools/export_model.py
 python tools/validate_registry.py
+python tools/validate_analysis_models.py
+python tools/validate_analysis_models.py
+python tools/validate_analysis_models.py
+python tools/validate_analysis_models.py
+python tools/validate_analysis_models.py
 python tools/backup_restore.py --restore-test
 ```
 

@@ -1,0 +1,17 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+state choose <<choice>>
+[*] --> choose : 提交且规则通过
+choose --> PENDING : [受限设备或场地]
+choose --> CONFIRMED : [普通设备]
+PENDING --> CONFIRMED : 批准 [当前检查通过]
+PENDING --> REJECTED : 驳回
+PENDING --> CANCELLED : 本人或维护或管理员取消
+CONFIRMED --> CANCELLED : 本人或维护或协调取消；复核不能执行
+CONFIRMED --> IN_USE : 实际借出或入场
+IN_USE --> COMPLETED : 真实归还或离场
+PENDING --> EXPIRED : 到开始仍未批准
+CONFIRMED --> EXPIRED : 未使用且过领取截止或原结束
+note right of CONFIRMED : 合法等待、复核通过不改变生命周期状态
+note right of IN_USE : 超时不自动失效，不伪造结束
+@enduml

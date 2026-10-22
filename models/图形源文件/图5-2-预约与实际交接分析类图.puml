@@ -1,0 +1,62 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+class "用户 User" as User {
+ 学校编号、有效性
+ 角色／资格按配置读取
+ --
+ 读取当前身份资格()
+}
+class "资源 Resource〔引用〕" as Resource {
+ 编号、类别、服务限制
+ --
+ 读取档案与限制()
+}
+class "预约 Reservation" as Reservation {
+ 原计划、用途／人数
+ 生命周期、当前复核标志
+ 请求标识、版本、规则快照
+ --
+ 查询幂等结果()
+ 检查承诺及依赖()
+ 建立申请()
+ 完成预约()
+}
+class "初始决定 ApprovalDecision" as ApprovalDecision {
+ 方式、决定、理由、主体
+ 决定时刻
+ --
+ 追加初始决定()
+}
+class "后续复核 ReservationReview" as ReservationReview {
+ 结论、理由、快照、主体
+ 复核时刻
+ --
+ 追加后续复核()
+}
+class "设备借出 Loan" as Loan {
+ 标签／配件快照、经办人
+ 到场／办理／交付／应还
+ --
+ 记录真实交付()
+ 读取借出及配件快照()
+}
+class "场地使用 RoomUse" as RoomUse {
+ 负责教师、实到人数
+ 开始／结束及现场检查
+ --
+ 记录真实开始／结束()
+}
+class "设备归还 ReturnRecord" as ReturnRecord {
+ 实还时刻、实收、损缺异常
+ --
+ 追加真实接收()
+}
+User "1" -- "0..*" Reservation
+Resource "1" -- "0..*" Reservation
+Reservation "1" -- "0..1" ApprovalDecision
+Reservation "1" -- "0..*" ReservationReview
+Reservation "1" -- "0..1" Loan
+Reservation "1" -- "0..1" RoomUse
+Loan "1" -- "0..1" ReturnRecord
+note bottom of Reservation : 按资源类别最多产生一种实际使用记录
+@enduml

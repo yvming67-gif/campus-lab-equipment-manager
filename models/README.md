@@ -45,3 +45,8 @@ python tools/validate_registry.py
 矢量PDF嵌入中文字体。生成器默认读取Windows的微软雅黑、Consolas和Arial；其他系统可通过`CAMPUS_CJK_FONT`指定可嵌入的中文TTF/TTC。字体仅用于本机渲染，不随仓库分发。可选安装PyMuPDF后使用`python tools/render_erd.py --preview`更新PNG预览，常规PDF与SVG生成不需要PyMuPDF。
 
 模型只表达结构及可执行约束，不能把外键本身当成角色授权、子类型完整性或跨表业务规则的证明；这些规则由统一服务、事务及数据约束共同执行。
+
+
+## 图5系列分析模型
+
+新增3张分析类图、4张内部协作序列图和2张状态图，均位于`图形源文件`，每图提供SVG、drawio及PlantUML。它们表达概念、职责和事件，不新增物理表；详细边界见[分析职责说明](../docs/课程规范完善/分析职责与实现说明.md)。

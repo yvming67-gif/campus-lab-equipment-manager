@@ -1,0 +1,10 @@
+{
+  "version": "2.3",
+  "date": "2026-10-22",
+  "base_commit": "d3a57f222e52eafd5ebc87c9a9853c45285c495b",
+  "branch": "docs/course-models-20261022",
+  "business_code_changed": false,
+  "physical_schema_changed": false,
+  "diagrams": 9,
+  "scope": "教学方法和模型完善；非实地调查，非正式外部能力验收"
+}

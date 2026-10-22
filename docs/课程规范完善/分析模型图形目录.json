@@ -1,0 +1,65 @@
+[
+  {
+    "name": "图5-1-资源类别分析类图",
+    "width": 507,
+    "height": 510,
+    "source": "models/图形源文件/图5-1-资源类别分析类图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-1-资源类别分析类图.png"
+  },
+  {
+    "name": "图5-2-预约与实际交接分析类图",
+    "width": 507,
+    "height": 698,
+    "source": "models/图形源文件/图5-2-预约与实际交接分析类图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-2-预约与实际交接分析类图.png"
+  },
+  {
+    "name": "图5-3-异常与维修分析类图",
+    "width": 507,
+    "height": 660,
+    "source": "models/图形源文件/图5-3-异常与维修分析类图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-3-异常与维修分析类图.png"
+  },
+  {
+    "name": "图5-4-设备申请内部协作序列图",
+    "width": 507,
+    "height": 605,
+    "source": "models/图形源文件/图5-4-设备申请内部协作序列图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-4-设备申请内部协作序列图.png"
+  },
+  {
+    "name": "图5-5-场地申请内部协作序列图",
+    "width": 507,
+    "height": 633,
+    "source": "models/图形源文件/图5-5-场地申请内部协作序列图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-5-场地申请内部协作序列图.png"
+  },
+  {
+    "name": "图5-6-设备归还内部协作序列图",
+    "width": 507,
+    "height": 620,
+    "source": "models/图形源文件/图5-6-设备归还内部协作序列图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-6-设备归还内部协作序列图.png"
+  },
+  {
+    "name": "图5-7-维修验收内部协作序列图",
+    "width": 507,
+    "height": 633,
+    "source": "models/图形源文件/图5-7-维修验收内部协作序列图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-7-维修验收内部协作序列图.png"
+  },
+  {
+    "name": "图5-8-预约生命周期状态图",
+    "width": 507,
+    "height": 570,
+    "source": "models/图形源文件/图5-8-预约生命周期状态图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-8-预约生命周期状态图.png"
+  },
+  {
+    "name": "图5-9-维修工单状态图",
+    "width": 507,
+    "height": 482,
+    "source": "models/图形源文件/图5-9-维修工单状态图.drawio",
+    "preview": "docs/课程规范完善/图形预览/图5-9-维修工单状态图.png"
+  }
+]

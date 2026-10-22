@@ -1122,7 +1122,8 @@
       "BR-38",
       "BR-40",
       "BR-44",
-      "BR-45"
+      "BR-45",
+      "BR-39"
     ],
     "quality": [],
     "constraints": [],
@@ -1193,7 +1194,8 @@
       "BR-38",
       "BR-40",
       "BR-44",
-      "BR-45"
+      "BR-45",
+      "BR-39"
     ],
     "quality": [],
     "constraints": [],
@@ -1402,7 +1404,8 @@
       "BR-38",
       "BR-40",
       "BR-44",
-      "BR-45"
+      "BR-45",
+      "BR-39"
     ],
     "quality": [],
     "constraints": [],
@@ -1474,7 +1477,8 @@
       "BR-38",
       "BR-40",
       "BR-44",
-      "BR-45"
+      "BR-45",
+      "BR-39"
     ],
     "quality": [],
     "constraints": [],
@@ -4303,7 +4307,9 @@
       "BR-36",
       "BR-37",
       "BR-40",
-      "BR-44"
+      "BR-44",
+      "BR-09",
+      "BR-38"
     ],
     "quality": [],
     "constraints": [],
@@ -4342,7 +4348,9 @@
       "BR-36",
       "BR-37",
       "BR-40",
-      "BR-44"
+      "BR-44",
+      "BR-09",
+      "BR-38"
     ],
     "quality": [],
     "constraints": [],

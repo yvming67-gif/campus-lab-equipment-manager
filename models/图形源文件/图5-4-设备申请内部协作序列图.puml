@@ -1,0 +1,27 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+hide footbox
+actor "申请人" as L0
+participant "«boundary»\n预约边界" as L1
+participant "«control»\n预约控制" as L2
+participant "«entity»\n用户" as L3
+participant "«entity»\n资源" as L4
+participant "«entity»\n预约" as L5
+participant "«control»\n业务事件控制" as L6
+L0 -> L1: S04-01 提交设备申请〔1〕\n资源／时段／用途／请求标识
+L1 -> L2: S04-02 受理设备申请〔1〕\n同一服务供网页与小程序
+critical 同申请人及资源的一致性边界
+L2 -> L5: S04-03 查询幂等结果〔2〕\n同内容返回原编号；异内容拒绝
+L2 -> L3: S04-04 读取当前身份资格〔3〕
+L2 -> L4: S04-05 读取档案与限制〔3〕
+L2 -> L2: S04-06 判断资格配额及时间〔3〕
+L2 -> L5: S04-07 检查承诺及依赖〔4〕\n重叠、同时上限、固定场地
+alt 所有规则通过／拒绝
+L2 -> L5: S04-08 建立申请〔5〕\n普通CONFIRMED＋初始决定；受限PENDING
+L2 -> L6: S04-09 追加审计与通知任务〔6〕\n业务必要记录同一提交
+else 任一检查失败
+L2 -> L2: S04-10 拒绝本次操作〔3a〕\n拒绝并无部分预约／承诺；不是成功提交
+end
+end
+L2 -> L1: S04-11 呈现申请结果〔7〕\n外部投递另由UC-23执行
+@enduml

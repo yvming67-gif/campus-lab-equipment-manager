@@ -1,0 +1,228 @@
+[
+  {
+    "class_id": "Lab",
+    "figure": "图5-1-资源类别分析类图",
+    "attributes": [
+      "实验室编号、位置",
+      "开放版本、启停状态"
+    ],
+    "operations": [
+      "核对开放(时段)"
+    ]
+  },
+  {
+    "class_id": "Resource",
+    "figure": "图5-1-资源类别分析类图",
+    "attributes": [
+      "资源编号、名称、类型",
+      "服务状态、所属实验室"
+    ],
+    "operations": [
+      "读取档案与限制()",
+      "派生可申请性(时段)",
+      "重算服务限制()"
+    ]
+  },
+  {
+    "class_id": "Equipment",
+    "figure": "图5-1-资源类别分析类图",
+    "attributes": [
+      "风险、培训、实物状态",
+      "可移动标志、可选依赖场地"
+    ],
+    "operations": [
+      "提供交接检查条件()"
+    ]
+  },
+  {
+    "class_id": "Room",
+    "figure": "图5-1-资源类别分析类图",
+    "attributes": [
+      "容量、安全说明"
+    ],
+    "operations": [
+      "核对空间使用条件()"
+    ]
+  },
+  {
+    "class_id": "User",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "学校编号、有效性",
+      "角色／资格按配置读取"
+    ],
+    "operations": [
+      "读取当前身份资格()"
+    ]
+  },
+  {
+    "class_id": "Resource",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "编号、类别、服务限制"
+    ],
+    "operations": [
+      "读取档案与限制()"
+    ]
+  },
+  {
+    "class_id": "Reservation",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "原计划、用途／人数",
+      "生命周期、当前复核标志",
+      "请求标识、版本、规则快照"
+    ],
+    "operations": [
+      "查询幂等结果()",
+      "检查承诺及依赖()",
+      "建立申请()",
+      "完成预约()"
+    ]
+  },
+  {
+    "class_id": "ApprovalDecision",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "方式、决定、理由、主体",
+      "决定时刻"
+    ],
+    "operations": [
+      "追加初始决定()"
+    ]
+  },
+  {
+    "class_id": "ReservationReview",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "结论、理由、快照、主体",
+      "复核时刻"
+    ],
+    "operations": [
+      "追加后续复核()"
+    ]
+  },
+  {
+    "class_id": "Loan",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "标签／配件快照、经办人",
+      "到场／办理／交付／应还"
+    ],
+    "operations": [
+      "记录真实交付()",
+      "读取借出及配件快照()"
+    ]
+  },
+  {
+    "class_id": "RoomUse",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "负责教师、实到人数",
+      "开始／结束及现场检查"
+    ],
+    "operations": [
+      "记录真实开始／结束()"
+    ]
+  },
+  {
+    "class_id": "ReturnRecord",
+    "figure": "图5-2-预约与实际交接分析类图",
+    "attributes": [
+      "实还时刻、实收、损缺异常"
+    ],
+    "operations": [
+      "追加真实接收()"
+    ]
+  },
+  {
+    "class_id": "Resource",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "服务限制、实物状态"
+    ],
+    "operations": [
+      "重算服务限制()"
+    ]
+  },
+  {
+    "class_id": "User",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "学校编号、当前权限"
+    ],
+    "operations": [
+      "校验对象权限()"
+    ]
+  },
+  {
+    "class_id": "Incident",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "现象、报告人、可选预约",
+      "核实状态、阻断标志",
+      "发现／报告／解决时刻"
+    ],
+    "operations": [
+      "保存异常事实()",
+      "按剩余工单结案()",
+      "核实／追加结案依据()"
+    ]
+  },
+  {
+    "class_id": "Evidence",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "来源、摘要、上传主体",
+      "文件索引、时刻"
+    ],
+    "operations": [
+      "追加／受控读取()"
+    ]
+  },
+  {
+    "class_id": "IncidentResponse",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "类型、内容、主体、时刻"
+    ],
+    "operations": [
+      "追加确认／异议／复核()"
+    ]
+  },
+  {
+    "class_id": "WorkOrder",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "当前指派、状态、结果",
+      "完成／验收人及时间"
+    ],
+    "operations": [
+      "读取当前工单()",
+      "保存验收结论()",
+      "接单／提交／重新指派()"
+    ]
+  },
+  {
+    "class_id": "WorkOrderEvent",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "工单、主体、原新状态",
+      "说明、时刻"
+    ],
+    "operations": [
+      "追加过程()"
+    ]
+  },
+  {
+    "class_id": "AuditEvent",
+    "figure": "图5-3-异常与维修分析类图",
+    "attributes": [
+      "对象逻辑引用、动作",
+      "主体、原新值、时刻"
+    ],
+    "operations": [
+      "核对历史执行者()"
+    ]
+  }
+]

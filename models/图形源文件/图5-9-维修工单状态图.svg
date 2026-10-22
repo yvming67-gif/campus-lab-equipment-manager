@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="482" viewBox="0 0 507 482"><rect width="100%" height="100%" fill="white"/>
+<circle cx="253" cy="16" r="5" fill="#24384B" stroke="#24384B"/>
+<rect x="154" y="62" width="199" height="48" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="89.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">OPEN 待处理</text>
+<rect x="154" y="177" width="199" height="48" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="204.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">IN_PROGRESS 处理中</text>
+<rect x="154" y="292" width="199" height="48" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="319.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">AWAITING_ACCEPTANCE 待验收</text>
+<rect x="154" y="416" width="199" height="48" rx="7" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="443.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">CLOSED 已关闭</text>
+<polyline points="253,21 253,62" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253,62 251.04265509649946,57.947988039412955 254.95734490350054,57.947988039412955" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="191.0" y="35.9" width="124.0" height="12.2" fill="white"/>
+<text x="253" y="45.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">创建[确认异常＋有效指派人]</text>
+<polyline points="253,110 253,177" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253,177 251.04265509649946,172.94798803941296 254.95734490350054,172.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="198.67447916666666" y="137.9" width="108.65104166666667" height="12.2" fill="white"/>
+<text x="253" y="147.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">START [当前有效指派人]</text>
+<polyline points="253,225 253,292" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253,292 251.04265509649946,287.94798803941296 254.95734490350054,287.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="195.33333333333334" y="252.9" width="115.33333333333333" height="12.2" fill="white"/>
+<text x="253" y="262.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">SUBMIT [过程与结果完整]</text>
+<polyline points="253,340 253,416" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253,416 251.04265509649946,411.94798803941296 254.95734490350054,411.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="186.00260416666666" y="371.9" width="133.99479166666669" height="12.2" fill="white"/>
+<text x="253" y="381.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">ACCEPT [独立且真实复测通过]</text>
+<polyline points="154,316 35,316 35,201 154,201" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="154,201 149.94798803941296,202.95734490350054 149.94798803941296,199.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="37.671875" y="246.8" width="102.65625" height="24.4" fill="white"/>
+<text x="89" y="256.12" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">REJECT_ACCEPTANCE</text>
+<text x="89" y="268.32000000000005" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">[复测不通过]</text>
+<polyline points="353,201 472,201 472,165 353,165 353,192" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="353,192 351.04265509649946,187.94798803941296 354.95734490350054,187.94798803941296" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="380.0" y="144.9" width="54.0" height="12.2" fill="white"/>
+<text x="407" y="154.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">PROGRESS</text>
+<text x="252" y="478.185" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">REASSIGN只换当前指派并追加事件，状态不变；历史执行人仍须回避验收</text>
+</svg>

@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="633" viewBox="0 0 507 633"><rect width="100%" height="100%" fill="white"/>
+<rect x="0.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="34.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«actor»</text>
+<text x="34.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">负责教师</text>
+<polyline points="34.0,48 34.0,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="73.16666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="107.16666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«boundary»</text>
+<text x="107.16666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">预约边界</text>
+<polyline points="107.16666666666667,48 107.16666666666667,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="146.33333333333334" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="180.33333333333334" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«control»</text>
+<text x="180.33333333333334" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">预约控制</text>
+<polyline points="180.33333333333334,48 180.33333333333334,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="219.5" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="253.5" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">用户</text>
+<polyline points="253.5,48 253.5,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="292.6666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="326.6666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="326.6666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">资源</text>
+<polyline points="326.6666666666667,48 326.6666666666667,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="365.8333333333333" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="399.8333333333333" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="399.8333333333333" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">预约</text>
+<polyline points="399.8333333333333,48 399.8333333333333,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="439.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="473.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«control»</text>
+<text x="473.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">业务事件控制</text>
+<polyline points="473.0,48 473.0,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="5" y="384" width="497" height="179" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="10" y="388.1" width="111.66666666666667" height="11.8" fill="white"/>
+<text x="10" y="397.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [通过／冲突或其他拒绝]</text>
+<rect x="2" y="140" width="503" height="430" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="7" y="144.1" width="154.33333333333334" height="11.8" fill="white"/>
+<text x="7" y="153.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">critical [个人场地配额及资源承诺核验]</text>
+<polyline points="34.0,94 107.16666666666667,94" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,94 103.11465470607962,95.95734490350054 103.11465470607962,92.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="9.083333333333343" y="62.9" width="123.0" height="24.2" fill="white"/>
+<text x="70.58333333333334" y="72.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-01 提交场地申请〔1〕</text>
+<text x="70.58333333333334" y="84.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">人数／用途／时段／请求标识</text>
+<polyline points="107.16666666666667,124 180.33333333333334,124" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,124 176.2813213727463,125.95734490350054 176.2813213727463,122.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="85.41666666666666" y="104.95" width="116.66666666666667" height="12.1" fill="white"/>
+<text x="143.75" y="114.185" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-02 受理场地申请〔1〕</text>
+<polyline points="180.33333333333334,192 399.8333333333333,192" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="399.8333333333333,192 395.7813213727463,193.95734490350054 395.7813213727463,190.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="229.41666666666666" y="160.9" width="121.33333333333333" height="24.2" fill="white"/>
+<text x="290.0833333333333" y="170.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-03 查询幂等结果〔1c〕</text>
+<text x="290.0833333333333" y="182.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">同标识异内容拒绝</text>
+<polyline points="180.33333333333334,236 253.5,236" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253.5,236 249.44798803941296,237.95734490350054 249.44798803941296,234.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="149.58333333333337" y="204.9" width="134.66666666666666" height="24.2" fill="white"/>
+<text x="216.91666666666669" y="214.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-04 读取当前身份资格〔1〕</text>
+<text x="216.91666666666669" y="226.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">必须为当前有效教师</text>
+<polyline points="180.33333333333334,280 326.6666666666667,280" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="326.6666666666667,280 322.61465470607965,281.95734490350054 322.61465470607965,278.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="190.66666666666666" y="248.9" width="125.66666666666667" height="24.2" fill="white"/>
+<text x="253.5" y="258.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-05 读取档案与限制〔2〕</text>
+<text x="253.5" y="270.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">整间场地、容量、开放</text>
+<polyline points="180.33333333333334,324 196.33333333333334,324 196.33333333333334,331 180.33333333333334,331" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,331 184.38534529392038,329.04265509649946 184.38534529392038,332.95734490350054" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="108.50000000000001" y="292.9" width="143.66666666666666" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="302.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-06 判断资格配额及时间〔3〕</text>
+<text x="180.33333333333334" y="314.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">未来场地数与设备另计</text>
+<polyline points="180.33333333333334,368 399.8333333333333,368" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="399.8333333333333,368 395.7813213727463,369.95734490350054 395.7813213727463,366.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="227.24999999999997" y="336.9" width="125.66666666666667" height="24.2" fill="white"/>
+<text x="290.0833333333333" y="346.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-07 检查承诺及依赖〔4〕</text>
+<text x="290.0833333333333" y="358.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">他人固定设备双向限制</text>
+<polyline points="180.33333333333334,436 399.8333333333333,436" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="399.8333333333333,436 395.7813213727463,437.95734490350054 395.7813213727463,434.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="216.75" y="404.9" width="146.66666666666666" height="24.2" fill="white"/>
+<text x="290.0833333333333" y="414.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-08 建立申请〔5〕</text>
+<text x="290.0833333333333" y="426.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">仅PENDING；不占场地或设备时段</text>
+<polyline points="180.33333333333334,480 473.0,480" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="473.0,480 468.94798803941296,481.95734490350054 468.94798803941296,478.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="254.83333333333337" y="448.9" width="143.66666666666666" height="24.2" fill="white"/>
+<text x="326.6666666666667" y="458.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-09 追加审计与通知任务〔5〕</text>
+<text x="326.6666666666667" y="470.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">形成管理员审核任务</text>
+<polyline points="8,496 499,496" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="14" y="500.1" width="124.66666666666667" height="11.8" fill="white"/>
+<text x="14" y="509.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">[冲突、容量、身份或配额不符]</text>
+<polyline points="180.33333333333334,547 196.33333333333334,547 196.33333333333334,554 180.33333333333334,554" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,554 184.38534529392038,552.0426550964995 184.38534529392038,555.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="119.16666666666669" y="515.9" width="122.33333333333333" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="525.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-10 拒绝本次操作〔4b〕</text>
+<text x="180.33333333333334" y="537.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">拒绝且无半条申请</text>
+<polyline points="180.33333333333334,605 107.16666666666667,605" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,605 111.21867862725372,603.0426550964995 111.21867862725372,606.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="64.08333333333333" y="573.9" width="159.33333333333334" height="24.2" fill="white"/>
+<text x="143.75" y="583.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S05-11 呈现申请结果〔5〕</text>
+<text x="143.75" y="595.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">返回待审核编号；批准由UC-08另执行</text>
+</svg>

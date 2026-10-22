@@ -1,0 +1,61 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+class "资源 Resource〔引用〕" as Resource {
+ 服务限制、实物状态
+ --
+ 重算服务限制()
+}
+class "用户 User〔引用〕" as User {
+ 学校编号、当前权限
+ --
+ 校验对象权限()
+}
+class "异常 Incident" as Incident {
+ 现象、报告人、可选预约
+ 核实状态、阻断标志
+ 发现／报告／解决时刻
+ --
+ 保存异常事实()
+ 按剩余工单结案()
+ 核实／追加结案依据()
+}
+class "证据 Evidence" as Evidence {
+ 来源、摘要、上传主体
+ 文件索引、时刻
+ --
+ 追加／受控读取()
+}
+class "回应 IncidentResponse" as IncidentResponse {
+ 类型、内容、主体、时刻
+ --
+ 追加确认／异议／复核()
+}
+class "维修工单 WorkOrder" as WorkOrder {
+ 当前指派、状态、结果
+ 完成／验收人及时间
+ --
+ 读取当前工单()
+ 保存验收结论()
+ 接单／提交／重新指派()
+}
+class "过程 WorkOrderEvent" as WorkOrderEvent {
+ 工单、主体、原新状态
+ 说明、时刻
+ --
+ 追加过程()
+}
+class "审计 AuditEvent" as AuditEvent {
+ 对象逻辑引用、动作
+ 主体、原新值、时刻
+ --
+ 核对历史执行者()
+}
+Resource "1" -- "0..*" Incident
+User "1" -- "0..*" Incident
+Incident "1" -- "0..*" Evidence
+Incident "1" -- "0..*" IncidentResponse
+Incident "1" -- "0..*" WorkOrder
+WorkOrder "1" -- "1..*" WorkOrderEvent
+WorkOrder .. AuditEvent : 逻辑追溯非物理外键
+note bottom of Incident : 同一异常最多一项未关闭工单
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+[*] --> OPEN : 创建 [已确认异常且指派人有效]
+OPEN --> IN_PROGRESS : START [当前有效指派人]
+IN_PROGRESS --> IN_PROGRESS : PROGRESS
+IN_PROGRESS --> AWAITING_ACCEPTANCE : SUBMIT [过程与结果完整]
+AWAITING_ACCEPTANCE --> IN_PROGRESS : REJECT_ACCEPTANCE [复测不通过]
+AWAITING_ACCEPTANCE --> CLOSED : ACCEPT [独立且真实复测通过]
+note right of IN_PROGRESS : REASSIGN状态不变，历史执行人仍回避
+note right of CLOSED : 工单关闭不保证其他资源限制已解除
+@enduml

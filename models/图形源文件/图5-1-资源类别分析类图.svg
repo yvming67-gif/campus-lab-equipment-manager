@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="510" viewBox="0 0 507 510"><rect width="100%" height="100%" fill="white"/>
+<rect x="180" y="8" width="147" height="112" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="20.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">实验室</text>
+<text x="253.5" y="32.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Lab</text>
+<polyline points="180,38 327,38" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="186" y="53.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">实验室编号、位置</text>
+<text x="186" y="65.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">开放版本、启停状态</text>
+<polyline points="180,70 327,70" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="186" y="85.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">核对开放(时段)</text>
+<rect x="180" y="185" width="147" height="124" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="197.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">资源</text>
+<text x="253.5" y="209.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Resource {abstract}</text>
+<polyline points="180,215 327,215" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="186" y="230.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">资源编号、名称、类型</text>
+<text x="186" y="242.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">服务状态、所属实验室</text>
+<polyline points="180,247 327,247" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="186" y="262.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">读取档案与限制()</text>
+<text x="186" y="274.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">派生可申请性(时段)</text>
+<text x="186" y="286.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">重算服务限制()</text>
+<rect x="5" y="385" width="225" height="116" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="117.5" y="397.03000000000003" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">设备</text>
+<text x="117.5" y="409.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Equipment</text>
+<polyline points="5,415 230,415" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="430.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">风险、培训、实物状态</text>
+<text x="11" y="442.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">可移动标志、可选依赖场地</text>
+<polyline points="5,447 230,447" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="462.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">提供交接检查条件()</text>
+<rect x="285" y="385" width="217" height="116" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="393.5" y="397.03000000000003" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">整间场地</text>
+<text x="393.5" y="409.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Room</text>
+<polyline points="285,415 502,415" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="291" y="430.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">容量、安全说明</text>
+<polyline points="285,435 502,435" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="291" y="450.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">核对空间使用条件()</text>
+<polyline points="253.5,120 253.5,185" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<rect x="264.6666666666667" y="144.9" width="24.666666666666668" height="12.2" fill="white"/>
+<text x="277" y="154.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">归属</text>
+<text x="240" y="135.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="232" y="177.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<polyline points="117.5,385 117.5,345 230,345 230,309" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="230,309 233.04475873877863,315.30312971646873 226.95524126122137,315.30312971646873" fill="white" stroke="#7C8C8B"/>
+<polyline points="393.5,385 393.5,345 277,345 277,309" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="277,309 280.0447587387786,315.30312971646873 273.9552412612214,315.30312971646873" fill="white" stroke="#7C8C8B"/>
+<rect x="200.33333333333334" y="320.85" width="105.33333333333333" height="12.3" fill="white"/>
+<text x="253" y="330.255" font-family="Microsoft YaHei,sans-serif" font-size="9.3" text-anchor="middle" fill="#24384B">{完整、互斥的资源类别}</text>
+</svg>

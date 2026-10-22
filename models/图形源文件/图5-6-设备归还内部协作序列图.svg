@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="620" viewBox="0 0 507 620"><rect width="100%" height="100%" fill="white"/>
+<rect x="0.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="34.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«actor»</text>
+<text x="34.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">管理员</text>
+<polyline points="34.0,48 34.0,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="73.16666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="107.16666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«boundary»</text>
+<text x="107.16666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">交接边界</text>
+<polyline points="107.16666666666667,48 107.16666666666667,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="146.33333333333334" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="180.33333333333334" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«control»</text>
+<text x="180.33333333333334" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">交接控制</text>
+<polyline points="180.33333333333334,48 180.33333333333334,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="219.5" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="253.5" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">设备借出</text>
+<polyline points="253.5,48 253.5,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="292.6666666666667" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="326.6666666666667" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="326.6666666666667" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">归还凭据</text>
+<polyline points="326.6666666666667,48 326.6666666666667,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="365.8333333333333" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="399.8333333333333" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«entity»</text>
+<text x="399.8333333333333" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">异常</text>
+<polyline points="399.8333333333333,48 399.8333333333333,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="439.0" y="2" width="68" height="46" rx="0" fill="#F1F5F3" stroke="#24384B" stroke-width=".7"/>
+<text x="473.0" y="22.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">«control»</text>
+<text x="473.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">业务事件控制</text>
+<polyline points="473.0,48 473.0,615" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="8" y="320" width="491" height="68" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="13" y="324.1" width="116.0" height="11.8" fill="white"/>
+<text x="13" y="333.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">opt [损坏、缺件或运行异常]</text>
+<rect x="5" y="252" width="497" height="298" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="10" y="256.1" width="163.66666666666666" height="11.8" fill="white"/>
+<text x="10" y="265.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [存在对应借出且检查可登记／无借出]</text>
+<rect x="2" y="140" width="503" height="417" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
+<rect x="7" y="144.1" width="154.33333333333334" height="11.8" fill="white"/>
+<text x="7" y="153.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">critical [真实归还及相关事实一起保存]</text>
+<polyline points="34.0,94 107.16666666666667,94" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,94 103.11465470607962,95.95734490350054 103.11465470607962,92.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="9.083333333333343" y="62.9" width="123.0" height="24.2" fill="white"/>
+<text x="70.58333333333334" y="72.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-01 提交归还检查〔3〕</text>
+<text x="70.58333333333334" y="84.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">标签、实收、现象及真实时刻</text>
+<polyline points="107.16666666666667,124 180.33333333333334,124" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,124 176.2813213727463,125.95734490350054 176.2813213727463,122.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="85.41666666666666" y="104.95" width="116.66666666666667" height="12.1" fill="white"/>
+<text x="143.75" y="114.185" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-02 接收真实归还〔1〕</text>
+<polyline points="180.33333333333334,192 253.5,192" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="253.5,192 249.44798803941296,193.95734490350054 249.44798803941296,190.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="145.08333333333337" y="160.9" width="143.66666666666666" height="24.2" fill="white"/>
+<text x="216.91666666666669" y="170.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-03 读取借出及配件快照〔2〕</text>
+<text x="216.91666666666669" y="182.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">核对开放借出和原设备标签</text>
+<polyline points="180.33333333333334,236 196.33333333333334,236 196.33333333333334,243 180.33333333333334,243" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,243 184.38534529392038,241.04265509649946 184.38534529392038,244.95734490350054" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="105.33333333333334" y="204.9" width="150.0" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="214.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-04 核对当前归还条件〔4〕</text>
+<text x="180.33333333333334" y="226.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">范围、时间和实收；失效账号仍接收</text>
+<polyline points="180.33333333333334,304 326.6666666666667,304" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="326.6666666666667,304 322.61465470607965,305.95734490350054 322.61465470607965,302.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="183.0" y="272.9" width="141.0" height="24.2" fill="white"/>
+<text x="253.5" y="282.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-05 追加真实接收〔5〕</text>
+<text x="253.5" y="294.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">正常、提前或逾期均保存真实结束</text>
+<polyline points="180.33333333333334,372 399.8333333333333,372" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="399.8333333333333,372 395.7813213727463,373.95734490350054 395.7813213727463,370.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="224.08333333333331" y="340.9" width="132.0" height="24.2" fill="white"/>
+<text x="290.0833333333333" y="350.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-06 保存异常事实〔5a〕</text>
+<text x="290.0833333333333" y="362.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">先保留阻断；不自动判赔或恢复</text>
+<polyline points="180.33333333333334,423 196.33333333333334,423 196.33333333333334,430 180.33333333333334,430" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,430 184.38534529392038,428.04265509649946 184.38534529392038,431.95734490350054" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="96.33333333333334" y="391.9" width="168.0" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="401.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-06b 同步使用与服务结论〔5〕</text>
+<text x="180.33333333333334" y="413.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">预约完成、实物回库，另查全部服务限制</text>
+<polyline points="180.33333333333334,467 473.0,467" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="473.0,467 468.94798803941296,468.95734490350054 468.94798803941296,465.04265509649946" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="254.83333333333337" y="435.9" width="143.66666666666666" height="24.2" fill="white"/>
+<text x="326.6666666666667" y="445.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-07 追加审计与通知任务〔6〕</text>
+<text x="326.6666666666667" y="457.235" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">不由通知控制作出归还领域决定</text>
+<polyline points="8,483 499,483" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="14" y="487.1" width="64.0" height="11.8" fill="white"/>
+<text x="14" y="496.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">[没有对应借出]</text>
+<polyline points="180.33333333333334,534 196.33333333333334,534 196.33333333333334,541 180.33333333333334,541" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="180.33333333333334,541 184.38534529392038,539.0426550964995 184.38534529392038,542.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="109.83333333333334" y="502.9" width="141.0" height="24.2" fill="white"/>
+<text x="180.33333333333334" y="512.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-08 拒绝本次操作〔1b〕</text>
+<text x="180.33333333333334" y="524.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">不伪造归还；引导异常登记待核实</text>
+<polyline points="180.33333333333334,592 107.16666666666667,592" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<polygon points="107.16666666666667,592 111.21867862725372,590.0426550964995 111.21867862725372,593.9573449035005" fill="#7C8C8B" stroke="#7C8C8B"/>
+<rect x="73.25" y="560.9" width="141.0" height="24.2" fill="white"/>
+<text x="143.75" y="570.135" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">S10-09 呈现归还结果〔6〕</text>
+<text x="143.75" y="582.2349999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.1" text-anchor="middle" fill="#24384B">返回凭据或明确失败，无部分成功</text>
+</svg>

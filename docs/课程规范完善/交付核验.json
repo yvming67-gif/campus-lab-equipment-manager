@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-22",
+  "analysis_version": "2.3",
+  "input_commit": "d3a57f222e52eafd5ebc87c9a9853c45285c495b",
+  "report": "docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx",
+  "sha256": "ab2a27a9b52431e9dca50c168cf44c4441fb030b2850d4f53a50ffdec0a546b9",
+  "render_pages": 104,
+  "toc_entries": 43,
+  "tables": 48,
+  "figures": 23,
+  "body_font": "宋体11pt，1.28倍行距",
+  "headings": "黑色原生Heading及多级编号",
+  "table_format": "9.5pt、D9D9D9完整边框、隔行底色、重复表头、不拆行",
+  "render_engine": "documents/render_docx.py；运行时3.12；manifest无LibreOffice，采用既有工作区便携LibreOffice",
+  "business_code_changed": false,
+  "physical_model_changed": false,
+  "rule_definitions_changed": false,
+  "limits": "本轮文件及模型静态核验；不是Microsoft Word在另一台电脑的实测，不代表调研、微信真机或真实外部服务验收。历史2.2独立复核不覆盖新增2.3内容。",
+  "visual_review": {
+    "pages": 104,
+    "all_pages_reviewed": true,
+    "final_render": "word-render-10",
+    "method": "逐页查看原尺寸页面；文字、目录、表格跨页和图形边界人工复核。后续仅改动页面重新查看，并按PNG摘要确认其余页面与已查版本相同。",
+    "revision_differences": {
+      "7_to_8": [
+        6,
+        25
+      ],
+      "8_to_9": [
+        87,
+        88,
+        89
+      ],
+      "9_to_10": [
+        104
+      ]
+    },
+    "observations": "未见乱码、文字裁切、图文重叠或空白页；目录43项均有实际页定位。完整大图保持独页时保留必要分页余量。",
+    "limitations": "使用LibreOffice渲染，不代表Microsoft Word在另一台电脑上的实际分页。"
+  },
+  "validation_commands": [
+    {
+      "command": "python tools/validate_registry.py",
+      "exit_code": 0,
+      "output": "PASS: 27 FR/UC/SPEC, 46 BR + DC-01, 11 QR, 66 AC; source/business/message/field/model references and explicit operational trace\nPASS: vector ERD has all exported entities / fields / field-attached FK; six complete domains; no card-crossing connectors"
+    },
+    {
+      "command": "python tools/validate_analysis_models.py",
+      "exit_code": 0,
+      "output": "分析契约通过：27规约、4内部协作、43消息、9组可编辑模型；静态检查不代替语义及运行验收。"
+    }
+  ]
+}

@@ -36,6 +36,7 @@ jobs:
       - run: npm ci --prefix tools/mini-check --ignore-scripts --no-audit --no-fund
       - run: node tools/mini-check/compile.cjs
       - run: python tools/validate_registry.py
+      - run: python tools/validate_analysis_models.py
       - run: python tools/test_startup.py
 
   windows-first-install:

@@ -18,5 +18,7 @@
   "metadata_only_change": [
     "docProps/core.xml"
   ],
-  "body_sha256": "c9c31e6c67ea0ebb40fda6d2b58dd25945cf8fcc7a4dc30c8a0671e3731df8a2"
+  "body_sha256": "c9c31e6c67ea0ebb40fda6d2b58dd25945cf8fcc7a4dc30c8a0671e3731df8a2",
+  "scope": "历史2.2交付核验；以下SHA及82页计数对应d3a57f2，不是当前2.3报告",
+  "current_verification": "../课程规范完善/交付核验.json"
 }

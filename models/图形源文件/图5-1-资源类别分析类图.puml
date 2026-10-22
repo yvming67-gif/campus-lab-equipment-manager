@@ -1,0 +1,32 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+class "实验室 Lab" as Lab {
+ 实验室编号、位置
+ 开放版本、启停状态
+ --
+ 核对开放(时段)
+}
+abstract class "资源 Resource {abstract}" as Resource {
+ 资源编号、名称、类型
+ 服务状态、所属实验室
+ --
+ 读取档案与限制()
+ 派生可申请性(时段)
+ 重算服务限制()
+}
+class "设备 Equipment" as Equipment {
+ 风险、培训、实物状态
+ 可移动标志、可选依赖场地
+ --
+ 提供交接检查条件()
+}
+class "整间场地 Room" as Room {
+ 容量、安全说明
+ --
+ 核对空间使用条件()
+}
+Lab "1" -- "0..*" Resource
+Resource <|-- Equipment
+Resource <|-- Room
+note bottom of Resource : 类别完整且互斥；概念泛化不等于Django继承
+@enduml

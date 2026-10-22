@@ -1,6 +1,6 @@
 {
   "baseline": {
-    "version": "2.2",
+    "version": "2.3",
     "project": "校园实验室设备预约与借用管理系统",
     "confirmed": {
       "objects": [
@@ -690,7 +690,7 @@
       "additional_ac": [
         "AC-63"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "认证失败不产生已登录会话；原业务记录不变。退出或会话失效不删除业务历史。",
       "field_ids": [
         "身份凭据",
@@ -719,14 +719,62 @@
       ],
       "pending": "真实学校制度与岗位范围待确认；本规约表达已接受课程方案。",
       "scope": "学生、教师及各管理岗位",
-      "kind": "用户目标用例",
+      "kind": "跨业务支撑用例",
       "permissions": "学生、教师及各管理岗位；本人及授权实验室记录",
       "time_constraints": "不适用预约时间与数量校验；相关对象状态和权限按本规约执行。",
       "acceptance_ids": [
         "AC-01",
         "AC-02",
         "AC-63"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "身份会话",
+      "receipt_fields": "主体编号＋当前角色范围＋会话到期时间＋认证渠道",
+      "rule_step_links": [
+        {
+          "rule": "BR-01",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-30",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-46",
+          "steps": [
+            "2"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "身份凭据",
+            "会话绑定"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "身份会话",
+          "definition": "主体编号＋当前角色范围＋会话到期时间＋认证渠道",
+          "boundary": "UC-01；凭据不进入业务日志"
+        }
+      ],
+      "control_class": "认证边界与身份控制"
     },
     {
       "id": "UC-02",
@@ -780,7 +828,7 @@
       "improvements": [
         "I-01"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "查询失败不改变资源、预约或权限；不暴露他人申请内容。",
       "field_ids": [
         "检索条件",
@@ -816,7 +864,50 @@
       "acceptance_ids": [
         "AC-03",
         "AC-04"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "资源目录结果",
+      "receipt_fields": "资源编号＋名称＋实验室＋类型＋服务状态＋审批要求＋分页信息",
+      "rule_step_links": [
+        {
+          "rule": "BR-29",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-31",
+          "steps": [
+            "3"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "检索条件",
+            "分页",
+            "资源编号"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "资源目录结果",
+          "definition": "资源编号＋名称＋实验室＋类型＋服务状态＋审批要求＋分页信息",
+          "boundary": "UC-02；不构成时段承诺"
+        }
+      ],
+      "control_class": "查询统计控制"
     },
     {
       "id": "UC-03",
@@ -886,7 +977,7 @@
         "AC-57",
         "AC-61"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "不产生预约、审核或实际使用；不泄露占用者隐私。",
       "field_ids": [
         "资源编号",
@@ -930,7 +1021,63 @@
         "AC-56",
         "AC-57",
         "AC-61"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 4,
+      "receipt_group": "时段可申请性",
+      "receipt_fields": "资源编号＋查询时段＋可申请结论＋阻断原因＋查询时点",
+      "rule_step_links": [
+        {
+          "rule": "BR-03",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-06",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-07",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-39",
+          "steps": [
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "资源编号",
+            "开始时间",
+            "结束时间",
+            "检索条件"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "时段可申请性",
+          "definition": "资源编号＋查询时段＋可申请结论＋阻断原因＋查询时点",
+          "boundary": "UC-03；不占时段，不是本人资格全部已满足"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-04",
@@ -1017,7 +1164,7 @@
         "AC-56",
         "AC-57"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "业务拒绝不产生新预约或占用；同内容重试返回原编号。外部通知失败不撤销已提交业务；技术失败不留下预约、决定、审计或通知的部分结果。",
       "field_ids": [
         "资源编号",
@@ -1061,7 +1208,64 @@
         "AC-08",
         "AC-56",
         "AC-57"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 6,
+      "receipt_group": "预约结果",
+      "receipt_fields": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+      "rule_step_links": [
+        {
+          "rule": "BR-07",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-09",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-14",
+          "steps": [
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-35",
+          "steps": [
+            "2"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "资源编号",
+            "开始时间",
+            "结束时间",
+            "用途",
+            "请求标识"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "6",
+          "direction": "输出或追加事实",
+          "group": "预约结果",
+          "definition": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+          "boundary": "UC-04/05；同内容重试返回原编号"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-05",
@@ -1076,7 +1280,7 @@
       "post": "生成PENDING场地申请、负责教师、申请人数、规则快照及通知；占场地未来配额，不占时段，也不占室内设备。",
       "stakeholders": "负责教师需要明确空间与人数责任；管理员需要活动用途和容量依据；设备使用者需要场地不无条件锁定可移动设备。",
       "steps": [
-        "1. 系统验证有效教师身份，接收场地、时段、人数、用途和请求标识。",
+        "1. 系统验证有效教师身份，接收场地、时段、人数、用途和请求标识，并核对同标识历史内容。",
         "2. 系统校验资源存在与场地类型、容量、时间规则和开放条件。",
         "3. 系统核对逾期、场地未来配额及本人同时间场地责任限制。",
         "4. 系统重新核对场地有效承诺及他人固定设备依赖。",
@@ -1147,7 +1351,7 @@
         "AC-56",
         "AC-57"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "拒绝时无新申请；相同标识同内容返回原结果；业务与审计/任务保持完整，外部失败不撤销申请。",
       "field_ids": [
         "资源编号",
@@ -1189,7 +1393,65 @@
         "AC-10",
         "AC-56",
         "AC-57"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 5,
+      "receipt_group": "预约结果",
+      "receipt_fields": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+      "rule_step_links": [
+        {
+          "rule": "BR-02",
+          "steps": [
+            "1"
+          ]
+        },
+        {
+          "rule": "BR-08",
+          "steps": [
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-09",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-39",
+          "steps": [
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "资源编号",
+            "开始时间",
+            "结束时间",
+            "用途",
+            "人数",
+            "请求标识"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "预约结果",
+          "definition": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+          "boundary": "UC-04/05；同内容重试返回原编号"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-06",
@@ -1252,7 +1514,7 @@
       "additional_ac": [
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "查询不改状态；拒绝的补充不覆盖原决定、材料或他人记录。",
       "field_ids": [
         "预约编号",
@@ -1290,7 +1552,56 @@
         "AC-11",
         "AC-12",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "预约时间线",
+      "receipt_fields": "预约编号＋原计划＋当前状态＋初始决定＋当前复核标志＋追加说明＋真实使用关联",
+      "rule_step_links": [
+        {
+          "rule": "BR-15",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-29",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-45",
+          "steps": [
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "补充说明",
+            "证据引用"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "预约时间线",
+          "definition": "预约编号＋原计划＋当前状态＋初始决定＋当前复核标志＋追加说明＋真实使用关联",
+          "boundary": "UC-06；原决定与后续记录分列"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-07",
@@ -1351,7 +1662,7 @@
         "I-02",
         "I-08"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "取消失败不改变原状态；已取消重试返回原结果，不能删除历史。",
       "field_ids": [
         "预约编号",
@@ -1386,7 +1697,56 @@
       "acceptance_ids": [
         "AC-13",
         "AC-14"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 4,
+      "receipt_group": "取消结果",
+      "receipt_fields": "预约编号＋CANCELLED＋取消原因＋操作者／时刻＋原占用释放结论",
+      "rule_step_links": [
+        {
+          "rule": "BR-16",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-26",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-35",
+          "steps": [
+            "1"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "原因",
+            "版本"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "取消结果",
+          "definition": "预约编号＋CANCELLED＋取消原因＋操作者／时刻＋原占用释放结论",
+          "boundary": "UC-07；原申请及决定保留"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-08",
@@ -1474,7 +1834,7 @@
         "AC-57",
         "AC-58"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "检查失败保持PENDING，不创建通过决定；并发最终至多一份重叠有效承诺；原决定不覆盖。",
       "field_ids": [
         "预约编号",
@@ -1517,7 +1877,64 @@
         "AC-56",
         "AC-57",
         "AC-58"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 5,
+      "receipt_group": "初始决定",
+      "receipt_fields": "预约编号＋通过或驳回＋决定方式＋责任主体＋理由＋决定时间",
+      "rule_step_links": [
+        {
+          "rule": "BR-07",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-08",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-15",
+          "steps": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-35",
+          "steps": [
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "决定",
+            "原因",
+            "版本"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "初始决定",
+          "definition": "预约编号＋通过或驳回＋决定方式＋责任主体＋理由＋决定时间",
+          "boundary": "UC-08及普通设备自动确认；不覆盖后续复核"
+        }
+      ],
+      "control_class": "预约控制"
     },
     {
       "id": "UC-09",
@@ -1568,7 +1985,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "problem": "P-05",
       "improvement": "I-05",
@@ -1602,7 +2020,7 @@
         "AC-61",
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "拒绝不产生成功借出凭据。检查失败可合法保留异常、隔离、审计或延误协调；技术失败不留下部分成功交接。",
       "field_ids": [
         "预约编号",
@@ -1653,7 +2071,67 @@
         "AC-57",
         "AC-61",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 5,
+      "receipt_group": "借出凭据",
+      "receipt_fields": "借出编号＋预约编号＋设备标签快照＋配件快照＋检查结论＋到场／开始办理／实际交付时刻＋应还时间＋经办人",
+      "rule_step_links": [
+        {
+          "rule": "BR-17",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-18",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-19",
+          "steps": [
+            "2",
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-38",
+          "steps": [
+            "3a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "学校编号",
+            "设备标签",
+            "配件检查",
+            "检查结论",
+            "到场时间",
+            "开始办理时间"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "借出凭据",
+          "definition": "借出编号＋预约编号＋设备标签快照＋配件快照＋检查结论＋到场／开始办理／实际交付时刻＋应还时间＋经办人",
+          "boundary": "UC-09；失败检查可以有异常，不能有成功借出凭据"
+        }
+      ],
+      "control_class": "交接控制"
     },
     {
       "id": "UC-10",
@@ -1733,7 +2211,7 @@
         "AC-61",
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "没有对应借出不伪造归还。损坏/缺件仍可成功接收且保存异常；技术失败无部分归还。原交接事实不覆盖。",
       "field_ids": [
         "预约编号",
@@ -1781,7 +2259,68 @@
         "AC-59",
         "AC-61",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 3,
+      "receipt_step": 5,
+      "receipt_group": "归还凭据",
+      "receipt_fields": "归还编号＋借出编号＋实际归还时刻＋实收配件＋损坏／缺件／运行异常＋检查说明＋经办人",
+      "rule_step_links": [
+        {
+          "rule": "BR-18",
+          "steps": [
+            "1"
+          ]
+        },
+        {
+          "rule": "BR-20",
+          "steps": [
+            "4",
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-22",
+          "steps": [
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-45",
+          "steps": [
+            "1c"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "3",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "设备标签",
+            "实际结束时间",
+            "检查结论",
+            "损坏标志",
+            "缺件标志",
+            "异常标志",
+            "实收数量"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "归还凭据",
+          "definition": "归还编号＋借出编号＋实际归还时刻＋实收配件＋损坏／缺件／运行异常＋检查说明＋经办人",
+          "boundary": "UC-10；如实接收后另判断服务能否恢复"
+        }
+      ],
+      "control_class": "交接控制"
     },
     {
       "id": "UC-11",
@@ -1831,7 +2370,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "problem": "P-07",
       "improvement": "I-07",
@@ -1867,7 +2407,7 @@
         "AC-61",
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "未通过核验不生成实际开始。合法延误协调可留记录；前人未结束不伪造离场。",
       "field_ids": [
         "预约编号",
@@ -1912,7 +2452,67 @@
         "AC-57",
         "AC-61",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 5,
+      "receipt_group": "场地使用凭据",
+      "receipt_fields": "场地使用标识＋预约编号＋负责教师＋实际人数＋到场和实际开始时刻＋现场结论＋经办人",
+      "rule_step_links": [
+        {
+          "rule": "BR-02",
+          "steps": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-18",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-21",
+          "steps": [
+            "2",
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-39",
+          "steps": [
+            "3",
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "学校编号",
+            "人数",
+            "到场时间",
+            "检查结论"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "场地使用凭据",
+          "definition": "场地使用标识＋预约编号＋负责教师＋实际人数＋到场和实际开始时刻＋现场结论＋经办人",
+          "boundary": "UC-11；不视为室内设备借出"
+        }
+      ],
+      "control_class": "交接控制"
     },
     {
       "id": "UC-12",
@@ -1988,7 +2588,7 @@
         "AC-61",
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "没有开始记录不虚构结束；检查有异常仍保存真实结束及异常；技术失败无部分结束。",
       "field_ids": [
         "预约编号",
@@ -2026,7 +2626,58 @@
         "AC-24",
         "AC-61",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "场地结束凭据",
+      "receipt_fields": "场地使用标识＋实际结束时刻＋结束经办人＋检查说明＋异常标志",
+      "rule_step_links": [
+        {
+          "rule": "BR-21",
+          "steps": [
+            "3",
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-44",
+          "steps": [
+            "2a"
+          ]
+        },
+        {
+          "rule": "BR-45",
+          "steps": [
+            "1a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "实际结束时间",
+            "检查结论",
+            "异常标志"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "场地结束凭据",
+          "definition": "场地使用标识＋实际结束时刻＋结束经办人＋检查说明＋异常标志",
+          "boundary": "UC-12；不自动归还其他设备"
+        }
+      ],
+      "control_class": "交接控制"
     },
     {
       "id": "UC-13",
@@ -2095,7 +2746,7 @@
         "AC-54",
         "AC-59"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "非法关联不生成报告；普通无关联报告不自动隔离。允许合法阻断与审计同时保存，外部失败不抹去报告。",
       "field_ids": [
         "资源编号",
@@ -2136,7 +2787,58 @@
         "AC-26",
         "AC-54",
         "AC-59"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 5,
+      "receipt_group": "异常事实",
+      "receipt_fields": "异常编号＋资源＋报告人＋可选关联预约＋类型＋现象＋发现／报告时刻＋核实状态＋阻断标志",
+      "rule_step_links": [
+        {
+          "rule": "BR-22",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-37",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-42",
+          "steps": [
+            "5"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "资源编号",
+            "异常类型",
+            "异常描述",
+            "发现时间",
+            "预约编号"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "异常事实",
+          "definition": "异常编号＋资源＋报告人＋可选关联预约＋类型＋现象＋发现／报告时刻＋核实状态＋阻断标志",
+          "boundary": "UC-13；核实状态与阻断标志正交"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-14",
@@ -2208,7 +2910,7 @@
         "AC-54",
         "AC-59"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "无权或非法状态操作不改原事实；有开放工单不得绕过维修验收结案；合法未解决限制继续保留。",
       "field_ids": [
         "异常编号",
@@ -2250,7 +2952,65 @@
         "AC-28",
         "AC-54",
         "AC-59"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 5,
+      "receipt_group": "异常处置",
+      "receipt_fields": "异常编号＋新核实结论或追加回应编号＋理由＋操作者／时间＋当前阻断原因",
+      "rule_step_links": [
+        {
+          "rule": "BR-22",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-25",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-37",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-42",
+          "steps": [
+            "1a",
+            "2b"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "异常编号",
+            "处置动作",
+            "原因",
+            "回应类型",
+            "补充说明"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "异常处置",
+          "definition": "异常编号＋新核实结论或追加回应编号＋理由＋操作者／时间＋当前阻断原因",
+          "boundary": "UC-14；本人回应不等于管理员核实"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-15",
@@ -2321,7 +3081,7 @@
       "additional_ac": [
         "AC-60"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "未确认异常不建工单；同异常最多一张开放工单；外部失败不撤销维修安排。",
       "field_ids": [
         "异常编号",
@@ -2359,7 +3119,53 @@
         "AC-29",
         "AC-30",
         "AC-60"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "维修任务",
+      "receipt_fields": "工单编号＋异常编号＋当前指派人＋当前状态＋安排理由及过程事件",
+      "rule_step_links": [
+        {
+          "rule": "BR-23",
+          "steps": [
+            "2",
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-43",
+          "steps": [
+            "2",
+            "2a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "异常编号",
+            "工单编号",
+            "维修人员",
+            "原因"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "维修任务",
+          "definition": "工单编号＋异常编号＋当前指派人＋当前状态＋安排理由及过程事件",
+          "boundary": "UC-15；已存在任务重试不创建第二项"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-16",
@@ -2426,7 +3232,7 @@
       "additional_ac": [
         "AC-60"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "无权或非法推进不改工单；维修提交不自动恢复资源；技术操作本身由人员完成。",
       "field_ids": [
         "工单编号",
@@ -2463,7 +3269,52 @@
         "AC-31",
         "AC-32",
         "AC-60"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 3,
+      "receipt_step": 5,
+      "receipt_group": "维修过程结果",
+      "receipt_fields": "工单编号＋处理动作＋原／新状态＋过程或结果＋实际操作者／时刻",
+      "rule_step_links": [
+        {
+          "rule": "BR-24",
+          "steps": [
+            "2",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-43",
+          "steps": [
+            "1a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "3",
+          "direction": "输入",
+          "fields": [
+            "工单编号",
+            "维修动作",
+            "维修结果"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "维修过程结果",
+          "definition": "工单编号＋处理动作＋原／新状态＋过程或结果＋实际操作者／时刻",
+          "boundary": "UC-16；提交待验收不恢复服务"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-17",
@@ -2530,7 +3381,7 @@
       "additional_ac": [
         "AC-60"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "非执行状态或自验收被拒；不覆盖原维修事实；技术失败不部分关闭；资源恢复服务与实物在库分开。",
       "field_ids": [
         "工单编号",
@@ -2568,7 +3419,57 @@
         "AC-33",
         "AC-34",
         "AC-60"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 5,
+      "receipt_group": "验收与服务结论",
+      "receipt_fields": "工单编号＋复测结论＋验收人／时刻＋依据＋工单状态＋异常结案结果＋资源当前限制",
+      "rule_step_links": [
+        {
+          "rule": "BR-24",
+          "steps": [
+            "1"
+          ]
+        },
+        {
+          "rule": "BR-25",
+          "steps": [
+            "4",
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-43",
+          "steps": [
+            "1"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "工单编号",
+            "决定",
+            "原因"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "验收与服务结论",
+          "definition": "工单编号＋复测结论＋验收人／时刻＋依据＋工单状态＋异常结案结果＋资源当前限制",
+          "boundary": "UC-17；工单关闭不保证全部资源限制解除"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-18",
@@ -2640,7 +3541,7 @@
         "AC-53",
         "AC-56"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "非法编号、类型、依赖或容量调整拒绝；普通配置权不授予业务状态维护权；不删除历史资源。",
       "field_ids": [
         "资源档案",
@@ -2683,7 +3584,61 @@
         "AC-36",
         "AC-53",
         "AC-56"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "资源档案版本",
+      "receipt_fields": "资源编号＋类型及明细＋所属实验室＋配件／固定依赖＋服务历史＋原新值审计",
+      "rule_step_links": [
+        {
+          "rule": "BR-23",
+          "steps": [
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-31",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-36",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-39",
+          "steps": [
+            "3"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "资源档案",
+            "原因"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "资源档案版本",
+          "definition": "资源编号＋类型及明细＋所属实验室＋配件／固定依赖＋服务历史＋原新值审计",
+          "boundary": "UC-18；不覆盖交接快照"
+        }
+      ],
+      "control_class": "授权档案控制"
     },
     {
       "id": "UC-19",
@@ -2747,7 +3702,7 @@
         "AC-58",
         "AC-61"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "不能自撤系统管理能力造成无法接手；权限变更不覆盖原审批或交接事实，也不禁止管理员接收真实归还。",
       "field_ids": [
         "授权配置",
@@ -2787,7 +3742,55 @@
         "AC-38",
         "AC-58",
         "AC-61"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "授权变更",
+      "receipt_fields": "主体编号＋角色／管理范围／资格原新值＋有效时段＋依据＋变更事件＋受影响安排",
+      "rule_step_links": [
+        {
+          "rule": "BR-13",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-30",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-44",
+          "steps": [
+            "4"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "授权配置",
+            "原因"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "授权变更",
+          "definition": "主体编号＋角色／管理范围／资格原新值＋有效时段＋依据＋变更事件＋受影响安排",
+          "boundary": "UC-19；账号停用不抹除归还责任"
+        }
+      ],
+      "control_class": "授权档案控制"
     },
     {
       "id": "UC-20",
@@ -2855,7 +3858,7 @@
       "additional_ac": [
         "AC-57"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "非法参数或周日历截断已确认承诺时拒绝；单日安全关闭是显式例外，不偷偷改原计划。",
       "field_ids": [
         "参数配置",
@@ -2895,7 +3898,56 @@
         "AC-39",
         "AC-40",
         "AC-57"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "参数日历版本",
+      "receipt_fields": "参数版本或开放例外标识＋原新取值＋生效范围＋变更主体／原因＋受影响预约",
+      "rule_step_links": [
+        {
+          "rule": "BR-05",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-33",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-40",
+          "steps": [
+            "2a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "参数配置",
+            "开放配置",
+            "原因"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "参数日历版本",
+          "definition": "参数版本或开放例外标识＋原新取值＋生效范围＋变更主体／原因＋受影响预约",
+          "boundary": "UC-20；每周计划和单日例外分别处理"
+        }
+      ],
+      "control_class": "授权档案控制"
     },
     {
       "id": "UC-21",
@@ -2955,7 +4007,7 @@
       "additional_ac": [
         "AC-64"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "无权限不返回事件；本用例不修改或删除历史。应用保护不声称抵抗数据库超级用户。",
       "field_ids": [
         "审计筛选",
@@ -2990,7 +4042,49 @@
       "acceptance_ids": [
         "AC-41",
         "AC-42"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "审计查询结果",
+      "receipt_fields": "可见事件编号＋对象类型及编号＋动作＋原新值＋操作者／时间＋原因＋请求标识＋分页信息",
+      "rule_step_links": [
+        {
+          "rule": "BR-26",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-29",
+          "steps": [
+            "2"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "审计筛选",
+            "分页"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "审计查询结果",
+          "definition": "可见事件编号＋对象类型及编号＋动作＋原新值＋操作者／时间＋原因＋请求标识＋分页信息",
+          "boundary": "UC-21；只读授权范围"
+        }
+      ],
+      "control_class": "查询统计控制"
     },
     {
       "id": "UC-22",
@@ -3049,7 +4143,7 @@
       "additional_ac": [
         "AC-63"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "不返回他人内容，不修改原业务与外部投递结论。",
       "field_ids": [
         "通知编号",
@@ -3085,7 +4179,49 @@
         "AC-43",
         "AC-44",
         "AC-63"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "站内通知结果",
+      "receipt_fields": "通知编号＋本人业务关联＋生成时刻＋内容＋阅读时刻＋渠道投递状态",
+      "rule_step_links": [
+        {
+          "rule": "BR-27",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-29",
+          "steps": [
+            "1"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "通知编号",
+            "分页"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "站内通知结果",
+          "definition": "通知编号＋本人业务关联＋生成时刻＋内容＋阅读时刻＋渠道投递状态",
+          "boundary": "UC-22；阅读与外部送达不是同一事实"
+        }
+      ],
+      "control_class": "通知控制"
     },
     {
       "id": "UC-23",
@@ -3152,7 +4288,7 @@
         "AC-58",
         "AC-63"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "外部失败不撤销预约或交接；已生成站内消息保留；进程中断的租约可恢复，但真实渠道需提供方幂等协议另验。",
       "field_ids": [
         "投递编号",
@@ -3192,7 +4328,56 @@
         "AC-46",
         "AC-58",
         "AC-63"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 4,
+      "receipt_group": "投递尝试结果",
+      "receipt_fields": "投递标识＋业务事件＋尝试序号＋租约／状态＋渠道结果＋下次执行时刻或人工联系依据",
+      "rule_step_links": [
+        {
+          "rule": "BR-27",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-28",
+          "steps": [
+            "3",
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-46",
+          "steps": [
+            "3b"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "投递编号",
+            "人工联系结果"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "投递尝试结果",
+          "definition": "投递标识＋业务事件＋尝试序号＋租约／状态＋渠道结果＋下次执行时刻或人工联系依据",
+          "boundary": "UC-23；结果不撤销原业务"
+        }
+      ],
+      "control_class": "通知控制"
     },
     {
       "id": "UC-24",
@@ -3249,7 +4434,7 @@
       "improvements": [
         "I-09"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "非法窗口不产生虚假结果；零分母显示不适用；外部接收方不自动取得个人明细。",
       "field_ids": [
         "统计日期",
@@ -3289,7 +4474,51 @@
       "acceptance_ids": [
         "AC-47",
         "AC-48"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 5,
+      "receipt_group": "利用信息结果",
+      "receipt_fields": "资源＋统计窗口＋可服务时数＋计划时数＋实际时数＋比率或不适用＋口径",
+      "rule_step_links": [
+        {
+          "rule": "BR-34",
+          "steps": [
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        {
+          "rule": "BR-29",
+          "steps": [
+            "2"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "统计日期",
+            "分页"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "5",
+          "direction": "输出或追加事实",
+          "group": "利用信息结果",
+          "definition": "资源＋统计窗口＋可服务时数＋计划时数＋实际时数＋比率或不适用＋口径",
+          "boundary": "UC-24；零分母不得伪作0%"
+        }
+      ],
+      "control_class": "查询统计控制"
     },
     {
       "id": "UC-25",
@@ -3353,7 +4582,7 @@
         "AC-59",
         "AC-64"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "不覆盖旧证据；无权限不暴露内容；非法文件不产生证据元数据，技术失败清理本次未关联文件。",
       "field_ids": [
         "异常编号",
@@ -3390,7 +4619,57 @@
         "AC-49",
         "AC-50",
         "AC-59"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "证据凭据",
+      "receipt_fields": "证据编号＋异常编号＋原文件名＋摘要＋上传人／时刻；读取时另有访问事件",
+      "rule_step_links": [
+        {
+          "rule": "BR-29",
+          "steps": [
+            "1",
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-32",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-42",
+          "steps": [
+            "3a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "异常编号",
+            "证据文件",
+            "证据编号"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "证据凭据",
+          "definition": "证据编号＋异常编号＋原文件名＋摘要＋上传人／时刻；读取时另有访问事件",
+          "boundary": "UC-25；文件地址不是公开访问凭证"
+        }
+      ],
+      "control_class": "异常维修控制"
     },
     {
       "id": "UC-26",
@@ -3450,7 +4729,7 @@
       "additional_ac": [
         "AC-62"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "他人记录不可猜号访问；查询不覆盖历史或生成交接。",
       "field_ids": [
         "历史筛选",
@@ -3493,7 +4772,56 @@
         "AC-51",
         "AC-52",
         "AC-62"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 1,
+      "receipt_step": 3,
+      "receipt_group": "历史查询结果",
+      "receipt_fields": "本人或授权范围内的预约及原计划＋初始／后续决定＋实际借还／场地使用＋相关异常＋稳定分页",
+      "rule_step_links": [
+        {
+          "rule": "BR-26",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-29",
+          "steps": [
+            "2"
+          ]
+        },
+        {
+          "rule": "BR-31",
+          "steps": [
+            "1"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "1",
+          "direction": "输入",
+          "fields": [
+            "历史筛选",
+            "分页",
+            "预约编号"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "3",
+          "direction": "输出或追加事实",
+          "group": "历史查询结果",
+          "definition": "本人或授权范围内的预约及原计划＋初始／后续决定＋实际借还／场地使用＋相关异常＋稳定分页",
+          "boundary": "UC-26；没有结果明确返回空"
+        }
+      ],
+      "control_class": "查询统计控制"
     },
     {
       "id": "UC-27",
@@ -3534,7 +4862,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "problem": "P-04",
       "improvement": "I-04",
@@ -3568,7 +4898,7 @@
         "AC-57",
         "AC-61"
       ],
-      "version": "2.2",
+      "version": "2.3",
       "minimum_guarantee": "检查失败不伪装通过或静默取消；原CONFIRMED仍占原时段及相应配额直至合法终止。技术失败不留部分复核。",
       "field_ids": [
         "预约编号",
@@ -3611,7 +4941,63 @@
         "AC-53",
         "AC-57",
         "AC-61"
-      ]
+      ],
+      "description_sources": [
+        "SRC-A03",
+        "SRC-A04",
+        "SRC-A05"
+      ],
+      "input_step": 2,
+      "receipt_step": 4,
+      "receipt_group": "后续复核结果",
+      "receipt_fields": "复核编号＋原预约编号＋通过或不能执行＋新依据／快照＋复核人／时刻＋当前标志及占用结论",
+      "rule_step_links": [
+        {
+          "rule": "BR-09",
+          "steps": [
+            "3"
+          ]
+        },
+        {
+          "rule": "BR-15",
+          "steps": [
+            "1"
+          ]
+        },
+        {
+          "rule": "BR-36",
+          "steps": [
+            "4"
+          ]
+        },
+        {
+          "rule": "BR-38",
+          "steps": [
+            "3a"
+          ]
+        }
+      ],
+      "data_events": [
+        {
+          "step": "2",
+          "direction": "输入",
+          "fields": [
+            "预约编号",
+            "决定",
+            "原因",
+            "版本"
+          ],
+          "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+        },
+        {
+          "step": "4",
+          "direction": "输出或追加事实",
+          "group": "后续复核结果",
+          "definition": "复核编号＋原预约编号＋通过或不能执行＋新依据／快照＋复核人／时刻＋当前标志及占用结论",
+          "boundary": "UC-27；不覆盖初始决定，不新增预约"
+        }
+      ],
+      "control_class": "预约控制"
     }
   ],
   "acceptance": [
@@ -4077,7 +5463,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     },
@@ -4107,7 +5494,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     },
@@ -4194,7 +5582,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     },
@@ -4225,7 +5614,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     },
@@ -5018,21 +6408,27 @@
         "FR-04",
         "FR-05",
         "FR-08",
-        "FR-18"
+        "FR-18",
+        "FR-09",
+        "FR-11"
       ],
       "uc": [
         "UC-03",
         "UC-04",
         "UC-05",
         "UC-08",
-        "UC-18"
+        "UC-18",
+        "UC-09",
+        "UC-11"
       ],
       "spec": [
         "SPEC-03",
         "SPEC-04",
         "SPEC-05",
         "SPEC-08",
-        "SPEC-18"
+        "SPEC-18",
+        "SPEC-09",
+        "SPEC-11"
       ],
       "rules": [
         "BR-39"
@@ -5286,7 +6682,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     },
@@ -5312,7 +6710,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "evidence_scope": "验收要求；实现/测试证据见本轮证据覆盖表，场景文字本身不证明已执行。"
     }
@@ -5889,7 +7289,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-17",
@@ -5920,7 +7321,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-17",
@@ -5951,7 +7353,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-17",
@@ -6064,7 +7467,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-21",
@@ -6096,7 +7500,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-21",
@@ -6128,7 +7533,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-21",
@@ -6160,7 +7566,8 @@
         "BR-38",
         "BR-40",
         "BR-44",
-        "BR-45"
+        "BR-45",
+        "BR-39"
       ],
       "ac": [
         "AC-21",
@@ -6773,7 +8180,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "ac": [
         "AC-65",
@@ -6798,7 +8207,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "ac": [
         "AC-65",
@@ -6823,7 +8234,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "ac": [
         "AC-65",
@@ -6848,7 +8261,9 @@
         "BR-36",
         "BR-37",
         "BR-40",
-        "BR-44"
+        "BR-44",
+        "BR-09",
+        "BR-38"
       ],
       "ac": [
         "AC-65",
@@ -6859,11 +8274,11 @@
       ]
     }
   ],
-  "version": "2.2",
+  "version": "2.3",
   "analysis_version": {
-    "date": "2026-10-21",
-    "baseline_commit": "a6bc7a593d0b122f9e7ee72eee774bf85996cf13",
-    "purpose": "业务依据、组织价值、业务实现与系统职责的逻辑一致性",
+    "date": "2026-10-22",
+    "baseline_commit": "d3a57f222e52eafd5ebc87c9a9853c45285c495b",
+    "purpose": "课程材料对应、用例数据事件契约与分析模型补充；不改变业务制度或运行架构",
     "implementation_changes": "本轮优先文档与模型；复核既有功能，不以既有代码替代真实业务依据。"
   },
   "constraints": [
@@ -6961,11 +8376,11 @@
     {
       "id": "SRC-E01",
       "type": "E 实现证据",
-      "name": "本地main提交a6bc7a593d0b122f9e7ee72eee774bf85996cf13",
-      "date": "2026-10-21",
+      "name": "实现对照提交d3a57f2（历史输入a6bc7a5）",
+      "date": "2026-10-22；历史输入记录2026-10-21",
       "facts": "Django/PostgreSQL、原生小程序及36个领域模型；业务服务、权限和既有测试可核查。",
       "supports": "implementation_map、数据模型、验收定位",
-      "limits": "证明实现及测试覆盖，不证明学校现状或规则合理；真实身份与消息未联调。",
+      "limits": "证明实现及对应测试覆盖，不证明学校现状或规则合理；本轮对照d3a57f2，未修改业务代码；真实身份与消息未联调。",
       "pending": "本轮针对性回归与文档一致性复核。"
     },
     {
@@ -6987,6 +8402,36 @@
       "supports": "愿景基线采集、真实试点前置条件",
       "limits": "不得写成统计事实或既有系统效果。",
       "pending": "教学优先、考试周、节假日、长期实验、线下应急、数据留存。"
+    },
+    {
+      "id": "SRC-A03",
+      "type": "A 用户提供教学依据",
+      "name": "课程总结.txt",
+      "date": "2026-10-22接收，原撰写日期未核实",
+      "facts": "愿景、组织价值、需求获取、规约、类／序列／状态分析与实现分层",
+      "supports": "规约数据事件、需求方法与系统分析模型",
+      "limits": "课程方法资料，非学校制度或调研结果；不证明目标学校真实流程、甲方签字或实施效果",
+      "pending": "以真实业务负责人和学校材料验证方案；不把练习当作已验证业务规则"
+    },
+    {
+      "id": "SRC-A04",
+      "type": "A 用户提供教学依据",
+      "name": "共享单车租赁系统-系统用例规约.txt",
+      "date": "2026-10-22接收，原撰写日期未核实",
+      "facts": "参与者意图与系统响应；关键步骤关联字段组；规则约束判断",
+      "supports": "规约数据事件、需求方法与系统分析模型",
+      "limits": "教学样例含省略和示例参数；不引入单车、收费、信用和支付规则；不证明目标学校真实流程、甲方签字或实施效果",
+      "pending": "以真实业务负责人和学校材料验证方案；不把练习当作已验证业务规则"
+    },
+    {
+      "id": "SRC-A05",
+      "type": "A 用户提供教学依据",
+      "name": "umlexercise.pdf",
+      "date": "2026-10-22接收，原撰写日期未核实",
+      "facts": "用户目标粒度、涉众平衡、BCE协作、泛化与关联、状态和消息一致性",
+      "supports": "规约数据事件、需求方法与系统分析模型",
+      "limits": "含待判断和故意错误的练习图；不是规范答案；页脚2015，来源作者未核验；不证明目标学校真实流程、甲方签字或实施效果",
+      "pending": "以真实业务负责人和学校材料验证方案；不把练习当作已验证业务规则"
     }
   ],
   "assumptions": [
@@ -8986,6 +10431,220 @@
         "AC-64"
       ],
       "evidence": "历史offline-recovery-result.json；本轮核对，不宣称跨主机灾难恢复"
+    }
+  ],
+  "receipt_dictionary": [
+    {
+      "name": "身份会话",
+      "definition": "主体编号＋当前角色范围＋会话到期时间＋认证渠道",
+      "boundary": "UC-01；凭据不进入业务日志"
+    },
+    {
+      "name": "资源目录结果",
+      "definition": "资源编号＋名称＋实验室＋类型＋服务状态＋审批要求＋分页信息",
+      "boundary": "UC-02；不构成时段承诺"
+    },
+    {
+      "name": "时段可申请性",
+      "definition": "资源编号＋查询时段＋可申请结论＋阻断原因＋查询时点",
+      "boundary": "UC-03；不占时段，不是本人资格全部已满足"
+    },
+    {
+      "name": "预约结果",
+      "definition": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+      "boundary": "UC-04/05；同内容重试返回原编号"
+    },
+    {
+      "name": "预约时间线",
+      "definition": "预约编号＋原计划＋当前状态＋初始决定＋当前复核标志＋追加说明＋真实使用关联",
+      "boundary": "UC-06；原决定与后续记录分列"
+    },
+    {
+      "name": "取消结果",
+      "definition": "预约编号＋CANCELLED＋取消原因＋操作者／时刻＋原占用释放结论",
+      "boundary": "UC-07；原申请及决定保留"
+    },
+    {
+      "name": "初始决定",
+      "definition": "预约编号＋通过或驳回＋决定方式＋责任主体＋理由＋决定时间",
+      "boundary": "UC-08及普通设备自动确认；不覆盖后续复核"
+    },
+    {
+      "name": "借出凭据",
+      "definition": "借出编号＋预约编号＋设备标签快照＋配件快照＋检查结论＋到场／开始办理／实际交付时刻＋应还时间＋经办人",
+      "boundary": "UC-09；失败检查可以有异常，不能有成功借出凭据"
+    },
+    {
+      "name": "归还凭据",
+      "definition": "归还编号＋借出编号＋实际归还时刻＋实收配件＋损坏／缺件／运行异常＋检查说明＋经办人",
+      "boundary": "UC-10；如实接收后另判断服务能否恢复"
+    },
+    {
+      "name": "场地使用凭据",
+      "definition": "场地使用标识＋预约编号＋负责教师＋实际人数＋到场和实际开始时刻＋现场结论＋经办人",
+      "boundary": "UC-11；不视为室内设备借出"
+    },
+    {
+      "name": "场地结束凭据",
+      "definition": "场地使用标识＋实际结束时刻＋结束经办人＋检查说明＋异常标志",
+      "boundary": "UC-12；不自动归还其他设备"
+    },
+    {
+      "name": "异常事实",
+      "definition": "异常编号＋资源＋报告人＋可选关联预约＋类型＋现象＋发现／报告时刻＋核实状态＋阻断标志",
+      "boundary": "UC-13；核实状态与阻断标志正交"
+    },
+    {
+      "name": "异常处置",
+      "definition": "异常编号＋新核实结论或追加回应编号＋理由＋操作者／时间＋当前阻断原因",
+      "boundary": "UC-14；本人回应不等于管理员核实"
+    },
+    {
+      "name": "维修任务",
+      "definition": "工单编号＋异常编号＋当前指派人＋当前状态＋安排理由及过程事件",
+      "boundary": "UC-15；已存在任务重试不创建第二项"
+    },
+    {
+      "name": "维修过程结果",
+      "definition": "工单编号＋处理动作＋原／新状态＋过程或结果＋实际操作者／时刻",
+      "boundary": "UC-16；提交待验收不恢复服务"
+    },
+    {
+      "name": "验收与服务结论",
+      "definition": "工单编号＋复测结论＋验收人／时刻＋依据＋工单状态＋异常结案结果＋资源当前限制",
+      "boundary": "UC-17；工单关闭不保证全部资源限制解除"
+    },
+    {
+      "name": "资源档案版本",
+      "definition": "资源编号＋类型及明细＋所属实验室＋配件／固定依赖＋服务历史＋原新值审计",
+      "boundary": "UC-18；不覆盖交接快照"
+    },
+    {
+      "name": "授权变更",
+      "definition": "主体编号＋角色／管理范围／资格原新值＋有效时段＋依据＋变更事件＋受影响安排",
+      "boundary": "UC-19；账号停用不抹除归还责任"
+    },
+    {
+      "name": "参数日历版本",
+      "definition": "参数版本或开放例外标识＋原新取值＋生效范围＋变更主体／原因＋受影响预约",
+      "boundary": "UC-20；每周计划和单日例外分别处理"
+    },
+    {
+      "name": "审计查询结果",
+      "definition": "可见事件编号＋对象类型及编号＋动作＋原新值＋操作者／时间＋原因＋请求标识＋分页信息",
+      "boundary": "UC-21；只读授权范围"
+    },
+    {
+      "name": "站内通知结果",
+      "definition": "通知编号＋本人业务关联＋生成时刻＋内容＋阅读时刻＋渠道投递状态",
+      "boundary": "UC-22；阅读与外部送达不是同一事实"
+    },
+    {
+      "name": "投递尝试结果",
+      "definition": "投递标识＋业务事件＋尝试序号＋租约／状态＋渠道结果＋下次执行时刻或人工联系依据",
+      "boundary": "UC-23；结果不撤销原业务"
+    },
+    {
+      "name": "利用信息结果",
+      "definition": "资源＋统计窗口＋可服务时数＋计划时数＋实际时数＋比率或不适用＋口径",
+      "boundary": "UC-24；零分母不得伪作0%"
+    },
+    {
+      "name": "证据凭据",
+      "definition": "证据编号＋异常编号＋原文件名＋摘要＋上传人／时刻；读取时另有访问事件",
+      "boundary": "UC-25；文件地址不是公开访问凭证"
+    },
+    {
+      "name": "历史查询结果",
+      "definition": "本人或授权范围内的预约及原计划＋初始／后续决定＋实际借还／场地使用＋相关异常＋稳定分页",
+      "boundary": "UC-26；没有结果明确返回空"
+    },
+    {
+      "name": "后续复核结果",
+      "definition": "复核编号＋原预约编号＋通过或不能执行＋新依据／快照＋复核人／时刻＋当前标志及占用结论",
+      "boundary": "UC-27；不覆盖初始决定，不新增预约"
+    }
+  ],
+  "elicitation_methods": [
+    {
+      "method": "材料研究",
+      "evidence": "已有制度、样表和历史记录；目前仅有题设与教学资料",
+      "strength": "方便、可保留原文并核对版本",
+      "limitation": "材料可能过时；教学案例不能证明本校现状",
+      "use": "先取得现行制度、样表及权限依据，标明发布人与日期"
+    },
+    {
+      "method": "实地访谈",
+      "evidence": "负责人、管理员、教师、维修支持；尚未实施",
+      "strength": "解释责任、例外和利益冲突",
+      "limitation": "受记忆和岗位立场影响，不能据一人答复认定全校制度",
+      "use": "围绕前人未还、缺件、改派、无人审批等反例核实"
+    },
+    {
+      "method": "同类系统比较",
+      "evidence": "LibreBooking、Snipe-IT及MRBS官方资料；已阅读",
+      "strength": "发现可选方案与容易遗漏的边界",
+      "limitation": "别校或产品的规则不等于目标学校规则",
+      "use": "比较审批、责任交接、房间依赖；记录不采纳的默认行为"
+    },
+    {
+      "method": "问卷",
+      "evidence": "拟在访谈后调查查询路径与等待体验；尚未实施",
+      "strength": "可比较多个角色的共同倾向",
+      "limitation": "自愿样本及措辞偏差；主观满意度不等于实测耗时",
+      "use": "先试填并统一题义，再按身份与资源类别分组"
+    },
+    {
+      "method": "现场观察",
+      "evidence": "拟观察申请、决定、到场、检查及归还；尚未实施",
+      "strength": "检验口述流程与实际交接是否相符",
+      "limitation": "耗时且可能漏掉少见异常；涉及个人记录需获准",
+      "use": "连续教学日记录事件时间及载体流转，不编造观察结果"
+    },
+    {
+      "method": "操作与原型验证",
+      "evidence": "模拟账号操作现有演示系统；有历史测试证据",
+      "strength": "检查需求是否可理解、实现是否符合规则",
+      "limitation": "只能证明模拟情景；用户点击路径不是现实业务证据",
+      "use": "用跨入口、超时重试和并发反例验证，另标真实调研缺口"
+    }
+  ],
+  "stakeholder_balances": [
+    {
+      "conflict": "快速得到结果与高风险使用安全",
+      "interests": "普通申请人希望少等待；管理员需承担受限审批责任",
+      "resolution": "普通设备规则确认，受限设备和场地保留人工决定",
+      "trace": "BR-14/15；UC-04/05/08；M-01/06"
+    },
+    {
+      "conflict": "竞争申请自由与承诺可靠",
+      "interests": "待审核申请人希望保留机会；获批者希望不会重复承诺",
+      "resolution": "待审核不占时段但计未来配额，批准重新检查并发冲突",
+      "trace": "BR-07/08/09；UC-08；AC-16"
+    },
+    {
+      "conflict": "按计划到场与实物实际未结束",
+      "interests": "后一人希望及时领取；前一人和管理员须如实记录",
+      "resolution": "停止重复交付，记录真实等待；不伪造归还或延长原结束",
+      "trace": "BR-18/38；UC-09/11；AC-55"
+    },
+    {
+      "conflict": "快速恢复服务与独立维修责任",
+      "interests": "使用者希望尽快恢复；管理岗位需防止自验收",
+      "resolution": "当前及历史实际执行人回避验收，检查所有剩余限制",
+      "trace": "BR-24/25；UC-17；AC-34"
+    },
+    {
+      "conflict": "责任可追溯与个人资料最小可见",
+      "interests": "主任和管理员需要凭据；个人希望限制用途和访问",
+      "resolution": "本人/实验室范围授权，追加事实，证据受控读取",
+      "trace": "BR-26/29/32/42；UC-21/25"
+    },
+    {
+      "conflict": "通知及时与外部渠道不可控",
+      "interests": "申请人希望及时知晓；系统不能保证外部服务随时成功",
+      "resolution": "业务凭据、站内消息和投递分层；失败重试及人工跟进",
+      "trace": "BR-27/28/46；UC-22/23"
     }
   ]
 }

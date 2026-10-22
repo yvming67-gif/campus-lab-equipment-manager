@@ -1,0 +1,27 @@
+@startuml
+skinparam defaultFontName Microsoft YaHei
+hide footbox
+actor "负责教师" as L0
+participant "«boundary»\n预约边界" as L1
+participant "«control»\n预约控制" as L2
+participant "«entity»\n用户" as L3
+participant "«entity»\n资源" as L4
+participant "«entity»\n预约" as L5
+participant "«control»\n业务事件控制" as L6
+L0 -> L1: S05-01 提交场地申请〔1〕\n人数／用途／时段／请求标识
+L1 -> L2: S05-02 受理场地申请〔1〕
+critical 个人场地配额及资源承诺核验
+L2 -> L5: S05-03 查询幂等结果〔1c〕\n同标识异内容拒绝
+L2 -> L3: S05-04 读取当前身份资格〔1〕\n必须为当前有效教师
+L2 -> L4: S05-05 读取档案与限制〔2〕\n整间场地、容量、开放
+L2 -> L2: S05-06 判断资格配额及时间〔3〕\n未来场地数与设备另计
+L2 -> L5: S05-07 检查承诺及依赖〔4〕\n他人固定设备双向限制
+alt 通过／冲突或其他拒绝
+L2 -> L5: S05-08 建立申请〔5〕\n仅PENDING；不占场地或设备时段
+L2 -> L6: S05-09 追加审计与通知任务〔5〕\n形成管理员审核任务
+else 冲突、容量、身份或配额不符
+L2 -> L2: S05-10 拒绝本次操作〔4b〕\n拒绝且无半条申请
+end
+end
+L2 -> L1: S05-11 呈现申请结果〔5〕\n返回待审核编号；批准由UC-08另执行
+@enduml

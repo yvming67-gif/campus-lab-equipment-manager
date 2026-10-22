@@ -1,0 +1,1510 @@
+[
+  {
+    "id": "UC-01",
+    "name": "登录系统",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "身份凭据",
+      "会话绑定"
+    ],
+    "receipt_group": "身份会话",
+    "receipt_fields": "主体编号＋当前角色范围＋会话到期时间＋认证渠道",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "身份凭据",
+          "会话绑定"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "身份会话",
+        "definition": "主体编号＋当前角色范围＋会话到期时间＋认证渠道",
+        "boundary": "UC-01；凭据不进入业务日志"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-01",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-30",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-46",
+        "steps": [
+          "2"
+        ]
+      }
+    ],
+    "control_class": "认证边界与身份控制"
+  },
+  {
+    "id": "UC-02",
+    "name": "查询实验室与设备",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "检索条件",
+      "分页",
+      "资源编号"
+    ],
+    "receipt_group": "资源目录结果",
+    "receipt_fields": "资源编号＋名称＋实验室＋类型＋服务状态＋审批要求＋分页信息",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "检索条件",
+          "分页",
+          "资源编号"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "资源目录结果",
+        "definition": "资源编号＋名称＋实验室＋类型＋服务状态＋审批要求＋分页信息",
+        "boundary": "UC-02；不构成时段承诺"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-29",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-31",
+        "steps": [
+          "3"
+        ]
+      }
+    ],
+    "control_class": "查询统计控制"
+  },
+  {
+    "id": "UC-03",
+    "name": "查询资源可用时段",
+    "input_step": 1,
+    "receipt_step": 4,
+    "field_ids": [
+      "资源编号",
+      "开始时间",
+      "结束时间",
+      "检索条件"
+    ],
+    "receipt_group": "时段可申请性",
+    "receipt_fields": "资源编号＋查询时段＋可申请结论＋阻断原因＋查询时点",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "资源编号",
+          "开始时间",
+          "结束时间",
+          "检索条件"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "时段可申请性",
+        "definition": "资源编号＋查询时段＋可申请结论＋阻断原因＋查询时点",
+        "boundary": "UC-03；不占时段，不是本人资格全部已满足"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-03",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-06",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-07",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-39",
+        "steps": [
+          "4"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-04",
+    "name": "提交设备预约",
+    "input_step": 2,
+    "receipt_step": 6,
+    "field_ids": [
+      "资源编号",
+      "开始时间",
+      "结束时间",
+      "用途",
+      "请求标识"
+    ],
+    "receipt_group": "预约结果",
+    "receipt_fields": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "资源编号",
+          "开始时间",
+          "结束时间",
+          "用途",
+          "请求标识"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "6",
+        "direction": "输出或追加事实",
+        "group": "预约结果",
+        "definition": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+        "boundary": "UC-04/05；同内容重试返回原编号"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-07",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-09",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-14",
+        "steps": [
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-35",
+        "steps": [
+          "2"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-05",
+    "name": "提交场地预约",
+    "input_step": 1,
+    "receipt_step": 5,
+    "field_ids": [
+      "资源编号",
+      "开始时间",
+      "结束时间",
+      "用途",
+      "人数",
+      "请求标识"
+    ],
+    "receipt_group": "预约结果",
+    "receipt_fields": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "资源编号",
+          "开始时间",
+          "结束时间",
+          "用途",
+          "人数",
+          "请求标识"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "预约结果",
+        "definition": "预约编号＋申请人＋资源编号＋原计划起止＋用途／人数＋PENDING或CONFIRMED＋规则快照",
+        "boundary": "UC-04/05；同内容重试返回原编号"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-02",
+        "steps": [
+          "1"
+        ]
+      },
+      {
+        "rule": "BR-08",
+        "steps": [
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-09",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-39",
+        "steps": [
+          "4"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-06",
+    "name": "查看预约进度",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "预约编号",
+      "补充说明",
+      "证据引用"
+    ],
+    "receipt_group": "预约时间线",
+    "receipt_fields": "预约编号＋原计划＋当前状态＋初始决定＋当前复核标志＋追加说明＋真实使用关联",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "补充说明",
+          "证据引用"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "预约时间线",
+        "definition": "预约编号＋原计划＋当前状态＋初始决定＋当前复核标志＋追加说明＋真实使用关联",
+        "boundary": "UC-06；原决定与后续记录分列"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-15",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-29",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-45",
+        "steps": [
+          "4"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-07",
+    "name": "取消预约",
+    "input_step": 1,
+    "receipt_step": 4,
+    "field_ids": [
+      "预约编号",
+      "原因",
+      "版本"
+    ],
+    "receipt_group": "取消结果",
+    "receipt_fields": "预约编号＋CANCELLED＋取消原因＋操作者／时刻＋原占用释放结论",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "原因",
+          "版本"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "取消结果",
+        "definition": "预约编号＋CANCELLED＋取消原因＋操作者／时刻＋原占用释放结论",
+        "boundary": "UC-07；原申请及决定保留"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-16",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-26",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-35",
+        "steps": [
+          "1"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-08",
+    "name": "审核预约",
+    "input_step": 2,
+    "receipt_step": 5,
+    "field_ids": [
+      "预约编号",
+      "决定",
+      "原因",
+      "版本"
+    ],
+    "receipt_group": "初始决定",
+    "receipt_fields": "预约编号＋通过或驳回＋决定方式＋责任主体＋理由＋决定时间",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "决定",
+          "原因",
+          "版本"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "初始决定",
+        "definition": "预约编号＋通过或驳回＋决定方式＋责任主体＋理由＋决定时间",
+        "boundary": "UC-08及普通设备自动确认；不覆盖后续复核"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-07",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-08",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-15",
+        "steps": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-35",
+        "steps": [
+          "4"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  },
+  {
+    "id": "UC-09",
+    "name": "办理设备借出",
+    "input_step": 2,
+    "receipt_step": 5,
+    "field_ids": [
+      "预约编号",
+      "学校编号",
+      "设备标签",
+      "配件检查",
+      "检查结论",
+      "到场时间",
+      "开始办理时间"
+    ],
+    "receipt_group": "借出凭据",
+    "receipt_fields": "借出编号＋预约编号＋设备标签快照＋配件快照＋检查结论＋到场／开始办理／实际交付时刻＋应还时间＋经办人",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "学校编号",
+          "设备标签",
+          "配件检查",
+          "检查结论",
+          "到场时间",
+          "开始办理时间"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "借出凭据",
+        "definition": "借出编号＋预约编号＋设备标签快照＋配件快照＋检查结论＋到场／开始办理／实际交付时刻＋应还时间＋经办人",
+        "boundary": "UC-09；失败检查可以有异常，不能有成功借出凭据"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-17",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-18",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-19",
+        "steps": [
+          "2",
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-38",
+        "steps": [
+          "3a"
+        ]
+      }
+    ],
+    "control_class": "交接控制"
+  },
+  {
+    "id": "UC-10",
+    "name": "办理设备归还",
+    "input_step": 3,
+    "receipt_step": 5,
+    "field_ids": [
+      "预约编号",
+      "设备标签",
+      "实际结束时间",
+      "检查结论",
+      "损坏标志",
+      "缺件标志",
+      "异常标志",
+      "实收数量"
+    ],
+    "receipt_group": "归还凭据",
+    "receipt_fields": "归还编号＋借出编号＋实际归还时刻＋实收配件＋损坏／缺件／运行异常＋检查说明＋经办人",
+    "data_events": [
+      {
+        "step": "3",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "设备标签",
+          "实际结束时间",
+          "检查结论",
+          "损坏标志",
+          "缺件标志",
+          "异常标志",
+          "实收数量"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "归还凭据",
+        "definition": "归还编号＋借出编号＋实际归还时刻＋实收配件＋损坏／缺件／运行异常＋检查说明＋经办人",
+        "boundary": "UC-10；如实接收后另判断服务能否恢复"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-18",
+        "steps": [
+          "1"
+        ]
+      },
+      {
+        "rule": "BR-20",
+        "steps": [
+          "4",
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-22",
+        "steps": [
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-45",
+        "steps": [
+          "1c"
+        ]
+      }
+    ],
+    "control_class": "交接控制"
+  },
+  {
+    "id": "UC-11",
+    "name": "登记场地使用开始",
+    "input_step": 2,
+    "receipt_step": 5,
+    "field_ids": [
+      "预约编号",
+      "学校编号",
+      "人数",
+      "到场时间",
+      "检查结论"
+    ],
+    "receipt_group": "场地使用凭据",
+    "receipt_fields": "场地使用标识＋预约编号＋负责教师＋实际人数＋到场和实际开始时刻＋现场结论＋经办人",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "学校编号",
+          "人数",
+          "到场时间",
+          "检查结论"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "场地使用凭据",
+        "definition": "场地使用标识＋预约编号＋负责教师＋实际人数＋到场和实际开始时刻＋现场结论＋经办人",
+        "boundary": "UC-11；不视为室内设备借出"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-02",
+        "steps": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-18",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-21",
+        "steps": [
+          "2",
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-39",
+        "steps": [
+          "3",
+          "4"
+        ]
+      }
+    ],
+    "control_class": "交接控制"
+  },
+  {
+    "id": "UC-12",
+    "name": "登记场地使用结束",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "预约编号",
+      "实际结束时间",
+      "检查结论",
+      "异常标志"
+    ],
+    "receipt_group": "场地结束凭据",
+    "receipt_fields": "场地使用标识＋实际结束时刻＋结束经办人＋检查说明＋异常标志",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "实际结束时间",
+          "检查结论",
+          "异常标志"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "场地结束凭据",
+        "definition": "场地使用标识＋实际结束时刻＋结束经办人＋检查说明＋异常标志",
+        "boundary": "UC-12；不自动归还其他设备"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-21",
+        "steps": [
+          "3",
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-44",
+        "steps": [
+          "2a"
+        ]
+      },
+      {
+        "rule": "BR-45",
+        "steps": [
+          "1a"
+        ]
+      }
+    ],
+    "control_class": "交接控制"
+  },
+  {
+    "id": "UC-13",
+    "name": "提交资源异常说明",
+    "input_step": 1,
+    "receipt_step": 5,
+    "field_ids": [
+      "资源编号",
+      "异常类型",
+      "异常描述",
+      "发现时间",
+      "预约编号"
+    ],
+    "receipt_group": "异常事实",
+    "receipt_fields": "异常编号＋资源＋报告人＋可选关联预约＋类型＋现象＋发现／报告时刻＋核实状态＋阻断标志",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "资源编号",
+          "异常类型",
+          "异常描述",
+          "发现时间",
+          "预约编号"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "异常事实",
+        "definition": "异常编号＋资源＋报告人＋可选关联预约＋类型＋现象＋发现／报告时刻＋核实状态＋阻断标志",
+        "boundary": "UC-13；核实状态与阻断标志正交"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-22",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-37",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-42",
+        "steps": [
+          "5"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-14",
+    "name": "核实与处置资源异常",
+    "input_step": 2,
+    "receipt_step": 5,
+    "field_ids": [
+      "异常编号",
+      "处置动作",
+      "原因",
+      "回应类型",
+      "补充说明"
+    ],
+    "receipt_group": "异常处置",
+    "receipt_fields": "异常编号＋新核实结论或追加回应编号＋理由＋操作者／时间＋当前阻断原因",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "异常编号",
+          "处置动作",
+          "原因",
+          "回应类型",
+          "补充说明"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "异常处置",
+        "definition": "异常编号＋新核实结论或追加回应编号＋理由＋操作者／时间＋当前阻断原因",
+        "boundary": "UC-14；本人回应不等于管理员核实"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-22",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-25",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-37",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-42",
+        "steps": [
+          "1a",
+          "2b"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-15",
+    "name": "创建与指派维修工单",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "异常编号",
+      "工单编号",
+      "维修人员",
+      "原因"
+    ],
+    "receipt_group": "维修任务",
+    "receipt_fields": "工单编号＋异常编号＋当前指派人＋当前状态＋安排理由及过程事件",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "异常编号",
+          "工单编号",
+          "维修人员",
+          "原因"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "维修任务",
+        "definition": "工单编号＋异常编号＋当前指派人＋当前状态＋安排理由及过程事件",
+        "boundary": "UC-15；已存在任务重试不创建第二项"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-23",
+        "steps": [
+          "2",
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-43",
+        "steps": [
+          "2",
+          "2a"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-16",
+    "name": "处理维修任务",
+    "input_step": 3,
+    "receipt_step": 5,
+    "field_ids": [
+      "工单编号",
+      "维修动作",
+      "维修结果"
+    ],
+    "receipt_group": "维修过程结果",
+    "receipt_fields": "工单编号＋处理动作＋原／新状态＋过程或结果＋实际操作者／时刻",
+    "data_events": [
+      {
+        "step": "3",
+        "direction": "输入",
+        "fields": [
+          "工单编号",
+          "维修动作",
+          "维修结果"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "维修过程结果",
+        "definition": "工单编号＋处理动作＋原／新状态＋过程或结果＋实际操作者／时刻",
+        "boundary": "UC-16；提交待验收不恢复服务"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-24",
+        "steps": [
+          "2",
+          "4",
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-43",
+        "steps": [
+          "1a"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-17",
+    "name": "验收维修与恢复资源",
+    "input_step": 2,
+    "receipt_step": 5,
+    "field_ids": [
+      "工单编号",
+      "决定",
+      "原因"
+    ],
+    "receipt_group": "验收与服务结论",
+    "receipt_fields": "工单编号＋复测结论＋验收人／时刻＋依据＋工单状态＋异常结案结果＋资源当前限制",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "工单编号",
+          "决定",
+          "原因"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "验收与服务结论",
+        "definition": "工单编号＋复测结论＋验收人／时刻＋依据＋工单状态＋异常结案结果＋资源当前限制",
+        "boundary": "UC-17；工单关闭不保证全部资源限制解除"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-24",
+        "steps": [
+          "1"
+        ]
+      },
+      {
+        "rule": "BR-25",
+        "steps": [
+          "4",
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-43",
+        "steps": [
+          "1"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-18",
+    "name": "维护实验室与设备档案",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "资源档案",
+      "原因"
+    ],
+    "receipt_group": "资源档案版本",
+    "receipt_fields": "资源编号＋类型及明细＋所属实验室＋配件／固定依赖＋服务历史＋原新值审计",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "资源档案",
+          "原因"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "资源档案版本",
+        "definition": "资源编号＋类型及明细＋所属实验室＋配件／固定依赖＋服务历史＋原新值审计",
+        "boundary": "UC-18；不覆盖交接快照"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-23",
+        "steps": [
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-31",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-36",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-39",
+        "steps": [
+          "3"
+        ]
+      }
+    ],
+    "control_class": "授权档案控制"
+  },
+  {
+    "id": "UC-19",
+    "name": "维护用户角色与管理范围",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "授权配置",
+      "原因"
+    ],
+    "receipt_group": "授权变更",
+    "receipt_fields": "主体编号＋角色／管理范围／资格原新值＋有效时段＋依据＋变更事件＋受影响安排",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "授权配置",
+          "原因"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "授权变更",
+        "definition": "主体编号＋角色／管理范围／资格原新值＋有效时段＋依据＋变更事件＋受影响安排",
+        "boundary": "UC-19；账号停用不抹除归还责任"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-13",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-30",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-44",
+        "steps": [
+          "4"
+        ]
+      }
+    ],
+    "control_class": "授权档案控制"
+  },
+  {
+    "id": "UC-20",
+    "name": "维护开放时间及预约参数",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "参数配置",
+      "开放配置",
+      "原因"
+    ],
+    "receipt_group": "参数日历版本",
+    "receipt_fields": "参数版本或开放例外标识＋原新取值＋生效范围＋变更主体／原因＋受影响预约",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "参数配置",
+          "开放配置",
+          "原因"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "参数日历版本",
+        "definition": "参数版本或开放例外标识＋原新取值＋生效范围＋变更主体／原因＋受影响预约",
+        "boundary": "UC-20；每周计划和单日例外分别处理"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-05",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-33",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-40",
+        "steps": [
+          "2a"
+        ]
+      }
+    ],
+    "control_class": "授权档案控制"
+  },
+  {
+    "id": "UC-21",
+    "name": "查询审计记录",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "审计筛选",
+      "分页"
+    ],
+    "receipt_group": "审计查询结果",
+    "receipt_fields": "可见事件编号＋对象类型及编号＋动作＋原新值＋操作者／时间＋原因＋请求标识＋分页信息",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "审计筛选",
+          "分页"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "审计查询结果",
+        "definition": "可见事件编号＋对象类型及编号＋动作＋原新值＋操作者／时间＋原因＋请求标识＋分页信息",
+        "boundary": "UC-21；只读授权范围"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-26",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-29",
+        "steps": [
+          "2"
+        ]
+      }
+    ],
+    "control_class": "查询统计控制"
+  },
+  {
+    "id": "UC-22",
+    "name": "查看本人通知",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "通知编号",
+      "分页"
+    ],
+    "receipt_group": "站内通知结果",
+    "receipt_fields": "通知编号＋本人业务关联＋生成时刻＋内容＋阅读时刻＋渠道投递状态",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "通知编号",
+          "分页"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "站内通知结果",
+        "definition": "通知编号＋本人业务关联＋生成时刻＋内容＋阅读时刻＋渠道投递状态",
+        "boundary": "UC-22；阅读与外部送达不是同一事实"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-27",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-29",
+        "steps": [
+          "1"
+        ]
+      }
+    ],
+    "control_class": "通知控制"
+  },
+  {
+    "id": "UC-23",
+    "name": "投递通知与失败重试",
+    "input_step": 1,
+    "receipt_step": 4,
+    "field_ids": [
+      "投递编号",
+      "人工联系结果"
+    ],
+    "receipt_group": "投递尝试结果",
+    "receipt_fields": "投递标识＋业务事件＋尝试序号＋租约／状态＋渠道结果＋下次执行时刻或人工联系依据",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "投递编号",
+          "人工联系结果"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "投递尝试结果",
+        "definition": "投递标识＋业务事件＋尝试序号＋租约／状态＋渠道结果＋下次执行时刻或人工联系依据",
+        "boundary": "UC-23；结果不撤销原业务"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-27",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-28",
+        "steps": [
+          "3",
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-46",
+        "steps": [
+          "3b"
+        ]
+      }
+    ],
+    "control_class": "通知控制"
+  },
+  {
+    "id": "UC-24",
+    "name": "查看资源利用与运行报表",
+    "input_step": 1,
+    "receipt_step": 5,
+    "field_ids": [
+      "统计日期",
+      "分页"
+    ],
+    "receipt_group": "利用信息结果",
+    "receipt_fields": "资源＋统计窗口＋可服务时数＋计划时数＋实际时数＋比率或不适用＋口径",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "统计日期",
+          "分页"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "5",
+        "direction": "输出或追加事实",
+        "group": "利用信息结果",
+        "definition": "资源＋统计窗口＋可服务时数＋计划时数＋实际时数＋比率或不适用＋口径",
+        "boundary": "UC-24；零分母不得伪作0%"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-34",
+        "steps": [
+          "3",
+          "4",
+          "5"
+        ]
+      },
+      {
+        "rule": "BR-29",
+        "steps": [
+          "2"
+        ]
+      }
+    ],
+    "control_class": "查询统计控制"
+  },
+  {
+    "id": "UC-25",
+    "name": "提交与读取异常证据",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "异常编号",
+      "证据文件",
+      "证据编号"
+    ],
+    "receipt_group": "证据凭据",
+    "receipt_fields": "证据编号＋异常编号＋原文件名＋摘要＋上传人／时刻；读取时另有访问事件",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "异常编号",
+          "证据文件",
+          "证据编号"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "证据凭据",
+        "definition": "证据编号＋异常编号＋原文件名＋摘要＋上传人／时刻；读取时另有访问事件",
+        "boundary": "UC-25；文件地址不是公开访问凭证"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-29",
+        "steps": [
+          "1",
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-32",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-42",
+        "steps": [
+          "3a"
+        ]
+      }
+    ],
+    "control_class": "异常维修控制"
+  },
+  {
+    "id": "UC-26",
+    "name": "查询预约与使用历史",
+    "input_step": 1,
+    "receipt_step": 3,
+    "field_ids": [
+      "历史筛选",
+      "分页",
+      "预约编号"
+    ],
+    "receipt_group": "历史查询结果",
+    "receipt_fields": "本人或授权范围内的预约及原计划＋初始／后续决定＋实际借还／场地使用＋相关异常＋稳定分页",
+    "data_events": [
+      {
+        "step": "1",
+        "direction": "输入",
+        "fields": [
+          "历史筛选",
+          "分页",
+          "预约编号"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "3",
+        "direction": "输出或追加事实",
+        "group": "历史查询结果",
+        "definition": "本人或授权范围内的预约及原计划＋初始／后续决定＋实际借还／场地使用＋相关异常＋稳定分页",
+        "boundary": "UC-26；没有结果明确返回空"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-26",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-29",
+        "steps": [
+          "2"
+        ]
+      },
+      {
+        "rule": "BR-31",
+        "steps": [
+          "1"
+        ]
+      }
+    ],
+    "control_class": "查询统计控制"
+  },
+  {
+    "id": "UC-27",
+    "name": "复核受影响预约",
+    "input_step": 2,
+    "receipt_step": 4,
+    "field_ids": [
+      "预约编号",
+      "决定",
+      "原因",
+      "版本"
+    ],
+    "receipt_group": "后续复核结果",
+    "receipt_fields": "复核编号＋原预约编号＋通过或不能执行＋新依据／快照＋复核人／时刻＋当前标志及占用结论",
+    "data_events": [
+      {
+        "step": "2",
+        "direction": "输入",
+        "fields": [
+          "预约编号",
+          "决定",
+          "原因",
+          "版本"
+        ],
+        "meaning": "本次意图所需字段；可选项和后续动作以字段字典及扩展路径为准"
+      },
+      {
+        "step": "4",
+        "direction": "输出或追加事实",
+        "group": "后续复核结果",
+        "definition": "复核编号＋原预约编号＋通过或不能执行＋新依据／快照＋复核人／时刻＋当前标志及占用结论",
+        "boundary": "UC-27；不覆盖初始决定，不新增预约"
+      }
+    ],
+    "rule_step_links": [
+      {
+        "rule": "BR-09",
+        "steps": [
+          "3"
+        ]
+      },
+      {
+        "rule": "BR-15",
+        "steps": [
+          "1"
+        ]
+      },
+      {
+        "rule": "BR-36",
+        "steps": [
+          "4"
+        ]
+      },
+      {
+        "rule": "BR-38",
+        "steps": [
+          "3a"
+        ]
+      }
+    ],
+    "control_class": "预约控制"
+  }
+]

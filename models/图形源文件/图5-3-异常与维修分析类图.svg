@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="660" viewBox="0 0 507 660"><rect width="100%" height="100%" fill="white"/>
+<rect x="5" y="5" width="145" height="92" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="77.5" y="17.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">资源</text>
+<text x="77.5" y="29.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Resource〔引用〕</text>
+<polyline points="5,35 150,35" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="50.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">服务限制、实物状态</text>
+<polyline points="5,55 150,55" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="70.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">重算服务限制()</text>
+<rect x="357" y="5" width="145" height="92" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="429.5" y="17.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">用户</text>
+<text x="429.5" y="29.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">User〔引用〕</text>
+<polyline points="357,35 502,35" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="50.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">学校编号、当前权限</text>
+<polyline points="357,55 502,55" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="70.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">校验对象权限()</text>
+<rect x="178" y="151" width="151" height="140" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="163.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">异常</text>
+<text x="253.5" y="175.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Incident</text>
+<polyline points="178,181 329,181" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="184" y="196.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">现象、报告人、可选预约</text>
+<text x="184" y="208.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">核实状态、阻断标志</text>
+<text x="184" y="220.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">发现／报告／解决时刻</text>
+<polyline points="178,225 329,225" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="184" y="240.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">保存异常事实()</text>
+<text x="184" y="252.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">按剩余工单结案()</text>
+<text x="184" y="264.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">核实／追加结案依据()</text>
+<rect x="5" y="329" width="145" height="110" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="77.5" y="341.03000000000003" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">证据</text>
+<text x="77.5" y="353.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">Evidence</text>
+<polyline points="5,359 150,359" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="374.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">来源、摘要、上传主体</text>
+<text x="11" y="386.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">文件索引、时刻</text>
+<polyline points="5,391 150,391" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="406.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">追加／受控读取()</text>
+<rect x="357" y="329" width="145" height="110" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="429.5" y="341.03000000000003" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">回应</text>
+<text x="429.5" y="353.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">IncidentResponse</text>
+<polyline points="357,359 502,359" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="374.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">类型、内容、主体、时刻</text>
+<polyline points="357,379 502,379" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="394.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">追加确认／异议／复核()</text>
+<rect x="178" y="438" width="151" height="140" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="253.5" y="450.03000000000003" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">维修工单</text>
+<text x="253.5" y="462.83" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">WorkOrder</text>
+<polyline points="178,468 329,468" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="184" y="483.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">当前指派、状态、结果</text>
+<text x="184" y="495.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">完成／验收人及时间</text>
+<polyline points="178,500 329,500" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="184" y="515.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">读取当前工单()</text>
+<text x="184" y="527.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">保存验收结论()</text>
+<text x="184" y="539.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">接单／提交／重新指派()</text>
+<rect x="5" y="551" width="145" height="104" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="77.5" y="563.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">过程</text>
+<text x="77.5" y="575.8299999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">WorkOrderEvent</text>
+<polyline points="5,581 150,581" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="596.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">工单、主体、原新状态</text>
+<text x="11" y="608.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">说明、时刻</text>
+<polyline points="5,613 150,613" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="11" y="628.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">追加过程()</text>
+<rect x="357" y="551" width="145" height="104" rx="0" fill="white" stroke="#24384B" stroke-width=".7"/>
+<text x="429.5" y="563.03" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">审计</text>
+<text x="429.5" y="575.8299999999999" font-family="Microsoft YaHei,sans-serif" font-size="9.8" text-anchor="middle" fill="#24384B">AuditEvent</text>
+<polyline points="357,581 502,581" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="596.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">对象逻辑引用、动作</text>
+<text x="363" y="608.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">主体、原新值、时刻</text>
+<polyline points="357,613 502,613" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="363" y="628.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="start" fill="#24384B">核对历史执行者()</text>
+<polyline points="77.5,97 77.5,183 178,183" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<rect x="94.33333333333333" y="126.9" width="43.333333333333336" height="12.2" fill="white"/>
+<text x="116" y="136.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">针对资源</text>
+<text x="63" y="117.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="162" y="202.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<polyline points="429.5,97 429.5,183 329,183" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<rect x="381.6666666666667" y="126.9" width="24.666666666666668" height="12.2" fill="white"/>
+<text x="394" y="136.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">报告</text>
+<text x="443" y="117.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="344" y="202.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<polyline points="178,251 77.5,251 77.5,329" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="164" y="241.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="62" y="320.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<polyline points="329,251 429.5,251 429.5,329" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="343" y="241.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="445" y="320.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<polyline points="253.5,291 253.5,438" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<rect x="265.6666666666667" y="354.9" width="24.666666666666668" height="12.2" fill="white"/>
+<text x="278" y="364.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">处理</text>
+<text x="241" y="311.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="223" y="424.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">0..*</text>
+<rect x="188.5" y="396.05" width="129.0" height="11.9" fill="white"/>
+<text x="253" y="405.115" font-family="Microsoft YaHei,sans-serif" font-size="8.9" text-anchor="middle" fill="#24384B">{同一异常最多一项未关闭工单}</text>
+<polyline points="178,520 77.5,520 77.5,551" fill="none" stroke="#7C8C8B" stroke-width=".7"/>
+<text x="164" y="510.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1</text>
+<text x="62" y="542.15" font-family="Microsoft YaHei,sans-serif" font-size="9" text-anchor="middle" fill="#24384B">1..*</text>
+<polyline points="329,520 343,520 343,599 357,599" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
+<rect x="370.6666666666667" y="479.9" width="24.666666666666668" height="12.2" fill="white"/>
+<text x="383" y="489.22" font-family="Microsoft YaHei,sans-serif" font-size="9.2" text-anchor="middle" fill="#24384B">追溯</text>
+</svg>
