@@ -74,3 +74,53 @@ jobs:
           if (Test-Path -LiteralPath (Join-Path $demoPath '.local/runtime.json')) {
             python (Join-Path $demoPath 'tools/stop_database.py')
           }
+
+  cloud-profile:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: cloud_test
+          POSTGRES_USER: campus
+          POSTGRES_PASSWORD: ci-cloud-test-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U campus -d cloud_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DJANGO_SETTINGS_MODULE: config.cloud_settings
+      DEMO_MODE: '1'
+      DJANGO_SECRET_KEY: ci-cloud-test-key-000000000000000000000000000000
+      MOCK_IDP_KEY: ci-identity-test-key-00000000000000000000000000
+      DATABASE_URL: postgresql://campus:ci-cloud-test-only@127.0.0.1:5432/cloud_test?sslmode=require
+      RENDER_EXTERNAL_HOSTNAME: cloud-test.example
+      AWS_ENDPOINT_URL_S3: https://branch.storage.example
+      AWS_ACCESS_KEY_ID: ci-test-key
+      AWS_SECRET_ACCESS_KEY: ci-test-secret
+      AWS_REGION: us-east-2
+      CAMPUS_STORAGE_BUCKET: campus-lab-evidence
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Enable TLS on the isolated PostgreSQL service
+        env:
+          PG_CONTAINER: ${{ job.services.postgres.id }}
+        run: |
+          openssl req -x509 -nodes -newkey rsa:2048 -days 1 -subj /CN=localhost -keyout "$RUNNER_TEMP/cloud-test.key" -out "$RUNNER_TEMP/cloud-test.crt"
+          docker cp "$RUNNER_TEMP/cloud-test.key" "$PG_CONTAINER:/var/lib/postgresql/data/server.key"
+          docker cp "$RUNNER_TEMP/cloud-test.crt" "$PG_CONTAINER:/var/lib/postgresql/data/server.crt"
+          docker exec --user root "$PG_CONTAINER" chown postgres:postgres /var/lib/postgresql/data/server.key /var/lib/postgresql/data/server.crt
+          docker exec --user root "$PG_CONTAINER" chmod 600 /var/lib/postgresql/data/server.key
+          docker exec "$PG_CONTAINER" psql -U campus -d cloud_test -c "ALTER SYSTEM SET ssl = 'on'"
+          docker exec "$PG_CONTAINER" psql -U campus -d cloud_test -c "SELECT pg_reload_conf()"
+      - run: pip install -r requirements-cloud.txt
+      - run: python tools/test_cloud.py
+      - run: python manage.py collectstatic --noinput
+      - run: python manage.py test core.cloud_tests --noinput

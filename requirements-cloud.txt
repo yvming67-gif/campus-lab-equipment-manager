@@ -1,0 +1,5 @@
+-r requirements-production.txt
+-c requirements-cloud.lock.txt
+whitenoise==6.12.0
+django-storages[s3]==1.14.6
+boto3==1.43.117
