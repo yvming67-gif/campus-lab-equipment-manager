@@ -19,6 +19,9 @@ CSRF_TRUSTED_ORIGINS = ["https://" + h for h in ALLOWED_HOSTS]
 DATABASES = {"default": database(os.environ)}
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = True
+# Internal platform probes must execute the database check, not return a healthy
+# 301 before reaching it. This endpoint contains no account or secret data.
+SECURE_REDIRECT_EXEMPT = [r"^health/$"]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_REFERRER_POLICY = "same-origin"

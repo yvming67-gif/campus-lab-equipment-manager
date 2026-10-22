@@ -56,3 +56,12 @@ class CloudProfileTests(TestCase):
         call_command("seed_demo", if_empty=True, verbosity=0)
         user.refresh_from_db()
         self.assertFalse(user.is_active)
+
+    def test_internal_http_probe_reports_database_failure_instead_of_healthy_redirect(self):
+        from unittest.mock import patch
+        from django.db import DatabaseError
+        client = self.client_for_cloud()
+        with patch("config.health.connection.cursor", side_effect=DatabaseError("isolated failure")):
+            response = client.get("/health/")
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["status"], "unavailable")
