@@ -1,0 +1,15 @@
+{
+  "health_status": "ready",
+  "instance": "87880b11f6e71663",
+  "operations": {
+    "http_status": 503,
+    "worker_recent": true,
+    "backup_recent": false,
+    "delivery_failed": 0,
+    "delivery_overdue": 0,
+    "replica_verified": false,
+    "storage_ok": true,
+    "backup_bytes": 0,
+    "free_bytes": 68790345728
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "deployment_observation": "公开登录、身份及侧栏已出现ef0382f模板修订；未通过控制台API独立读取部署ID",
+  "checks": [
+    {
+      "name": "更新后数据库就绪及稳定实例标识",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "status": "ready",
+        "instance_unchanged": true
+      }
+    },
+    {
+      "name": "更新后登录文案",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "local_only_copy_absent": true
+      }
+    },
+    {
+      "name": "更新后身份文案",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "simulated_identity_copy_present": true
+      }
+    },
+    {
+      "name": "admin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "更新后预约1保留且已取消",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "id": 1,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "更新后预约2保留且已取消",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "id": 2,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "更新后预约3保留且已取消",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "id": 3,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "更新后预约4保留且已取消",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "id": 4,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "更新后异常及附件索引保留",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "incident_id": 1,
+        "state": "DISMISSED"
+      }
+    },
+    {
+      "name": "更新后附件摘要一致",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "bytes": 76,
+        "sha256": "af9cb484e25836824f7bf5adede1e0ce33aea0abaae1e8978b5ec30e99ca27f1"
+      }
+    },
+    {
+      "name": "更新后验收审计保留",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "audit_marker_present": true
+      }
+    },
+    {
+      "name": "更新后侧栏文案",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "local_only_copy_absent": true
+      }
+    }
+  ],
+  "session_check": "另见browser-post-redeploy.json",
+  "before_instance": "87880b11f6e71663",
+  "after_instance": "87880b11f6e71663"
+}

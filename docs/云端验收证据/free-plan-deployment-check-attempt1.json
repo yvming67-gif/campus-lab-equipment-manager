@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-10-22T17:28:27.466972+08:00",
+  "url": "https://campus-lab-equipment-manager.onrender.com",
+  "method": "只读GET；未提交业务、未触发部署、未调用私有账单接口；无持续保活或压力测试",
+  "account_status": {
+    "Render_payment_method": "用户确认已移除，未独立读取账单后台",
+    "Neon_plan": "用户确认Free，未独立读取账单后台"
+  },
+  "checks": [
+    {
+      "name": "公开HTTPS及数据库就绪",
+      "passed": false,
+      "evidence": {
+        "path": "/health/",
+        "error_type": "URLError",
+        "elapsed_seconds": 0.907,
+        "readiness": null
+      }
+    },
+    {
+      "name": "登录页及当前演示文案",
+      "passed": false,
+      "evidence": {
+        "path": "/login/",
+        "error_type": "URLError",
+        "elapsed_seconds": 0.907,
+        "current_copy_present": false
+      }
+    },
+    {
+      "name": "登录页样式可读取",
+      "passed": false,
+      "evidence": {
+        "reason": "No stylesheet found in response"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "path": "/health/",
+      "error_type": "URLError",
+      "elapsed_seconds": 0.907
+    },
+    {
+      "path": "/login/",
+      "error_type": "URLError",
+      "elapsed_seconds": 0.907
+    }
+  ],
+  "limits": [
+    "本次仅验证就绪、登录页和样式；不证明所有业务、休眠恢复、云端联合备份或私有账单状态"
+  ]
+}
