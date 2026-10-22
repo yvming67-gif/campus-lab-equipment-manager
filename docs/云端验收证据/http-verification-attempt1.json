@@ -1,0 +1,558 @@
+{
+  "url": "https://campus-lab-equipment-manager.onrender.com",
+  "marker": "云端验收-20261022-bc7861",
+  "checks": [
+    {
+      "name": "公开HTTPS登录入口",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "redirect_to_login": true
+      }
+    },
+    {
+      "name": "数据库健康检查",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "status": "ready"
+      }
+    },
+    {
+      "name": "静态样式 /static/app.661bf51b6174.css",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "bytes": 16430
+      }
+    },
+    {
+      "name": "身份页面云端措辞观察",
+      "passed": true,
+      "evidence": {
+        "contains_local_only_copy": true
+      }
+    },
+    {
+      "name": "student 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "student /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /bookings/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /notifications/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "student /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "student2 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "student2 /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "teacher 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "teacher /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "teacher /bookings/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "admin /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /reports/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /work/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /incidents/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /deliveries/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "tech /work/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech /incidents/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "sysadmin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "sysadmin /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /deliveries/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /reports/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "验收执行中断",
+      "passed": false,
+      "evidence": {
+        "type": "URLError",
+        "message": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)>"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 1.843
+    },
+    {
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "final_path": "/health/",
+      "elapsed_seconds": 5.86
+    },
+    {
+      "method": "GET",
+      "path": "/static/app.661bf51b6174.css",
+      "status": 200,
+      "final_path": "/static/app.661bf51b6174.css",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.843
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.579
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 23.406
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/",
+      "status": 200,
+      "final_path": "/bookings/",
+      "elapsed_seconds": 1.187
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/",
+      "status": 200,
+      "final_path": "/notifications/",
+      "elapsed_seconds": 0.688
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 403,
+      "final_path": "/manage/",
+      "elapsed_seconds": 5.656
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 403,
+      "final_path": "/audit/",
+      "elapsed_seconds": 0.735
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 1.406
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.281
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.703
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.985
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.719
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.312
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.672
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.688
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/",
+      "status": 200,
+      "final_path": "/bookings/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.547
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.25
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.516
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.641
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 0.718
+    },
+    {
+      "method": "GET",
+      "path": "/reports/",
+      "status": 200,
+      "final_path": "/reports/",
+      "elapsed_seconds": 0.907
+    },
+    {
+      "method": "GET",
+      "path": "/work/",
+      "status": 200,
+      "final_path": "/work/",
+      "elapsed_seconds": 0.719
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/",
+      "status": 200,
+      "final_path": "/incidents/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "GET",
+      "path": "/deliveries/",
+      "status": 200,
+      "final_path": "/deliveries/",
+      "elapsed_seconds": 5.562
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.891
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 9.797
+    },
+    {
+      "method": "GET",
+      "path": "/work/",
+      "status": 200,
+      "final_path": "/work/",
+      "elapsed_seconds": 1.515
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/",
+      "status": 200,
+      "final_path": "/incidents/",
+      "elapsed_seconds": 1.094
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 403,
+      "final_path": "/manage/",
+      "elapsed_seconds": 5.891
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 11.172
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.438
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.593
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 6.094
+    },
+    {
+      "method": "GET",
+      "path": "/deliveries/",
+      "status": 200,
+      "final_path": "/deliveries/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/reports/",
+      "status": 403,
+      "final_path": "/reports/",
+      "elapsed_seconds": 1.625
+    }
+  ],
+  "created": []
+}

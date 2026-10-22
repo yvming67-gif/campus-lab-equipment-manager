@@ -1,0 +1,1396 @@
+{
+  "url": "https://campus-lab-equipment-manager.onrender.com",
+  "marker": "云端验收-20261022-e63fee",
+  "checks": [
+    {
+      "name": "公开HTTPS登录入口",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "redirect_to_login": true
+      }
+    },
+    {
+      "name": "数据库健康检查",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "status": "ready"
+      }
+    },
+    {
+      "name": "静态样式 /static/app.661bf51b6174.css",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "bytes": 16430
+      }
+    },
+    {
+      "name": "身份页面云端措辞观察",
+      "passed": true,
+      "evidence": {
+        "contains_local_only_copy": true
+      }
+    },
+    {
+      "name": "student 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "student /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /bookings/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /notifications/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "student /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "student /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "student2 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "student2 /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "teacher 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "teacher /resources/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "teacher /bookings/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "admin /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /reports/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /work/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /incidents/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "admin /deliveries/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "tech /work/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech /incidents/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "tech /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "sysadmin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "sysadmin /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /deliveries/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "sysadmin /reports/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "director 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "director /reports/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "director /audit/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 200,
+        "actual_http": 200
+      }
+    },
+    {
+      "name": "director /manage/",
+      "passed": true,
+      "evidence": {
+        "expected_http": 403,
+        "actual_http": 403
+      }
+    },
+    {
+      "name": "student 小程序模拟接口登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "username": "student"
+      }
+    },
+    {
+      "name": "student2 小程序模拟接口登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "username": "student2"
+      }
+    },
+    {
+      "name": "teacher 小程序模拟接口登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "username": "teacher"
+      }
+    },
+    {
+      "name": "小程序匿名拒绝",
+      "passed": true,
+      "evidence": {
+        "http": 401
+      }
+    },
+    {
+      "name": "设备与场地可用性查询",
+      "passed": true,
+      "evidence": {
+        "count": 10,
+        "target_start": "2026-10-23T10:00:00",
+        "target_end": "2026-10-23T11:00:00"
+      }
+    },
+    {
+      "name": "普通设备 创建预约",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/bookings/1/"
+      }
+    },
+    {
+      "name": "普通设备自动确认",
+      "passed": true,
+      "evidence": {
+        "id": 1,
+        "state": "CONFIRMED"
+      }
+    },
+    {
+      "name": "同内容同请求号重试返回原预约",
+      "passed": true,
+      "evidence": {
+        "returned_id": 1
+      }
+    },
+    {
+      "name": "不同内容复用请求号被拒绝",
+      "passed": true,
+      "evidence": {
+        "expected_error": "同一请求号不能提交不同内容"
+      }
+    },
+    {
+      "name": "重叠预约被拒绝",
+      "passed": true,
+      "evidence": {
+        "expected_error": "存在时间冲突",
+        "no_booking_created": true
+      }
+    },
+    {
+      "name": "他人预约对象归属拒绝",
+      "passed": true,
+      "evidence": {
+        "http": 404,
+        "id": 1
+      }
+    },
+    {
+      "name": "系统管理员不自动获得业务审批权限",
+      "passed": true,
+      "evidence": {
+        "http": 404,
+        "id": 1
+      }
+    },
+    {
+      "name": "取消验收预约 1",
+      "passed": true,
+      "evidence": {
+        "id": 1,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "受限设备 创建预约",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/bookings/2/"
+      }
+    },
+    {
+      "name": "受限设备进入待审核",
+      "passed": true,
+      "evidence": {
+        "id": 2,
+        "state": "PENDING"
+      }
+    },
+    {
+      "name": "受限设备在线审批",
+      "passed": true,
+      "evidence": {
+        "id": 2,
+        "state": "CONFIRMED"
+      }
+    },
+    {
+      "name": "取消验收预约 2",
+      "passed": true,
+      "evidence": {
+        "id": 2,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "学生场地申请被拒绝",
+      "passed": true,
+      "evidence": {
+        "http": 409,
+        "code": "RULE_REJECTED"
+      }
+    },
+    {
+      "name": "教师场地 创建预约",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/bookings/3/"
+      }
+    },
+    {
+      "name": "教师场地进入待审核",
+      "passed": true,
+      "evidence": {
+        "id": 3,
+        "state": "PENDING"
+      }
+    },
+    {
+      "name": "场地在线审批",
+      "passed": true,
+      "evidence": {
+        "id": 3,
+        "state": "CONFIRMED"
+      }
+    },
+    {
+      "name": "取消验收预约 3",
+      "passed": true,
+      "evidence": {
+        "id": 3,
+        "state": "CANCELLED"
+      }
+    },
+    {
+      "name": "小程序接口创建预约",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "status": "CONFIRMED"
+      }
+    },
+    {
+      "name": "小程序预约在网页可见",
+      "passed": true,
+      "evidence": {
+        "id": 4,
+        "http": 200
+      }
+    },
+    {
+      "name": "小程序接口取消预约",
+      "passed": true,
+      "evidence": {
+        "id": 4,
+        "status": "CANCELLED"
+      }
+    },
+    {
+      "name": "创建不阻断资源的模拟报告",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/incidents/1/"
+      }
+    },
+    {
+      "name": "私有附件上传",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "incident_id": 1,
+        "evidence_paths": [
+          "/evidence/1/"
+        ]
+      }
+    },
+    {
+      "name": "授权附件下载及摘要一致",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "path": "/evidence/1/",
+        "sha256": "af9cb484e25836824f7bf5adede1e0ce33aea0abaae1e8978b5ec30e99ca27f1",
+        "bytes": 76
+      }
+    },
+    {
+      "name": "非关联用户附件拒绝",
+      "passed": true,
+      "evidence": {
+        "http": 403,
+        "path": "/evidence/1/"
+      }
+    },
+    {
+      "name": "匿名附件请求转登录",
+      "passed": true,
+      "evidence": {
+        "final_path": "/login/"
+      }
+    },
+    {
+      "name": "模拟异常结案并保留凭据",
+      "passed": true,
+      "evidence": {
+        "incident_id": 1,
+        "http": 200
+      }
+    },
+    {
+      "name": "验收后资源保持正常",
+      "passed": true,
+      "evidence": {
+        "resource": "EQ-OSC-01",
+        "state": "NORMAL"
+      }
+    },
+    {
+      "name": "后台任务心跳新鲜",
+      "passed": true,
+      "evidence": {
+        "http": 503,
+        "worker_recent": true,
+        "backup_recent": false,
+        "replica_verified": false,
+        "note": "该端点综合本地备份条件，云端联合恢复尚未验收，不能仅以503认定后台不运行。"
+      }
+    },
+    {
+      "name": "验收操作审计可追踪",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "marker": "云端验收-20261022-e63fee"
+      }
+    },
+    {
+      "name": "测试预约与异常全部结束",
+      "passed": true,
+      "evidence": [
+        {
+          "type": "reservation",
+          "id": 1,
+          "owner": "student",
+          "resource": "EQ-OSC-01",
+          "state": "CANCELLED"
+        },
+        {
+          "type": "reservation",
+          "id": 2,
+          "owner": "student",
+          "resource": "EQ-CAM-01",
+          "state": "CANCELLED"
+        },
+        {
+          "type": "reservation",
+          "id": 3,
+          "owner": "teacher",
+          "resource": "ROOM-101",
+          "state": "CANCELLED"
+        },
+        {
+          "type": "reservation",
+          "id": 4,
+          "owner": "student2",
+          "resource": "EQ-OSC-01",
+          "state": "CANCELLED"
+        },
+        {
+          "type": "incident",
+          "id": 1,
+          "state": "DISMISSED",
+          "owner": "student"
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 1.406
+    },
+    {
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "final_path": "/health/",
+      "elapsed_seconds": 0.907
+    },
+    {
+      "method": "GET",
+      "path": "/static/app.661bf51b6174.css",
+      "status": 200,
+      "final_path": "/static/app.661bf51b6174.css",
+      "elapsed_seconds": 0.906
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.547
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.828
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.391
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.781
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/",
+      "status": 200,
+      "final_path": "/bookings/",
+      "elapsed_seconds": 1.0
+    },
+    {
+      "method": "GET",
+      "path": "/notifications/",
+      "status": 200,
+      "final_path": "/notifications/",
+      "elapsed_seconds": 0.609
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 403,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 403,
+      "final_path": "/audit/",
+      "elapsed_seconds": 0.985
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.641
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.656
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.562
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.735
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 5.531
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 6.219
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.531
+    },
+    {
+      "method": "GET",
+      "path": "/resources/",
+      "status": 200,
+      "final_path": "/resources/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/",
+      "status": 200,
+      "final_path": "/bookings/",
+      "elapsed_seconds": 0.687
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.641
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 2.437
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 3.985
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 1.109
+    },
+    {
+      "method": "GET",
+      "path": "/reports/",
+      "status": 200,
+      "final_path": "/reports/",
+      "elapsed_seconds": 0.938
+    },
+    {
+      "method": "GET",
+      "path": "/work/",
+      "status": 200,
+      "final_path": "/work/",
+      "elapsed_seconds": 0.687
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/",
+      "status": 200,
+      "final_path": "/incidents/",
+      "elapsed_seconds": 5.578
+    },
+    {
+      "method": "GET",
+      "path": "/deliveries/",
+      "status": 200,
+      "final_path": "/deliveries/",
+      "elapsed_seconds": 0.594
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.594
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.266
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.203
+    },
+    {
+      "method": "GET",
+      "path": "/work/",
+      "status": 200,
+      "final_path": "/work/",
+      "elapsed_seconds": 0.609
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/",
+      "status": 200,
+      "final_path": "/incidents/",
+      "elapsed_seconds": 0.719
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 403,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.547
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 6.297
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.187
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 5.61
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 1.0
+    },
+    {
+      "method": "GET",
+      "path": "/deliveries/",
+      "status": 200,
+      "final_path": "/deliveries/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/reports/",
+      "status": 403,
+      "final_path": "/reports/",
+      "elapsed_seconds": 0.687
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 5.578
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.39
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 9.844
+    },
+    {
+      "method": "GET",
+      "path": "/reports/",
+      "status": 200,
+      "final_path": "/reports/",
+      "elapsed_seconds": 0.86
+    },
+    {
+      "method": "GET",
+      "path": "/audit/",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 0.734
+    },
+    {
+      "method": "GET",
+      "path": "/manage/",
+      "status": 403,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.625
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/login/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/login/",
+      "elapsed_seconds": 2.656
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/login/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/login/",
+      "elapsed_seconds": 3.11
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/login/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/login/",
+      "elapsed_seconds": 2.89
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/resources/",
+      "status": 401,
+      "final_path": "/api/mini/v1/resources/",
+      "elapsed_seconds": 0.719
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/me/",
+      "status": 200,
+      "final_path": "/api/mini/v1/me/",
+      "elapsed_seconds": 1.046
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/resources/?starts_at=2026-10-23T10%3A00%3A00&ends_at=2026-10-23T11%3A00%3A00",
+      "status": 200,
+      "final_path": "/api/mini/v1/resources/",
+      "elapsed_seconds": 0.922
+    },
+    {
+      "method": "GET",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/resources/1/",
+      "elapsed_seconds": 5.578
+    },
+    {
+      "method": "POST",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/bookings/1/",
+      "elapsed_seconds": 6.797
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/1/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/1/",
+      "elapsed_seconds": 0.625
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/1/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/1/",
+      "elapsed_seconds": 0.609
+    },
+    {
+      "method": "POST",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/bookings/1/",
+      "elapsed_seconds": 1.282
+    },
+    {
+      "method": "POST",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/resources/1/",
+      "elapsed_seconds": 5.703
+    },
+    {
+      "method": "GET",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/resources/1/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "POST",
+      "path": "/resources/1/",
+      "status": 200,
+      "final_path": "/resources/1/",
+      "elapsed_seconds": 0.812
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/1/",
+      "status": 404,
+      "final_path": "/bookings/1/",
+      "elapsed_seconds": 0.688
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/1/review/",
+      "status": 404,
+      "final_path": "/bookings/1/review/",
+      "elapsed_seconds": 0.718
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/1/cancel/",
+      "status": 200,
+      "final_path": "/bookings/1/cancel/",
+      "elapsed_seconds": 0.625
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/1/cancel/",
+      "status": 200,
+      "final_path": "/bookings/1/",
+      "elapsed_seconds": 1.313
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/1/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/1/",
+      "elapsed_seconds": 5.578
+    },
+    {
+      "method": "GET",
+      "path": "/resources/4/",
+      "status": 200,
+      "final_path": "/resources/4/",
+      "elapsed_seconds": 0.687
+    },
+    {
+      "method": "POST",
+      "path": "/resources/4/",
+      "status": 200,
+      "final_path": "/bookings/2/",
+      "elapsed_seconds": 1.5
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/2/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/2/",
+      "elapsed_seconds": 5.578
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/2/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/2/",
+      "elapsed_seconds": 0.688
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/2/review/",
+      "status": 200,
+      "final_path": "/bookings/2/review/",
+      "elapsed_seconds": 0.797
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/2/review/",
+      "status": 200,
+      "final_path": "/bookings/2/",
+      "elapsed_seconds": 1.921
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/2/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/2/",
+      "elapsed_seconds": 0.735
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/2/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/2/",
+      "elapsed_seconds": 5.594
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/2/cancel/",
+      "status": 200,
+      "final_path": "/bookings/2/cancel/",
+      "elapsed_seconds": 0.671
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/2/cancel/",
+      "status": 200,
+      "final_path": "/bookings/2/",
+      "elapsed_seconds": 1.485
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/2/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/2/",
+      "elapsed_seconds": 0.812
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/bookings/",
+      "status": 409,
+      "final_path": "/api/mini/v1/bookings/",
+      "elapsed_seconds": 0.797
+    },
+    {
+      "method": "GET",
+      "path": "/resources/9/",
+      "status": 200,
+      "final_path": "/resources/9/",
+      "elapsed_seconds": 0.625
+    },
+    {
+      "method": "POST",
+      "path": "/resources/9/",
+      "status": 200,
+      "final_path": "/bookings/3/",
+      "elapsed_seconds": 1.953
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/3/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/3/",
+      "elapsed_seconds": 0.703
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/3/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/3/",
+      "elapsed_seconds": 0.969
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/3/review/",
+      "status": 200,
+      "final_path": "/bookings/3/review/",
+      "elapsed_seconds": 0.75
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/3/review/",
+      "status": 200,
+      "final_path": "/bookings/3/",
+      "elapsed_seconds": 1.875
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/3/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/3/",
+      "elapsed_seconds": 0.688
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/3/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/3/",
+      "elapsed_seconds": 0.672
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/3/cancel/",
+      "status": 200,
+      "final_path": "/bookings/3/cancel/",
+      "elapsed_seconds": 0.75
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/3/cancel/",
+      "status": 200,
+      "final_path": "/bookings/3/",
+      "elapsed_seconds": 1.484
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/bookings/3/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/3/",
+      "elapsed_seconds": 0.735
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/bookings/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/",
+      "elapsed_seconds": 0.86
+    },
+    {
+      "method": "GET",
+      "path": "/bookings/4/",
+      "status": 200,
+      "final_path": "/bookings/4/",
+      "elapsed_seconds": 0.812
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/bookings/4/cancel/",
+      "status": 200,
+      "final_path": "/api/mini/v1/bookings/4/cancel/",
+      "elapsed_seconds": 0.75
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/new/",
+      "status": 200,
+      "final_path": "/incidents/new/",
+      "elapsed_seconds": 0.719
+    },
+    {
+      "method": "POST",
+      "path": "/incidents/new/",
+      "status": 200,
+      "final_path": "/incidents/1/",
+      "elapsed_seconds": 1.594
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/1/evidence/",
+      "status": 200,
+      "final_path": "/incidents/1/evidence/",
+      "elapsed_seconds": 0.656
+    },
+    {
+      "method": "POST",
+      "path": "/incidents/1/evidence/",
+      "status": 200,
+      "final_path": "/incidents/1/",
+      "elapsed_seconds": 3.61
+    },
+    {
+      "method": "GET",
+      "path": "/evidence/1/",
+      "status": 200,
+      "final_path": "/evidence/1/",
+      "elapsed_seconds": 0.64
+    },
+    {
+      "method": "GET",
+      "path": "/evidence/1/",
+      "status": 403,
+      "final_path": "/evidence/1/",
+      "elapsed_seconds": 0.641
+    },
+    {
+      "method": "GET",
+      "path": "/evidence/1/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 1.219
+    },
+    {
+      "method": "GET",
+      "path": "/incidents/1/verify/",
+      "status": 200,
+      "final_path": "/incidents/1/verify/",
+      "elapsed_seconds": 0.687
+    },
+    {
+      "method": "POST",
+      "path": "/incidents/1/verify/",
+      "status": 200,
+      "final_path": "/incidents/1/",
+      "elapsed_seconds": 1.531
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/resources/1/",
+      "status": 200,
+      "final_path": "/api/mini/v1/resources/1/",
+      "elapsed_seconds": 0.61
+    },
+    {
+      "method": "GET",
+      "path": "/operations/health/",
+      "status": 503,
+      "final_path": "/operations/health/",
+      "elapsed_seconds": 0.64
+    },
+    {
+      "method": "GET",
+      "path": "/audit/?q=%E4%BA%91%E7%AB%AF%E9%AA%8C%E6%94%B6-20261022-e63fee",
+      "status": 200,
+      "final_path": "/audit/",
+      "elapsed_seconds": 0.61
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/logout/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/logout/",
+      "elapsed_seconds": 1.672
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/logout/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/logout/",
+      "elapsed_seconds": 0.547
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/logout/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/logout/",
+      "elapsed_seconds": 0.671
+    }
+  ],
+  "created": [
+    {
+      "type": "reservation",
+      "id": 1,
+      "owner": "student",
+      "resource": "EQ-OSC-01",
+      "state": "CANCELLED"
+    },
+    {
+      "type": "reservation",
+      "id": 2,
+      "owner": "student",
+      "resource": "EQ-CAM-01",
+      "state": "CANCELLED"
+    },
+    {
+      "type": "reservation",
+      "id": 3,
+      "owner": "teacher",
+      "resource": "ROOM-101",
+      "state": "CANCELLED"
+    },
+    {
+      "type": "reservation",
+      "id": 4,
+      "owner": "student2",
+      "resource": "EQ-OSC-01",
+      "state": "CANCELLED"
+    },
+    {
+      "type": "incident",
+      "id": 1,
+      "state": "DISMISSED",
+      "owner": "student"
+    }
+  ]
+}

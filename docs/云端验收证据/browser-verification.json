@@ -1,0 +1,161 @@
+[
+  {
+    "fonts": "loaded",
+    "headings": [
+      "你好，演示学生",
+      "设备与场地各自预约，\n申请到交接全程有据。",
+      "近期预约"
+    ],
+    "path": "/",
+    "scrollWidth": 1440,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "工作台 · 实验资源中心",
+    "unlabelled": [],
+    "width": 1440,
+    "role": "student",
+    "screenshot": "student-dashboard.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "资源目录",
+      "10 项资源",
+      "全画幅摄影套装",
+      "数字示波器",
+      "混合信号示波器",
+      "便携式计算机",
+      "移动工作站",
+      "协作机器人平台",
+      "传感器教学套件",
+      "物联网传感套件",
+      "电子与传感实验室整间场地",
+      "机器人与数字影像实验室整间场地"
+    ],
+    "path": "/resources/",
+    "scrollWidth": 1440,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "资源目录 · 实验资源中心",
+    "unlabelled": [],
+    "width": 1440,
+    "role": "student",
+    "screenshot": "student-resources-desktop.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "资源目录",
+      "10 项资源",
+      "全画幅摄影套装",
+      "数字示波器",
+      "混合信号示波器",
+      "便携式计算机",
+      "移动工作站",
+      "协作机器人平台",
+      "传感器教学套件",
+      "物联网传感套件",
+      "电子与传感实验室整间场地",
+      "机器人与数字影像实验室整间场地"
+    ],
+    "path": "/resources/",
+    "scrollWidth": 390,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "资源目录 · 实验资源中心",
+    "unlabelled": [],
+    "width": 390,
+    "role": "student",
+    "screenshot": "student-resources-mobile.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "预约与使用记录"
+    ],
+    "path": "/bookings/",
+    "scrollWidth": 390,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "预约与使用记录 · 实验资源中心",
+    "unlabelled": [],
+    "width": 390,
+    "role": "student",
+    "screenshot": "student-bookings-mobile.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "电子与传感实验室整间场地",
+      "资源信息",
+      "预约场地"
+    ],
+    "path": "/resources/9/",
+    "scrollWidth": 1440,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "电子与传感实验室整间场地 · 实验资源中心",
+    "unlabelled": [],
+    "width": 1440,
+    "role": "teacher",
+    "screenshot": "teacher-room.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "预约与使用记录"
+    ],
+    "path": "/bookings/",
+    "scrollWidth": 1440,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "预约与使用记录 · 实验资源中心",
+    "unlabelled": [],
+    "width": 1440,
+    "role": "admin",
+    "screenshot": "admin-bookings.png",
+    "console_errors": ""
+  },
+  {
+    "fonts": "loaded",
+    "headings": [
+      "审计记录"
+    ],
+    "path": "/audit/",
+    "scrollWidth": 1440,
+    "styles": [
+      {
+        "loaded": true
+      }
+    ],
+    "title": "审计记录 · 实验资源中心",
+    "unlabelled": [],
+    "width": 1440,
+    "role": "admin",
+    "screenshot": "admin-audit.png",
+    "console_errors": ""
+  }
+]
