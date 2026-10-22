@@ -3,7 +3,7 @@
   "analysis_version": "2.3",
   "input_commit": "d3a57f222e52eafd5ebc87c9a9853c45285c495b",
   "report": "docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx",
-  "sha256": "ab2a27a9b52431e9dca50c168cf44c4441fb030b2850d4f53a50ffdec0a546b9",
+  "sha256": "5bfc41c7efc730191acabda15fb8c472dac0d8eb8d45dbb2e73ff58a2b7bcfe1",
   "render_pages": 104,
   "toc_entries": 43,
   "tables": 48,
@@ -19,7 +19,7 @@
   "visual_review": {
     "pages": 104,
     "all_pages_reviewed": true,
-    "final_render": "word-render-10",
+    "final_render": "word-render-11",
     "method": "逐页查看原尺寸页面；文字、目录、表格跨页和图形边界人工复核。后续仅改动页面重新查看，并按PNG摘要确认其余页面与已查版本相同。",
     "revision_differences": {
       "7_to_8": [
@@ -33,10 +33,28 @@
       ],
       "9_to_10": [
         104
+      ],
+      "10_to_11": [
+        6,
+        71,
+        85,
+        86,
+        90,
+        91,
+        92,
+        93,
+        94,
+        101
       ]
     },
     "observations": "未见乱码、文字裁切、图文重叠或空白页；目录43项均有实际页定位。完整大图保持独页时保留必要分页余量。",
     "limitations": "使用LibreOffice渲染，不代表Microsoft Word在另一台电脑上的实际分页。"
+  },
+  "independent_review": {
+    "report": "docs/课程规范完善/独立课程模型复核报告.md",
+    "scope": "27份契约结构与引用全量、4个核心用例语义及新增模型/修订页面；非独立104页全页审查，非云端验收",
+    "result": "限定范围通过",
+    "word_sha256": "5bfc41c7efc730191acabda15fb8c472dac0d8eb8d45dbb2e73ff58a2b7bcfe1"
   },
   "validation_commands": [
     {

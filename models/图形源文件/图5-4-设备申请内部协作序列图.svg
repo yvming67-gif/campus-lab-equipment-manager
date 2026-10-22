@@ -28,8 +28,8 @@
 <text x="473.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">业务事件控制</text>
 <polyline points="473.0,48 473.0,600" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
 <rect x="5" y="356" width="497" height="179" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
-<rect x="10" y="360.1" width="103.0" height="11.8" fill="white"/>
-<text x="10" y="369.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [所有规则通过／拒绝]</text>
+<rect x="10" y="360.1" width="77.0" height="11.8" fill="white"/>
+<text x="10" y="369.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [所有规则通过]</text>
 <rect x="2" y="154" width="503" height="388" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
 <rect x="7" y="158.1" width="154.33333333333334" height="11.8" fill="white"/>
 <text x="7" y="167.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">critical [同申请人及资源的一致性边界]</text>

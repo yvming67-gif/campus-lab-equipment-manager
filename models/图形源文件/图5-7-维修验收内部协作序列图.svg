@@ -28,8 +28,8 @@
 <text x="473.0" y="34.3" font-family="Microsoft YaHei,sans-serif" font-size="9.4" text-anchor="middle" fill="#24384B">资源</text>
 <polyline points="473.0,48 473.0,628" fill="none" stroke="#7C8C8B" stroke-width=".7" stroke-dasharray="3 3"/>
 <rect x="5" y="296" width="497" height="223" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
-<rect x="10" y="300.1" width="129.0" height="11.8" fill="white"/>
-<text x="10" y="309.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [合法独立验收通过／不通过]</text>
+<rect x="10" y="300.1" width="94.33333333333333" height="11.8" fill="white"/>
+<text x="10" y="309.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">alt [合法独立验收通过]</text>
 <rect x="2" y="140" width="503" height="430" rx="0" fill="none" stroke="#24384B" stroke-width=".7"/>
 <rect x="7" y="144.1" width="171.66666666666666" height="11.8" fill="white"/>
 <text x="7" y="153.08" font-family="Microsoft YaHei,sans-serif" font-size="8.8" text-anchor="start" fill="#24384B">critical [验收状态及恢复结论的一致性边界]</text>

@@ -105,7 +105,7 @@
       {
         "type": "frame",
         "operator": "alt",
-        "guard": "所有规则通过／拒绝"
+        "guard": "所有规则通过"
       },
       {
         "type": "call",
@@ -261,7 +261,7 @@
       {
         "type": "frame",
         "operator": "alt",
-        "guard": "通过／冲突或其他拒绝"
+        "guard": "所有场地规则通过"
       },
       {
         "type": "call",
@@ -390,7 +390,7 @@
       {
         "type": "frame",
         "operator": "alt",
-        "guard": "存在对应借出且检查可登记／无借出"
+        "guard": "存在对应借出且检查可登记"
       },
       {
         "type": "call",
@@ -554,7 +554,7 @@
       {
         "type": "frame",
         "operator": "alt",
-        "guard": "合法独立验收通过／不通过"
+        "guard": "合法独立验收通过"
       },
       {
         "type": "call",
