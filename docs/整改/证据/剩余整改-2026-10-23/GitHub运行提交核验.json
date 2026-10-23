@@ -1,0 +1,35 @@
+{
+  "commit": "69d62385e0e1d23a09c690d7d7d3e4cca2db9e15",
+  "main_matches": true,
+  "tree_matches": true,
+  "workflow": [
+    {
+      "id": 39919399175,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/39919399175"
+    }
+  ],
+  "jobs": [
+    {
+      "name": "cloud-profile",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/39919399175/job/120300704713"
+    },
+    {
+      "name": "windows-first-install",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/39919399175/job/120300704961"
+    },
+    {
+      "name": "test",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/39919399175/job/120300705105"
+    }
+  ],
+  "provider_statuses": [],
+  "scope": "GitHub metadata only; no private Render billing or direct Neon connection"
+}

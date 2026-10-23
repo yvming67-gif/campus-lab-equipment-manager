@@ -1,0 +1,184 @@
+{
+  "url": "https://campus-lab-equipment-manager.onrender.com",
+  "marker": "只读整改核验-20261023",
+  "checks": [
+    {
+      "name": "数据库就绪",
+      "passed": true,
+      "evidence": {
+        "http": 200
+      }
+    },
+    {
+      "name": "sysadmin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "新版用户筛选与分页已在线呈现",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "query_control": true,
+        "pagination": true
+      }
+    },
+    {
+      "name": "admin 网页登录",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "final_path": "/"
+      }
+    },
+    {
+      "name": "新版授权资源筛选可访问",
+      "passed": true,
+      "evidence": {
+        "http": 200
+      }
+    },
+    {
+      "name": "非法实验室编号明确提示",
+      "passed": true,
+      "evidence": {
+        "http": 200
+      }
+    },
+    {
+      "name": "小程序模拟API登录",
+      "passed": true,
+      "evidence": {
+        "http": 200
+      }
+    },
+    {
+      "name": "新版占用分页契约",
+      "passed": true,
+      "evidence": {
+        "http": 200,
+        "total": 0,
+        "page": 1,
+        "has_more": false
+      }
+    },
+    {
+      "name": "日期极值返回字段错误",
+      "passed": true,
+      "evidence": {
+        "http": 400,
+        "code": "VALIDATION_ERROR"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/health/",
+      "transport_error": "TimeoutError",
+      "attempt": 1
+    },
+    {
+      "method": "GET",
+      "path": "/health/",
+      "status": 200,
+      "final_path": "/health/",
+      "elapsed_seconds": 41.166
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.756
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 6.567
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 21.844
+    },
+    {
+      "method": "GET",
+      "path": "/manage/?user_q=student&user_role=STUDENT",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 1.404
+    },
+    {
+      "method": "GET",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "elapsed_seconds": 0.96
+    },
+    {
+      "method": "POST",
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/identity/",
+      "elapsed_seconds": 1.385
+    },
+    {
+      "method": "POST",
+      "path": "/identity/",
+      "status": 200,
+      "final_path": "/",
+      "elapsed_seconds": 4.321
+    },
+    {
+      "method": "GET",
+      "path": "/manage/?resource_q=EQ-OSC",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 0.634
+    },
+    {
+      "method": "GET",
+      "path": "/manage/?resource_lab=%C2%B2",
+      "status": 200,
+      "final_path": "/manage/",
+      "elapsed_seconds": 1.185
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/login/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/login/",
+      "elapsed_seconds": 3.008
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/resources/1/",
+      "status": 200,
+      "final_path": "/api/mini/v1/resources/1/",
+      "elapsed_seconds": 0.628
+    },
+    {
+      "method": "GET",
+      "path": "/api/mini/v1/resources/1/?schedule_day=9999-12-31",
+      "status": 400,
+      "final_path": "/api/mini/v1/resources/1/",
+      "elapsed_seconds": 0.659
+    },
+    {
+      "method": "POST",
+      "path": "/api/mini/v1/auth/logout/",
+      "status": 200,
+      "final_path": "/api/mini/v1/auth/logout/",
+      "elapsed_seconds": 0.57
+    }
+  ],
+  "created": []
+}
