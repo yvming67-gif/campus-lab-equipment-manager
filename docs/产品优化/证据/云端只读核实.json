@@ -1,0 +1,41 @@
+{
+  "scope": "Public read-only deploy smoke; no booking/approval/notification changes; not full business or phone acceptance",
+  "commit_expected": "ca923c48502297604a817d89a9bb06c48afe02f0",
+  "rows": [
+    {
+      "path": "/health/",
+      "status": 200,
+      "final_path": "/health/",
+      "bytes": 81,
+      "ready": true
+    },
+    {
+      "path": "/login/",
+      "status": 200,
+      "final_path": "/login/",
+      "bytes": 2229,
+      "new_layout_references": true
+    },
+    {
+      "path": "/schedule/",
+      "status": 200,
+      "final_path": "/login/?next=/schedule/",
+      "bytes": 2229,
+      "protected_route_redirects_to_login": true
+    },
+    {
+      "path": "/static/product.css",
+      "status": 200,
+      "final_path": "/static/product.css",
+      "bytes": 6236,
+      "matches_published_source": true
+    },
+    {
+      "path": "/static/product.js",
+      "status": 200,
+      "final_path": "/static/product.js",
+      "bytes": 245,
+      "matches_published_source": true
+    }
+  ]
+}

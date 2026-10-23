@@ -1,0 +1,29 @@
+{
+  "commit": "ca923c48502297604a817d89a9bb06c48afe02f0",
+  "runs": [
+    {
+      "id": 40022136888,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/40022136888",
+      "jobs": [
+        {
+          "name": "test",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "windows-first-install",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "cloud-profile",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "commit_statuses": []
+}

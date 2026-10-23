@@ -1,0 +1,23 @@
+{
+  "source_commit": "ca923c48502297604a817d89a9bb06c48afe02f0",
+  "runtime_files_identical": 39,
+  "private_overrides": [
+    "AppID",
+    "projectname",
+    "libVersion"
+  ],
+  "official_preview_exit": 0,
+  "device_acceptance": "not executed; user paused",
+  "formal_release": "not uploaded or submitted for review",
+  "package": {
+    "size": {
+      "total": 87311,
+      "packages": [
+        {
+          "name": "TOTAL",
+          "size": 87311
+        }
+      ]
+    }
+  }
+}
