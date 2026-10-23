@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-23",
+  "source": "Actual deployed mini-program API invoked from an independent browser on the same HTTPS origin",
+  "login": {
+    "method": "POST",
+    "path": "/api/mini/v1/auth/login/",
+    "status": 200,
+    "ok": true
+  },
+  "me": {
+    "method": "GET",
+    "path": "/api/mini/v1/me/",
+    "status": 200,
+    "username": "student"
+  },
+  "cleanup": "The temporary acceptance session was logged out through the API; token was not printed or saved in evidence",
+  "scope_limit": "This proves the deployed API accepts the simulated identity, not that WeChat domain/TLS checks pass in non-debug mode"
+}

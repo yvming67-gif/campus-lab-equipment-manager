@@ -1,0 +1,7 @@
+{
+  "url": "https://res.servicewechat.com/weapp/public/commlib/1661.wxapkg",
+  "version": "3.17.4",
+  "bytes": 41072215,
+  "sha256": "68ec2277bf53633cab84dd7f4da23707e3d9c3ff5ebeb2cc42d0c20e7f52648b",
+  "reason": "Official downloader completed but its rename step failed with EXDEV; use a file copy for the official cache."
+}

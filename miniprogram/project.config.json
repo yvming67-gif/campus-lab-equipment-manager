@@ -1,9 +1,9 @@
 {
-  "description": "校园实验室用户端：原生微信小程序，连接同仓库Django服务",
+  "description": "校园实验资源中心：设备与场地预约用户端，连接同仓库Django服务",
   "miniprogramRoot": "./",
   "compileType": "miniprogram",
   "appid": "touristappid",
-  "projectname": "campus-lab-mini",
+  "projectname": "campus-lab-resource-center",
   "setting": {
     "urlCheck": false,
     "es6": true,

@@ -1,0 +1,64 @@
+{
+  "captured_at": "2026-10-23T14:06:14.024272+00:00",
+  "database_scope": "isolated mock acceptance only",
+  "reservations": [
+    {
+      "id": 1,
+      "status": "CANCELLED",
+      "resource": "EQ-OSC-01",
+      "applicant": "student",
+      "purpose": "WX-CONTAINER-20261023 普通设备",
+      "version": 2,
+      "approval": [
+        {
+          "mode": "AUTO",
+          "approved": true,
+          "reason": "普通设备规则检查通过，系统自动确认"
+        }
+      ],
+      "notifications": [
+        {
+          "kind": "CANCEL",
+          "read_at": null
+        },
+        {
+          "kind": "CANCEL",
+          "read_at": null
+        },
+        {
+          "kind": "AUTO_CONFIRM",
+          "read_at": null
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "status": "CANCELLED",
+      "resource": "EQ-OSC-01",
+      "applicant": "student",
+      "purpose": "WX-CONTAINER-20261023 取消流程复核",
+      "version": 2,
+      "approval": [
+        {
+          "mode": "AUTO",
+          "approved": true,
+          "reason": "普通设备规则检查通过，系统自动确认"
+        }
+      ],
+      "notifications": [
+        {
+          "kind": "CANCEL",
+          "read_at": null
+        },
+        {
+          "kind": "CANCEL",
+          "read_at": null
+        },
+        {
+          "kind": "AUTO_CONFIRM",
+          "read_at": null
+        }
+      ]
+    }
+  ]
+}

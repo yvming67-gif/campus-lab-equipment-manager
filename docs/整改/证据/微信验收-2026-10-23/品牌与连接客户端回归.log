@@ -1,0 +1,45 @@
+✔ AUD-0017 older notification reads cannot overwrite a newer result (10.3698ms)
+✔ AUD-0018 changing dates invalidates an outstanding availability response (2.2083ms)
+✔ AUD-0036 offline logout clears local credentials and returns to login (1.9294ms)
+✔ all seven native pages and lifecycle entry files exist (5.3538ms)
+✔ WXML event bindings point to actual controller methods (2.8741ms)
+✔ protected calls require an authenticated session (1.6638ms)
+✔ expired local session is removed (0.8538ms)
+✔ only HTTPS or loopback HTTP service addresses are accepted (1.3522ms)
+✔ cached service and forged form data cannot redirect login credentials (1.888ms)
+✔ legacy or foreign-origin session cannot send bearer token: undefined (0.7661ms)
+✔ legacy or foreign-origin session cannot send bearer token: https://other.example (0.5165ms)
+✔ developer configuration can select a local backend without user address settings (2.1461ms)
+✔ cloud login allows wake-up time while ordinary requests remain bounded (0.5994ms)
+✔ network failure reports a specific actionable cause: request:fail timeout (0.5728ms)
+✔ network failure reports a specific actionable cause: request:fail url not in domain list (0.5439ms)
+✔ network failure reports a specific actionable cause: request:fail ssl certificate error (0.5686ms)
+✔ bearer token is sent in headers, never in the request URL (0.5017ms)
+✔ unauthorized server response clears session and redirects (1.362ms)
+✔ business rejection keeps the authenticated session (0.528ms)
+✔ unknown HTML response is a visible service error (0.5862ms)
+✔ network failure retains stable idempotency key on retry (1.0259ms)
+✔ changed submission gets a new key and success removes draft (0.804ms)
+✔ unauthenticated submit cannot create a draft or issue a request (0.5437ms)
+✔ field validation errors expose Chinese labels and causes (0.5098ms)
+✔ resource draft restores the same form after interrupted submission (1.7063ms)
+✔ double tap does not duplicate an in-flight login (1.1132ms)
+✔ student cannot trigger a room reservation from the page controller (0.935ms)
+✔ cancellation transmits the displayed optimistic version (0.8218ms)
+✔ marking one notification updates only that row and unread count (0.8594ms)
+✔ failed remote logout still clears the local session (0.38ms)
+✔ China date formatting is independent of the computer timezone (0.5204ms)
+✔ occupancy next page appends without changing the reservation form (0.8477ms)
+✔ date switch invalidates an older occupancy response (0.7635ms)
+✔ failed occupancy load keeps the previous page and supports retry (0.6784ms)
+✔ AUD-0086 returning to resource page releases pagination: fresh-first (2.0947ms)
+✔ AUD-0086 returning to resource page releases pagination: old-first (1.4111ms)
+✔ AUD-0086 failed return reload also releases older pagination ownership (2.0765ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 197.4541

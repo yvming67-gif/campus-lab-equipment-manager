@@ -1,0 +1,9 @@
+{
+  "platform": "android",
+  "model": "FIN-AL60a",
+  "brand": "HUAWEI",
+  "system": "Android 12",
+  "version": "8.0.78",
+  "SDKVersion": "3.17.4",
+  "page": "pages/login/index"
+}

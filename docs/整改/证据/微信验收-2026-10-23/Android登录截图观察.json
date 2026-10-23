@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-23",
+  "source": "User-provided Android phone screenshot; read directly with the model's image capability, no external image service",
+  "native_container_visible": true,
+  "native_evidence": "WeChat capsule buttons in the upper right, native page title 进入实验室, no browser URL bar",
+  "displayed_backend": "http://127.0.0.1:8000",
+  "displayed_error": "暂时无法连接服务，请检查启动窗口中的地址后重试",
+  "interpretation": "The configured loopback URL targets the phone itself. This demonstrates a configuration failure, not proof that the deployed HTTPS service is down.",
+  "action": "User instructed to replace the service URL with the existing HTTPS demo address, then retry; success not yet reported",
+  "visual_scope": "This login screenshot only; not evidence for resource, booking, notification or iOS layouts",
+  "privacy": "Original phone screenshot remains local/conversation evidence, not copied into public repository"
+}

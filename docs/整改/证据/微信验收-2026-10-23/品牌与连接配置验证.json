@@ -1,0 +1,41 @@
+{
+  "base_commit": "8c8b51e6518940532722a6cb4040c7cbc2e3b04d",
+  "scope": "本轮未提交工作树的小程序配置、品牌和连接反馈变更",
+  "client_tests": 37,
+  "client_result": "PASS",
+  "native_template_pages": 7,
+  "native_template_result": "PASS",
+  "source_sha256": {
+    "config.js": "81160534a05cd9086be1525917088f165ef92f4a630696c6f4860aacd9b066ca",
+    "utils/api.js": "20285fc159d4084c3ab3f3ed953091beae649f028cbb8fa0fc9d2f9e2af0765f",
+    "controllers.js": "5b1aa55204b38aad7547bb182a7c754618a010226acd467c816a5e808fcea1d9",
+    "pages/login/index.wxml": "48f578b9692e24c1273231f527502458337c952eb405f4e86d8edad126cf48bb",
+    "pages/login/index.json": "36118c08f361df3c4bc4babd0115f7990d419085704f8bc59e71188efdfaf447",
+    "app.json": "e6d428e06ab783ecfcb8e09d0fe16317fe67bb0cc101ad18568087277837e072",
+    "app.wxss": "402e336e0cf0dcbaae09847f0aacd1f840797a9c4d76e2728047fe0836370697",
+    "assets/brand-icon.png": "be0a1a7e0a0cfe396db933fd51946506e7c291e23d633e032f03cb656c4e8048",
+    "assets/brand-icon.svg": "b52252a9307522fbb8d056986f7cf66a11c17fd2e493663be035b43648cddba9"
+  },
+  "brand_build_1": {
+    "size": {
+      "total": 80168,
+      "packages": [
+        {
+          "name": "TOTAL",
+          "size": 80168
+        }
+      ]
+    }
+  },
+  "brand_build_2": {
+    "size": {
+      "total": 88267,
+      "packages": [
+        {
+          "name": "TOTAL",
+          "size": 88267
+        }
+      ]
+    }
+  }
+}

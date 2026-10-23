@@ -1,0 +1,8 @@
+{
+  "source": "Actual browser same-origin fetch to deployed mini API, public mock identity, temporary session revoked; token not returned",
+  "status": 200,
+  "me_status": 200,
+  "combined_elapsed_ms": 18997,
+  "interpretation": "Combined login + me duration only, not isolated login duration; does not prove phone failure reason.",
+  "native_automation_limit": "Windows SDK launch failed; two later SDK connections to port 9421 also failed despite a real native Webview being present. Native browser snapshot confirmed brand text and controls. No simulator-login pass claimed."
+}

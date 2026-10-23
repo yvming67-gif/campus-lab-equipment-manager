@@ -1,4 +1,5 @@
 const api = require('./utils/api');
+const config = require('./config');
 const fmt = require('./utils/format');
 const statuses = [{ code: '', name: '全部' }, { code: 'PENDING', name: '待审核' }, { code: 'CONFIRMED', name: '已确认' }, { code: 'IN_USE', name: '使用中' }, { code: 'COMPLETED', name: '已完成' }, { code: 'CANCELLED', name: '已取消' }, { code: 'REJECTED', name: '已驳回' }, { code: 'EXPIRED', name: '已失效' }];
 function error(page, e) { page.setData({ error: api.errorText(e) }); }
@@ -10,15 +11,14 @@ function confirm(options) { return new Promise(resolve => wx.showModal(Object.as
 
 const screens = {
   login: {
-    data: { accounts: [{ username: 'student', name: '学生 · 演示账号01' }, { username: 'student2', name: '学生 · 演示账号02' }, { username: 'teacher', name: '教师 · 演示账号' }], accountIndex: 0, form: { password: 'Demo@2026', base: '' }, busy: false, error: '' },
-    onLoad() { this.setData({ 'form.base': api.baseUrl() }); },
+    data: { brandName: config.appName, accounts: [{ username: 'student', name: '学生 · 演示账号01' }, { username: 'student2', name: '学生 · 演示账号02' }, { username: 'teacher', name: '教师 · 演示账号' }], accountIndex: 0, form: { password: 'Demo@2026' }, busy: false, error: '' },
     onShow() { if (api.session()) wx.switchTab({ url: '/pages/resources/index' }); },
     input,
     chooseAccount(e) { this.setData({ accountIndex: Number(e.detail.value), error: '' }); },
     async submit() {
       if (this.data.busy) return;
       this.setData({ busy: true, error: '' });
-      try { api.setBase(this.data.form.base); await api.login(this.data.accounts[this.data.accountIndex].username, this.data.form.password); wx.switchTab({ url: '/pages/resources/index' }); }
+      try { await api.login(this.data.accounts[this.data.accountIndex].username, this.data.form.password); wx.switchTab({ url: '/pages/resources/index' }); }
       catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
     }
   },
@@ -192,11 +192,11 @@ const screens = {
     onPullDownRefresh() { return this.load(1).finally(endRefresh); }
   },
   profile: {
-    data: { user: null, stats: null, policy: null, loading: false, error: '', base: '', busy: false, roleLabel: '' },
+    data: { user: null, stats: null, policy: null, loading: false, error: '', busy: false, roleLabel: '' },
     onShow() { if (api.requireLogin()) return this.load(); },
     async load() {
       this.setData({ loading: true, error: '' });
-      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, roleLabel: data.user.roles.map(x => x.name).join(' / '), base: api.baseUrl() }); }
+      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, roleLabel: data.user.roles.map(x => x.name).join(' / ')}); }
       catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
     },
     async signout() {

@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-23",
+  "evidence_source": "User's hands-on phone results in this conversation; not independent device automation",
+  "android_native_entry": {
+    "status": "PASS",
+    "evidence": "User scanned the dedicated mini-program QR; provided a screenshot showing native WeChat capsule and app login page"
+  },
+  "android_login_attempts": [
+    {
+      "configuration": "http://127.0.0.1:8000",
+      "result": "FAIL",
+      "evidence": "Actual native screenshot showed connection failure; loopback addresses phone itself"
+    },
+    {
+      "configuration": "Existing HTTPS demo address, before enabling debugging",
+      "result": "FAIL",
+      "evidence": "User reported still unable to connect; exact wx.request errMsg not captured"
+    },
+    {
+      "configuration": "Existing HTTPS demo address, debug mode enabled, app re-entered",
+      "result": "PASS",
+      "evidence": "User explicitly confirmed 已进入资源目录"
+    }
+  ],
+  "network_interpretation": "Enabling debug changed the outcome. Official network documentation explains the debug-only bypass. The exact rejected check is not proven because raw request error was not captured; non-debug/production validation remains unexecuted.",
+  "android_ordinary_booking": {
+    "code": "DEB74BD143384DF2",
+    "native_submission": "User submitted in the confirmed native WeChat client and reported the code",
+    "independent_result": "Actual deployed web detail /bookings/6/ showed CONFIRMED and AUTO, correct resource, purpose and time",
+    "native_cancel": "User confirmed cancellation to CANCELLED through native reason input and modal",
+    "independent_cancel": "Actual deployed web and mini API showed CANCELLED, version 2, retained submit/cancel timeline",
+    "notifications": "User found both native confirm/cancel messages; deployed mini API independently returned AUTO_CONFIRM/自动确认 and CANCEL/预约取消 linked to booking 6",
+    "scope": "PASS in test-account debug mode; not a non-debug or production-release result"
+  },
+  "android_restricted_booking": {
+    "code": "E65531AC4FC844B4",
+    "raw_user_waiting_label": "待验收",
+    "label_evidence_limit": "Web independently showed PENDING/待审核. No phone screenshot of the original waiting label was obtained, so the user's wording alone is not classified as a confirmed UI terminology defect.",
+    "independent_before": "Actual deployed /bookings/7/ showed PENDING, manual approval and correct camera resource/time",
+    "web_approval": "Approved through actual manager web form at 2026-10-23 22:57:22 +08:00; resulting status CONFIRMED and audit retained",
+    "native_refresh": "PASS: user explicitly confirmed CONFIRMED and approval timeline synchronized",
+    "cleanup": "PASS: user explicitly confirmed native cancellation; deployed record CANCELLED at 2026-10-23T23:00:21+08:00"
+  },
+  "ios": "Not yet executed",
+  "android_room_role": "PASS: user confirmed student button only permits teachers and cannot apply",
+  "android_offline_recovery": "PASS: user disabled network, saw failure, restored network and successfully refreshed",
+  "android_logout": "PASS: user confirmed return to login",
+  "brand_build_1": {
+    "ui": "User confirmed updated name/icon and no address field",
+    "login": "FAIL: user reported unable to connect on Android with debug enabled",
+    "cause": "Not proven; original wx.request errMsg not captured"
+  },
+  "brand_build_2": {
+    "changes": "Login allows 60s; query timeout stays 10s; distinct timeout/domain/TLS guidance and waiting hint",
+    "result": "PASS: user explicitly confirmed entered resource directory using the newest QR after enabling debug",
+    "scope": "Android test-account debug mode login; original core business cases not fully repeated on this build"
+  },
+  "platform_profile": {
+    "request": "Change name/avatar in WeChat recent mini-program list",
+    "status": "Not modified",
+    "limit": "User checked both sandbox and main-platform test-account login; no editable basic-information entry found. In-app brand does not change platform account metadata."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "base_commit": "8c8b51e6518940532722a6cb4040c7cbc2e3b04d",
+  "working_tree": "new fixed developer config and approved branding",
+  "private_differences": [
+    "project.config.json"
+  ],
+  "details": "Only test AppID, tool project name and SDK version; all runtime files byte-identical to canonical source."
+}

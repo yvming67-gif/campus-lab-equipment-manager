@@ -17,7 +17,7 @@ function setup() {
   for (const name of ['utils/api.js', 'controllers.js']) delete require.cache[require.resolve(path.join(root, name))];
   api = require(path.join(root, 'utils/api'));
 }
-function signedIn() { storage.set('campus-mini-session', { token: 'a'.repeat(32), user: { id: 1, display_name: '模拟学生' }, expiresAt: Date.now() + 7200000 }); }
+function signedIn() { storage.set('campus-mini-session', { token: 'a'.repeat(32), user: { id: 1, display_name: '模拟学生' }, base: api.baseUrl(), expiresAt: Date.now() + 7200000 }); }
 function page(name) {
   const definition = require(path.join(root, 'controllers')).create(name);
   definition.setData = function (values) {
@@ -47,7 +47,7 @@ test('AUD-0018 changing dates invalidates an outstanding availability response',
   assert.equal(p.data.available,null);assert.equal(p.data.availability,'');
 });
 
-test('AUD-0036 offline logout clears local credentials and reaches address settings',async()=>{
+test('AUD-0036 offline logout clears local credentials and returns to login',async()=>{
   signedIn();reply=r=>r.fail({errMsg:'offline'});const p=page('profile');await p.signout();
   assert.equal(api.session(),null);assert.ok(navigations.includes('/pages/login/index'));
   const login=page('login');const count=navigations.length;login.onShow();assert.equal(navigations.length,count);
@@ -79,9 +79,35 @@ test('only HTTPS or loopback HTTP service addresses are accepted', () => {
   assert.equal(api.normalizeBase('https://lab.example.edu/'), 'https://lab.example.edu');
   for (const url of ['javascript:alert(1)', 'http://example.com', 'https://user:pass@example.com', 'https://example.com?x=1']) assert.throws(() => api.normalizeBase(url));
 });
-test('changing service clears credentials and drafts', () => {
-  signedIn();storage.set('campus-mini-draft', { key: 'x' });api.setBase('http://localhost:18000');
-  assert.equal(api.session(), null);assert.equal(storage.has('campus-mini-draft'), false);
+test('cached service and forged form data cannot redirect login credentials', async () => {
+  storage.set('campus-mini-base', 'https://untrusted.example');
+  reply = r => r.success({ statusCode: 200, data: { ok: true, data: { token: 'b'.repeat(32), user: { id: 1 }, expires_in: 7200 } } });
+  const p = page('login');p.setData({ 'form.base': 'https://untrusted.example' });await p.submit();
+  assert.equal(requests.length, 1);assert.equal(requests[0].url, api.baseUrl() + '/api/mini/v1/auth/login/');
+  assert.equal(new URL(requests[0].url).origin, require(path.join(root, 'config')).backendBaseUrl);
+  assert.equal(storage.has('campus-mini-base'), false);assert.equal(api.session().base, api.baseUrl());
+});
+for (const oldBase of [undefined, 'https://other.example']) test('legacy or foreign-origin session cannot send bearer token: ' + String(oldBase), async () => {
+  signedIn();storage.get('campus-mini-session').base = oldBase;
+  storage.set('campus-mini-draft', { key: 'x' });
+  await assert.rejects(api.request('/me/'), /请先登录/);
+  assert.equal(requests.length, 0);assert.equal(api.session(), null);assert.equal(storage.has('campus-mini-draft'), false);
+});
+test('developer configuration can select a local backend without user address settings', async () => {
+  const vm = require('node:vm'), sandbox = { module: { exports: {} }, wx: global.wx, require: () => ({ backendBaseUrl: 'http://127.0.0.1:18000' }) };
+  vm.runInNewContext(fs.readFileSync(path.join(root, 'utils/api.js'), 'utf8'), sandbox);
+  const localApi = sandbox.module.exports;
+  await localApi.request('/auth/login/', 'POST', { username: 'student', password: 'mock' }, { auth: false });
+  assert.equal(requests[0].url, 'http://127.0.0.1:18000/api/mini/v1/auth/login/');assert.equal(localApi.setBase, undefined);
+});
+test('cloud login allows wake-up time while ordinary requests remain bounded', async () => {
+  reply = r => r.success({ statusCode: 200, data: { ok: true, data: { token: 'b'.repeat(32), user: { id: 1 }, expires_in: 7200 } } });
+  await api.login('student', 'mock');await api.request('/me/');
+  assert.equal(requests[0].timeout, 60000);assert.equal(requests[1].timeout, 10000);
+});
+for (const [cause, message] of [['request:fail timeout', /连接超时/], ['request:fail url not in domain list', /域名校验未通过/], ['request:fail ssl certificate error', /安全连接未建立/]]) test('network failure reports a specific actionable cause: ' + cause, async () => {
+  signedIn();reply = r => r.fail({ errMsg: cause });
+  await assert.rejects(api.request('/me/'), message);assert.ok(api.session());assert.equal(navigations.length, 0);
 });
 test('bearer token is sent in headers, never in the request URL', async () => {
   signedIn();await api.request('/me/');assert.equal(requests[0].header.Authorization, 'Bearer ' + 'a'.repeat(32));assert.ok(!requests[0].url.includes('aaaa'));
@@ -96,7 +122,7 @@ test('business rejection keeps the authenticated session', async () => {
 });
 test('unknown HTML response is a visible service error', async () => {
   signedIn();reply = r => r.success({ statusCode: 200, data: '<html>wrong server</html>' });
-  await assert.rejects(api.request('/me/'), /服务返回异常/);
+  await assert.rejects(api.request('/me/'), /服务暂时异常/);
 });
 test('network failure retains stable idempotency key on retry', async () => {
   signedIn();reply = r => r.fail({ errMsg: 'timeout' });
@@ -119,7 +145,7 @@ test('resource draft restores the same form after interrupted submission', async
   const p = page('resource');p.onLoad({ id: '1' });assert.equal(p.data.form.purpose, '模拟用途');assert.equal(p.data.form.date, '2027-01-01');
 });
 test('double tap does not duplicate an in-flight login', async () => {
-  reply = () => {};const p = page('login');p.onLoad();p.submit();p.submit();assert.equal(requests.length, 1);assert.equal(p.data.busy, true);
+  reply = () => {};const p = page('login');p.submit();p.submit();assert.equal(requests.length, 1);assert.equal(p.data.busy, true);
 });
 test('student cannot trigger a room reservation from the page controller', async () => {
   signedIn();const p = page('resource');p.setData({ item: { id: 1, kind: 'ROOM', can_apply: false } });await p.submit();assert.match(p.data.error, /仅教师/);assert.equal(requests.length, 0);

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+  <title id="title">校园实验资源中心</title>
+  <desc id="desc">墨绿背景，白色烧瓶与预约确认勾选。</desc>
+  <rect width="1024" height="1024" fill="#244f3d"/>
+  <g fill="none" stroke="#f7f6ee" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M358 228h220M390 230v198L242 682c-28 49-2 94 54 94h289"/>
+    <path d="M546 230v198l104 180"/>
+    <path d="M323 566c82-28 133 28 216 4"/>
+  </g>
+  <circle cx="686" cy="691" r="152" fill="#244f3d"/>
+  <circle cx="686" cy="691" r="126" fill="none" stroke="#f7f6ee" stroke-width="36"/>
+  <path d="m628 692 41 43 78-86" fill="none" stroke="#f7f6ee" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

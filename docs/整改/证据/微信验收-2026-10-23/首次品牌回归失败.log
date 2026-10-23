@@ -1,0 +1,70 @@
+✔ AUD-0017 older notification reads cannot overwrite a newer result (7.9085ms)
+✔ AUD-0018 changing dates invalidates an outstanding availability response (2.3275ms)
+✔ AUD-0036 offline logout clears local credentials and returns to login (1.7413ms)
+✔ all seven native pages and lifecycle entry files exist (5.1969ms)
+✔ WXML event bindings point to actual controller methods (2.1439ms)
+✔ protected calls require an authenticated session (1.242ms)
+✔ expired local session is removed (0.6592ms)
+✔ only HTTPS or loopback HTTP service addresses are accepted (0.5278ms)
+✔ cached service and forged form data cannot redirect login credentials (1.1033ms)
+✔ legacy or foreign-origin session cannot send bearer token: undefined (0.4434ms)
+✔ legacy or foreign-origin session cannot send bearer token: https://other.example (0.36ms)
+✔ developer configuration can select a local backend without user address settings (1.563ms)
+✔ bearer token is sent in headers, never in the request URL (0.4422ms)
+✔ unauthorized server response clears session and redirects (0.4427ms)
+✔ business rejection keeps the authenticated session (0.523ms)
+✖ unknown HTML response is a visible service error (0.9504ms)
+✔ network failure retains stable idempotency key on retry (0.7618ms)
+✔ changed submission gets a new key and success removes draft (0.8175ms)
+✔ unauthenticated submit cannot create a draft or issue a request (0.3842ms)
+✔ field validation errors expose Chinese labels and causes (0.4063ms)
+✔ resource draft restores the same form after interrupted submission (0.7569ms)
+✔ double tap does not duplicate an in-flight login (0.6501ms)
+✔ student cannot trigger a room reservation from the page controller (1.2514ms)
+✔ cancellation transmits the displayed optimistic version (1.2604ms)
+✔ marking one notification updates only that row and unread count (1.053ms)
+✔ failed remote logout still clears the local session (0.512ms)
+✔ China date formatting is independent of the computer timezone (0.6366ms)
+✔ occupancy next page appends without changing the reservation form (1.1271ms)
+✔ date switch invalidates an older occupancy response (0.9949ms)
+✔ failed occupancy load keeps the previous page and supports retry (0.9708ms)
+✔ AUD-0086 returning to resource page releases pagination: fresh-first (1.1732ms)
+✔ AUD-0086 returning to resource page releases pagination: old-first (0.8904ms)
+✔ AUD-0086 failed return reload also releases older pagination ownership (0.9106ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 32
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 168.9584
+
+✖ failing tests:
+
+test at tools\mini-check\client.test.cjs:114:1
+✖ unknown HTML response is a visible service error (0.9504ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /服务返回异常/. Input:
+
+  'Error: 服务暂时异常，请稍后重试'
+
+      at async TestContext.<anonymous> (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:116:3)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: 服务暂时异常，请稍后重试
+        at Object.success (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\miniprogram\utils\api.js:46:23)
+        at reply (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:115:29)
+        at Object.request (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:12:39)
+        at <本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\miniprogram\utils\api.js:40:8
+        at new Promise (<anonymous>)
+        at Object.request (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\miniprogram\utils\api.js:37:10)
+        at TestContext.<anonymous> (<本地工作区>\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:116:28)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1306:25)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:897:7),
+    expected: /服务返回异常/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

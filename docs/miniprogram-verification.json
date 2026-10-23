@@ -1,16 +1,36 @@
 {
-  "date": "2026-10-20",
-  "backend_total_tests": 154,
-  "client_controller_tests": 24,
-  "native_template_compilation": {
-    "tool": "miniprogram-compiler@0.2.3",
-    "pages": 7,
-    "wxml": "pass",
-    "wxss": "pass"
-  },
-  "developer_tool_current_container": "not executed",
-  "physical_device": "not executed",
-  "production_release": "not executed",
-  "scope": "simulated identities and shared actual Django/PostgreSQL; browser not equivalent to WeChat runtime",
-  "evidence": "整改/整改验证记录.md"
+  "history": [
+    {
+      "date": "2026-10-20",
+      "backend_total_tests": 154,
+      "client_controller_tests": 24,
+      "native_template_compilation": {
+        "tool": "miniprogram-compiler@0.2.3",
+        "pages": 7,
+        "wxml": "pass",
+        "wxss": "pass"
+      },
+      "developer_tool_current_container": "not executed",
+      "physical_device": "not executed",
+      "production_release": "not executed",
+      "scope": "simulated identities and shared actual Django/PostgreSQL; browser not equivalent to WeChat runtime",
+      "evidence": "整改/整改验证记录.md"
+    }
+  ],
+  "latest": {
+    "date": "2026-10-23",
+    "source_baseline": "8c8b51e6518940532722a6cb4040c7cbc2e3b04d",
+    "client_tests": 37,
+    "native_template_pages": 7,
+    "client_result": "pass",
+    "template_result": "pass",
+    "developer_tool_current_container": "partial; complete suite not passed",
+    "android_original_preview": "core course flows passed in test-account debug mode, user operation plus deployed state checks",
+    "android_brand_preview_1": "updated UI confirmed; login unable to connect",
+    "android_brand_preview_2": "PASS: user confirmed entered resource directory, Android test-account debug mode; full business suite not repeated",
+    "ios": "not executed",
+    "platform_name_avatar": "not modified; current test account has no found profile-edit entry",
+    "production_release": "not executed",
+    "record": "整改/微信容器与真机验收-2026-10-23.md"
+  }
 }

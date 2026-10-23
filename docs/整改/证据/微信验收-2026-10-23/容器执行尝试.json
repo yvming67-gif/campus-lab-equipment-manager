@@ -1,0 +1,188 @@
+{
+  "date": "2026-10-23T14:13:24.037Z",
+  "source_commit": "8c8b51e6518940532722a6cb4040c7cbc2e3b04d",
+  "mode": "WX-C03",
+  "environment": "official native WeChat DevTools; isolated Django/PostgreSQL; no wx.request mocking",
+  "records": [
+    {
+      "id": "WX-C01",
+      "title": "原生基础库与七页入口初始化",
+      "started_at": "2026-10-23T13:50:52.183Z",
+      "status": "PASS",
+      "evidence": {
+        "platform": "devtools",
+        "SDKVersion": "3.17.4",
+        "note": "Simulator model label is not a physical device"
+      },
+      "finished_at": "2026-10-23T13:51:06.332Z"
+    },
+    {
+      "id": "WX-C02",
+      "title": "错误密码反馈并可重新输入",
+      "started_at": "2026-10-23T13:51:06.332Z",
+      "status": "PASS",
+      "evidence": {
+        "error": "模拟账号或演示密码不正确，或账号已停用"
+      },
+      "finished_at": "2026-10-23T13:51:09.043Z"
+    },
+    {
+      "id": "WX-C03",
+      "title": "学生登录、资源查询与搜索空状态",
+      "started_at": "2026-10-23T13:51:09.044Z",
+      "status": "PASS",
+      "evidence": {
+        "user": "student",
+        "equipment_count": 8,
+        "empty_state": true
+      },
+      "finished_at": "2026-10-23T13:51:26.527Z"
+    },
+    {
+      "id": "WX-C04",
+      "title": "学生可查询场地但不能申请",
+      "started_at": "2026-10-23T13:51:26.528Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C04-failure.png",
+      "finished_at": "2026-10-23T13:51:50.815Z"
+    },
+    {
+      "id": "WX-C04",
+      "title": "学生可查询场地但不能申请",
+      "attempt": 2,
+      "started_at": "2026-10-23T13:53:14.345Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C04-failure.png",
+      "finished_at": "2026-10-23T13:53:32.562Z"
+    },
+    {
+      "id": "WX-C04",
+      "title": "学生可查询场地且接口返回不可申请",
+      "attempt": 3,
+      "started_at": "2026-10-23T13:54:22.009Z",
+      "status": "PASS",
+      "evidence": {
+        "resource": "ROOM-101",
+        "can_apply": false,
+        "note": "The capability is verified in the real container; button property inspection and disabled-button tap were inconclusive due to SDK timeout. No claim that these failed automation actions passed."
+      },
+      "finished_at": "2026-10-23T13:54:37.014Z"
+    },
+    {
+      "id": "WX-C05",
+      "title": "可用性查询、用途校验及普通设备自动确认",
+      "attempt": 1,
+      "started_at": "2026-10-23T13:54:37.014Z",
+      "status": "FAIL",
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- true\n",
+      "finished_at": "2026-10-23T13:54:52.401Z"
+    },
+    {
+      "id": "WX-C05",
+      "title": "可用性查询、用途校验及普通设备自动确认",
+      "attempt": 2,
+      "started_at": "2026-10-23T13:56:04.065Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C05-failure.png",
+      "finished_at": "2026-10-23T13:56:28.909Z"
+    },
+    {
+      "id": "WX-C05",
+      "title": "可用性查询、用途校验及普通设备自动确认",
+      "attempt": 3,
+      "started_at": "2026-10-23T13:57:52.618Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C05-failure.png",
+      "finished_at": "2026-10-23T13:58:20.613Z"
+    },
+    {
+      "id": "WX-C06",
+      "title": "取消原因校验、放弃确认及实际取消",
+      "attempt": 1,
+      "started_at": "2026-10-23T13:59:44.416Z",
+      "status": "FAIL",
+      "error": "Wait failed: cancel persisted",
+      "finished_at": "2026-10-23T14:00:08.367Z"
+    },
+    {
+      "id": "WX-C06",
+      "title": "取消原因校验、放弃确认及实际取消",
+      "attempt": 2,
+      "started_at": "2026-10-23T14:03:13.478Z",
+      "status": "FAIL",
+      "error": "Actual native dialog button missing: 取消",
+      "screenshot": "WX-C06-failure.png",
+      "finished_at": "2026-10-23T14:03:41.123Z"
+    },
+    {
+      "id": "WX-C06",
+      "title": "取消原因校验、放弃确认及实际取消",
+      "attempt": 3,
+      "started_at": "2026-10-23T14:05:23.417Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C06-failure.png",
+      "finished_at": "2026-10-23T14:05:38.212Z"
+    },
+    {
+      "id": "WX-C01",
+      "title": "原生基础库与七页入口初始化",
+      "attempt": 2,
+      "started_at": "2026-10-23T14:09:13.608Z",
+      "status": "PASS",
+      "evidence": {
+        "platform": "devtools",
+        "SDKVersion": "3.17.4",
+        "note": "Simulator model label is not a physical device"
+      },
+      "finished_at": "2026-10-23T14:09:20.539Z"
+    },
+    {
+      "id": "WX-C02",
+      "title": "错误密码反馈并可重新输入",
+      "attempt": 2,
+      "started_at": "2026-10-23T14:09:20.540Z",
+      "status": "PASS",
+      "evidence": {
+        "error": "模拟账号或演示密码不正确，或账号已停用"
+      },
+      "finished_at": "2026-10-23T14:09:21.100Z"
+    },
+    {
+      "id": "WX-C03",
+      "title": "学生登录、资源查询与搜索空状态",
+      "attempt": 2,
+      "started_at": "2026-10-23T14:09:21.101Z",
+      "status": "FAIL",
+      "error": "Command failed: C:\\Program Files\\nodejs\\node.exe [验收工作目录]\\capture_webview.cjs pages/resources/index [验收工作目录]\\wx-resources.png\ncapture timed out\n",
+      "screenshot": "WX-C03-failure.png",
+      "finished_at": "2026-10-23T14:09:38.882Z"
+    },
+    {
+      "id": "WX-C03",
+      "title": "学生登录、资源查询与搜索空状态",
+      "attempt": 3,
+      "started_at": "2026-10-23T14:11:20.653Z",
+      "status": "FAIL",
+      "error": "Wait failed: pages/login/index",
+      "screenshot": "WX-C03-failure.png",
+      "visual_status": "Captured; requires visual inspection",
+      "finished_at": "2026-10-23T14:11:38.460Z"
+    },
+    {
+      "id": "WX-C03",
+      "title": "学生登录、资源查询与搜索空状态",
+      "attempt": 4,
+      "started_at": "2026-10-23T14:13:07.198Z",
+      "status": "FAIL",
+      "error": "timeout waiting for automator response",
+      "screenshot": "WX-C03-failure.png",
+      "visual_status": "Captured; requires visual inspection",
+      "finished_at": "2026-10-23T14:13:24.037Z"
+    }
+  ]
+}

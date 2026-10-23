@@ -1,11 +1,11 @@
-const BASE_KEY = 'campus-mini-base';
+const config = require('../config');
 const SESSION_KEY = 'campus-mini-session';
 const DRAFT_KEY = 'campus-mini-draft';
-const DEFAULT_BASE = 'http://127.0.0.1:8000';
+const CONFIGURED_BASE = normalizeBase(config.backendBaseUrl);
 const PREFIX = '/api/mini/v1';
 let redirecting = false;
 
-function baseUrl() { return wx.getStorageSync(BASE_KEY) || DEFAULT_BASE; }
+function baseUrl() { return CONFIGURED_BASE; }
 function normalizeBase(value) {
   const base = String(value || '').trim().replace(/\/+$/, '');
   if (!/^https:\/\/[a-z0-9.-]+(?::\d+)?$/i.test(base) && !/^http:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?$/i.test(base)) {
@@ -13,16 +13,10 @@ function normalizeBase(value) {
   }
   return base;
 }
-function setBase(value) {
-  const base = normalizeBase(value);
-  if (base !== baseUrl()) clearSession();
-  wx.setStorageSync(BASE_KEY, base);
-  return base;
-}
-function clearSession() { wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); }
+function clearSession() { wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync('campus-mini-base'); }
 function session() {
   const value = wx.getStorageSync(SESSION_KEY);
-  if (!value || !value.token || !value.user || value.expiresAt <= Date.now()) {
+  if (!value || !value.token || !value.user || value.expiresAt <= Date.now() || value.base !== CONFIGURED_BASE) {
     if (value) clearSession();
     return null;
   }
@@ -44,23 +38,32 @@ function request(path, method, data, options) {
     const header = { 'content-type': 'application/json' };
     if (auth) header.Authorization = 'Bearer ' + saved.token;
     wx.request({
-      url: baseUrl() + PREFIX + path, method: method || 'GET', data: data || {}, header, timeout: 10000,
+      url: baseUrl() + PREFIX + path, method: method || 'GET', data: data || {}, header, timeout: options.timeout || 10000,
       success(result) {
         const body = result.data;
         if (result.statusCode >= 200 && result.statusCode < 300 && body && body.ok === true) { resolve(body.data); return; }
         const detail = body && body.error || {};
-        const error = new Error(detail.message || '服务返回异常，请确认服务地址并重试');
+        const error = new Error(detail.message || '服务暂时异常，请稍后重试');
         error.code = detail.code; error.fields = detail.fields || {}; error.status = result.statusCode;
         if (auth && (result.statusCode === 401 || detail.code === 'ROLE_NOT_SUPPORTED')) { clearSession(); goLogin(); }
         reject(error);
       },
-      fail() { const e = new Error(method === 'POST' && path.indexOf('/bookings/') === 0 ? '未能确认操作结果，请保持内容并重试，或查看预约记录' : '暂时无法连接服务，请检查启动窗口中的地址后重试'); e.network = true; reject(e); }
+      fail(detail) {
+        const message = detail && detail.errMsg || '';
+        let reason = '暂时无法连接服务，请检查网络；测试号真机请开启调试后重试';
+        if (/timeout/i.test(message)) reason = '连接超时，云端演示可能正在唤醒，请稍候重试';
+        else if (/url not in domain list|not in.*domain|合法域名/i.test(message)) reason = '域名校验未通过，测试号请在右上角开启调试，退出后重新进入';
+        else if (/ssl|tls|certificate|cert_/i.test(message)) reason = '安全连接未建立，请检查手机网络和系统时间后重试';
+        const e = new Error(method === 'POST' && path.indexOf('/bookings/') === 0 ? '未能确认操作结果，请保持内容并重试，或查看预约记录' : reason);
+        e.network = true; reject(e);
+      }
     });
   });
 }
 async function login(username, password) {
-  const data = await request('/auth/login/', 'POST', { username, password }, { auth: false });
-  wx.setStorageSync(SESSION_KEY, { token: data.token, user: data.user, expiresAt: Date.now() + data.expires_in * 1000 });
+  const data = await request('/auth/login/', 'POST', { username, password }, { auth: false, timeout: 60000 });
+  wx.setStorageSync(SESSION_KEY, { token: data.token, user: data.user, base: CONFIGURED_BASE, expiresAt: Date.now() + data.expires_in * 1000 });
+  wx.removeStorageSync('campus-mini-base');
   wx.removeStorageSync(DRAFT_KEY);
   return data;
 }
@@ -88,4 +91,4 @@ function errorText(error) {
   const fields = Object.keys(error.fields || {}).map(k => (names[k] || k) + '：' + error.fields[k].join('；'));
   return fields.length ? fields.join('\n') : error.message || '操作未完成，请重试';
 }
-module.exports = { baseUrl, setBase, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, errorText, uuid };
+module.exports = { baseUrl, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, errorText, uuid };

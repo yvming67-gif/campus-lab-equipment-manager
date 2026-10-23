@@ -1,0 +1,46 @@
+{
+  "booking": {
+    "approval_mode": "AUTO",
+    "code": "DEB74BD143384DF2",
+    "id": 6,
+    "purpose": "Android小程序真机验收",
+    "reason": "Android真机验收结束",
+    "status": "CANCELLED",
+    "timeline": [
+      {
+        "at": "2026-10-23T22:50:09+08:00",
+        "label": "提交申请",
+        "reason": "提交资源预约"
+      },
+      {
+        "at": "2026-10-23T22:53:14+08:00",
+        "label": "取消预约",
+        "reason": "Android真机验收结束"
+      }
+    ],
+    "version": 2
+  },
+  "notifications": [
+    {
+      "booking_id": 6,
+      "kind": "CANCEL",
+      "kind_label": "预约取消"
+    },
+    {
+      "booking_id": 6,
+      "kind": "AUTO_CONFIRM",
+      "kind_label": "自动确认"
+    }
+  ],
+  "observed_at": "2026-10-23T14:55:25.002Z",
+  "quotas": {
+    "confirmed": 0,
+    "future_equipment": 1,
+    "future_room": 0,
+    "pending": 1,
+    "unread": 9,
+    "using": 0
+  },
+  "source": "Actual deployed mini-program API read after user native actions",
+  "quota_snapshot_context": "Snapshot at 22:55:25 had one newly submitted pending camera application (id7, code E65531AC4FC844B4, submitted 22:55:09). Ordinary booking6 had been cancelled at 22:53:14. Do not mistake the remaining quota count for failure to release booking6."
+}

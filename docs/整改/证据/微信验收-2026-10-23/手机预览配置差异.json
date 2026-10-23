@@ -1,0 +1,9 @@
+{
+  "scope": "Private physical-phone preview copy; do not publish AppID or QR",
+  "source_commit": "8c8b51e6518940532722a6cb4040c7cbc2e3b04d",
+  "config_differences": {
+    "project.config.json": "Test AppID, local project name, pinned SDK version",
+    "utils/api.js": "Only DEFAULT_BASE points to the existing HTTPS demo; login, rules, API calls and data behavior unchanged"
+  },
+  "source_business_files_modified": false
+}
