@@ -1,0 +1,160 @@
+- complementary
+  - link "L 实验资源中心 CAMPUS LAB RESOURCES" [ref=e1]
+    - StaticText "L"
+    - StaticText "实验资源中心"
+    - StaticText "CAMPUS LAB RESOURCES"
+  - paragraph
+    - StaticText "预约与使用"
+  - group
+    - navigation
+      - link "◫　工作台" [ref=e6]
+      - link "▦　资源目录" [ref=e7]
+      - link "▤　预约与使用记录" [ref=e8]
+      - link "◇　异常追踪" [ref=e9]
+      - link "⚒　维修任务" [ref=e10]
+      - link "◉　消息中心 7" [ref=e11]
+        - StaticText "◉　消息中心"
+        - StaticText "7"
+      - paragraph
+        - StaticText "管理与洞察"
+      - link "▥　利用与运行报表" [ref=e12]
+      - link "≡　审计记录" [ref=e13]
+      - link "⚙　资源与配置" [ref=e14]
+      - link "↗　外部通知投递" [ref=e15]
+  - StaticText "课程演示环境"
+  - StaticText "全部业务数据均为模拟数据"
+- banner
+  - generic
+    - StaticText "实验教学中心 / 资源与配置"
+  - StaticText "资"
+  - StaticText "资源管理员"
+  - StaticText "实验室管理员"
+  - form
+    - button "退出" [ref=e5]
+- main
+  - StaticText "ADMINISTRATION"
+  - heading "资源与配置" [level=1, ref=e2]
+  - paragraph
+    - StaticText "维护档案与规则参数，既有借还和审计事实继续保留。"
+  - heading "资源档案" [level=2, ref=e3]
+  - link "新增资源 ↗" [ref=e4]
+  - table
+    - rowgroup
+      - row
+        - columnheader "资源" [ref=e56]
+        - columnheader "实验室" [ref=e57]
+        - columnheader "状态" [ref=e58]
+        - columnheader "维护" [ref=e59]
+    - row
+      - cell "全画幅摄影套装 EQ-CAM-01" [ref=e16]
+        - strong
+          - StaticText "全画幅摄影套装"
+        - StaticText "EQ-CAM-01"
+      - cell "机器人与数字影像实验室" [ref=e17]
+      - cell "正常" [ref=e18]
+      - cell "档案　服务限制" [ref=e19]
+        - link "档案" [ref=e60]
+        - StaticText "　"
+        - link "服务限制" [ref=e61]
+    - row
+      - cell "数字示波器 EQ-OSC-01" [ref=e20]
+        - strong
+          - StaticText "数字示波器"
+        - StaticText "EQ-OSC-01"
+      - cell "电子与传感实验室" [ref=e21]
+      - cell "正常" [ref=e22]
+      - cell "档案　服务限制" [ref=e23]
+        - link "档案" [ref=e62]
+        - StaticText "　"
+        - link "服务限制" [ref=e63]
+    - row
+      - cell "混合信号示波器 EQ-OSC-02" [ref=e24]
+        - strong
+          - StaticText "混合信号示波器"
+        - StaticText "EQ-OSC-02"
+      - cell "电子与传感实验室" [ref=e25]
+      - cell "正常" [ref=e26]
+      - cell "档案　服务限制" [ref=e27]
+        - link "档案" [ref=e64]
+        - StaticText "　"
+        - link "服务限制" [ref=e65]
+    - row
+      - cell "便携式计算机 EQ-PC-01" [ref=e28]
+        - strong
+          - StaticText "便携式计算机"
+        - StaticText "EQ-PC-01"
+      - cell "电子与传感实验室" [ref=e29]
+      - cell "正常" [ref=e30]
+      - cell "档案　服务限制" [ref=e31]
+        - link "档案" [ref=e66]
+        - StaticText "　"
+        - link "服务限制" [ref=e67]
+    - row
+      - cell "移动工作站 EQ-PC-02" [ref=e32]
+        - strong
+          - StaticText "移动工作站"
+        - StaticText "EQ-PC-02"
+      - cell "机器人与数字影像实验室" [ref=e33]
+      - cell "正常" [ref=e34]
+      - cell "档案　服务限制" [ref=e35]
+        - link "档案" [ref=e68]
+        - StaticText "　"
+        - link "服务限制" [ref=e69]
+    - row
+      - cell "协作机器人平台 EQ-ROB-01" [ref=e36]
+        - strong
+          - StaticText "协作机器人平台"
+        - StaticText "EQ-ROB-01"
+      - cell "机器人与数字影像实验室" [ref=e37]
+      - cell "正常" [ref=e38]
+      - cell "档案　服务限制" [ref=e39]
+        - link "档案" [ref=e70]
+        - StaticText "　"
+        - link "服务限制" [ref=e71]
+    - row
+      - cell "传感器教学套件 EQ-SEN-01" [ref=e40]
+        - strong
+          - StaticText "传感器教学套件"
+        - StaticText "EQ-SEN-01"
+      - cell "电子与传感实验室" [ref=e41]
+      - cell "正常" [ref=e42]
+      - cell "档案　服务限制" [ref=e43]
+        - link "档案" [ref=e72]
+        - StaticText "　"
+        - link "服务限制" [ref=e73]
+    - row
+      - cell "物联网传感套件 EQ-SEN-02" [ref=e44]
+        - strong
+          - StaticText "物联网传感套件"
+        - StaticText "EQ-SEN-02"
+      - cell "机器人与数字影像实验室" [ref=e45]
+      - cell "正常" [ref=e46]
+      - cell "档案　服务限制" [ref=e47]
+        - link "档案" [ref=e74]
+        - StaticText "　"
+        - link "服务限制" [ref=e75]
+    - row
+      - cell "电子与传感实验室整间场地 ROOM-101" [ref=e48]
+        - strong
+          - StaticText "电子与传感实验室整间场地"
+        - StaticText "ROOM-101"
+      - cell "电子与传感实验室" [ref=e49]
+      - cell "正常" [ref=e50]
+      - cell "档案　服务限制" [ref=e51]
+        - link "档案" [ref=e76]
+        - StaticText "　"
+        - link "服务限制" [ref=e77]
+    - row
+      - cell "机器人与数字影像实验室整间场地 ROOM-202" [ref=e52]
+        - strong
+          - StaticText "机器人与数字影像实验室整间场地"
+        - StaticText "ROOM-202"
+      - cell "机器人与数字影像实验室" [ref=e53]
+      - cell "正常" [ref=e54]
+      - cell "档案　服务限制" [ref=e55]
+        - link "档案" [ref=e78]
+        - StaticText "　"
+        - link "服务限制" [ref=e79]
+- contentinfo
+  - StaticText "校园实验室设备预约与借用管理系统"
+  - StaticText "课程演示 · 业务规则可追溯"

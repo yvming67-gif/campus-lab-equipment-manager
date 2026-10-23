@@ -366,11 +366,13 @@
     ],
     "migration": "无结构变更",
     "tests": [
-      "core.remediation_tests；baseline-tests.log；regression-before.log"
+      "core.remediation_tests；baseline-tests.log；regression-before.log",
+      "core.followup_tests.FollowupTests.test_invalid_management_lab_identifiers_never_raise_server_errors"
     ],
     "results": [
       "原始版本号、投递编号进行格式/长度校验，非法取消版本和投递参数不触发500。",
-      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。"
+      "课程演示边界内已执行证据见整改验证记录；通过相关反例/功能检查，关闭的是此台账界定问题，不宣称全部潜在缺陷已发现。",
+      "补充manage resource_lab参数实例；非法值返回请选择有效的实验室及空列表，不扩大授权范围。"
     ],
     "commits": [
       "33fe592370508d98cbd9cebbe280b20bd9d96bfb",
@@ -388,6 +390,11 @@
         "status": "已实现待复验",
         "decision": "共用时间/交接核验、参数清洗、初始化保权、性能子进程显式测试库、借出阻断反馈、完整档案旧值快照。",
         "results": []
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "evidence": "遗漏实例：新增/manage/资源实验室筛选使用isdigit，²会触发整数转换异常，超长/0缺少明确提示。现按ASCII十进制正整数与PostgreSQL bigint边界验证；5类异常参数回归通过。"
       }
     ],
     "original_record": "../审查基线/问题完整台账.md#AUD-0009",
@@ -1336,6 +1343,11 @@
         "results": [
           "2026-10-22真实云端：受保护operations/health返回503，其中worker_recent=true、backup_recent=false、replica_verified=false。后台工作正常，但原本地备份标记不能代表Neon数据库和私有对象的联合恢复；实际云端备份恢复仍待实施。关联docs/云端实际验收报告.md，不据此关闭AUD-0030。"
         ]
+      },
+      {
+        "date": "2026-10-23",
+        "status": "等待外部环境验证",
+        "evidence": "增加tools/backup_cloud.py：同源快照与配置存储联合归档、附件摘要核对；tools/restore_archive.py增加逐表计数。3项本地PostgreSQL＋InMemoryStorage恢复集成通过；真实Neon/S3/异地副本未执行，继续等待外部验证。"
       }
     ],
     "original_record": "../审查基线/问题完整台账.md#AUD-0030",
@@ -1620,6 +1632,11 @@
         "status": "待处理",
         "decision": "",
         "results": []
+      },
+      {
+        "date": "2026-10-23",
+        "status": "等待外部环境验证",
+        "evidence": "用户确认目前没有AppID，按其要求先完成其余整改；27项客户端、7页原生编译通过不替代微信容器和真机。"
       }
     ],
     "original_record": "../审查基线/问题完整台账.md#AUD-0037",
@@ -3149,6 +3166,675 @@
         "date": "2026-10-22",
         "status": "已复验关闭",
         "evidence": "实际公开站点三处新文案均生效，模拟身份保留；12条更新后检查及原浏览器会话通过。没有以GitHub提交成功代替线上验证。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0075",
+    "title": "资源与配置的用户和资源档案清单没有检索与分页",
+    "type": "优化建议",
+    "severity": "轻微",
+    "evidence": "代码确认；资源管理员页面观察",
+    "location": "core/views.py:302-304 manage；templates/manage.html:1；GET /manage/",
+    "description": "配置页直接传递并渲染全量授权资源或全部用户，不提供检索、筛选及分页；资源管理员页面已观察到10项资源且无检索/分页入口。尚未测量大数据量耗时。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0003"
+    ],
+    "module": "资源配置、用户授权管理",
+    "roles": "实验室管理员、系统管理员",
+    "severity_reason": "当前10项资源可操作，主要影响较大目录的定位与维护；没有测得性能故障。",
+    "trigger": "以实验室管理员访问资源配置，或系统管理员查看用户授权；数据量增加时影响更明显。",
+    "steps": [
+      "使用已有模拟admin会话进入“资源与配置”。",
+      "观察资源档案列表及检索、筛选、分页入口。",
+      "对照manage视图和模板，核对用户列表也未使用分页；该角色页面本轮未重新登录观察。"
+    ],
+    "expected": "这是可维护性和规模适配建议，不是已确认违反某条强制分页需求；较多用户或资源时宜能按编号、名称、实验室、角色定位，并限制单页数量。",
+    "actual": "资源管理员页面显示10项资源，无检索/分页入口；manage直接把全量授权资源或全部用户传给模板。没有进行大数据量响应测试。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/screenshots/manage-desktop.png",
+      "docs/整改/证据/现状复查-2026-10-22/screenshots/manage-mobile.png",
+      "docs/整改/证据/现状复查-2026-10-22/browser-command-004.log",
+      "core/views.py:302-304；templates/manage.html:1",
+      "core/views.py:manage；templates/manage.html；templates/pagination.html",
+      "docs/整改/剩余整改-2026-10-23.md",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "资源/用户增多后依赖浏览器查找或长列表滚动；不宣称当前已丢数据、越权或响应超时。",
+    "root_cause": "manage未复用其他列表的paginate，也没有对应查询参数和控件。",
+    "decision": "配置页新增授权范围内的资源检索、实验室筛选、用户账号/身份编号/姓名检索及角色筛选；两类列表独立30条分页，保留另一类筛选。",
+    "acceptance": "在隔离环境分别构造超过一页用户/资源，核对筛选、翻页、返回条件保留，且管理员不能因此查看无权管理资源。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "优化建议",
+        "status": "待处理",
+        "evidence": "代码确认；资源管理员页面观察"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "优化建议",
+        "status": "待优化",
+        "evidence": "代码确认；资源管理员页面观察"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现、隔离测试及页面检查",
+        "evidence": "core.followup_tests.FollowupTests：四项管理过滤、分页和权限反例"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0075",
+    "results": [
+      "2026-10-23本地完整189项后端回归通过；客户端27项及7页模板编译通过。关闭限本条已定义问题，云端生效另行验证。"
+    ],
+    "tests": [
+      "core.followup_tests.FollowupTests：四项管理过滤、分页和权限反例"
+    ]
+  },
+  {
+    "id": "AUD-0076",
+    "title": "设备与场地占用列表截断后没有总量或后续查看提示",
+    "type": "优化建议",
+    "severity": "轻微",
+    "evidence": "代码确认",
+    "location": "core/views.py:146 resource_detail；templates/resource.html:1；core/miniapi.py:262 resource_detail；miniprogram/pages/resource/index.wxml:10",
+    "description": "网页仅返回按开始时间排序的15项有效占用，小程序接口仅返回30项未来占用；两端视图未说明截断、总量或如何继续浏览。服务端目标时段冲突检查另行执行，不能据此声称可重复确认。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0003"
+    ],
+    "module": "资源详情及小程序资源接口",
+    "roles": "学生、教师、实验室管理员",
+    "severity_reason": "影响对完整日程的理解；目标时段冲突校验仍独立存在，未发现因此重复确认。",
+    "trigger": "同一资源有16项以上有效占用，或31项以上未来占用。",
+    "steps": [
+      "在独立数据库为同一普通设备创建31段不重叠的未来预约，本轮使用31个不同模拟账号以遵守每人配额。",
+      "读取网页资源详情及小程序GET /api/mini/v1/resources/{id}/。",
+      "对照数据库条数、网页展示及接口schedule长度。"
+    ],
+    "expected": "这是信息完整性提示建议：可以限制预览数量，但应说明仅展示部分、总量/查询范围，并提供按日查看或继续浏览。",
+    "actual": "本地实测31条确认占用，网页显示15条，接口返回30条；网页该区域没有截断提示，接口没有schedule总量/分页字段。当前云端没有被填入31条测试记录。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/占用列表边界验证.json",
+      "core/views.py:146；templates/resource.html:1",
+      "core/miniapi.py:262；miniprogram/pages/resource/index.wxml:10",
+      "core/schedules.py:resource_schedule；core/views.py:resource_detail；core/miniapi.py:resource_detail；miniprogram/controllers.js:resource",
+      "docs/整改/剩余整改-2026-10-23.md",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "用户可能将预览误解为完整日程，选择未列出的已占用时段后才发现不可用；不影响服务端重叠检查本身。",
+    "root_cause": "查询固定切片15/30条，而响应和界面没有同口径的has_more、总量或范围说明。",
+    "decision": "网页占用15条分页，小程序30条分页并返回总数和下一页标志；两个入口均按日期筛选。未结束实际使用继续可见；仅公开时段状态，不泄露申请人或用途。小程序切换日期废弃旧响应，失败可重试且保留草稿。",
+    "acceptance": "以0、15、16、30、31条及跨日数据验证两端提示和继续查看路径；目标时段查询与提交冲突规则保持一致。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "优化建议",
+        "status": "待处理",
+        "evidence": "代码确认"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "优化建议",
+        "status": "待优化",
+        "evidence": "代码确认"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现、隔离测试及页面检查",
+        "evidence": "core.followup_tests：31项占用的完整翻页及日期一致性；tools/mini-check/client.test.cjs：三项分页、竞态、重试"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0076",
+    "results": [
+      "2026-10-23本地完整189项后端回归通过；客户端27项及7页模板编译通过。关闭限本条已定义问题，云端生效另行验证。"
+    ],
+    "tests": [
+      "core.followup_tests：31项占用的完整翻页及日期一致性；tools/mini-check/client.test.cjs：三项分页、竞态、重试"
+    ]
+  },
+  {
+    "id": "AUD-0077",
+    "title": "预约和维修过程时间线直接显示内部事件或状态代码",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "evidence": "代码确认＋本地实际模板片段渲染",
+    "location": "templates/work_detail.html:1（e.old_status/e.new_status）；templates/booking.html:1（ev.action）；core/models.py:302-309 WorkOrderEvent；core/services.py:430、457、477及core/coordination.py:139",
+    "description": "维修事件状态代码直接进入展示层；同类问题也出现于预约过程记录的ev.action。审计接口面向技术复核保留代码可以合理，本项关注普通业务时间线缺少中文含义。",
+    "status": "已复验关闭",
+    "related": [],
+    "module": "预约详情、维修任务详情",
+    "roles": "申请人、实验室管理员、维修人员",
+    "severity_reason": "不阻止流程执行，但业务用户需理解内部代码才能读懂过程。",
+    "trigger": "存在带状态变化的维修事件，或有预约审计事件；无需正式身份服务。",
+    "steps": [
+      "在本地读取实际维修模板的事件循环。",
+      "以明确标注的模拟事件IN_PROGRESS→AWAITING_ACCEPTANCE渲染该片段。",
+      "对照预约模板对ev.action的直接展示。"
+    ],
+    "expected": "面向普通业务用户显示“处理中→待验收”等中文含义，必要时附技术代码；创建前空状态也应有明确表达。依据为项目统一中文业务术语和清楚反馈要求。",
+    "actual": "实际模板片段渲染保留IN_PROGRESS→AWAITING_ACCEPTANCE；预约模板直接显示事件代码。没有新建线上维修数据，也未宣称已经观察线上维修工单。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/维修时间线模板验证.json",
+      "templates/work_detail.html:1；templates/booking.html:1",
+      "core/domain_labels.py；templates/booking.html；templates/work_detail.html；core/miniapi.py:booking_detail",
+      "docs/整改/剩余整改-2026-10-23.md",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "工单交接、复核与过程解释需要额外人工说明；既有状态及审计事实未丢失。",
+    "root_cause": "模板直接绑定持久化代码字段，没有使用实体状态/事件展示映射。",
+    "decision": "网页预约事件和维修状态时间线使用统一中文标签；小程序预约详情采用同一事件字典，保留持久化代码和历史事实。",
+    "acceptance": "覆盖四种工单状态、创建空状态及预约创建、审批、取消、复核、交接事件，中文含义与实际状态一致。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "已确认缺陷",
+        "status": "待验证",
+        "evidence": "代码确认，待本地模板核对"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋本地实际模板片段渲染"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现、隔离测试及页面检查",
+        "evidence": "core.followup_tests：真实模板过滤器输出与事件标签断言"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0077",
+    "results": [
+      "2026-10-23本地完整189项后端回归通过；客户端27项及7页模板编译通过。关闭限本条已定义问题，云端生效另行验证。"
+    ],
+    "tests": [
+      "core.followup_tests：真实模板过滤器输出与事件标签断言"
+    ]
+  },
+  {
+    "id": "AUD-0078",
+    "title": "利用率报表未纳入单日开放例外",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "evidence": "代码确认＋隔离PostgreSQL实际运行验证",
+    "location": "core/reports.py:8-35 utilization；core/coordination.py:18-27 check_calendar、113起 calendar_exception",
+    "description": "预约检查读取CalendarException，报表仅遍历OpeningPeriod与ServicePeriod，搜索该计算函数未见单日例外合并逻辑。准备在独立数据库核对闭馆、缩短开放和额外开放三类分母，不使用线上数据。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0021",
+      "AUD-0034"
+    ],
+    "module": "利用率报表、开放日历",
+    "roles": "实验室管理员、实验教学中心主任、报表使用者",
+    "severity_reason": "一般：统计分母及由其裁剪的分子会错误，影响利用率比较；本轮未证明它会绕过预约阻断或导致实物安全事故。",
+    "trigger": "统计窗口内存在单日闭馆、缩短开放或在常规休息日额外开放，且资源处于正常服务区间。",
+    "steps": [
+      "在全新独立PostgreSQL中迁移并初始化模拟资源，正常周日历为08:00—20:00。",
+      "分别登记次日全天闭馆、另一日仅10:00—12:00开放、常规不开放日额外09:00—12:00开放。",
+      "将统计观察时钟at参数推进到相应日结束，调用utilization统计08:00—20:00；同时验证10:00—11:00的预约可用性。"
+    ],
+    "expected": "依据BR-34的有效开放可服务时数和BR-40的单日例外优先原则，三种分母分别应为0、2、3小时；为零时利用率应不适用。FR/UC/SPEC-24、AC-48需补充这一组合场景。",
+    "actual": "三例分别得到12、12、0小时，均不符合0、2、3小时；预约查询却分别正确执行闭馆/例外开放。场景使用本地模拟日期和推进的统计时钟，不是虚构学校已发生数据。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/报表日历反例.json",
+      "docs/整改/证据/现状复查-2026-10-22/本地隔离验证输出.log",
+      "core/reports.py:14-25；core/coordination.py:18-27、113-130",
+      "core/reports.py:7 utilization",
+      "docs/整改/报表计算修复-2026-10-23.md",
+      "docs/整改/证据/报表修复-2026-10-23/red.log",
+      "docs/整改/证据/报表修复-2026-10-23/green.log"
+    ],
+    "impact": "闭馆或缩短开放可能虚增分母，额外开放可能被忽略；实际和计划时数使用同一windows，也会受窗口错误影响。尚未在云端填入此类反例，不宣称当前云端已有错误真实统计。",
+    "root_cause": "报表由OpeningPeriod与ServicePeriod构造窗口，没有与CalendarException组合；查询与统计形成两套日历解释。",
+    "decision": "报表按BR-40以生效单日例外替代周日历，再统一裁剪正常服务、创建时间及统计窗口；日历按实验室复用。分子和分母共用有效区间，不回写任何预约、交接或审计事实。",
+    "acceptance": "本轮三个反例变为0、2、3小时；另核对无例外、跨多日、零分母、服务限制与例外重叠、实际使用跨边界；分子分母同口径且原报表数值测试不回退。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "待验证风险",
+        "status": "调查中",
+        "evidence": "代码确认，等待隔离场景验证"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋隔离PostgreSQL实际运行验证"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现与隔离回归",
+        "evidence": "修复前四项失败，修复后177项通过；云端仍为原版本，不宣称已在线生效。"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0078",
+    "results": [
+      "独立本地177项后端回归通过，含15项新增报表测试；原三例分母现为0、2、3小时。",
+      "设备和场地实际/计划时数、维护交集、非生效例外、历史版本、创建边界及跨日窗口通过；没有更新云端。"
+    ],
+    "tests": [
+      "core.report_tests.CalendarReportTests",
+      "docs/整改/证据/报表修复-2026-10-23/green.log"
+    ]
+  },
+  {
+    "id": "AUD-0079",
+    "title": "八类现有业务通知缺少中文分类映射，统一显示业务进度",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0040"
+    ],
+    "evidence": "代码确认＋本地调用实际分类过滤器",
+    "location": "core/templatetags/domain_labels.py:3-5；templates/notifications.html:1；调用位置逐条见通知类型字典核对.json",
+    "description": "ARRANGEMENT_IMPACT、COORDINATE、INCIDENT_RESPONSE、REASSIGN、RECALL、RECHECK、WORK_CREATED、WORK_PROGRESS这8类现有通知未进入LABELS映射，实际过滤器统一返回“业务进度”。",
+    "module": "消息中心通知分类",
+    "roles": "学生、教师、实验室管理员、维修人员",
+    "severity_reason": "轻微：通知正文仍存在，但不同业务类型的辅助分类失去区分。",
+    "trigger": "收到上述任意一种现有业务事件产生的通知。",
+    "steps": [
+      "扫描services与coordination中notify的常量通知类型，保留全部发现位置。",
+      "逐个调用当前business_label过滤器。",
+      "对照消息中心模板对n.kind的调用。"
+    ],
+    "expected": "已有明确业务含义的通知应分别显示安排变化、复核、召回、转派、维修创建/进展等中文分类；未知未来类型可保留通用回退。",
+    "actual": "8类均返回“业务进度”；通知正文没有因此丢失。本轮未制造线上通知或证明所有动态类型都已枚举。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/通知类型字典核对.json",
+      "core/templatetags/domain_labels.py:3-5；templates/notifications.html:1",
+      "core/domain_labels.py:NOTIFICATION_LABELS；core/miniapi.py:notifications；miniprogram/pages/notifications/index.wxml",
+      "docs/整改/剩余整改-2026-10-23.md",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "消息列表中难以凭分类快速区分召回、待处理和普通进展；不等于通知投递失败。",
+    "root_cause": "新增领域事件后没有同步中文类别字典，也没有覆盖所有现有常量类型的映射检查。",
+    "decision": "补齐8种通知业务类型，网页与小程序共同引用标签；小程序通知响应增加kind_label。",
+    "acceptance": "逐一验证8种类型的中文标签及全部已发现调用位置；通知正文、已读状态和投递逻辑保持不变。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码检查"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋本地调用实际分类过滤器"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现、隔离测试及页面检查",
+        "evidence": "core.followup_tests：遍历两处业务服务已知常量notify调用，全部种类有明确中文标签"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "evidence": "独立复核追加遗漏实例core/operations.py的APPROVAL_ESCALATION，已补审批待办升级标签；AST范围扩至三个实际发送模块，11项专项通过。"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0079",
+    "results": [
+      "2026-10-23本地完整189项后端回归通过；客户端27项及7页模板编译通过。关闭限本条已定义问题，云端生效另行验证。",
+      "审批升级通知与原8类同根因补齐，不新增编号。"
+    ],
+    "tests": [
+      "core.followup_tests：遍历两处业务服务已知常量notify调用，全部种类有明确中文标签"
+    ]
+  },
+  {
+    "id": "AUD-0080",
+    "title": "消息中心将正式外部渠道也标为模拟外部",
+    "type": "应用适配缺口",
+    "severity": "轻微",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0040"
+    ],
+    "evidence": "代码确认＋本地实际模板渠道分支渲染",
+    "location": "templates/notifications.html:1；core/services.py:39-46 notify、519-523投递分支",
+    "description": "消息中心仅区分IN_APP与其他，其他一律写为“模拟外部”；服务层已经区分MOCK_EXTERNAL和EXTERNAL。",
+    "module": "正式消息渠道接入的界面适配",
+    "roles": "所有接收通知的角色、运维人员",
+    "severity_reason": "轻微：当前DEMO_MODE=1实际使用模拟渠道，显示符合现状；切换正式模式后渠道名称将不准确。",
+    "trigger": "未来在独立正式配置中使用EXTERNAL并产生通知；当前云端演示不满足此触发条件。",
+    "steps": [
+      "以IN_APP、MOCK_EXTERNAL、EXTERNAL三个模拟值分别渲染实际消息模板的渠道分支。",
+      "核对services中非演示模式确实创建EXTERNAL。"
+    ],
+    "expected": "站内、模拟外部、正式外部渠道应分别命名，不将正式提供方收据误称模拟。依据为现有服务渠道契约。",
+    "actual": "实际模板分支对EXTERNAL与MOCK_EXTERNAL均输出“模拟外部”。当前演示不是因此无法通知，也未进行真实提供方联调。",
+    "proof": [
+      "docs/整改/证据/现状复查-2026-10-22/渠道标签模板验证.json",
+      "templates/notifications.html:1；core/services.py:46、519-523",
+      "core/domain_labels.py:CHANNEL_LABELS；templates/notifications.html",
+      "docs/整改/剩余整改-2026-10-23.md",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "切换真实渠道后界面与实际投递属性不一致，容易误判是否仍处于模拟状态。",
+    "root_cause": "模板两分支省略了正式外部渠道，未随服务渠道枚举一起展开。",
+    "decision": "投递渠道按IN_APP、MOCK_EXTERNAL、EXTERNAL分别显示站内、模拟外部、正式外部；未知类型保留未知提示。此处只校正呈现，不宣称已连接真实消息提供方。",
+    "acceptance": "三种渠道及未知渠道均显示正确含义；正式提供方成功与失败仍必须单独联调，本项模板检查不能替代该联调。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "应用适配缺口",
+        "status": "待正式模式适配",
+        "evidence": "代码检查"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "应用适配缺口",
+        "status": "待正式模式适配",
+        "evidence": "代码确认＋本地实际模板渠道分支渲染"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地实现、隔离测试及页面检查",
+        "evidence": "core.followup_tests：正式外部与未知渠道模板结果"
+      }
+    ],
+    "source_review": "docs/整改/证据/现状复查-2026-10-22/问题完整台账.md#AUD-0080",
+    "results": [
+      "2026-10-23本地完整189项后端回归通过；客户端27项及7页模板编译通过。关闭限本条已定义问题，云端生效另行验证。"
+    ],
+    "tests": [
+      "core.followup_tests：正式外部与未知渠道模板结果"
+    ]
+  },
+  {
+    "id": "AUD-0081",
+    "title": "报表31天上限使用整数天截断，接受超出上限的区间",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "severity_reason": "允许超过已声明的统计跨度，影响边界一致性；未发现因此损坏业务数据。",
+    "evidence": "代码确认＋本地PostgreSQL回归验证",
+    "module": "利用率报表区间校验",
+    "roles": "报表使用者、维护人员",
+    "location": "core/reports.py:7 utilization；原判断(end-start).days>31",
+    "description": "timedelta.days会丢弃剩余时分秒，31天零1秒至不足32天的区间仍被接受，与最多31天约束不一致。",
+    "trigger": "调用报表计算入口，观察时钟不早于结束，区间长度为31天零1秒等超上限值。",
+    "steps": [
+      "使用独立本地数据库和模拟资源。",
+      "将end设为start+31天零1秒，at=end，调用utilization。",
+      "修复前没有抛出BusinessError；修复后拒绝，恰好31天仍可计算。"
+    ],
+    "expected": "依据BR-34及AC-48，完整时长大于31天应拒绝，恰好31天允许。",
+    "actual": "修复前31天零1秒被接受，修复后改用完整timedelta比较，边界测试通过。",
+    "proof": [
+      "core/report_tests.py: test_aud0081_more_than_31_days_is_rejected_without_truncation、test_exactly_31_days_remains_valid",
+      "docs/整改/证据/报表修复-2026-10-23/red.log",
+      "docs/整改/证据/报表修复-2026-10-23/green.log"
+    ],
+    "impact": "对调用方给出不一致的统计跨度边界；本项不等同于单日例外导致的计算窗口错误。",
+    "root_cause": "只比较timedelta的整数days属性。",
+    "decision": "使用end-start>timedelta(days=31)比较完整时长，不改变已有31天业务上限。",
+    "acceptance": "验证31天允许、31天零1秒拒绝、零长度/逆序/结束晚于观察时钟拒绝，并通过原报表数值场景。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0078"
+    ],
+    "tests": [
+      "core.report_tests.CalendarReportTests"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "修复前精确边界反例失败，未抛出预期BusinessError"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地回归",
+        "evidence": "完整177项通过，未触发云端部署"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0082",
+    "title": "README重复追加课程分析说明和同一校验命令",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "severity_reason": "影响公开说明准确性与可复核性，未发现因此改写业务数据。",
+    "evidence": "代码/文档确认及修订后静态复核",
+    "module": "公开项目说明",
+    "roles": "项目访问者、维护人员",
+    "location": "README.md原第[84]行及校验命令第[111, 112, 113, 114, 115]行",
+    "description": "同一课程规范说明连续出现5遍，validate_analysis_models命令连续出现5行；同一重复追加根因的两个已发现位置合并记录。",
+    "trigger": "阅读本仓库基线01211f9的README。",
+    "steps": [
+      "定位业务分析与验证范围段，计数相同完整句。",
+      "定位常用操作代码块，计数连续相同校验命令。"
+    ],
+    "expected": "公开说明每项方法和必需命令保留一次，不把重复次数当作验证次数。",
+    "actual": "修订后该说明与校验命令均只出现1次，其他独立验证记录保留。",
+    "proof": [
+      "docs/整改/证据/剩余整改-2026-10-23/README原始问题证据.json",
+      "README.md"
+    ],
+    "impact": "读者需要自行辨别重复内容或不一致的验证状态，降低交付可信度。",
+    "root_cause": "重复追加内容缺少去重检查；具体历史操作责任未追溯，不归因于业务代码。",
+    "decision": "删除重复4份段落和4行命令，不删各批历史证据。",
+    "acceptance": "按原始证据计数比对，相关Markdown链接仍存在。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "work/cloud20261022/followup_docs.py中的原文计数与修后断言（本地制作工具，不提交源码）"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "同一课程规范说明连续出现5遍，validate_analysis_models命令连续出现5行；同一重复追加根因的两个已发现位置合并记录。"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "evidence": "修订后该说明与校验命令均只出现1次，其他独立验证记录保留。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0083",
+    "title": "README仍将已验证的共享演示HTTPS列为待验收",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "severity_reason": "影响公开说明准确性与可复核性，未发现因此改写业务数据。",
+    "evidence": "代码/文档确认及修订后静态复核",
+    "module": "公开项目说明",
+    "roles": "项目访问者、维护人员",
+    "location": "README.md原第88行，与docs/云端实际验收报告.md矛盾",
+    "description": "说明仍写正式HTTPS部署需验收，而同页已链接公开共享演示及2026-10-22云端实际验收；共享演示与校园生产验证边界混在一句中。",
+    "trigger": "阅读本仓库基线01211f9的README。",
+    "steps": [
+      "比较README业务分析末段与云端演示段。",
+      "核对云端实际验收报告中的已执行范围和未执行范围。"
+    ],
+    "expected": "明确共享演示HTTPS已有验证证据，同时保留真实身份、消息、微信真机和校园上线的外部限制。",
+    "actual": "现文字链接已有实际验收报告，并明确不据此宣称校园生产上线；新版本在线生效另行验证。",
+    "proof": [
+      "docs/整改/证据/剩余整改-2026-10-23/README原始问题证据.json",
+      "README.md"
+    ],
+    "impact": "读者需要自行辨别重复内容或不一致的验证状态，降低交付可信度。",
+    "root_cause": "云端完成后未同步更新旧的范围声明。",
+    "decision": "按实际证据区分已验证演示与未验证外部能力。",
+    "acceptance": "README不再出现原冲突句，保留真实能力待验说明和可用证据链接。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "work/cloud20261022/followup_docs.py中的原文计数与修后断言（本地制作工具，不提交源码）"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "说明仍写正式HTTPS部署需验收，而同页已链接公开共享演示及2026-10-22云端实际验收；共享演示与校园生产验证边界混在一句中。"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "evidence": "现文字链接已有实际验收报告，并明确不据此宣称校园生产上线；新版本在线生效另行验证。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0084",
+    "title": "占用日期9999-12-31使网页与小程序查询溢出报错",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "特定合法格式边界导致服务器错误。",
+    "evidence": "代码确认＋本地回归验证",
+    "module": "占用日期查询",
+    "roles": "学生、教师、管理员",
+    "location": "core/schedules.py:resource_schedule；GET /resources/{id}/、GET /api/mini/v1/resources/{id}/",
+    "description": "日期格式有效，但按日查询计算下一日时超出Python datetime上限，原代码未捕获OverflowError。",
+    "trigger": "已登录并查询存在的资源，schedule_day=9999-12-31。",
+    "steps": [
+      "在独立模拟环境请求两个查询入口并附带schedule_day=9999-12-31。",
+      "原网页抛OverflowError；相同共享函数也被小程序入口调用。",
+      "补充网页字段提示和小程序400断言，再执行完整回归。"
+    ],
+    "expected": "边界日期不应返回500；网页提供字段原因，小程序返回400与schedule_day字段说明。",
+    "actual": "修复前边界反例报OverflowError，修复后两入口均返回占用日期无效；192项通过。",
+    "proof": [
+      "docs/整改/证据/剩余整改-2026-10-23/输入边界修复前.log",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log",
+      "core/schedules.py"
+    ],
+    "impact": "两类查询入口无法返回预期的字段反馈。",
+    "root_cause": "计算日期加一天发生在日期校验异常处理之外。",
+    "decision": "将日末计算纳入日期边界校验，统一转为可理解的ValueError供两入口处理。",
+    "acceptance": "极限日期两入口不报500；正常31项占用、日期过滤与翻页仍通过。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0076"
+    ],
+    "tests": [
+      "core.followup_tests.FollowupTests.test_last_representable_calendar_date_is_a_field_error_on_both_clients"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "日期格式有效，但按日查询计算下一日时超出Python datetime上限，原代码未捕获OverflowError。"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地192项回归",
+        "evidence": "修复前边界反例报OverflowError，修复后两入口均返回占用日期无效；192项通过。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0085",
+    "title": "备份子进程通道绑定环境变量名称错误",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "子进程未继承明确要求的安全连接选项，配置语义不一致；未发现或声称已发生攻击。",
+    "evidence": "代码确认＋本地回归验证",
+    "module": "联合备份数据库连接",
+    "roles": "授权维护人员",
+    "location": "core/backup.py:pg_environment、archive_database",
+    "description": "原代码用PG+key.upper()把channel_binding转换成PGCHANNEL_BINDING，而libpq读取的是PGCHANNELBINDING。",
+    "trigger": "Django源数据库OPTIONS设置channel_binding=require，并从本工具调用pg_dump。",
+    "steps": [
+      "检查OPTIONS到子进程环境字典的构造。",
+      "以纯模拟数据库配置生成环境，核对PGCHANNELBINDING=require及TLS参数。",
+      "执行无需真实云凭据的环境单元测试和本地联合恢复集成。"
+    ],
+    "expected": "依据PostgreSQL17 libpq变量约定，子进程准确继承已明确配置的TLS和通道绑定要求。",
+    "actual": "已改用显式映射；单元断言正确键、覆盖继承的prefer及sslmode/sslrootcert，完整192项通过。真实TLS/Neon未执行。",
+    "proof": [
+      "core/backup.py:pg_environment",
+      "core/backup_tests.py:BackupEnvironmentTests",
+      "https://www.postgresql.org/docs/17/libpq-envars.html",
+      "docs/整改/证据/剩余整改-2026-10-23/后端完整回归.log"
+    ],
+    "impact": "要求channel_binding=require的源连接与pg_dump可能采用不同默认值；不据此推断真实云端已连接或受攻击。",
+    "root_cause": "将配置参数名直接大写拼接，未核对libpq环境变量的特殊命名。",
+    "decision": "显式映射sslmode→PGSSLMODE、channel_binding→PGCHANNELBINDING、sslrootcert→PGSSLROOTCERT。",
+    "acceptance": "测试生成环境的精确键和值，保留已有源参数；实际云连通仍单独验收。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0030"
+    ],
+    "tests": [
+      "core.backup_tests.BackupEnvironmentTests.test_libpq_tls_and_channel_binding_names_are_explicit"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "原代码用PG+key.upper()把channel_binding转换成PGCHANNEL_BINDING，而libpq读取的是PGCHANNELBINDING。"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "scope": "本地192项回归",
+        "evidence": "已改用显式映射；单元断言正确键、覆盖继承的prefer及sslmode/sslrootcert，完整192项通过。真实TLS/Neon未执行。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0086",
+    "title": "小程序占用加载中返回页面后分页按钮持续禁用",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "正常离开再返回即可触发，用户无法继续查看占用列表；不影响已保存预约。",
+    "evidence": "独立Node反例＋客户端红绿回归",
+    "module": "微信小程序资源详情",
+    "roles": "学生、教师",
+    "location": "miniprogram/controllers.js:resource.load、loadSchedule、onShow、moreSchedule",
+    "description": "分页loadSchedule设置scheduleBusy=true；页面返回触发load并抢占同一序列号，旧请求finally失效，新load却未释放scheduleBusy，后续moreSchedule持续被守卫拒绝。",
+    "trigger": "已有占用列表且还有下一页，分页请求尚未结束时离开页面再返回，触发onShow重新加载。",
+    "steps": [
+      "触发loadSchedule(2)，保持请求未返回。",
+      "触发onShow/load(1)，按新先旧后、旧先新后分别交付响应。",
+      "原代码最终scheduleBusy仍为true；修正后继续加载能发起第3次请求。",
+      "另外验证新load失败后两加载标志均释放。"
+    ],
+    "expected": "当前请求持有加载状态；旧响应不改写新数据，最新请求结束后应允许重试或继续翻页。",
+    "actual": "原反例复现持续禁用；新增3测试修复前失败，修复后30项客户端测试通过，7页编译通过。此为stub API控制器验证，非微信真机。",
+    "proof": [
+      "docs/整改/证据/剩余整改-2026-10-23/小程序返回竞态修复前.json",
+      "docs/整改/证据/剩余整改-2026-10-23/客户端-修复前.log",
+      "docs/整改/证据/剩余整改-2026-10-23/小程序客户端.log",
+      "miniprogram/controllers.js"
+    ],
+    "impact": "在分页期间返回资源页面的申请人无法继续读取后续占用；必须重开页面才能恢复原实现。",
+    "root_cause": "共享序列号淘汰旧请求时，新拥有者没有接管并释放旧分页的加载标志。",
+    "decision": "load接管请求域时清scheduleBusy；当前serial的finally共同释放loading和scheduleBusy，旧响应继续被拒绝。",
+    "acceptance": "两种响应顺序均保留新第1页数据并可继续第2页；重载失败后两标志释放并显示可理解错误。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0076"
+    ],
+    "tests": [
+      "tools/mini-check/client.test.cjs：AUD-0086两种响应顺序及返回失败三项"
+    ],
+    "history": [
+      {
+        "date": "2026-10-23",
+        "status": "已确认",
+        "evidence": "独立agent内存控制器反例确认；新增三项测试均失败"
+      },
+      {
+        "date": "2026-10-23",
+        "status": "已复验关闭",
+        "evidence": "30项客户端通过；7页语法编译通过；真机仍未执行"
       }
     ]
   }

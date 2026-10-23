@@ -1,0 +1,22 @@
+{
+  "baseline_total": 74,
+  "baseline_closed": 64,
+  "baseline_pending": 10,
+  "new_total": 6,
+  "new_by_type": {
+    "优化建议": 2,
+    "已确认缺陷": 3,
+    "应用适配缺口": 1
+  },
+  "new_by_severity": {
+    "轻微": 5,
+    "一般": 1
+  },
+  "new_by_status": {
+    "待优化": 2,
+    "待整改": 3,
+    "待正式模式适配": 1
+  },
+  "review_pending_total": 16,
+  "note": "正式仓库台账未修改；新增编号保留在本轮独立审查目录。"
+}

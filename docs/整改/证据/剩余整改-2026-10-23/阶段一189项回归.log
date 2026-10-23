@@ -1,0 +1,251 @@
+Creating test database for alias 'default' ('test_reportfix_isolated')...
+
+Found 189 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, postgres, staticfiles
+  Apply all migrations: auth, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_audit_immutable... OK
+  Applying core.0003_alter_resource_service_status... OK
+  Applying core.0004_audit_business_extensions... OK
+  Applying sessions.0001_initial...test_adjacent_half_open_times_allowed (core.tests.BusinessTests.test_adjacent_half_open_times_allowed) ... ok
+test_audit_database_rejects_update_and_delete (core.tests.BusinessTests.test_audit_database_rejects_update_and_delete) ... ok
+test_authorization_change_and_revocation (core.tests.BusinessTests.test_authorization_change_and_revocation) ... ok
+test_cancel_after_start_rejected (core.tests.BusinessTests.test_cancel_after_start_rejected) ... ok
+test_cancel_and_release (core.tests.BusinessTests.test_cancel_and_release) ... ok
+test_cancel_other_person_rejected (core.tests.BusinessTests.test_cancel_other_person_rejected) ... ok
+test_checkout_accessory_failure_isolates_without_loan (core.tests.BusinessTests.test_checkout_accessory_failure_isolates_without_loan) ... ok
+test_checkout_identity_mismatch (core.tests.BusinessTests.test_checkout_identity_mismatch) ... ok
+test_checkout_tag_mismatch (core.tests.BusinessTests.test_checkout_tag_mismatch) ... ok
+test_damage_and_missing_preserve_return_fact (core.tests.BusinessTests.test_damage_and_missing_preserve_return_fact) ... ok
+test_database_exclusion_even_without_service (core.tests.BusinessTests.test_database_exclusion_even_without_service) ... ok
+test_delivery_failure_does_not_rollback_business (core.tests.BusinessTests.test_delivery_failure_does_not_rollback_business) ... ok
+test_end_boundary_cannot_start_usage (core.tests.BusinessTests.test_end_boundary_cannot_start_usage) ... ok
+test_evidence_access_and_hash (core.tests.BusinessTests.test_evidence_access_and_hash) ... ok
+test_exact_conflict_blocked (core.tests.BusinessTests.test_exact_conflict_blocked) ... ok
+test_expiration_and_no_show (core.tests.BusinessTests.test_expiration_and_no_show) ... ok
+test_failed_acceptance_returns_to_repair (core.tests.BusinessTests.test_failed_acceptance_returns_to_repair) ... ok
+test_full_maintenance_cycle (core.tests.BusinessTests.test_full_maintenance_cycle) ... ok
+test_future_quota_counts_pending (core.tests.BusinessTests.test_future_quota_counts_pending) ... ok
+test_future_window (core.tests.BusinessTests.test_future_window) ... ok
+test_hold_prevents_booking (core.tests.BusinessTests.test_hold_prevents_booking) ... ok
+test_http_request_id_matches_audit (core.tests.BusinessTests.test_http_request_id_matches_audit) ... ok
+test_idempotency_and_changed_payload (core.tests.BusinessTests.test_idempotency_and_changed_payload) ... ok
+test_identity_ticket_cannot_be_replayed (core.tests.BusinessTests.test_identity_ticket_cannot_be_replayed) ... ok
+test_incident_requires_confirmation_before_work (core.tests.BusinessTests.test_incident_requires_confirmation_before_work) ... ok
+test_independent_operation_has_shared_audit_request (core.tests.BusinessTests.test_independent_operation_has_shared_audit_request) ... ok
+test_login_and_csrf_protection (core.tests.BusinessTests.test_login_and_csrf_protection) ... ok
+test_maintenance_cancels_future_and_preserves_history (core.tests.BusinessTests.test_maintenance_cancels_future_and_preserves_history) ... ok
+test_manual_approval_rechecks_conflict (core.tests.BusinessTests.test_manual_approval_rechecks_conflict) ... ok
+test_manual_contact_is_append_only_and_scoped (core.tests.BusinessTests.test_manual_contact_is_append_only_and_scoped) ... ok
+test_max_duration (core.tests.BusinessTests.test_max_duration) ... ok
+test_normal_return_snapshot_and_idempotency (core.tests.BusinessTests.test_normal_return_snapshot_and_idempotency) ... ok
+test_notification_owner_and_read (core.tests.BusinessTests.test_notification_owner_and_read) ... ok
+test_numeric_utilization_distinguishes_actual_and_planned (core.tests.BusinessTests.test_numeric_utilization_distinguishes_actual_and_planned) ... ok
+test_object_privacy (core.tests.BusinessTests.test_object_privacy) ... ok
+test_occurrence_and_report_times_are_separate (core.tests.BusinessTests.test_occurrence_and_report_times_are_separate) ... ok
+test_opening_does_not_break_confirmed_booking (core.tests.BusinessTests.test_opening_does_not_break_confirmed_booking) ... ok
+test_opening_preserves_versions (core.tests.BusinessTests.test_opening_preserves_versions) ... ok
+test_optimistic_version (core.tests.BusinessTests.test_optimistic_version) ... ok
+test_ordinary_auto_confirmation (core.tests.BusinessTests.test_ordinary_auto_confirmation) ... ok
+test_other_incident_prevents_restoration (core.tests.BusinessTests.test_other_incident_prevents_restoration) ... ok
+test_outside_opening (core.tests.BusinessTests.test_outside_opening) ... ok
+test_overdue_blocks_then_clears (core.tests.BusinessTests.test_overdue_blocks_then_clears) ... ok
+test_past_time_rejected (core.tests.BusinessTests.test_past_time_rejected) ... ok
+test_pending_does_not_occupy (core.tests.BusinessTests.test_pending_does_not_occupy) ... ok
+test_policy_revision_and_self_protection (core.tests.BusinessTests.test_policy_revision_and_self_protection) ... ok
+test_query_form_and_all_role_pages (core.tests.BusinessTests.test_query_form_and_all_role_pages) ... ok
+test_reject_and_supplement (core.tests.BusinessTests.test_reject_and_supplement) ... ok
+test_reminder_deduplication (core.tests.BusinessTests.test_reminder_deduplication) ... ok
+test_report_resource_pagination_preserves_scope (core.tests.BusinessTests.test_report_resource_pagination_preserves_scope) ... ok
+test_report_zero_denominator (core.tests.BusinessTests.test_report_zero_denominator) ... ok
+test_resource_create_and_historical_accessory_snapshot (core.tests.BusinessTests.test_resource_create_and_historical_accessory_snapshot) ... ok
+test_restart_seed_preserves_revoked_permissions (core.tests.BusinessTests.test_restart_seed_preserves_revoked_permissions) ... ok
+test_return_state_fault (core.tests.BusinessTests.test_return_state_fault) ... ok
+test_return_without_loan_rejected (core.tests.BusinessTests.test_return_without_loan_rejected) ... ok
+test_revoked_training_rechecked_on_pickup (core.tests.BusinessTests.test_revoked_training_rechecked_on_pickup) ... ok
+test_room_abnormal_end (core.tests.BusinessTests.test_room_abnormal_end) ... ok
+test_room_and_equipment_are_independent (core.tests.BusinessTests.test_room_and_equipment_are_independent) ... ok
+test_room_and_equipment_quotas_are_separate (core.tests.BusinessTests.test_room_and_equipment_quotas_are_separate) ... ok
+test_room_capacity_limit (core.tests.BusinessTests.test_room_capacity_limit) ... ok
+test_room_over_capacity_on_arrival (core.tests.BusinessTests.test_room_over_capacity_on_arrival) ... ok
+test_room_start_and_end (core.tests.BusinessTests.test_room_start_and_end) ... ok
+test_scope_not_system_admin_privilege (core.tests.BusinessTests.test_scope_not_system_admin_privilege) ... ok
+test_simultaneous_equipment_limit (core.tests.BusinessTests.test_simultaneous_equipment_limit) ... ok
+test_slot_granularity (core.tests.BusinessTests.test_slot_granularity) ... ok
+test_student_cannot_book_room (core.tests.BusinessTests.test_student_cannot_book_room) ... ok
+test_teacher_single_room_even_pending (core.tests.BusinessTests.test_teacher_single_room_even_pending) ... ok
+test_training_required (core.tests.BusinessTests.test_training_required) ... ok
+test_transaction_rolls_back_partial_save (core.tests.BusinessTests.test_transaction_rolls_back_partial_save) ... ok
+test_unusable_business_password (core.tests.BusinessTests.test_unusable_business_password) ... ok
+test_wrong_time_order (core.tests.BusinessTests.test_wrong_time_order) ... ok
+test_readiness_has_no_account_data_or_credentials (core.tests.LocalReadinessTests.test_readiness_has_no_account_data_or_credentials) ... ok
+test_unavailable_database_is_not_reported_ready (core.tests.LocalReadinessTests.test_unavailable_database_is_not_reported_ready) ... ok
+test_actor_and_status_injection_not_accepted (core.miniapi_tests.MiniApiTests.test_actor_and_status_injection_not_accepted) ... ok
+test_api_does_not_remove_web_csrf_protection (core.miniapi_tests.MiniApiTests.test_api_does_not_remove_web_csrf_protection) ... ok
+test_bad_page_and_status_return_validation_error (core.miniapi_tests.MiniApiTests.test_bad_page_and_status_return_validation_error) ... ok
+test_cancel_releases_slot_and_creates_audit (core.miniapi_tests.MiniApiTests.test_cancel_releases_slot_and_creates_audit) ... ok
+test_conflict_rejected_without_extra_business_records (core.miniapi_tests.MiniApiTests.test_conflict_rejected_without_extra_business_records) ... ok
+test_cookie_session_does_not_authorize_api (core.miniapi_tests.MiniApiTests.test_cookie_session_does_not_authorize_api) ... ok
+test_deactivated_account_invalidates_access (core.miniapi_tests.MiniApiTests.test_deactivated_account_invalidates_access) ... ok
+test_detail_timeline_includes_submit (core.miniapi_tests.MiniApiTests.test_detail_timeline_includes_submit) ... ok
+test_expired_session_rejected (core.miniapi_tests.MiniApiTests.test_expired_session_rejected) ... ok
+test_foreign_booking_is_neither_visible_nor_cancellable (core.miniapi_tests.MiniApiTests.test_foreign_booking_is_neither_visible_nor_cancellable) ... ok
+test_future_quota_matches_web_service (core.miniapi_tests.MiniApiTests.test_future_quota_matches_web_service) ... ok
+test_incorrect_login_rejected (core.miniapi_tests.MiniApiTests.test_incorrect_login_rejected) ... ok
+test_invalid_query_time_reports_field_errors (core.miniapi_tests.MiniApiTests.test_invalid_query_time_reports_field_errors) ... ok
+test_invalid_time_and_missing_idempotency_fields (core.miniapi_tests.MiniApiTests.test_invalid_time_and_missing_idempotency_fields) ... ok
+test_login_returns_scoped_expiring_session_without_cookie (core.miniapi_tests.MiniApiTests.test_login_returns_scoped_expiring_session_without_cookie) ... ok
+test_login_throttle (core.miniapi_tests.MiniApiTests.test_login_throttle) ... ok
+test_logout_revokes_token (core.miniapi_tests.MiniApiTests.test_logout_revokes_token) ... ok
+test_maintenance_blocks_api_booking (core.miniapi_tests.MiniApiTests.test_maintenance_blocks_api_booking) ... ok
+test_management_identity_is_not_client_identity (core.miniapi_tests.MiniApiTests.test_management_identity_is_not_client_identity) ... ok
+test_missing_resource_rejected (core.miniapi_tests.MiniApiTests.test_missing_resource_rejected) ... ok
+test_mock_login_disabled_outside_demo (core.miniapi_tests.MiniApiTests.test_mock_login_disabled_outside_demo) ... ok
+test_nested_json_and_non_object_are_rejected (core.miniapi_tests.MiniApiTests.test_nested_json_and_non_object_are_rejected) ... ok
+test_non_json_body_is_rejected (core.miniapi_tests.MiniApiTests.test_non_json_body_is_rejected) ... ok
+test_notification_read_all_is_idempotent_and_scoped (core.miniapi_tests.MiniApiTests.test_notification_read_all_is_idempotent_and_scoped) ... ok
+test_only_owned_notifications_can_be_read (core.miniapi_tests.MiniApiTests.test_only_owned_notifications_can_be_read) ... ok
+test_ordinary_booking_and_duplicate_share_one_record (core.miniapi_tests.MiniApiTests.test_ordinary_booking_and_duplicate_share_one_record) ... ok
+test_resource_detail_hides_other_applicant (core.miniapi_tests.MiniApiTests.test_resource_detail_hides_other_applicant) ... ok
+test_resource_search_and_lab_filter (core.miniapi_tests.MiniApiTests.test_resource_search_and_lab_filter) ... ok
+test_response_is_not_cacheable_and_has_request_id (core.miniapi_tests.MiniApiTests.test_response_is_not_cacheable_and_has_request_id) ... ok
+test_restricted_requests_do_not_occupy_until_web_approval (core.miniapi_tests.MiniApiTests.test_restricted_requests_do_not_occupy_until_web_approval) ... ok
+test_reusing_key_with_different_payload_rejected (core.miniapi_tests.MiniApiTests.test_reusing_key_with_different_payload_rejected) ... ok
+test_revoked_role_invalidates_access (core.miniapi_tests.MiniApiTests.test_revoked_role_invalidates_access) ... ok
+test_stale_cancel_version_rejected (core.miniapi_tests.MiniApiTests.test_stale_cancel_version_rejected) ... ok
+test_started_booking_cannot_be_cancelled (core.miniapi_tests.MiniApiTests.test_started_booking_cannot_be_cancelled) ... ok
+test_teacher_room_pending_and_student_room_blocked (core.miniapi_tests.MiniApiTests.test_teacher_room_pending_and_student_room_blocked) ... ok
+test_wrong_http_method_returns_json (core.miniapi_tests.MiniApiTests.test_wrong_http_method_returns_json) ... ok
+test_aud0001_inactive_borrower_cannot_collect (core.remediation_tests.RemediationTests.test_aud0001_inactive_borrower_cannot_collect) ... ok
+test_aud0001_return_allowed_after_deactivation (core.remediation_tests.RemediationTests.test_aud0001_return_allowed_after_deactivation) ... ok
+test_aud0001_teacher_role_rechecked_at_room_start (core.remediation_tests.RemediationTests.test_aud0001_teacher_role_rechecked_at_room_start) ... ok
+test_aud0002_upgrade_requires_recheck_preserves_original_decision (core.remediation_tests.RemediationTests.test_aud0002_upgrade_requires_recheck_preserves_original_decision) ... ok
+test_aud0003_all_list_entries_have_reachable_pagination (core.remediation_tests.RemediationTests.test_aud0003_all_list_entries_have_reachable_pagination) ... ok
+test_aud0005_unrelated_report_does_not_block_but_authorized_report_does (core.remediation_tests.RemediationTests.test_aud0005_unrelated_report_does_not_block_but_authorized_report_does) ... ok
+test_aud0006_query_rejects_objective_invalid_times (core.remediation_tests.RemediationTests.test_aud0006_query_rejects_objective_invalid_times) ... ok
+test_aud0007_delay_coordination_releases_no_extra_time (core.remediation_tests.RemediationTests.test_aud0007_delay_coordination_releases_no_extra_time) ... ok
+test_aud0007_unproven_wait_is_rejected (core.remediation_tests.RemediationTests.test_aud0007_unproven_wait_is_rejected) ... ok
+test_aud0008_fault_notifies_confirmed_applicant (core.remediation_tests.RemediationTests.test_aud0008_fault_notifies_confirmed_applicant) ... ok
+test_aud0009_bad_cancel_version_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_cancel_version_is_not_500) ... ok
+test_aud0009_bad_delivery_id_is_not_500 (core.remediation_tests.RemediationTests.test_aud0009_bad_delivery_id_is_not_500) ... ok
+test_aud0010_grace_message_uses_policy (core.remediation_tests.RemediationTests.test_aud0010_grace_message_uses_policy) ... ok
+test_aud0011_explicit_seed_preserves_revocation (core.remediation_tests.RemediationTests.test_aud0011_explicit_seed_preserves_revocation) ... ok
+test_aud0014_changed_return_is_not_silently_accepted (core.remediation_tests.RemediationTests.test_aud0014_changed_return_is_not_silently_accepted) ... ok
+test_aud0019_borrower_can_access_own_return_incident_only (core.remediation_tests.RemediationTests.test_aud0019_borrower_can_access_own_return_incident_only) ... ok
+test_aud0020_invalid_header_only_pdf_rejected (core.remediation_tests.RemediationTests.test_aud0020_invalid_header_only_pdf_rejected) ... ok
+test_aud0021_single_day_closure_preserves_other_days (core.remediation_tests.RemediationTests.test_aud0021_single_day_closure_preserves_other_days) ... ok
+test_aud0022_fixed_equipment_checks_both_booking_directions (core.remediation_tests.RemediationTests.test_aud0022_fixed_equipment_checks_both_booking_directions) ... ok
+test_aud0024_responses_append_and_reviewer_is_independent (core.remediation_tests.RemediationTests.test_aud0024_responses_append_and_reviewer_is_independent) ... ok
+test_aud0025_reassignment_after_technician_deactivation (core.remediation_tests.RemediationTests.test_aud0025_reassignment_after_technician_deactivation) ... ok
+test_aud0028_resource_audit_contains_old_details (core.remediation_tests.RemediationTests.test_aud0028_resource_audit_contains_old_details) ... ok
+test_aud0043_revocation_notifies_and_blocks (core.remediation_tests.RemediationTests.test_aud0043_revocation_notifies_and_blocks) ... ok
+test_all_seven_lists_reach_items_beyond_one_hundred (core.operations_tests.OperationsRegression.test_all_seven_lists_reach_items_beyond_one_hundred) ... ok
+test_aud0044_owned_room_query_matches_fixed_equipment_submission (core.operations_tests.OperationsRegression.test_aud0044_owned_room_query_matches_fixed_equipment_submission) ... ok
+test_aud0047_cancel_and_expiry_end_current_review_flag (core.operations_tests.OperationsRegression.test_aud0047_cancel_and_expiry_end_current_review_flag) ... ok
+test_escalation_is_deduplicated_and_visible_to_backup_manager (core.operations_tests.OperationsRegression.test_escalation_is_deduplicated_and_visible_to_backup_manager) ... ok
+test_health_is_private_and_degraded_without_worker_or_backup (core.operations_tests.OperationsRegression.test_health_is_private_and_degraded_without_worker_or_backup) ... ok
+test_missing_quantity_retry_preserves_one_return_fact (core.operations_tests.OperationsRegression.test_missing_quantity_retry_preserves_one_return_fact) ... ok
+test_missing_school_adapter_fails_closed (core.operations_tests.OperationsRegression.test_missing_school_adapter_fails_closed) ... ok
+test_real_adapter_contract_uses_stable_delivery_id (core.operations_tests.OperationsRegression.test_real_adapter_contract_uses_stable_delivery_id) ... ok
+test_restore_archive_rejects_escape_and_tampering (core.operations_tests.OperationsRegression.test_restore_archive_rejects_escape_and_tampering) ... ok
+test_school_identity_requires_state_and_existing_active_mapping (core.operations_tests.OperationsRegression.test_school_identity_requires_state_and_existing_active_mapping) ... ok
+test_unconfigured_external_send_retries_without_mock_success (core.operations_tests.OperationsRegression.test_unconfigured_external_send_retries_without_mock_success) ... ok
+test_ac04_missing_resource_is_404_in_web_and_mini (core.logic_alignment_tests.LogicAlignmentTests.test_ac04_missing_resource_is_404_in_web_and_mini) ... ok
+test_ac05_availability_is_not_personal_training_eligibility (core.logic_alignment_tests.LogicAlignmentTests.test_ac05_availability_is_not_personal_training_eligibility) ... ok
+test_ac25_unrelated_report_does_not_isolate_until_confirmed (core.logic_alignment_tests.LogicAlignmentTests.test_ac25_unrelated_report_does_not_isolate_until_confirmed) ... ok
+test_ac51_history_filters_apply_to_bookings_and_owner (core.logic_alignment_tests.LogicAlignmentTests.test_ac51_history_filters_apply_to_bookings_and_owner) ... ok
+test_ac65_recheck_appends_without_replacing_initial_decision (core.logic_alignment_tests.LogicAlignmentTests.test_ac65_recheck_appends_without_replacing_initial_decision) ... ok
+test_ac66_failed_recheck_keeps_commitment_until_explicit_cancel (core.logic_alignment_tests.LogicAlignmentTests.test_ac66_failed_recheck_keeps_commitment_until_explicit_cancel) ... ok
+test_current_recheck_does_not_add_to_full_future_category_quota (core.logic_alignment_tests.LogicAlignmentTests.test_current_recheck_does_not_add_to_full_future_category_quota)
+A commitment at its original start no longer consumes a future slot. ... ok
+test_former_repair_executor_cannot_accept_after_reassignment (core.logic_alignment_tests.LogicAlignmentTests.test_former_repair_executor_cannot_accept_after_reassignment)
+Changing the assignee must not erase the actual executor's history. ... ok
+test_aud0078_closed_day_has_no_service_or_usage_hours (core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours) ... ok
+test_aud0078_extra_opening_replaces_an_absent_weekly_period (core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period) ... ok
+test_aud0078_shortened_day_clips_actual_and_planned_equally (core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally) ... ok
+test_aud0081_more_than_31_days_is_rejected_without_truncation (core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation) ... ok
+test_exactly_31_days_remains_valid (core.report_tests.CalendarReportTests.test_exactly_31_days_remains_valid) ... ok
+test_exception_still_intersects_normal_service_history (core.report_tests.CalendarReportTests.test_exception_still_intersects_normal_service_history) ... ok
+test_inactive_exception_does_not_override_weekly_opening (core.report_tests.CalendarReportTests.test_inactive_exception_does_not_override_weekly_opening) ... ok
+test_invalid_or_future_interval_is_rejected (core.report_tests.CalendarReportTests.test_invalid_or_future_interval_is_rejected) ... ok
+test_multi_day_report_keeps_exception_local_and_end_exclusive (core.report_tests.CalendarReportTests.test_multi_day_report_keeps_exception_local_and_end_exclusive) ... ok
+test_normal_weekly_opening_is_unchanged (core.report_tests.CalendarReportTests.test_normal_weekly_opening_is_unchanged) ... ok
+test_only_current_exception_version_is_used (core.report_tests.CalendarReportTests.test_only_current_exception_version_is_used) ... ok
+test_open_loan_is_counted_only_to_report_observation (core.report_tests.CalendarReportTests.test_open_loan_is_counted_only_to_report_observation) ... ok
+test_resource_creation_and_report_window_clip_exception (core.report_tests.CalendarReportTests.test_resource_creation_and_report_window_clip_exception) ... ok
+test_room_usage_is_clipped_by_the_same_exception (core.report_tests.CalendarReportTests.test_room_usage_is_clipped_by_the_same_exception) ... ok
+test_weekly_history_versions_are_preserved_without_exception (core.report_tests.CalendarReportTests.test_weekly_history_versions_are_preserved_without_exception) ... ok
+test_business_timelines_translate_states_events_and_channels (core.followup_tests.FollowupTests.test_business_timelines_translate_states_events_and_channels) ... ok
+test_management_filters_never_expand_lab_grants (core.followup_tests.FollowupTests.test_management_filters_never_expand_lab_grants) ... ok
+test_mini_schedule_exposes_total_and_next_page_without_applicant (core.followup_tests.FollowupTests.test_mini_schedule_exposes_total_and_next_page_without_applicant) ... ok
+test_new_notification_kinds_have_specific_labels_at_every_known_constant_call (core.followup_tests.FollowupTests.test_new_notification_kinds_have_specific_labels_at_every_known_constant_call) ... ok
+test_resource_configuration_search_and_pagination (core.followup_tests.FollowupTests.test_resource_configuration_search_and_pagination) ... ok
+test_schedule_date_filter_agrees_between_clients_and_rejects_bad_date (core.followup_tests.FollowupTests.test_schedule_date_filter_agrees_between_clients_and_rejects_bad_date) ... ok
+test_students_cannot_access_management_and_lab_admin_cannot_list_users (core.followup_tests.FollowupTests.test_students_cannot_access_management_and_lab_admin_cannot_list_users) ... ok
+test_user_configuration_search_role_and_pagination (core.followup_tests.FollowupTests.test_user_configuration_search_role_and_pagination) ... ok
+test_web_schedule_exposes_total_and_all_pages_without_applicant (core.followup_tests.FollowupTests.test_web_schedule_exposes_total_and_all_pages_without_applicant) ... ok
+test_100_concurrent_resource_competitions (core.tests.ConcurrencyTests.test_100_concurrent_resource_competitions) ... ok
+test_concurrent_approval_has_single_winner (core.tests.ConcurrencyTests.test_concurrent_approval_has_single_winner) ... ok
+test_person_quota_serialized_across_resources (core.tests.ConcurrencyTests.test_person_quota_serialized_across_resources) ... ok
+test_cancelled_booking_no_longer_requires_active_recheck (core.independent_tests.IndependentAcceptance.test_cancelled_booking_no_longer_requires_active_recheck) ... ok
+test_identical_missing_return_retry (core.independent_tests.IndependentAcceptance.test_identical_missing_return_retry) ... ok
+test_lab_lock_serializes_cross_resource_conflict (core.independent_tests.IndependentAcceptance.test_lab_lock_serializes_cross_resource_conflict) ... ok
+test_overdue_fixed_equipment_blocks_next_room_start (core.independent_tests.IndependentAcceptance.test_overdue_fixed_equipment_blocks_next_room_start) ... ok
+test_overdue_room_blocks_next_fixed_equipment_collection (core.independent_tests.IndependentAcceptance.test_overdue_room_blocks_next_fixed_equipment_collection) ... ok
+test_own_room_availability_matches_allowed_submit (core.independent_tests.IndependentAcceptance.test_own_room_availability_matches_allowed_submit) ... ok
+test_recheck_during_existing_pickup_grace (core.independent_tests.IndependentAcceptance.test_recheck_during_existing_pickup_grace) ... ok
+test_repaired_incident_is_no_longer_a_current_service_block (core.independent_tests.IndependentAcceptance.test_repaired_incident_is_no_longer_a_current_service_block) ... ok
+test_missing_or_corrupt_object_never_publishes_a_backup (core.backup_tests.PortableBackupTests.test_missing_or_corrupt_object_never_publishes_a_backup) ... ok
+test_size_limit_and_public_repository_destination_are_rejected (core.backup_tests.PortableBackupTests.test_size_limit_and_public_repository_destination_are_rejected) ... ok
+test_snapshot_and_non_filesystem_evidence_restore_to_new_database (core.backup_tests.PortableBackupTests.test_snapshot_and_non_filesystem_evidence_restore_to_new_database) ... ok
+
+----------------------------------------------------------------------
+Ran 189 tests in 66.441s
+
+OK
+Destroying test database for alias 'default' ('test_reportfix_isolated')...
+
+ OK
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Existing demo data preserved; initialization skipped.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

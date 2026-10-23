@@ -1,0 +1,10 @@
+{
+  "method": "独立本地数据库31个模拟用户、31段相邻预约；不使用云端数据",
+  "confirmed_count": 31,
+  "web_http": 200,
+  "web_displayed": 15,
+  "mini_http": 200,
+  "mini_displayed": 30,
+  "web_truncation_notice_present": false,
+  "mini_pagination_keys": []
+}

@@ -1,0 +1,13 @@
+{
+  "mode": "green",
+  "exit_code": 1,
+  "expected_failure": false,
+  "scope": "全新本地PostgreSQL和模拟数据；没有连接Render/Neon或修改现有数据",
+  "labels": [
+    "core.followup_tests.FollowupTests.test_invalid_management_lab_identifiers_never_raise_server_errors",
+    "core.followup_tests.FollowupTests.test_last_representable_calendar_date_is_a_field_error_on_both_clients"
+  ],
+  "log": "green.log",
+  "purpose": "修复前反例，预期失败，实际2 errors和2 failures",
+  "runner_note": "通用运行器参数mode=green沿用文件名，expected_failure字段为原运行器元数据；本批明确作为红阶段证据，不将exit1当作验收通过。"
+}

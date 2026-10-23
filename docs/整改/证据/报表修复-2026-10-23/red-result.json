@@ -1,0 +1,13 @@
+{
+  "mode": "red",
+  "exit_code": 1,
+  "expected_failure": true,
+  "scope": "全新本地PostgreSQL和模拟数据；没有连接Render/Neon或修改现有数据",
+  "labels": [
+    "core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours",
+    "core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally",
+    "core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period",
+    "core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation"
+  ],
+  "log": "red.log"
+}

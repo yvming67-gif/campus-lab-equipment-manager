@@ -41,12 +41,15 @@ def restore(archive,pg_bin,target_db,media,host,port,user):
         if process.returncode:raise RuntimeError('目标库恢复失败；源数据未修改，请检查新目标库后再重试，不自动删除它')
         with psycopg.connect(dbname=target_db,**kwargs) as connection:
             if connection.execute('SELECT COUNT(*) FROM django_session').fetchone()[0]:raise ValueError('恢复库含有效会话，拒绝验收')
+            for table,expected_count in manifest.get('table_counts',{}).items():
+                actual=connection.execute(sql.SQL('SELECT COUNT(*) FROM {}').format(sql.Identifier('public',table))).fetchone()[0]
+                if actual!=expected_count:raise ValueError('恢复库表数量与归档快照不符')
         media.mkdir(parents=True,exist_ok=True)
         for item in manifest['attachments']:
             target=(media/item['file']).resolve()
             if not target.is_relative_to(media):raise ValueError('附件目标越界')
             target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(z.read('media/'+item['file']))
-        receipt={'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'target_database':target_db,'attachments':len(manifest['attachments']),'sessions':0,'verified':True}
+        receipt={'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'target_database':target_db,'attachments':len(manifest['attachments']),'sessions':0,'verified':True,'table_counts_verified':bool(manifest.get('table_counts'))}
         (media/'restore-receipt.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2),'utf-8')
         return receipt
 

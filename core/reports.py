@@ -1,5 +1,4 @@
 from datetime import datetime,timedelta
-from django.db.models import Q
 from django.utils import timezone
 from .models import *
 from .services import TZ, BusinessError
@@ -7,20 +6,33 @@ from .services import TZ, BusinessError
 def intersection(a,b,c,d):return max(0,(min(b,d)-max(a,c)).total_seconds())
 def utilization(resources,start,end,at=None):
     at=at or timezone.now()
-    if start>=end or end>at or (end-start).days>31:raise BusinessError("报表仅统计已发生的时间，单次跨度不超过31天")
+    if start>=end or end>at or end-start>timedelta(days=31):raise BusinessError("报表仅统计已发生的时间，单次跨度不超过31天")
     rows=[]
+    first_day=start.astimezone(TZ).date();last_day=end.astimezone(TZ).date()
+    calendars={}
     for r in resources:
-        windows=[];day=start.astimezone(TZ).date();last=end.astimezone(TZ).date()
-        openings=list(OpeningPeriod.objects.filter(lab=r.lab));periods=list(r.service_periods.all())
-        while day<=last:
-            for op in openings:
-                if op.weekday==day.isoweekday() and op.valid_from<=day and (not op.valid_to or day<=op.valid_to):
-                    a=max(start,datetime.combine(day,op.starts_at,TZ),r.created_at);b=min(end,datetime.combine(day,op.ends_at,TZ))
-                    if a<b:
-                        for sp in periods:
-                            if sp.status=="NORMAL":
-                                x=max(a,sp.starts_at);y=min(b,sp.ends_at or end)
-                                if x<y:windows.append((x,y))
+        if r.lab_id not in calendars:
+            openings=list(OpeningPeriod.objects.filter(lab_id=r.lab_id))
+            exceptions={item.day:item for item in CalendarException.objects.filter(lab_id=r.lab_id,active=True,day__range=(first_day,last_day))}
+            calendars[r.lab_id]=(openings,exceptions)
+        openings,exceptions=calendars[r.lab_id]
+        windows=[];day=first_day
+        periods=list(r.service_periods.all())
+        while day<=last_day:
+            exception=exceptions.get(day)
+            # BR-40: a single-day exception replaces, rather than intersects
+            # with, the weekly calendar. It can also open a normally closed day.
+            if exception:
+                slots=[] if exception.closed else [(exception.starts_at,exception.ends_at)]
+            else:
+                slots=[(op.starts_at,op.ends_at) for op in openings if op.weekday==day.isoweekday() and op.valid_from<=day and (not op.valid_to or day<=op.valid_to)]
+            for opens,closes in slots:
+                a=max(start,datetime.combine(day,opens,TZ),r.created_at);b=min(end,datetime.combine(day,closes,TZ))
+                if a<b:
+                    for sp in periods:
+                        if sp.status=="NORMAL":
+                            x=max(a,sp.starts_at);y=min(b,sp.ends_at or end)
+                            if x<y:windows.append((x,y))
             day+=timedelta(days=1)
         capacity=sum((b-a).total_seconds() for a,b in windows)
         uses=[]

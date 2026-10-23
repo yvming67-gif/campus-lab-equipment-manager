@@ -1,1 +1,36 @@
-{% extends 'base.html' %}{% block content %}<div class="page-top"><div><div class="eyebrow">ADMINISTRATION</div><h1>资源与配置</h1><p>维护档案与规则参数，既有借还和审计事实继续保留。</p></div></div>{% if can_system %}<div class="management-grid"><a class="panel" href="{% url 'calendar-exception' %}"><h2>单日开放例外</h2><p>节假日、闭馆与临时开放</p></a><a class="panel" href="{% url 'manage-form' 'policy' %}"><h2>预约与通知参数 ↗</h2><p>{{ policy.window_days }}天 / {{ policy.slot_minutes }}分钟 / 版本{{ policy.version }}</p></a><a class="panel" href="{% url 'manage-form' 'opening' %}"><h2>开放日历版本 ↗</h2><p>未来日期生效，保留历史口径</p></a><a class="panel" href="{% url 'manage-form' 'lab' %}"><h2>新增实验室 ↗</h2><p>编号、地点与基础信息</p></a></div><div class="section-heading"><h2>用户与授权</h2></div><div class="table-wrap"><table><thead><tr><th>用户</th><th>身份编号</th><th>角色</th><th>状态</th><th></th></tr></thead><tbody>{% for u in users %}<tr><td>{{ u.display_name }}</td><td>{{ u.school_no }}</td><td>{% for r in u.roles.all %}{{ r.name }} {% endfor %}</td><td>{% if u.is_active %}有效{% else %}已停用{% endif %}</td><td><a href="{% url 'manage-edit' 'grant' u.pk %}">维护授权 →</a></td></tr>{% endfor %}</tbody></table></div>{% endif %}{% if can_manage %}<div class="section-heading"><h2>资源档案</h2><a class="button" href="{% url 'manage-form' 'resource' %}">新增资源 ↗</a></div><div class="table-wrap"><table><thead><tr><th>资源</th><th>实验室</th><th>状态</th><th>维护</th></tr></thead><tbody>{% for r in resources %}<tr><td><strong>{{ r.name }}</strong><small>{{ r.code }}</small></td><td>{{ r.lab.name }}</td><td>{{ r.get_service_status_display }}</td><td><a href="{% url 'manage-edit' 'resource' r.pk %}">档案</a>　<a href="{% url 'manage-edit' 'hold' r.pk %}">服务限制</a></td></tr>{% endfor %}</tbody></table></div>{% endif %}{% endblock %}
+{% extends 'base.html' %}{% block content %}
+<div class="page-top"><div><div class="eyebrow">ADMINISTRATION</div><h1>资源与配置</h1><p>维护档案与规则参数，既有借还和审计事实继续保留。</p></div></div>
+{% if can_system %}
+<div class="management-grid">
+  <a class="panel" href="{% url 'calendar-exception' %}"><h2>单日开放例外</h2><p>节假日、闭馆与临时开放</p></a>
+  <a class="panel" href="{% url 'manage-form' 'policy' %}"><h2>预约与通知参数 ↗</h2><p>{{ policy.window_days }}天 / {{ policy.slot_minutes }}分钟 / 版本{{ policy.version }}</p></a>
+  <a class="panel" href="{% url 'manage-form' 'opening' %}"><h2>开放日历版本 ↗</h2><p>未来日期生效，保留历史口径</p></a>
+  <a class="panel" href="{% url 'manage-form' 'lab' %}"><h2>新增实验室 ↗</h2><p>编号、地点与基础信息</p></a>
+</div>
+<div class="section-heading"><h2>用户与授权</h2></div>
+<form method="get" class="filter-row panel" aria-label="用户筛选">
+  <input type="hidden" name="resource_q" value="{{ resource_q }}"><input type="hidden" name="resource_lab" value="{{ resource_lab }}">
+  <div><label for="manage-user-q">姓名、账号或身份编号</label><input id="manage-user-q" name="user_q" value="{{ user_q }}" maxlength="150"></div>
+  <div><label for="manage-user-role">角色</label><select id="manage-user-role" name="user_role"><option value="">全部角色</option>{% for role in roles %}<option value="{{ role.code }}" {% if user_role == role.code %}selected{% endif %}>{{ role.name }}</option>{% endfor %}</select></div>
+  <button class="button">检索用户</button>
+</form>
+<div class="table-wrap"><table><thead><tr><th>用户</th><th>身份编号</th><th>角色</th><th>状态</th><th>操作</th></tr></thead><tbody>
+{% for u in users %}<tr><td>{{ u.display_name }}</td><td>{{ u.school_no }}</td><td>{% for r in u.roles.all %}{{ r.name }} {% endfor %}</td><td>{% if u.is_active %}有效{% else %}已停用{% endif %}</td><td><a href="{% url 'manage-edit' 'grant' u.pk %}">维护授权 →</a></td></tr>
+{% empty %}<tr><td colspan="5" class="empty-state">没有符合筛选条件的用户。</td></tr>{% endfor %}
+</tbody></table></div>
+{% include 'pagination.html' with page=user_page filters=user_filters page_param='users_page' pagination_label='用户授权分页' %}
+{% endif %}
+{% if can_manage %}
+<div class="section-heading"><h2>资源档案</h2><a class="button" href="{% url 'manage-form' 'resource' %}">新增资源 ↗</a></div>
+<form method="get" class="filter-row panel" aria-label="资源档案筛选">
+  <input type="hidden" name="user_q" value="{{ user_q }}"><input type="hidden" name="user_role" value="{{ user_role }}">
+  <div><label for="manage-resource-q">资源名称或编号</label><input id="manage-resource-q" name="resource_q" value="{{ resource_q }}" maxlength="150"></div>
+  <div><label for="manage-resource-lab">实验室</label><select id="manage-resource-lab" name="resource_lab"><option value="">全部授权实验室</option>{% for lab in resource_labs %}<option value="{{ lab.pk }}" {% if resource_lab == lab.pk|stringformat:'s' %}selected{% endif %}>{{ lab.name }}</option>{% endfor %}</select></div>
+  <button class="button">检索资源</button>
+</form>
+<div class="table-wrap"><table><thead><tr><th>资源</th><th>实验室</th><th>状态</th><th>维护</th></tr></thead><tbody>
+{% for r in resources %}<tr><td><strong>{{ r.name }}</strong><small>{{ r.code }}</small></td><td>{{ r.lab.name }}</td><td>{{ r.get_service_status_display }}</td><td><a href="{% url 'manage-edit' 'resource' r.pk %}">档案</a>　<a href="{% url 'manage-edit' 'hold' r.pk %}">服务限制</a></td></tr>
+{% empty %}<tr><td colspan="4" class="empty-state">没有符合条件的授权资源。</td></tr>{% endfor %}
+</tbody></table></div>
+{% include 'pagination.html' with page=resource_page filters=resource_filters page_param='resources_page' pagination_label='资源档案分页' %}
+{% endif %}{% endblock %}

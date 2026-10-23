@@ -1,0 +1,92 @@
+"""Read-only repository review using a wholly separate local mock database."""
+from pathlib import Path
+import os, sys, json, ast, re
+from datetime import datetime, timedelta, time
+from types import SimpleNamespace
+ROOT=Path(__file__).resolve().parents[2]
+APP=ROOT/'outputs/重制版-2026-10-18/campus-lab-equipment-manager'
+OUT=ROOT/'outputs/现状完善评估-2026-10-22-01211f9'
+sys.path.insert(0,str(APP));os.environ.setdefault('DJANGO_SETTINGS_MODULE','config.settings')
+import django
+django.setup()
+from django.core.management import call_command
+from django.utils import timezone
+from django.template import Engine, Context
+from django.test import Client
+from core.models import *
+from core import services as s
+from core.coordination import calendar_exception
+from core.reports import utilization
+from core.templatetags.domain_labels import LABELS,business_label
+from django.contrib.sessions.backends.db import SessionStore
+
+call_command('migrate',interactive=False,verbosity=0)
+call_command('seed_demo',verbosity=0)
+sysadmin=User.objects.get(username='sysadmin');student=User.objects.get(username='student')
+r=Resource.objects.get(code='EQ-OSC-01')
+cases=[]
+for i,(name,closed,a,b,expected) in enumerate([
+    ('正常开放日临时全天闭馆',True,None,None,0.0),
+    ('正常开放日缩短为10至12时',False,time(10),time(12),2.0),
+    ('常规不开放日额外开放9至12时',False,time(9),time(12),3.0)],1):
+    day=timezone.localdate()+timedelta(days=i)
+    if i==3:OpeningPeriod.objects.filter(lab=r.lab,weekday=day.isoweekday()).delete()
+    start=datetime.combine(day,time(8),s.TZ);end=datetime.combine(day,time(20),s.TZ)
+    before=utilization([r],start,end,at=end)[0]['capacity']
+    calendar_exception(sysadmin,r.lab_id,day,closed,a,b,'隔离审查模拟例外')
+    after=utilization([r],start,end,at=end)[0]
+    query_start=datetime.combine(day,time(10),s.TZ)
+    available,label=s.availability(r,query_start,query_start+timedelta(hours=1),applicant=student)
+    cases.append(dict(name=name,day=str(day),expected_capacity_hours=expected,
+                      baseline_capacity_hours=before,actual_capacity_hours=after['capacity'],
+                      matches_expected=after['capacity']==expected,
+                      availability_10_to_11=available,availability_reason=label,
+                      scenario='独立模拟数据库，统计观察时钟通过at参数推进到该日结束，不是已发生的学校运行数据'))
+    print(json.dumps(cases[-1],ensure_ascii=False),flush=True)
+(OUT/'报表日历反例.json').write_text(json.dumps(cases,ensure_ascii=False,indent=2)+'\n','utf-8')
+
+template=(APP/'templates/work_detail.html').read_text('utf-8')
+fragment=template[template.index('{% for e in events %}'):]
+fragment=fragment[:fragment.index('{% endfor %}')+len('{% endfor %}')]
+event=SimpleNamespace(created_at=timezone.now(),actor='模拟维修人员',note='模拟提交维修结果',old_status='IN_PROGRESS',new_status='AWAITING_ACCEPTANCE')
+rendered=Engine().from_string(fragment).render(Context({'events':[event]}))
+proof=dict(method='实际模板维修事件片段，以模拟事件渲染；未访问线上工单',
+           source='templates/work_detail.html:1',old='IN_PROGRESS',new='AWAITING_ACCEPTANCE',
+           rendered=rendered,raw_codes_visible='IN_PROGRESS → AWAITING_ACCEPTANCE' in rendered)
+(OUT/'维修时间线模板验证.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n','utf-8')
+
+calls=[]
+for name in ['core/services.py','core/coordination.py']:
+    tree=ast.parse((APP/name).read_text('utf-8'))
+    for node in ast.walk(tree):
+        if not isinstance(node,ast.Call) or len(node.args)<3:continue
+        fn=node.func
+        is_notify=(isinstance(fn,ast.Name) and fn.id=='notify') or (isinstance(fn,ast.Attribute) and fn.attr=='notify')
+        if is_notify and isinstance(node.args[2],ast.Constant) and isinstance(node.args[2].value,str):
+            kind=node.args[2].value
+            if kind not in LABELS:calls.append(dict(kind=kind,location=name+':'+str(node.lineno),label=business_label(kind)))
+(OUT/'通知类型字典核对.json').write_text(json.dumps(calls,ensure_ascii=False,indent=2)+'\n','utf-8')
+
+# Large schedule boundary is exercised locally, never by filling the public demo.
+resource=Resource.objects.get(code='EQ-PC-02');role=Role.objects.get(code='STUDENT')
+for n in range(31):
+    user=User.objects.create(username=f'review_local_{n}',school_no=f'ISOLATED-{n:03d}',display_name=f'隔离模拟{n}')
+    UserRole.objects.create(user=user,role=role)
+    day=timezone.localdate()+timedelta(days=1+n//24)
+    start=datetime.combine(day,time(8),s.TZ)+timedelta(minutes=30*(n%24))
+    s.create_reservation(user,resource.pk,start,start+timedelta(minutes=30),'本地隔离占用列表边界')
+c=Client();c.force_login(student)
+response=c.get(f'/resources/{resource.pk}/');body=response.content.decode('utf-8')
+section=body.split('<h3>已确认占用</h3>',1)[1].split('<div class="actions">',1)[0]
+session=SessionStore();session['channel']='campus-mini-v1';session['mini_user_id']=student.pk;session.set_expiry(7200);session.create()
+api=c.get(f'/api/mini/v1/resources/{resource.pk}/',HTTP_AUTHORIZATION='Bearer '+session.session_key)
+data=api.json();session.delete()
+schedule=dict(method='独立本地数据库31个模拟用户、31段相邻预约；不使用云端数据',
+              confirmed_count=resource.reservations.filter(status='CONFIRMED').count(),
+              web_http=response.status_code,web_displayed=section.count('<p class="detail-row">'),
+              mini_http=api.status_code,mini_displayed=len(data['data']['schedule']),
+              web_truncation_notice_present=bool(re.search('仅显示|最多显示|更多时段|下一页',section)),
+              mini_pagination_keys=[k for k in data['data'] if 'page' in k or 'more' in k or 'total' in k])
+(OUT/'占用列表边界验证.json').write_text(json.dumps(schedule,ensure_ascii=False,indent=2)+'\n','utf-8')
+print(json.dumps(dict(report_mismatches=sum(not c['matches_expected'] for c in cases),raw_work_codes_visible=proof['raw_codes_visible'],
+                      unmapped_notification_kinds=sorted({c['kind'] for c in calls}),schedule=schedule),ensure_ascii=False),flush=True)

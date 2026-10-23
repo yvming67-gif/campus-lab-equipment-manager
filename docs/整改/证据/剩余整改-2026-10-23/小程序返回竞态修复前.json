@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-23",
+  "issue": "AUD-0086",
+  "evidence_status": "独立Node内存反例执行；未运行微信容器或真机；未修改业务代码",
+  "input_commit": "01211f98995591719b99b2b66925c62dddf06e2b及本轮未提交整改工作树",
+  "affected_file": "miniprogram/controllers.js",
+  "scenario": "loadSchedule(2)未返回时load()接管同一serial；先返回新资源请求，再返回旧分页请求",
+  "runtime": "C:/Users/admin/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+  "script": "const api=require('./miniprogram/utils/api');\nconst pending=[]; api.request=()=>new Promise(resolve=>pending.push(resolve));\nconst p=require('./miniprogram/controllers').create('resource');\np.setData=function(v){ for(const [k,x] of Object.entries(v)){const parts=k.split('.');let d=this.data;for(const y of parts.slice(0,-1)) d=d[y]||(d[y]={});d[parts.at(-1)]=x;}};\np.setData({id:1,item:{schedule:[]},scheduleHasMore:true});\nconst old=p.loadSchedule(2);\nconst fresh=p.load();\npending[1]({schedule:[],schedule_page:1,schedule_total:31,schedule_has_more:true,policy:{window_days:14}});\nfresh.then(()=>{pending[0]({schedule:[],schedule_page:2,schedule_total:31,schedule_has_more:false});return old;}).then(()=>console.log(JSON.stringify({loading:p.data.loading,scheduleBusy:p.data.scheduleBusy,scheduleHasMore:p.data.scheduleHasMore,canRequestNext:!p.data.scheduleBusy&&!p.data.loading})));",
+  "exit_code": 0,
+  "stdout": "{\"loading\":false,\"scheduleBusy\":true,\"scheduleHasMore\":true,\"canRequestNext\":false}",
+  "interpretation": "所有请求均已返回，但占用读取仍为忙碌，继续查看按钮因scheduleBusy被禁用。命令成功退出表示反例脚本执行完毕，不表示产品通过验收。",
+  "expected": "新请求接管后正确释放本次加载状态，旧响应不得覆盖新列表，也不得遗留scheduleBusy。"
+}

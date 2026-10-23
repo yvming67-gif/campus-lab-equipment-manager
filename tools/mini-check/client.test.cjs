@@ -138,3 +138,42 @@ test('failed remote logout still clears the local session', async () => {
 test('China date formatting is independent of the computer timezone', () => {
   const fmt = require(path.join(root, 'utils/format'));assert.equal(fmt.day(Date.parse('2026-10-19T20:00:00Z')), '2026-10-20');
 });
+
+test('occupancy next page appends without changing the reservation form', async () => {
+  signedIn(); const p=page('resource');p.setData({id:1,item:{schedule:[{starts_at:'2027-01-01T10:00',ends_at:'2027-01-01T11:00'}]},scheduleHasMore:true,schedulePage:1,'form.purpose':'保留草稿'});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{schedule:[{starts_at:'2027-01-02T10:00',ends_at:'2027-01-02T11:00'}],schedule_page:2,schedule_total:31,schedule_has_more:false}}});
+  await p.moreSchedule();assert.equal(requests[0].data.schedule_page,2);assert.equal(p.data.item.schedule.length,2);assert.equal(p.data.form.purpose,'保留草稿');assert.equal(p.data.scheduleHasMore,false);
+});
+
+test('date switch invalidates an older occupancy response', async () => {
+  signedIn();const waiting=[];reply=r=>waiting.push(r);const p=page('resource');p.setData({id:1,item:{schedule:[]}});
+  const old=p.loadSchedule(1);const current=p.chooseScheduleDay({detail:{value:'2027-01-03'}});
+  waiting[1].success({statusCode:200,data:{ok:true,data:{schedule:[{starts_at:'2027-01-03T10:00',ends_at:'2027-01-03T11:00'}],schedule_page:1,schedule_total:1,schedule_has_more:false}}});await current;
+  waiting[0].success({statusCode:200,data:{ok:true,data:{schedule:[],schedule_page:1,schedule_total:0,schedule_has_more:false}}});await old;
+  assert.equal(p.data.scheduleTotal,1);assert.equal(p.data.item.schedule[0].starts_at,'2027-01-03T10:00');assert.equal(p.data.scheduleBusy,false);
+});
+
+test('failed occupancy load keeps the previous page and supports retry', async () => {
+  signedIn();const p=page('resource');p.setData({id:1,item:{schedule:[]},schedulePage:1,scheduleHasMore:true});reply=r=>r.fail({});
+  await p.moreSchedule();assert.equal(p.data.schedulePage,1);assert.equal(p.data.scheduleHasMore,true);assert.ok(p.data.scheduleError);assert.equal(p.data.scheduleBusy,false);
+});
+
+for (const order of ['fresh-first','old-first']) test('AUD-0086 returning to resource page releases pagination: '+order, async () => {
+  signedIn();const waiting=[];reply=r=>waiting.push(r);const p=page('resource');
+  p.setData({id:1,item:{schedule:[]},schedulePage:1,scheduleHasMore:true});
+  const old=p.loadSchedule(2),fresh=p.onShow();
+  const send=(index,pageNumber)=>waiting[index].success({statusCode:200,data:{ok:true,data:{policy:{window_days:14},schedule:[],schedule_page:pageNumber,schedule_total:31,schedule_has_more:true}}});
+  if(order==='fresh-first'){send(1,1);await fresh;send(0,2);await old;}
+  else{send(0,2);await old;send(1,1);await fresh;}
+  assert.equal(p.data.schedulePage,1);assert.equal(p.data.scheduleBusy,false);assert.equal(p.data.loading,false);
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{schedule:[],schedule_page:2,schedule_total:31,schedule_has_more:false}}});
+  await p.moreSchedule();assert.equal(requests.length,3);assert.equal(p.data.schedulePage,2);
+});
+
+test('AUD-0086 failed return reload also releases older pagination ownership', async () => {
+  signedIn();const waiting=[];reply=r=>waiting.push(r);const p=page('resource');
+  p.setData({id:1,item:{schedule:[]},schedulePage:1,scheduleHasMore:true});
+  const old=p.loadSchedule(2),fresh=p.onShow();waiting[1].fail({errMsg:'offline'});await fresh;
+  waiting[0].success({statusCode:200,data:{ok:true,data:{schedule:[],schedule_page:2,schedule_total:31,schedule_has_more:false}}});await old;
+  assert.equal(p.data.scheduleBusy,false);assert.equal(p.data.loading,false);assert.ok(p.data.error);
+});

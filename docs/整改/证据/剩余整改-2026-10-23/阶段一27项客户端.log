@@ -1,0 +1,35 @@
+✔ AUD-0017 older notification reads cannot overwrite a newer result (11.055ms)
+✔ AUD-0018 changing dates invalidates an outstanding availability response (2.0415ms)
+✔ AUD-0036 offline logout clears local credentials and reaches address settings (2.8879ms)
+✔ all seven native pages and lifecycle entry files exist (5.7297ms)
+✔ WXML event bindings point to actual controller methods (3.9877ms)
+✔ protected calls require an authenticated session (3.0344ms)
+✔ expired local session is removed (0.98ms)
+✔ only HTTPS or loopback HTTP service addresses are accepted (1.3112ms)
+✔ changing service clears credentials and drafts (0.752ms)
+✔ bearer token is sent in headers, never in the request URL (0.698ms)
+✔ unauthorized server response clears session and redirects (0.7273ms)
+✔ business rejection keeps the authenticated session (0.7258ms)
+✔ unknown HTML response is a visible service error (0.5623ms)
+✔ network failure retains stable idempotency key on retry (1.3611ms)
+✔ changed submission gets a new key and success removes draft (0.793ms)
+✔ unauthenticated submit cannot create a draft or issue a request (0.5382ms)
+✔ field validation errors expose Chinese labels and causes (0.5538ms)
+✔ resource draft restores the same form after interrupted submission (1.1901ms)
+✔ double tap does not duplicate an in-flight login (0.9871ms)
+✔ student cannot trigger a room reservation from the page controller (1.6909ms)
+✔ cancellation transmits the displayed optimistic version (2.3554ms)
+✔ marking one notification updates only that row and unread count (1.2198ms)
+✔ failed remote logout still clears the local session (0.5802ms)
+✔ China date formatting is independent of the computer timezone (0.7488ms)
+✔ occupancy next page appends without changing the reservation form (1.2661ms)
+✔ date switch invalidates an older occupancy response (1.0572ms)
+✔ failed occupancy load keeps the previous page and supports retry (1.09ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 221.7295

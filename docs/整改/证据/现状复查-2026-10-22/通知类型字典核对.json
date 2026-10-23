@@ -1,0 +1,57 @@
+[
+  {
+    "kind": "WORK_CREATED",
+    "location": "core/services.py:440",
+    "label": "业务进度"
+  },
+  {
+    "kind": "WORK_PROGRESS",
+    "location": "core/services.py:459",
+    "label": "业务进度"
+  },
+  {
+    "kind": "RECALL",
+    "location": "core/services.py:439",
+    "label": "业务进度"
+  },
+  {
+    "kind": "RECALL",
+    "location": "core/services.py:376",
+    "label": "业务进度"
+  },
+  {
+    "kind": "ARRANGEMENT_IMPACT",
+    "location": "core/services.py:415",
+    "label": "业务进度"
+  },
+  {
+    "kind": "RECHECK",
+    "location": "core/coordination.py:81",
+    "label": "业务进度"
+  },
+  {
+    "kind": "COORDINATE",
+    "location": "core/coordination.py:107",
+    "label": "业务进度"
+  },
+  {
+    "kind": "REASSIGN",
+    "location": "core/coordination.py:141",
+    "label": "业务进度"
+  },
+  {
+    "kind": "INCIDENT_RESPONSE",
+    "location": "core/coordination.py:158",
+    "label": "业务进度"
+  },
+  {
+    "kind": "ARRANGEMENT_IMPACT",
+    "location": "core/coordination.py:60",
+    "label": "业务进度"
+  },
+  {
+    "kind": "RECALL",
+    "location": "core/coordination.py:127",
+    "label": "业务进度"
+  }
+]

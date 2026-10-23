@@ -50,7 +50,7 @@ const screens = {
     onReachBottom() { return this.more(); }
   },
   resource: {
-    data: { id: null, item: null, form: fmt.defaultForm(), loading: false, busy: false, error: '', availability: '', available: null, minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000) },
+    data: { id: null, item: null, form: fmt.defaultForm(), loading: false, busy: false, error: '', availability: '', available: null, minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000), scheduleDay: '', schedulePage: 1, scheduleTotal: 0, scheduleHasMore: false, scheduleBusy: false, scheduleError: '' },
     onLoad(options) {
       this.setData({ id: Number(options.id) });
       const pending = api.draft();
@@ -61,12 +61,28 @@ const screens = {
     },
     onShow() { if (api.requireLogin()) return this.load(); },
     async load() {
-      this.setData({ loading: true, error: '' });
+      const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
+      this.setData({ loading: true, scheduleBusy: false, error: '' });
       try {
-        const item = await api.request('/resources/' + this.data.id + '/');
-        this.setData({ item: fmt.resource(item), maxDate: fmt.day(Date.now() + item.policy.window_days * 86400000) });
-      } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
+        const item = await api.request('/resources/' + this.data.id + '/', 'GET', {schedule_day:this.data.scheduleDay,schedule_page:1});
+        if(serial!==this._scheduleSerial)return;
+        this.setData({ item: fmt.resource(item), maxDate: fmt.day(Date.now() + item.policy.window_days * 86400000), schedulePage:item.schedule_page, scheduleTotal:item.schedule_total, scheduleHasMore:item.schedule_has_more, scheduleError:'' });
+      } catch (e) { if(serial===this._scheduleSerial)error(this, e); } finally { if(serial===this._scheduleSerial)this.setData({ loading: false, scheduleBusy: false }); }
     },
+    async loadSchedule(page) {
+      const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
+      this.setData({scheduleBusy:true,scheduleError:''});
+      try {
+        const item=await api.request('/resources/'+this.data.id+'/', 'GET', {schedule_day:this.data.scheduleDay,schedule_page:page});
+        if(serial!==this._scheduleSerial)return;
+        const slots=fmt.resource(item).schedule;
+        this.setData({'item.schedule':(page===1?[]:this.data.item.schedule).concat(slots),schedulePage:item.schedule_page,scheduleTotal:item.schedule_total,scheduleHasMore:item.schedule_has_more});
+      } catch(e) {if(serial===this._scheduleSerial)this.setData({scheduleError:api.errorText(e)});}
+      finally {if(serial===this._scheduleSerial)this.setData({scheduleBusy:false,loading:false});}
+    },
+    chooseScheduleDay(e) {this.setData({scheduleDay:e.detail.value,'item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
+    clearScheduleDay() {this.setData({scheduleDay:'','item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
+    moreSchedule() {if(this.data.scheduleHasMore&&!this.data.scheduleBusy&&!this.data.loading)return this.loadSchedule(this.data.schedulePage+1);},
     input,
     chooseDate(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.date': e.detail.value, availability: '', available: null }); },
     chooseStart(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.start': e.detail.value, availability: '', available: null }); },

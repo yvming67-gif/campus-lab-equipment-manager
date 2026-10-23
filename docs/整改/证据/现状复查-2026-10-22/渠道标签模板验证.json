@@ -1,0 +1,14 @@
+[
+  {
+    "channel": "IN_APP",
+    "label": "站内"
+  },
+  {
+    "channel": "MOCK_EXTERNAL",
+    "label": "模拟外部"
+  },
+  {
+    "channel": "EXTERNAL",
+    "label": "模拟外部"
+  }
+]

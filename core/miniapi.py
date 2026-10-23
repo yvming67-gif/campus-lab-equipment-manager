@@ -19,6 +19,8 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from . import services as s
 from .demo_identity import verify_demo_password
+from .schedules import resource_schedule
+from .domain_labels import event_label, notification_label
 from .forms import BookingForm, QueryForm, ActionForm
 from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent
 from .request_context import correlation_id
@@ -259,7 +261,15 @@ def resource_detail(request, pk):
     result["policy"] = policy_data()
     result["can_apply"] = request.mini_user.has_role("TEACHER") if resource.kind == "ROOM" else True
     result["accessories"] = list(resource.accessories.filter(is_active=True).order_by("code").values("code", "name", "quantity"))
-    result["schedule"] = [{"starts_at": date_text(x.starts_at), "ends_at": date_text(x.ends_at)} for x in resource.reservations.filter(status__in=s.ACTIVE, ends_at__gt=timezone.now()).order_by("starts_at")[:30]]
+    raw_page=request.GET.get("schedule_page","1")
+    if not re.fullmatch(r"[1-9][0-9]{0,5}",raw_page):
+        raise ApiError("VALIDATION_ERROR","占用列表页码必须为正整数",fields={"schedule_page":["页码无效"]})
+    day=request.GET.get("schedule_day","")
+    try:schedule=resource_schedule(resource,day)
+    except ValueError as error:raise ApiError("VALIDATION_ERROR",str(error),fields={"schedule_day":[str(error)]})
+    page=Paginator(schedule,30).get_page(int(raw_page))
+    result["schedule"] = [{"starts_at": date_text(x.starts_at), "ends_at": date_text(x.ends_at), "status":x.status,"status_label":x.get_status_display()} for x in page.object_list]
+    result.update(schedule_total=page.paginator.count,schedule_page=page.number,schedule_has_more=page.has_next(),schedule_day=day)
     return result
 
 
@@ -291,9 +301,8 @@ def bookings(request):
 def booking_detail(request, pk):
     booking = get_object_or_404(my_bookings(request.mini_user), pk=pk)
     result = booking_data(booking)
-    labels = {"SUBMIT": "提交申请", "CREATE": "提交申请", "AUTO_CONFIRM": "自动确认", "APPROVE": "审核通过", "REJECT": "审核驳回", "CANCEL": "取消预约", "CHECKOUT": "设备借出", "RETURN": "设备归还", "ROOM_START": "场地入场", "ROOM_END": "场地结束", "REQUEST_INFO": "要求补充", "PROVIDE_INFO": "补充说明", "EXPIRE": "预约失效"}
     events = list(AuditEvent.objects.filter(entity_type="reservation", entity_id=booking.pk).select_related("actor").order_by("-created_at", "-pk")[:100])
-    result["timeline"] = [{"id": e.pk, "action": e.action, "label": labels.get(e.action, "业务状态更新"), "at": date_text(e.created_at), "reason": e.reason, "actor": e.actor.display_name if e.actor_id else "系统"} for e in reversed(events)]
+    result["timeline"] = [{"id": e.pk, "action": e.action, "label": event_label(e.action), "at": date_text(e.created_at), "reason": e.reason, "actor": e.actor.display_name if e.actor_id else "系统"} for e in reversed(events)]
     return result
 
 
@@ -314,7 +323,7 @@ def cancel(request, pk):
 def notifications(request):
     qs = Notification.objects.filter(recipient=request.mini_user).annotate(owned_booking=Exists(Reservation.objects.filter(applicant=request.mini_user, pk=OuterRef("audit__entity_id")))).select_related("audit").order_by("-created_at", "-pk")
     def serialize(item):
-        return {"id": item.pk, "kind": item.kind, "content": item.content, "created_at": date_text(item.created_at),
+        return {"id": item.pk, "kind": item.kind, "kind_label":notification_label(item.kind), "content": item.content, "created_at": date_text(item.created_at),
                 "read_at": date_text(item.read_at), "booking_id": item.audit.entity_id if item.audit.entity_type == "reservation" and item.owned_booking else None}
     result = page_data(request, qs, serialize)
     result["unread"] = qs.filter(read_at__isnull=True).count()

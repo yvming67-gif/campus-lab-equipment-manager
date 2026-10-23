@@ -1,0 +1,280 @@
+[
+  {
+    "id": "AUD-0075",
+    "title": "资源与配置的用户和资源档案清单没有检索与分页",
+    "type": "优化建议",
+    "severity": "轻微",
+    "evidence": "代码确认；资源管理员页面观察",
+    "location": "core/views.py:302-304 manage；templates/manage.html:1；GET /manage/",
+    "description": "配置页直接传递并渲染全量授权资源或全部用户，不提供检索、筛选及分页；资源管理员页面已观察到10项资源且无检索/分页入口。尚未测量大数据量耗时。",
+    "status": "待优化",
+    "related": [
+      "AUD-0003"
+    ],
+    "module": "资源配置、用户授权管理",
+    "roles": "实验室管理员、系统管理员",
+    "severity_reason": "当前10项资源可操作，主要影响较大目录的定位与维护；没有测得性能故障。",
+    "trigger": "以实验室管理员访问资源配置，或系统管理员查看用户授权；数据量增加时影响更明显。",
+    "steps": [
+      "使用已有模拟admin会话进入“资源与配置”。",
+      "观察资源档案列表及检索、筛选、分页入口。",
+      "对照manage视图和模板，核对用户列表也未使用分页；该角色页面本轮未重新登录观察。"
+    ],
+    "expected": "这是可维护性和规模适配建议，不是已确认违反某条强制分页需求；较多用户或资源时宜能按编号、名称、实验室、角色定位，并限制单页数量。",
+    "actual": "资源管理员页面显示10项资源，无检索/分页入口；manage直接把全量授权资源或全部用户传给模板。没有进行大数据量响应测试。",
+    "proof": [
+      "screenshots/manage-desktop.png",
+      "screenshots/manage-mobile.png",
+      "browser-command-004.log",
+      "core/views.py:302-304；templates/manage.html:1"
+    ],
+    "impact": "资源/用户增多后依赖浏览器查找或长列表滚动；不宣称当前已丢数据、越权或响应超时。",
+    "root_cause": "manage未复用其他列表的paginate，也没有对应查询参数和控件。",
+    "decision": "最小方案为增加编号/名称检索与必要筛选，用户和资源列表分别分页；保留原有实验室范围和角色权限。",
+    "acceptance": "在隔离环境分别构造超过一页用户/资源，核对筛选、翻页、返回条件保留，且管理员不能因此查看无权管理资源。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "优化建议",
+        "status": "待处理",
+        "evidence": "代码确认；资源管理员页面观察"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "优化建议",
+        "status": "待优化",
+        "evidence": "代码确认；资源管理员页面观察"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0076",
+    "title": "设备与场地占用列表截断后没有总量或后续查看提示",
+    "type": "优化建议",
+    "severity": "轻微",
+    "evidence": "代码确认",
+    "location": "core/views.py:146 resource_detail；templates/resource.html:1；core/miniapi.py:262 resource_detail；miniprogram/pages/resource/index.wxml:10",
+    "description": "网页仅返回按开始时间排序的15项有效占用，小程序接口仅返回30项未来占用；两端视图未说明截断、总量或如何继续浏览。服务端目标时段冲突检查另行执行，不能据此声称可重复确认。",
+    "status": "待优化",
+    "related": [
+      "AUD-0003"
+    ],
+    "module": "资源详情及小程序资源接口",
+    "roles": "学生、教师、实验室管理员",
+    "severity_reason": "影响对完整日程的理解；目标时段冲突校验仍独立存在，未发现因此重复确认。",
+    "trigger": "同一资源有16项以上有效占用，或31项以上未来占用。",
+    "steps": [
+      "在独立数据库为同一普通设备创建31段不重叠的未来预约，本轮使用31个不同模拟账号以遵守每人配额。",
+      "读取网页资源详情及小程序GET /api/mini/v1/resources/{id}/。",
+      "对照数据库条数、网页展示及接口schedule长度。"
+    ],
+    "expected": "这是信息完整性提示建议：可以限制预览数量，但应说明仅展示部分、总量/查询范围，并提供按日查看或继续浏览。",
+    "actual": "本地实测31条确认占用，网页显示15条，接口返回30条；网页该区域没有截断提示，接口没有schedule总量/分页字段。当前云端没有被填入31条测试记录。",
+    "proof": [
+      "占用列表边界验证.json",
+      "core/views.py:146；templates/resource.html:1",
+      "core/miniapi.py:262；miniprogram/pages/resource/index.wxml:10"
+    ],
+    "impact": "用户可能将预览误解为完整日程，选择未列出的已占用时段后才发现不可用；不影响服务端重叠检查本身。",
+    "root_cause": "查询固定切片15/30条，而响应和界面没有同口径的has_more、总量或范围说明。",
+    "decision": "保留轻量预览，增加数量和范围说明；按所选日期查询完整时段或分页，不必首先开发复杂日历组件。",
+    "acceptance": "以0、15、16、30、31条及跨日数据验证两端提示和继续查看路径；目标时段查询与提交冲突规则保持一致。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "优化建议",
+        "status": "待处理",
+        "evidence": "代码确认"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "优化建议",
+        "status": "待优化",
+        "evidence": "代码确认"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0077",
+    "title": "预约和维修过程时间线直接显示内部事件或状态代码",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "evidence": "代码确认＋本地实际模板片段渲染",
+    "location": "templates/work_detail.html:1（e.old_status/e.new_status）；templates/booking.html:1（ev.action）；core/models.py:302-309 WorkOrderEvent；core/services.py:430、457、477及core/coordination.py:139",
+    "description": "维修事件状态代码直接进入展示层；同类问题也出现于预约过程记录的ev.action。审计接口面向技术复核保留代码可以合理，本项关注普通业务时间线缺少中文含义。",
+    "status": "待整改",
+    "related": [],
+    "module": "预约详情、维修任务详情",
+    "roles": "申请人、实验室管理员、维修人员",
+    "severity_reason": "不阻止流程执行，但业务用户需理解内部代码才能读懂过程。",
+    "trigger": "存在带状态变化的维修事件，或有预约审计事件；无需正式身份服务。",
+    "steps": [
+      "在本地读取实际维修模板的事件循环。",
+      "以明确标注的模拟事件IN_PROGRESS→AWAITING_ACCEPTANCE渲染该片段。",
+      "对照预约模板对ev.action的直接展示。"
+    ],
+    "expected": "面向普通业务用户显示“处理中→待验收”等中文含义，必要时附技术代码；创建前空状态也应有明确表达。依据为项目统一中文业务术语和清楚反馈要求。",
+    "actual": "实际模板片段渲染保留IN_PROGRESS→AWAITING_ACCEPTANCE；预约模板直接显示事件代码。没有新建线上维修数据，也未宣称已经观察线上维修工单。",
+    "proof": [
+      "维修时间线模板验证.json",
+      "templates/work_detail.html:1；templates/booking.html:1"
+    ],
+    "impact": "工单交接、复核与过程解释需要额外人工说明；既有状态及审计事实未丢失。",
+    "root_cause": "模板直接绑定持久化代码字段，没有使用实体状态/事件展示映射。",
+    "decision": "统一业务时间线展示映射，保留原始存储和审计代码，不修改历史事实。",
+    "acceptance": "覆盖四种工单状态、创建空状态及预约创建、审批、取消、复核、交接事件，中文含义与实际状态一致。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "已确认缺陷",
+        "status": "待验证",
+        "evidence": "代码确认，待本地模板核对"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋本地实际模板片段渲染"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0078",
+    "title": "利用率报表未纳入单日开放例外",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "evidence": "代码确认＋隔离PostgreSQL实际运行验证",
+    "location": "core/reports.py:8-35 utilization；core/coordination.py:18-27 check_calendar、113起 calendar_exception",
+    "description": "预约检查读取CalendarException，报表仅遍历OpeningPeriod与ServicePeriod，搜索该计算函数未见单日例外合并逻辑。准备在独立数据库核对闭馆、缩短开放和额外开放三类分母，不使用线上数据。",
+    "status": "待整改",
+    "related": [
+      "AUD-0021",
+      "AUD-0034"
+    ],
+    "module": "利用率报表、开放日历",
+    "roles": "实验室管理员、实验教学中心主任、报表使用者",
+    "severity_reason": "一般：统计分母及由其裁剪的分子会错误，影响利用率比较；本轮未证明它会绕过预约阻断或导致实物安全事故。",
+    "trigger": "统计窗口内存在单日闭馆、缩短开放或在常规休息日额外开放，且资源处于正常服务区间。",
+    "steps": [
+      "在全新独立PostgreSQL中迁移并初始化模拟资源，正常周日历为08:00—20:00。",
+      "分别登记次日全天闭馆、另一日仅10:00—12:00开放、常规不开放日额外09:00—12:00开放。",
+      "将统计观察时钟at参数推进到相应日结束，调用utilization统计08:00—20:00；同时验证10:00—11:00的预约可用性。"
+    ],
+    "expected": "依据BR-34的有效开放可服务时数和BR-40的单日例外优先原则，三种分母分别应为0、2、3小时；为零时利用率应不适用。FR/UC/SPEC-24、AC-48需补充这一组合场景。",
+    "actual": "三例分别得到12、12、0小时，均不符合0、2、3小时；预约查询却分别正确执行闭馆/例外开放。场景使用本地模拟日期和推进的统计时钟，不是虚构学校已发生数据。",
+    "proof": [
+      "报表日历反例.json",
+      "本地隔离验证输出.log",
+      "core/reports.py:14-25；core/coordination.py:18-27、113-130"
+    ],
+    "impact": "闭馆或缩短开放可能虚增分母，额外开放可能被忽略；实际和计划时数使用同一windows，也会受窗口错误影响。尚未在云端填入此类反例，不宣称当前云端已有错误真实统计。",
+    "root_cause": "报表由OpeningPeriod与ServicePeriod构造窗口，没有与CalendarException组合；查询与统计形成两套日历解释。",
+    "decision": "抽取有效开放区间解析，单日例外覆盖周日历，再统一与资源正常服务、创建时间和统计区间求交；同步补齐UC-24/BR-40的交叉追踪及数值回归。",
+    "acceptance": "本轮三个反例变为0、2、3小时；另核对无例外、跨多日、零分母、服务限制与例外重叠、实际使用跨边界；分子分母同口径且原报表数值测试不回退。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "待验证风险",
+        "status": "调查中",
+        "evidence": "代码确认，等待隔离场景验证"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋隔离PostgreSQL实际运行验证"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0079",
+    "title": "八类现有业务通知缺少中文分类映射，统一显示业务进度",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "status": "待整改",
+    "related": [
+      "AUD-0040"
+    ],
+    "evidence": "代码确认＋本地调用实际分类过滤器",
+    "location": "core/templatetags/domain_labels.py:3-5；templates/notifications.html:1；调用位置逐条见通知类型字典核对.json",
+    "description": "ARRANGEMENT_IMPACT、COORDINATE、INCIDENT_RESPONSE、REASSIGN、RECALL、RECHECK、WORK_CREATED、WORK_PROGRESS这8类现有通知未进入LABELS映射，实际过滤器统一返回“业务进度”。",
+    "module": "消息中心通知分类",
+    "roles": "学生、教师、实验室管理员、维修人员",
+    "severity_reason": "轻微：通知正文仍存在，但不同业务类型的辅助分类失去区分。",
+    "trigger": "收到上述任意一种现有业务事件产生的通知。",
+    "steps": [
+      "扫描services与coordination中notify的常量通知类型，保留全部发现位置。",
+      "逐个调用当前business_label过滤器。",
+      "对照消息中心模板对n.kind的调用。"
+    ],
+    "expected": "已有明确业务含义的通知应分别显示安排变化、复核、召回、转派、维修创建/进展等中文分类；未知未来类型可保留通用回退。",
+    "actual": "8类均返回“业务进度”；通知正文没有因此丢失。本轮未制造线上通知或证明所有动态类型都已枚举。",
+    "proof": [
+      "通知类型字典核对.json",
+      "core/templatetags/domain_labels.py:3-5；templates/notifications.html:1"
+    ],
+    "impact": "消息列表中难以凭分类快速区分召回、待处理和普通进展；不等于通知投递失败。",
+    "root_cause": "新增领域事件后没有同步中文类别字典，也没有覆盖所有现有常量类型的映射检查。",
+    "decision": "补齐现有8类及已知动态类型映射，并增加现有事件类型覆盖检查；保留对真正未知类型的安全回退。",
+    "acceptance": "逐一验证8种类型的中文标签及全部已发现调用位置；通知正文、已读状态和投递逻辑保持不变。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码检查"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "已确认缺陷",
+        "status": "待整改",
+        "evidence": "代码确认＋本地调用实际分类过滤器"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0080",
+    "title": "消息中心将正式外部渠道也标为模拟外部",
+    "type": "应用适配缺口",
+    "severity": "轻微",
+    "status": "待正式模式适配",
+    "related": [
+      "AUD-0040"
+    ],
+    "evidence": "代码确认＋本地实际模板渠道分支渲染",
+    "location": "templates/notifications.html:1；core/services.py:39-46 notify、519-523投递分支",
+    "description": "消息中心仅区分IN_APP与其他，其他一律写为“模拟外部”；服务层已经区分MOCK_EXTERNAL和EXTERNAL。",
+    "module": "正式消息渠道接入的界面适配",
+    "roles": "所有接收通知的角色、运维人员",
+    "severity_reason": "轻微：当前DEMO_MODE=1实际使用模拟渠道，显示符合现状；切换正式模式后渠道名称将不准确。",
+    "trigger": "未来在独立正式配置中使用EXTERNAL并产生通知；当前云端演示不满足此触发条件。",
+    "steps": [
+      "以IN_APP、MOCK_EXTERNAL、EXTERNAL三个模拟值分别渲染实际消息模板的渠道分支。",
+      "核对services中非演示模式确实创建EXTERNAL。"
+    ],
+    "expected": "站内、模拟外部、正式外部渠道应分别命名，不将正式提供方收据误称模拟。依据为现有服务渠道契约。",
+    "actual": "实际模板分支对EXTERNAL与MOCK_EXTERNAL均输出“模拟外部”。当前演示不是因此无法通知，也未进行真实提供方联调。",
+    "proof": [
+      "渠道标签模板验证.json",
+      "templates/notifications.html:1；core/services.py:46、519-523"
+    ],
+    "impact": "切换真实渠道后界面与实际投递属性不一致，容易误判是否仍处于模拟状态。",
+    "root_cause": "模板两分支省略了正式外部渠道，未随服务渠道枚举一起展开。",
+    "decision": "按明确渠道值显示三类标签，对未知渠道显示可识别回退；纳入正式身份/消息接入前的界面检查。",
+    "acceptance": "三种渠道及未知渠道均显示正确含义；正式提供方成功与失败仍必须单独联调，本项模板检查不能替代该联调。",
+    "history": [
+      {
+        "stage": "发现时记录",
+        "type": "应用适配缺口",
+        "status": "待正式模式适配",
+        "evidence": "代码检查"
+      },
+      {
+        "stage": "本轮最终结论",
+        "type": "应用适配缺口",
+        "status": "待正式模式适配",
+        "evidence": "代码确认＋本地实际模板渠道分支渲染"
+      }
+    ]
+  }
+]

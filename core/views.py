@@ -21,10 +21,11 @@ from .forms import *
 from . import services as s
 from .reports import utilization
 from .demo_identity import verify_demo_password
+from .schedules import resource_schedule
 
-def paginate(request,queryset,size=30):
-    page=Paginator(queryset,size).get_page(request.GET.get('page',1))
-    query=request.GET.copy();query.pop('page',None)
+def paginate(request,queryset,size=30,*,page_param='page'):
+    page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
+    query=request.GET.copy();query.pop(page_param,None)
     return page,query.urlencode()
 
 
@@ -143,7 +144,11 @@ def resource_detail(request,pk):
             messages.success(request,"预约已保存："+b.get_status_display());return redirect("booking",pk=b.pk)
         except s.BusinessError as e:form.add_error(None,str(e))
         except IntegrityError:form.add_error(None,"时段或请求已被其他操作占用，请刷新后重试")
-    return render(request,"resource.html",{"title":r.name,"resource":r,"form":form,"can_apply":request.user.has_role("TEACHER") if r.kind=="ROOM" else request.user.has_role("STUDENT","TEACHER"),"manageable":s.manager(request.user,r),"reservations":r.reservations.filter(status__in=s.ACTIVE).order_by("starts_at")[:15]})
+    schedule_day=request.GET.get("schedule_day","");schedule_error=""
+    try:schedule=resource_schedule(r,schedule_day)
+    except ValueError as error:schedule=r.reservations.none();schedule_error=str(error)
+    schedule_page,schedule_filters=paginate(request,schedule,15,page_param="schedule_page")
+    return render(request,"resource.html",{"title":r.name,"resource":r,"form":form,"can_apply":request.user.has_role("TEACHER") if r.kind=="ROOM" else request.user.has_role("STUDENT","TEACHER"),"manageable":s.manager(request.user,r),"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error})
 
 @login_required
 def bookings(request):
@@ -301,7 +306,19 @@ def reports(request):
 @login_required
 def manage(request):
     protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN"))
-    return render(request,"manage.html",{"title":"资源与配置","resources":Resource.objects.filter(lab__labgrant__user=request.user).select_related("lab").order_by("code") if request.user.has_role("LAB_ADMIN") else [],"users":User.objects.prefetch_related("roles").all() if request.user.has_role("SYS_ADMIN") else [],"labs":Lab.objects.all(),"policy":Policy.objects.get(pk=1)})
+    resource_q=request.GET.get("resource_q","").strip();user_q=request.GET.get("user_q","").strip()
+    resource_lab=request.GET.get("resource_lab","");user_role=request.GET.get("user_role","")
+    resources=Resource.objects.filter(lab__labgrant__user=request.user).select_related("lab").distinct() if request.user.has_role("LAB_ADMIN") else Resource.objects.none()
+    users=User.objects.prefetch_related("roles").all() if request.user.has_role("SYS_ADMIN") else User.objects.none()
+    if resource_q:resources=resources.filter(Q(code__icontains=resource_q)|Q(name__icontains=resource_q))
+    if resource_lab:
+        if resource_lab.isascii() and resource_lab.isdecimal() and len(resource_lab)<=19 and 0<int(resource_lab)<=9223372036854775807:resources=resources.filter(lab_id=resource_lab)
+        else:resources=resources.none();messages.error(request,"请选择有效的实验室")
+    if user_q:users=users.filter(Q(username__icontains=user_q)|Q(school_no__icontains=user_q)|Q(display_name__icontains=user_q))
+    if user_role:users=users.filter(roles__code=user_role).distinct()
+    resource_page,resource_filters=paginate(request,resources.order_by("code","pk"),page_param="resources_page")
+    user_page,user_filters=paginate(request,users.order_by("school_no","pk"),page_param="users_page")
+    return render(request,"manage.html",{"title":"资源与配置","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
 
 @login_required
 def manage_form(request,action,pk=None):

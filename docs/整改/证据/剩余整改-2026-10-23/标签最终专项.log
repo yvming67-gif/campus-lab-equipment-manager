@@ -1,0 +1,49 @@
+Creating test database for alias 'default' ('test_reportfix_isolated')...
+
+Found 11 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, postgres, staticfiles
+  Apply all migrations: auth, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_audit_immutable... OK
+  Applying core.0003_alter_resource_service_status... OK
+  Applying core.0004_audit_business_extensions... OK
+  Applying sessions.0001_initial...test_business_timelines_translate_states_events_and_channels (core.followup_tests.FollowupTests.test_business_timelines_translate_states_events_and_channels) ... ok
+test_invalid_management_lab_identifiers_never_raise_server_errors (core.followup_tests.FollowupTests.test_invalid_management_lab_identifiers_never_raise_server_errors) ... ok
+test_last_representable_calendar_date_is_a_field_error_on_both_clients (core.followup_tests.FollowupTests.test_last_representable_calendar_date_is_a_field_error_on_both_clients) ... ok
+test_management_filters_never_expand_lab_grants (core.followup_tests.FollowupTests.test_management_filters_never_expand_lab_grants) ... ok
+test_mini_schedule_exposes_total_and_next_page_without_applicant (core.followup_tests.FollowupTests.test_mini_schedule_exposes_total_and_next_page_without_applicant) ... ok
+test_new_notification_kinds_have_specific_labels_at_every_known_constant_call (core.followup_tests.FollowupTests.test_new_notification_kinds_have_specific_labels_at_every_known_constant_call) ... ok
+test_resource_configuration_search_and_pagination (core.followup_tests.FollowupTests.test_resource_configuration_search_and_pagination) ... ok
+test_schedule_date_filter_agrees_between_clients_and_rejects_bad_date (core.followup_tests.FollowupTests.test_schedule_date_filter_agrees_between_clients_and_rejects_bad_date) ... ok
+test_students_cannot_access_management_and_lab_admin_cannot_list_users (core.followup_tests.FollowupTests.test_students_cannot_access_management_and_lab_admin_cannot_list_users) ... ok
+test_user_configuration_search_role_and_pagination (core.followup_tests.FollowupTests.test_user_configuration_search_role_and_pagination) ... ok
+test_web_schedule_exposes_total_and_all_pages_without_applicant (core.followup_tests.FollowupTests.test_web_schedule_exposes_total_and_all_pages_without_applicant) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.856s
+
+OK
+Destroying test database for alias 'default' ('test_reportfix_isolated')...
+
+ OK
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

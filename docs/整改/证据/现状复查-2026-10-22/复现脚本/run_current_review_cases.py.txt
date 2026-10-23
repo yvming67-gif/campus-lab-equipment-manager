@@ -1,0 +1,35 @@
+from pathlib import Path
+import os, subprocess, socket, secrets
+ROOT=Path(__file__).resolve().parents[2]
+APP=ROOT/'outputs/重制版-2026-10-18/campus-lab-equipment-manager'
+WORK=ROOT/'work/review20261022';WORK.mkdir(exist_ok=True)
+OUT=ROOT/'outputs/现状完善评估-2026-10-22-01211f9'
+PG=ROOT/'work/rebuild20261018/postgres/pgsql/bin'
+PY=ROOT/'work/cloud20261022/venv/Scripts/python.exe'
+DATA=WORK/'pgdata';assert not DATA.exists(),'Never replace an existing database'
+def run(args,env,log,timeout=100):
+    with (WORK/log).open('wb') as f:
+        result=subprocess.run([str(a) for a in args],cwd=APP,env=env,stdout=f,stderr=subprocess.STDOUT,
+                              creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0),timeout=timeout)
+    if result.returncode:
+        # Local logs contain only simulated test records; do not print environment or credentials.
+        print((WORK/log).read_text('utf-8',errors='replace')[-5000:],flush=True)
+        raise RuntimeError('Local review failed: '+log)
+env=os.environ.copy();password=secrets.token_urlsafe(24)
+with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
+pw=WORK/'init-password.tmp';pw.write_text(password,'utf-8')
+try:run([PG/'initdb.exe','-D',DATA,'-U','campus','--pwfile',pw,'-A','scram-sha-256','-E','UTF8','--no-locale'],env,'initdb.log')
+finally:pw.unlink(missing_ok=True)
+with (DATA/'postgresql.conf').open('a',encoding='utf-8') as f:f.write("\nlisten_addresses='127.0.0.1'\nport="+str(port)+'\n')
+env.update(PGHOST='127.0.0.1',PGPORT=str(port),PGUSER='campus',PGPASSWORD=password,PGDATABASE='review_isolated',
+           CAMPUS_USE_EXTERNAL_DATABASE='1',CAMPUS_LOCAL_DIR=str(WORK/'profile'),DJANGO_SETTINGS_MODULE='config.settings',
+           DEMO_MODE='1',ALLOWED_HOSTS='testserver,localhost,127.0.0.1',PYTHONUTF8='1',PYTHONIOENCODING='utf-8')
+run([PG/'pg_ctl.exe','-D',DATA,'-l',WORK/'postgres.log','-w','start'],env,'start.log')
+try:
+    run([PG/'createdb.exe','review_isolated'],env,'createdb.log')
+    run([PY,'-X','utf8',Path(__file__).resolve().parent/'current_review_cases.py'],env,'cases.log')
+    (OUT/'本地隔离验证输出.log').write_text((WORK/'cases.log').read_text('utf-8'),'utf-8')
+    print((WORK/'cases.log').read_text('utf-8')[-5000:],flush=True)
+finally:
+    run([PG/'pg_ctl.exe','-D',DATA,'-w','stop','-m','fast'],env,'stop.log')
+print('Owned local cluster stopped. No public database was contacted.',flush=True)

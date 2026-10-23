@@ -1,0 +1,2 @@
+Missing arguments for: click
+Usage: agent-browser click <selector> [--new-tab]

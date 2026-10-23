@@ -7,6 +7,17 @@
     <view class="section-label">填写使用信息</view><view class="card"><view class="field first"><text class="field-label">使用目的</text><view class="field-box"><textarea value="{{form.purpose}}" data-field="purpose" bindinput="input" placeholder="例如：传感器课程实验与数据采集" maxlength="1000" /></view></view><view class="field" wx:if="{{item.kind === 'ROOM'}}"><text class="field-label">参与人数</text><view class="field-box"><input type="number" value="{{form.participants}}" data-field="participants" bindinput="input" maxlength="5" /></view></view></view>
     <view class="notice" wx:if="{{item.requires_approval}}">本资源需人工审核。提交后可在“预约”中查看进度；待审核申请不占用时段。</view><view class="notice" wx:if="{{!item.requires_approval}}">普通设备通过资格、时段与配额检查后自动确认。</view>
     <button class="primary top-gap" bindtap="submit" loading="{{busy}}" disabled="{{busy || !item.can_apply || item.service_status !== 'NORMAL'}}">{{item.can_apply ? (item.requires_approval ? '提交预约申请' : '确认预约') : '仅教师可预约场地'}}</button>
-    <view class="section-label" wx:if="{{item.schedule.length}}">已确认的占用时段</view><view class="card" wx:if="{{item.schedule.length}}"><view class="time-row" wx:for="{{item.schedule}}" wx:for-item="slot" wx:key="starts_at">{{slot.time_label}}</view><view class="hint">仅显示时段，不公开他人的申请人或使用目的。</view></view>
+    <view class="section-label">已确认的占用时段</view>
+    <view class="card">
+      <picker mode="date" value="{{scheduleDay || form.date}}" bindchange="chooseScheduleDay"><view class="field-value">{{scheduleDay || '全部后续占用'}}　选择日期⌄</view></picker>
+      <button wx:if="{{scheduleDay}}" class="text-button" bindtap="clearScheduleDay">显示全部后续占用</button>
+      <view class="hint">共{{scheduleTotal}}项，已显示{{item.schedule.length}}项；使用中记录保留至实际结束。</view>
+      <view class="time-row" wx:for="{{item.schedule}}" wx:for-item="slot" wx:key="starts_at">{{slot.time_label}} · {{slot.status_label}}</view>
+      <view wx:if="{{scheduleError}}" class="error">{{scheduleError}}</view>
+      <view wx:if="{{scheduleBusy}}" class="loading">正在读取占用时段…</view>
+      <view wx:if="{{!scheduleBusy && !item.schedule.length}}" class="hint">所选范围暂无已确认占用。</view>
+      <button wx:if="{{scheduleHasMore}}" class="secondary" bindtap="moreSchedule" disabled="{{scheduleBusy || loading}}">继续查看占用时段</button>
+      <view class="hint">仅显示时段及状态，不公开他人的申请人或使用目的。</view>
+    </view>
   </view>
 </view>

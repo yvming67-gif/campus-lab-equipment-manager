@@ -1,0 +1,187 @@
+Creating test database for alias 'default' ('test_reportfix_isolated')...
+
+Found 4 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, postgres, staticfiles
+  Apply all migrations: auth, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_audit_immutable... OK
+  Applying core.0003_alter_resource_service_status... OK
+  Applying core.0004_audit_business_extensions... OK
+  Applying sessions.0001_initial...test_aud0078_closed_day_has_no_service_or_usage_hours (core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours) ... ERROR
+test_aud0078_shortened_day_clips_actual_and_planned_equally (core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally) ... ERROR
+test_aud0078_extra_opening_replaces_an_absent_weekly_period (core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period) ... FAIL
+test_aud0081_more_than_31_days_is_rejected_without_truncation (core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation) ... FAIL
+
+======================================================================
+ERROR: test_aud0078_closed_day_has_no_service_or_usage_hours (core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.NotNullViolation: null value in column "arrived_at" of relation "core_loan" violates not-null constraint
+DETAIL:  Failing row contains (1, FA6902CB4DE44C26, null, null, 2026-10-24 01:30:00+00, 2026-10-24 07:00:00+00, EQ-OSC-01, 模拟完好, 4, 1).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 70, in test_aud0078_closed_day_has_no_service_or_usage_hours
+    self.loan(returned_at=self.moment(11, 30))
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 57, in loan
+    loan = Loan.objects.create(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\query.py", line 665, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\query.py", line 1873, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: null value in column "arrived_at" of relation "core_loan" violates not-null constraint
+DETAIL:  Failing row contains (1, FA6902CB4DE44C26, null, null, 2026-10-24 01:30:00+00, 2026-10-24 07:00:00+00, EQ-OSC-01, 模拟完好, 4, 1).
+
+======================================================================
+ERROR: test_aud0078_shortened_day_clips_actual_and_planned_equally (core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.NotNullViolation: null value in column "arrived_at" of relation "core_loan" violates not-null constraint
+DETAIL:  Failing row contains (2, 162C32B256FB479F, null, null, 2026-10-24 01:30:00+00, 2026-10-24 07:00:00+00, EQ-OSC-01, 模拟完好, 4, 2).
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 78, in test_aud0078_shortened_day_clips_actual_and_planned_equally
+    self.loan(returned_at=self.moment(11, 30))
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 57, in loan
+    loan = Loan.objects.create(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\query.py", line 665, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\query.py", line 1873, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\work\cloud20261022\venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
+    raise ex.with_traceback(None)
+django.db.utils.IntegrityError: null value in column "arrived_at" of relation "core_loan" violates not-null constraint
+DETAIL:  Failing row contains (2, 162C32B256FB479F, null, null, 2026-10-24 01:30:00+00, 2026-10-24 07:00:00+00, EQ-OSC-01, 模拟完好, 4, 2).
+
+======================================================================
+FAIL: test_aud0078_extra_opening_replaces_an_absent_weekly_period (core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 87, in test_aud0078_extra_opening_replaces_an_absent_weekly_period
+    self.assertEqual(self.report()["capacity"], 3)
+AssertionError: 0.0 != 3
+
+======================================================================
+FAIL: test_aud0081_more_than_31_days_is_rejected_without_truncation (core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 158, in test_aud0081_more_than_31_days_is_rejected_without_truncation
+    with self.assertRaisesMessage(s.BusinessError, "31天"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py", line 144, in __exit__
+    next(self.gen)
+AssertionError: BusinessError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.294s
+
+FAILED (failures=2, errors=2)
+Destroying test database for alias 'default' ('test_reportfix_isolated')...
+
+ OK
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

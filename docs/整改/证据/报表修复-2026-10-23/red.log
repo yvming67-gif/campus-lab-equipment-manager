@@ -1,0 +1,91 @@
+Creating test database for alias 'default' ('test_reportfix_isolated')...
+
+Found 4 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, postgres, staticfiles
+  Apply all migrations: auth, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_audit_immutable... OK
+  Applying core.0003_alter_resource_service_status... OK
+  Applying core.0004_audit_business_extensions... OK
+  Applying sessions.0001_initial...test_aud0078_closed_day_has_no_service_or_usage_hours (core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours) ... FAIL
+test_aud0078_shortened_day_clips_actual_and_planned_equally (core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally) ... FAIL
+test_aud0078_extra_opening_replaces_an_absent_weekly_period (core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period) ... FAIL
+test_aud0081_more_than_31_days_is_rejected_without_truncation (core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation) ... FAIL
+
+======================================================================
+FAIL: test_aud0078_closed_day_has_no_service_or_usage_hours (core.report_tests.CalendarReportTests.test_aud0078_closed_day_has_no_service_or_usage_hours)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 74, in test_aud0078_closed_day_has_no_service_or_usage_hours
+    self.assertEqual((row["capacity"], row["booked"], row["actual"]), (0, 0, 0))
+AssertionError: Tuples differ: (12.0, 6.0, 2.0) != (0, 0, 0)
+
+First differing element 0:
+12.0
+0
+
+- (12.0, 6.0, 2.0)
++ (0, 0, 0)
+
+======================================================================
+FAIL: test_aud0078_shortened_day_clips_actual_and_planned_equally (core.report_tests.CalendarReportTests.test_aud0078_shortened_day_clips_actual_and_planned_equally)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 82, in test_aud0078_shortened_day_clips_actual_and_planned_equally
+    self.assertEqual((row["capacity"], row["booked"], row["actual"], row["rate"]), (2, 2, 1.5, 75))
+AssertionError: Tuples differ: (12.0, 6.0, 2.0, 16.7) != (2, 2, 1.5, 75)
+
+First differing element 0:
+12.0
+2
+
+- (12.0, 6.0, 2.0, 16.7)
++ (2, 2, 1.5, 75)
+
+======================================================================
+FAIL: test_aud0078_extra_opening_replaces_an_absent_weekly_period (core.report_tests.CalendarReportTests.test_aud0078_extra_opening_replaces_an_absent_weekly_period)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 88, in test_aud0078_extra_opening_replaces_an_absent_weekly_period
+    self.assertEqual(self.report()["capacity"], 3)
+AssertionError: 0.0 != 3
+
+======================================================================
+FAIL: test_aud0081_more_than_31_days_is_rejected_without_truncation (core.report_tests.CalendarReportTests.test_aud0081_more_than_31_days_is_rejected_without_truncation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\core\report_tests.py", line 159, in test_aud0081_more_than_31_days_is_rejected_without_truncation
+    with self.assertRaisesMessage(s.BusinessError, "31天"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\contextlib.py", line 144, in __exit__
+    next(self.gen)
+AssertionError: BusinessError not raised
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.208s
+
+FAILED (failures=4)
+Destroying test database for alias 'default' ('test_reportfix_isolated')...
+
+ OK
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

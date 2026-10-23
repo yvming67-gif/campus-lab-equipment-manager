@@ -10,7 +10,7 @@
 
 蓝图使用Render免费网页计算、Neon PostgreSQL 17与私有附件存储。先按说明创建Neon项目，再将连接信息直接填入Render控制台。服务密钥自动生成，不将凭据提交仓库。当前公开演示地址为 https://campus-lab-equipment-manager.onrender.com/ ，实际验证范围见[云端验收报告](docs/云端实际验收报告.md)。
 
-免费服务会休眠，首次唤醒需要等待；休眠时后台任务暂停、恢复后补扫。云端联合备份恢复尚需单独演练，不能引用本地恢复证据替代。公开演示账号只用于共享模拟数据，详细边界见部署说明。
+免费服务会休眠，首次唤醒需要等待；休眠时后台任务暂停、恢复后补扫。已有[云端联合归档与恢复工具](docs/云端备份与恢复.md)，真实Neon数据库和私有桶的联合恢复仍待单独演练，不能引用本地恢复证据替代。公开演示账号只用于共享模拟数据，详细边界见部署说明。
 
 当前采用仅使用免费额度、耗尽后接受暂停或操作受限的策略，不自动升级付费。额度与账单核实边界见[免费额度与停用策略](docs/云端免费额度与停用策略.md)，验收证据的只读复核见[云端独立复核](docs/云端实际独立复核报告.md)。
 
@@ -81,11 +81,13 @@ Python 3.13、Django 5.2.18、psycopg 3.3.6、PostgreSQL 17.11；Django模板和
 
 ## 业务分析与验证范围
 
-当前分析基线2.3区分题设、课程约定、业务假设、公开资料和实现证据；设备、场地、异常维修及利用信息分别建立现状与改进实现，所有系统用例都有结构化规约。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。
+当前分析基线2.3区分题设、课程约定、业务假设、公开资料和实现证据；设备、场地、异常维修及利用信息分别建立现状与改进实现，所有系统用例都有结构化规约。根据教学材料补充了需求获取方法比较、涉众利益取舍、步骤数据与规则契约，以及分析类、内部协作和状态模型；[课程规范完善与验证范围](docs/课程规范完善/README.md)说明具体采用方法。
 
 [业务分析材料与完整追踪](docs/逻辑整改/README.md)记录来源、职责迁移、状态和证据覆盖边界。2.2批次完整后端162项通过，修复了维修改派后原执行人仍可自验收，以及原开始后复核误计未来配额的问题；原始失败与回归证据保留。历史154项及既有24项客户端、11项启动和8项独立场景记录保留批次与环境，不能把不同运行合并为同一次验收。
 
-支持风险变化后追加复核、前序延误到场协调、固定设备场地依赖、单日闭馆例外、维修改派及损坏异议；默认日间教学短借。真实学校身份、消息提供方、微信容器/真机及正式HTTPS部署仍需验收，不能把配置入口当作上线证明。
+支持风险变化后追加复核、前序延误到场协调、固定设备场地依赖、单日闭馆例外、维修改派及损坏异议；默认日间教学短借。真实学校身份、消息提供方及微信容器/真机仍待外部验收；共享演示HTTPS已完成的范围见[云端实际验收报告](docs/云端实际验收报告.md)，不据此宣称校园生产上线。
+
+2026年10月23日剩余整改：后端192项通过（含非文件存储联合归档恢复3项），客户端30项通过，7页原生模板编译通过；本地模拟证据和外部待验范围见[本次整改记录](docs/整改/剩余整改-2026-10-23.md)。
 
 ## 数据模型图
 
@@ -104,14 +106,10 @@ python manage.py check
 python manage.py migrate
 python manage.py seed_demo
 python manage.py prepare_demo
-python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests core.logic_alignment_tests --noinput
+python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests core.logic_alignment_tests core.report_tests core.followup_tests core.backup_tests --noinput
 python manage.py test core.benchmark_tests --noinput
 python tools/export_model.py
 python tools/validate_registry.py
-python tools/validate_analysis_models.py
-python tools/validate_analysis_models.py
-python tools/validate_analysis_models.py
-python tools/validate_analysis_models.py
 python tools/validate_analysis_models.py
 python tools/backup_restore.py --restore-test
 ```

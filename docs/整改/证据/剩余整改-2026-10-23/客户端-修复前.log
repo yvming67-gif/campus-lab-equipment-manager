@@ -1,0 +1,91 @@
+✔ AUD-0017 older notification reads cannot overwrite a newer result (7.2015ms)
+✔ AUD-0018 changing dates invalidates an outstanding availability response (1.1302ms)
+✔ AUD-0036 offline logout clears local credentials and reaches address settings (1.7434ms)
+✔ all seven native pages and lifecycle entry files exist (3.9785ms)
+✔ WXML event bindings point to actual controller methods (2.4219ms)
+✔ protected calls require an authenticated session (1.3933ms)
+✔ expired local session is removed (0.3747ms)
+✔ only HTTPS or loopback HTTP service addresses are accepted (0.8866ms)
+✔ changing service clears credentials and drafts (0.4244ms)
+✔ bearer token is sent in headers, never in the request URL (0.4417ms)
+✔ unauthorized server response clears session and redirects (0.476ms)
+✔ business rejection keeps the authenticated session (0.4067ms)
+✔ unknown HTML response is a visible service error (0.3708ms)
+✔ network failure retains stable idempotency key on retry (0.7316ms)
+✔ changed submission gets a new key and success removes draft (0.5093ms)
+✔ unauthenticated submit cannot create a draft or issue a request (0.3815ms)
+✔ field validation errors expose Chinese labels and causes (0.3724ms)
+✔ resource draft restores the same form after interrupted submission (0.7926ms)
+✔ double tap does not duplicate an in-flight login (1.047ms)
+✔ student cannot trigger a room reservation from the page controller (0.7939ms)
+✔ cancellation transmits the displayed optimistic version (0.7885ms)
+✔ marking one notification updates only that row and unread count (0.717ms)
+✔ failed remote logout still clears the local session (0.3759ms)
+✔ China date formatting is independent of the computer timezone (0.5985ms)
+✔ occupancy next page appends without changing the reservation form (0.8047ms)
+✔ date switch invalidates an older occupancy response (0.7433ms)
+✔ failed occupancy load keeps the previous page and supports retry (0.7825ms)
+✖ AUD-0086 returning to resource page releases pagination: fresh-first (1.692ms)
+✖ AUD-0086 returning to resource page releases pagination: old-first (0.7453ms)
+✖ AUD-0086 failed return reload also releases older pagination ownership (0.8203ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 27
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 147.5387
+
+✖ failing tests:
+
+test at tools\mini-check\client.test.cjs:161:50
+✖ AUD-0086 returning to resource page releases pagination: fresh-first (1.692ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:168:46)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tools\mini-check\client.test.cjs:161:50
+✖ AUD-0086 returning to resource page releases pagination: old-first (0.7453ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:168:46)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tools\mini-check\client.test.cjs:173:1
+✖ AUD-0086 failed return reload also releases older pagination ownership (0.8203ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (C:\Users\admin\Documents\Codex\2026-10-09\1602240221-1402-1-2-3-4\outputs\重制版-2026-10-18\campus-lab-equipment-manager\tools\mini-check\client.test.cjs:178:10)
+      at async Test.run (node:internal/test_runner/test:1313:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:897:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,8 @@
+{
+  "method": "实际模板维修事件片段，以模拟事件渲染；未访问线上工单",
+  "source": "templates/work_detail.html:1",
+  "old": "IN_PROGRESS",
+  "new": "AWAITING_ACCEPTANCE",
+  "rendered": "<li><span>10-22 18:10:57 · 模拟维修人员</span><b>模拟提交维修结果</b><small>IN_PROGRESS → AWAITING_ACCEPTANCE</small></li>",
+  "raw_codes_visible": true
+}

@@ -1,0 +1,16 @@
+{
+  "mode": "green",
+  "exit_code": 0,
+  "expected_failure": false,
+  "scope": "全新本地PostgreSQL和模拟数据；没有连接Render/Neon或修改现有数据",
+  "labels": [
+    "core.tests",
+    "core.miniapi_tests",
+    "core.remediation_tests",
+    "core.operations_tests",
+    "core.independent_tests",
+    "core.logic_alignment_tests",
+    "core.report_tests"
+  ],
+  "log": "green.log"
+}
