@@ -3923,6 +3923,491 @@
         "status": "已复验关闭",
         "scope": "源码、单元回归、编译及新版界面反馈；非全部真机流程",
         "evidence": "37项客户端及7页模板通过，用户确认新版界面；后续连接失败独立保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "补充遗漏文档实例",
+        "evidence": "README旧导入说明仍要求用户填写后端地址；已修正固定config.js说明并更新自有账号注册进度。原接口安全修正未回退。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0088",
+    "title": "资源翻页混合尚未应用的时段与检索条件",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "不同查询的资源集合与可用性被混合，用户可能误判目标时段；提交校验仍有效，未观察到并发约束失效。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "原生小程序",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "miniprogram/controllers.js:52（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "先成功查询一页，再编辑时段或关键词而不查询，点击加载更多；旧实现保留原页并按编辑中的条件请求下一页，结果标签和详情携带时段随之错误。",
+    "trigger": "先成功查询一页，再编辑时段或关键词而不查询，点击加载更多；旧实现保留原页并按编辑中的条件请求下一页，结果标签和详情携带时段随之错误。",
+    "steps": [
+      "先成功查询一页，再编辑时段或关键词而不查询，点击加载更多；旧实现保留原页并按编辑中的条件请求下一页，结果标签和详情携带时段随之错误。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "不同查询的资源集合与可用性被混合，用户可能误判目标时段；提交校验仍有效，未观察到并发约束失效。",
+    "root_cause": "分页直接读取当前编辑状态，未比较已成功应用查询的签名。",
+    "decision": "保存成功查询签名，条件改变后将分页请求归为新查询第一页；仅最新响应可更新列表、时段标签和详情参数。",
+    "acceptance": "Node: editing time or search before loading more replaces results instead of mixing queries；独立6场景中的条件变化、同条件追加与倒序响应。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "Node: editing time or search before loading more replaces results instead of mixing queries；独立6场景中的条件变化、同条件追加与倒序响应。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-01",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "Node: editing time or search before loading more replaces results instead of mixing queries；独立6场景中的条件变化、同条件追加与倒序响应。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0089",
+    "title": "管理员个人预约入口跳转到全授权集合",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "个人计数与列表不一致；未超出现有授权，但容易误认他人预约为本人记录。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "templates/dashboard.html:5（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "管理员或多角色用户点击“我的待审核”“我的已确认”“我的使用中”或“接下来要使用”中的“我的记录”；原链接只按状态或不筛选，进入全体有权记录。",
+    "trigger": "管理员或多角色用户点击“我的待审核”“我的已确认”“我的使用中”或“接下来要使用”中的“我的记录”；原链接只按状态或不筛选，进入全体有权记录。",
+    "steps": [
+      "管理员或多角色用户点击“我的待审核”“我的已确认”“我的使用中”或“接下来要使用”中的“我的记录”；原链接只按状态或不筛选，进入全体有权记录。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "个人计数与列表不一致；未超出现有授权，但容易误认他人预约为本人记录。",
+    "root_cause": "个人卡片计数与列表采用不同对象范围。",
+    "decision": "4个入口统一scope=mine；后端在既有权限集合内再次限定applicant=request.user，筛选表单及分页保留scope。",
+    "acceptance": "ProductTests.test_personal_cards_filter_to_self_for_multi_role_manager；独立静态复核全部4个入口。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "ProductTests.test_personal_cards_filter_to_self_for_multi_role_manager；独立静态复核全部4个入口。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-02",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "ProductTests.test_personal_cards_filter_to_self_for_multi_role_manager；独立静态复核全部4个入口。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0090",
+    "title": "微信缺失缓存键返回空串时重置预约状态筛选",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "severity_reason": "已选筛选反复被重置；普通Node假实现缺键返回undefined曾掩盖此边界。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "原生小程序",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "miniprogram/controllers.js:138（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "没有临时跳转筛选缓存，在预约列表选择状态后离开再进入；实际微信getStorageSync缺键返回空字符串，原字符串类型判断将其当作“全部状态”指令。",
+    "trigger": "没有临时跳转筛选缓存，在预约列表选择状态后离开再进入；实际微信getStorageSync缺键返回空字符串，原字符串类型判断将其当作“全部状态”指令。",
+    "steps": [
+      "没有临时跳转筛选缓存，在预约列表选择状态后离开再进入；实际微信getStorageSync缺键返回空字符串，原字符串类型判断将其当作“全部状态”指令。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "已选筛选反复被重置；普通Node假实现缺键返回undefined曾掩盖此边界。",
+    "root_cause": "使用空字符串作为有无临时指令的判断，无法区别合法“全部”与无数据。",
+    "decision": "临时指令改为对象{status}，只消费符合结构的对象，读取后删除；缺键不改变已选状态。",
+    "acceptance": "Node: native absent storage value does not reset a manually selected booking filter；独立真实空串语义场景。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "Node: native absent storage value does not reset a manually selected booking filter；独立真实空串语义场景。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-03",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "Node: native absent storage value does not reset a manually selected booking filter；独立真实空串语义场景。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0091",
+    "title": "维修状态筛选隐藏本人待验收任务",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "无法跟进本人提交的结果，虽不影响后台独立验收限制。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "core/views.py:275（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "维修人员提交工单后打开普通“待验收”状态列表；原筛选无条件排除assigned_to=当前用户，导致自己的待验收记录消失。",
+    "trigger": "维修人员提交工单后打开普通“待验收”状态列表；原筛选无条件排除assigned_to=当前用户，导致自己的待验收记录消失。",
+    "steps": [
+      "维修人员提交工单后打开普通“待验收”状态列表；原筛选无条件排除assigned_to=当前用户，导致自己的待验收记录消失。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "无法跟进本人提交的结果，虽不影响后台独立验收限制。",
+    "root_cause": "把“可由我办理验收”的限制错误用于“有权查看此状态”的普通列表。",
+    "decision": "普通状态列表保留本人任务；只有明确acceptance办理队列排除本人和其他不满足独立条件的任务。",
+    "acceptance": "ProductTests.test_technician_sees_submitted_work_but_cannot_accept_it；独立后端反例。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "ProductTests.test_technician_sees_submitted_work_but_cannot_accept_it；独立后端反例。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-04",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "ProductTests.test_technician_sees_submitted_work_but_cannot_accept_it；独立后端反例。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0092",
+    "title": "本人申请进入本人不可办理的复核队列",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "待办数量包含本人无法处理事项，影响责任分配与承诺跟进。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "core/workbench.py:36（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "同时拥有教师和实验室管理员角色，自己的已确认预约变为待复核；原队列计入本人，而事务服务禁止本人办理独立复核。",
+    "trigger": "同时拥有教师和实验室管理员角色，自己的已确认预约变为待复核；原队列计入本人，而事务服务禁止本人办理独立复核。",
+    "steps": [
+      "同时拥有教师和实验室管理员角色，自己的已确认预约变为待复核；原队列计入本人，而事务服务禁止本人办理独立复核。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "待办数量包含本人无法处理事项，影响责任分配与承诺跟进。",
+    "root_cause": "待复核队列未像审核队列排除本人申请。",
+    "decision": "待办计数与列表同时排除本人申请，普通本人记录保留，仍可联系另一授权管理员处理。",
+    "acceptance": "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-05",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0093",
+    "title": "异常待办卡片与列表的实验室范围不一致",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "卡片数与办理列表不一致，可能把只可查看的记录误认为可核实任务；未绕过服务层权限。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "core/views.py:218（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "多角色管理员在非本人管理实验室报告或参与异常，点击“异常待核实”；原计数只含管理范围，跳转列表还含本人报告/借用/被指派的跨范围记录。",
+    "trigger": "多角色管理员在非本人管理实验室报告或参与异常，点击“异常待核实”；原计数只含管理范围，跳转列表还含本人报告/借用/被指派的跨范围记录。",
+    "steps": [
+      "多角色管理员在非本人管理实验室报告或参与异常，点击“异常待核实”；原计数只含管理范围，跳转列表还含本人报告/借用/被指派的跨范围记录。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "卡片数与办理列表不一致，可能把只可查看的记录误认为可核实任务；未绕过服务层权限。",
+    "root_cause": "复用了面向全部可见异常的列表却未传递办理范围。",
+    "decision": "增加明确managed队列参数，服务端验证管理员后限制授权实验室；普通异常列表继续保留本人相关记录。",
+    "acceptance": "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-06",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0094",
+    "title": "异常和验收办理队列没有可见范围及退出入口",
+    "type": "优化建议",
+    "severity": "轻微",
+    "severity_reason": "用户难以解释列表数量变化；属于清晰度改进，不认定为越权缺陷。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "templates/work.html:1（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "从工作台进入异常或维修验收队列，原页面只显示状态标签，不解释额外办理范围；切换标签时范围还可能静默改变。",
+    "trigger": "从工作台进入异常或维修验收队列，原页面只显示状态标签，不解释额外办理范围；切换标签时范围还可能静默改变。",
+    "steps": [
+      "从工作台进入异常或维修验收队列，原页面只显示状态标签，不解释额外办理范围；切换标签时范围还可能静默改变。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "用户难以解释列表数量变化；属于清晰度改进，不认定为越权缺陷。",
+    "root_cause": "新增队列参数未被页面显式表达。",
+    "decision": "增加范围提示和退出链接；异常切换状态保留管理范围；验收队列隐藏与固定待验收条件矛盾的普通状态标签。",
+    "acceptance": "独立PRV-07最终静态复核；本地主agent网页检查。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "独立PRV-07最终静态复核；本地主agent网页检查。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-07",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "独立PRV-07最终静态复核；本地主agent网页检查。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0095",
+    "title": "同名培训资格可能使用重复的原生列表键",
+    "type": "待验证风险",
+    "severity": "轻微",
+    "severity_reason": "可能产生微信列表行复用或渲染告警；未在真实微信容器复现，不能声称已观察到显示错误。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "原生小程序",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "miniprogram/pages/profile/index.wxml:1（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "业务允许不同编号的培训类型使用相同名称；原/me/只返回名称，资格列表使用name作为key。",
+    "trigger": "业务允许不同编号的培训类型使用相同名称；原/me/只返回名称，资格列表使用name作为key。",
+    "steps": [
+      "业务允许不同编号的培训类型使用相同名称；原/me/只返回名称，资格列表使用name作为key。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始问题已由独立审查记录；当前修正见整改决定和验证证据。重复key项只确认数据与键不匹配风险，未声称真机故障。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "可能产生微信列表行复用或渲染告警；未在真实微信容器复现，不能声称已观察到显示错误。",
+    "root_cause": "把非唯一显示名用作唯一渲染标识。",
+    "decision": "API兼容增加qualification.code，前端使用唯一code作为key，保留原name字段。",
+    "acceptance": "独立后端同名异编号资格场景通过，WXML code键静态确认，7页编译通过；本轮真机未执行。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "独立后端同名异编号资格场景通过，WXML code键静态确认，7页编译通过；本轮真机未执行。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-08",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "独立后端同名异编号资格场景通过，WXML code键静态确认，7页编译通过；本轮真机未执行。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0096",
+    "title": "历史维修参与者仍被列入可独立验收队列",
+    "type": "已确认缺陷",
+    "severity": "一般",
+    "severity_reason": "办理队列出现服务层必拒绝的任务；原accept_work仍阻止历史执行者自验收，无越权成功证据。",
+    "evidence": "代码确认＋本地自动验证；具体原生运行限制按本条说明",
+    "module": "网页工作台/管理队列",
+    "roles": "学生、教师、实验室管理员、维修人员；具体适用角色见触发条件",
+    "location": "core/workbench.py:8（最终位置；初始发现位置和判断保留于独立审查记录）",
+    "description": "多角色管理员曾对工单执行START/PROGRESS/SUBMIT，之后改派其他维修人员并待验收；原队列只排除当前负责人，仍把历史实际维修者列为可验收。",
+    "trigger": "多角色管理员曾对工单执行START/PROGRESS/SUBMIT，之后改派其他维修人员并待验收；原队列只排除当前负责人，仍把历史实际维修者列为可验收。",
+    "steps": [
+      "多角色管理员曾对工单执行START/PROGRESS/SUBMIT，之后改派其他维修人员并待验收；原队列只排除当前负责人，仍把历史实际维修者列为可验收。",
+      "按整改决定重试同一场景，并核对计数、记录范围或请求参数。"
+    ],
+    "expected": "按照既有角色、记录归属、独立办理与列表一致性规则；纯优化建议以本轮明确的产品清晰度目标为依据。",
+    "actual": "初始代码行为与问题描述一致；当前已按整改决定修正并在限定范围验证。",
+    "proof": [
+      "docs/产品优化/独立审查记录.md",
+      "docs/产品优化/验证与独立复核.md",
+      "core/product_tests.py",
+      "tools/mini-check/client.test.cjs"
+    ],
+    "impact": "办理队列出现服务层必拒绝的任务；原accept_work仍阻止历史执行者自验收，无越权成功证据。",
+    "root_cause": "待办筛选只核对当前assigned_to，未复用历史维修参与限制。",
+    "decision": "统一acceptance_queue供计数与列表使用，以审计子查询排除历史实际维修者；普通状态浏览不排除。",
+    "acceptance": "ProductTests.test_former_repair_performer_is_not_in_independent_acceptance_queue；独立后端历史参与者边界。",
+    "status": "已复验关闭",
+    "related": [],
+    "tests": [
+      "ProductTests.test_former_repair_performer_is_not_in_independent_acceptance_queue；独立后端历史参与者边界。"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "发现并登记",
+        "review_id": "PRV-09",
+        "evidence": "建设后独立子agent发现，初始判断保留。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "本地代码、独立后端/控制器或模板验证；不等同本轮真机或生产验收",
+        "evidence": "ProductTests.test_former_repair_performer_is_not_in_independent_acceptance_queue；独立后端历史参与者边界。"
+      }
+    ]
+  },
+  {
+    "id": "AUD-0097",
+    "title": "逻辑问题记录有AUD-0087详情但缺少当前索引行",
+    "type": "已确认缺陷",
+    "severity": "轻微",
+    "severity_reason": "不影响软件执行，但问题索引不完整，影响按编号复核与统计一致性。",
+    "evidence": "文档确认；基线60c59e4的Markdown索引缺87，JSON及详情均存在。",
+    "module": "整改文档与索引",
+    "roles": "文档阅读者、维护人员",
+    "location": "docs/逻辑整改/逻辑整改问题记录.md 当前编号表；基线60c59e4，可与该文件AUD-0087详情及JSON对照",
+    "description": "逐项核对时发现原逻辑台账第一张当前索引表只到AUD-0086，后方已有AUD-0087详情；完整总台账及JSON含87。历史补充段落重复引用同一AUD编号属于历史记录，不删除或当作新增问题重复计数。",
+    "trigger": "按当前索引检索AUD-0087或核对索引、JSON与详情的编号集合。",
+    "steps": [
+      "查看60c59e4的逻辑问题记录第一张编号表。",
+      "对照后方AUD-0087详情、逻辑JSON和完整总台账。"
+    ],
+    "expected": "当前索引、对应JSON和逐条详情使用相同唯一编号集合，历史引用仍保留。",
+    "actual": "索引遗漏已补；本轮最终总台账97个唯一编号，逻辑子集0049—0097共49个，历史补充段落保留且不重复计数。",
+    "proof": [
+      "docs/逻辑整改/逻辑整改问题记录.md",
+      "docs/逻辑整改/逻辑整改问题记录.json",
+      "docs/整改/issues.json",
+      "docs/产品优化/验证与独立复核.md"
+    ],
+    "impact": "仅凭索引会漏读地址配置修正及真机证据边界。",
+    "root_cause": "此前增量添加详情时遗漏第一张索引表，文档索引与JSON分别维护。",
+    "decision": "从同一JSON重建两份文档第一张当前编号表，保留其他历史表和补充段落；逐项核对唯一详情编号、当前索引和统计。",
+    "acceptance": "完整索引=JSON=唯一详情集合0001—0097；逻辑索引=子集JSON=唯一详情集合0049—0097；状态分类合计97。",
+    "status": "已复验关闭",
+    "related": [
+      "AUD-0087"
+    ],
+    "tests": [
+      "最终编号集合与统计一致性断言"
+    ],
+    "history": [
+      {
+        "date": "2026-10-24",
+        "status": "已确认",
+        "evidence": "主agent交付编号核对发现，非独立子agent9项之一。"
+      },
+      {
+        "date": "2026-10-24",
+        "status": "已复验关闭",
+        "scope": "文档编号与统计一致性"
       }
     ]
   }

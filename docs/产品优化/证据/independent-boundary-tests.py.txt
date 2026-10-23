@@ -1,0 +1,38 @@
+# Independent extra boundary cases, mock data only.
+from django.test import TestCase
+from django.core.management import call_command
+from django.contrib.sessions.backends.db import SessionStore
+from django.utils import timezone
+from datetime import timedelta
+from core.models import User, Resource, Role, UserRole, QualificationType, UserQualification, Incident, WorkOrder
+from core import services as s
+
+class IndependentBoundaryTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):call_command('seed_demo',verbosity=0)
+
+    def test_duplicate_qualification_names_have_unique_api_keys(self):
+        user=User.objects.get(username='student')
+        for code,revoked in [('INDEP-Q-A',False),('INDEP-Q-B',True)]:
+            q=QualificationType.objects.create(code=code,name='同名模拟培训')
+            UserQualification.objects.create(user=user,qualification=q,expires_at=timezone.now()+timedelta(days=30),revoked=revoked)
+        session=SessionStore();session.update({'channel':'campus-mini-v1','mini_user_id':user.pk});session.set_expiry(7200);session.create()
+        response=self.client.get('/api/mini/v1/me/',HTTP_AUTHORIZATION='Bearer '+session.session_key)
+        data=[q for q in response.json()['data']['qualifications'] if q['name']=='同名模拟培训']
+        self.assertEqual({q['code'] for q in data},{'INDEP-Q-A','INDEP-Q-B'})
+        self.assertEqual({q['valid'] for q in data},{True,False})
+
+    def test_previous_repair_worker_can_view_but_is_not_eligible_to_accept(self):
+        admin=User.objects.get(username='admin');tech=User.objects.get(username='tech');student=User.objects.get(username='student')
+        UserRole.objects.get_or_create(user=admin,role=Role.objects.get(code='TECHNICIAN'))
+        resource=Resource.objects.get(code='EQ-OSC-01')
+        incident=Incident.objects.create(resource=resource,reporter=student,kind='FAULT',description='独立验证模拟异常',occurred_at=timezone.now())
+        work=WorkOrder.objects.create(incident=incident,created_by=admin,assigned_to=tech,status='AWAITING_ACCEPTANCE')
+        s.audit(admin,work,'PROGRESS',old={'status':'IN_PROGRESS'},new={'status':'IN_PROGRESS'},reason='原维修参与事实')
+        self.client.force_login(admin)
+        self.assertContains(self.client.get('/work/',{'status':'AWAITING_ACCEPTANCE'}),work.code)
+        self.assertNotContains(self.client.get('/work/',{'queue':'acceptance'}),work.code)
+        tasks=self.client.get('/').context['tasks']
+        self.assertEqual(next(t['count'] for t in tasks if t['name']=='维修待验收'),0)
+        with self.assertRaisesMessage(s.BusinessError,'曾参与本工单维修'):
+            s.accept_work(admin,work.pk,True,'模拟验收')

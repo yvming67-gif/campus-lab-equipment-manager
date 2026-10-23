@@ -1,0 +1,14 @@
+✔ unchanged applied slot appends next page and details carry matching slot (8.9386ms)
+✔ edited slot cannot append page two into old slot results (1.1798ms)
+✔ edited text cannot append page two into old search results (1.1513ms)
+✔ out of order discovery responses do not replace latest applied slot (1.487ms)
+✔ missing WeChat storage key returning empty string preserves manually chosen status (0.9544ms)
+✔ workbench status instruction is consumed once and subsequent returns retain new choice (0.9351ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118.191

@@ -22,6 +22,7 @@ from . import services as s
 from .reports import utilization
 from .demo_identity import verify_demo_password
 from .schedules import resource_schedule
+from .workbench import tasks_for, booking_queue, acceptance_queue
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
@@ -112,6 +113,10 @@ def dashboard(request):
     now=timezone.now();mine=Reservation.objects.filter(applicant=request.user)
     context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"resource_count":Resource.objects.count(),"lab_count":Lab.objects.count(),"policy":Policy.objects.get(pk=1),"overdue":s.overdue_for(request.user,now)}
     if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
+    scoped=scoped_bookings(request.user)
+    context['tasks']=tasks_for(request.user,scoped,scoped_incidents(request.user),scoped_work(request.user),now)
+    context['upcoming']=mine.filter(Q(status='IN_USE')|Q(status='CONFIRMED',ends_at__gt=now)).select_related('resource__lab').order_by('starts_at')[:4]
+    context['unread_preview']=request.user.notifications.filter(read_at__isnull=True).order_by('-created_at')[:3]
     return render(request,"dashboard.html",context)
 
 @login_required
@@ -153,6 +158,12 @@ def resource_detail(request,pk):
 @login_required
 def bookings(request):
     qs=scoped_bookings(request.user);q=request.GET.get("q","");status=request.GET.get("status","");lab=request.GET.get("lab","");day=request.GET.get("day","")
+    if request.GET.get('scope')=='mine':qs=qs.filter(applicant=request.user)
+    queue=request.GET.get('queue','')
+    if queue:
+        protected(request.user.has_role('LAB_ADMIN'))
+        qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
+        if queue in ['review','recheck']:qs=qs.exclude(applicant=request.user)
     if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
     if status:qs=qs.filter(status=status)
     if lab.isdigit():qs=qs.filter(resource__lab_id=lab)
@@ -203,7 +214,13 @@ def booking_action(request,pk,action):
 
 @login_required
 def incidents(request):
-    page,filters=paginate(request,scoped_incidents(request.user).order_by("-reported_at","-pk"))
+    qs=scoped_incidents(request.user)
+    if request.GET.get('queue')=='managed':
+        protected(request.user.has_role('LAB_ADMIN'))
+        qs=qs.filter(resource__lab__labgrant__user=request.user).distinct()
+    status=request.GET.get('status','')
+    if status in dict(Incident.STATUS):qs=qs.filter(status=status)
+    page,filters=paginate(request,qs.order_by("-reported_at","-pk"))
     return render(request,"incidents.html",{"title":"异常追踪","incidents":page.object_list,"page":page,"filters":filters})
 
 @login_required
@@ -251,7 +268,14 @@ def evidence_download(request,pk):
 
 @login_required
 def work_list(request):
-    page,filters=paginate(request,scoped_work(request.user).order_by("-created_at","-pk"))
+    qs=scoped_work(request.user)
+    status=request.GET.get('status','')
+    if status=='ACTIVE':qs=qs.filter(status__in=['OPEN','IN_PROGRESS'],assigned_to=request.user)
+    elif status in dict(WorkOrder.STATUS):qs=qs.filter(status=status)
+    if request.GET.get('queue')=='acceptance':
+        protected(request.user.has_role('LAB_ADMIN'))
+        qs=acceptance_queue(qs,request.user)
+    page,filters=paginate(request,qs.order_by("-created_at","-pk"))
     return render(request,"work.html",{"title":"维修任务","work":page.object_list,"page":page,"filters":filters})
 
 @login_required
@@ -318,7 +342,17 @@ def manage(request):
     if user_role:users=users.filter(roles__code=user_role).distinct()
     resource_page,resource_filters=paginate(request,resources.order_by("code","pk"),page_param="resources_page")
     user_page,user_filters=paginate(request,users.order_by("school_no","pk"),page_param="users_page")
-    return render(request,"manage.html",{"title":"资源与配置","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
+    section=request.GET.get('section','overview')
+    if section not in ['overview','resources','people','calendars','access']:section='overview'
+    if section in ['people','access']:protected(request.user.has_role('SYS_ADMIN'))
+    visible_labs=Lab.objects.all() if request.user.has_role('SYS_ADMIN') else Lab.objects.filter(labgrant__user=request.user).distinct()
+    today=timezone.localdate()
+    context_extra={'section':section,'directory_labs':visible_labs.order_by('code'),
+        'opening_periods':OpeningPeriod.objects.filter(lab__in=visible_labs).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=today)).select_related('lab').order_by('lab__code','weekday','valid_from')[:100],
+        'calendar_exceptions':CalendarException.objects.filter(lab__in=visible_labs,active=True,day__gte=today).select_related('lab').order_by('day','lab__code')[:30],
+        'qualification_types':QualificationType.objects.order_by('code'),
+        'role_directory':Role.objects.prefetch_related('users').order_by('code') if request.user.has_role('SYS_ADMIN') else Role.objects.none()}
+    return render(request,"manage.html",{**context_extra,"title":"资源与配置","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
 
 @login_required
 def manage_form(request,action,pk=None):

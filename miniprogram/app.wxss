@@ -90,3 +90,11 @@ textarea { width: 100%; min-height: 148rpx; font-size: 28rpx; line-height: 1.6; 
 .login-brand-name { font-size: 28rpx; font-weight: 650; line-height: 1.4; color: #294f35; }
 .login-title { font-size: 57rpx; line-height: 1.25; font-weight: 650; color: #263d2c; margin: 19rpx 0 23rpx; }
 .login-foot { color: #98a18d; text-align: center; font-size: 20rpx; margin-top: 38rpx; }
+
+/* Daily work and time-oriented discovery. */
+.compact-booking{padding:24rpx;background:#fff;border:1rpx solid #d7e3d4;border-radius:15rpx;margin-top:14rpx}
+.compact-name{font-size:27rpx;font-weight:600;flex:1;margin-right:15rpx}
+.time-filter{margin-top:14rpx}.time-filter .form-times>view{flex:1;min-width:0}
+.availability-result{font-size:23rpx;line-height:1.7;padding:13rpx 17rpx;border-radius:9rpx;margin-top:17rpx}
+.qualification-item{padding:18rpx 0;border-bottom:1rpx solid #e5ecdf}.qualification-item:last-child{border-bottom:0}
+.hero-stat{min-height:95rpx}.next-bookings .hint{font-size:22rpx}.row .small-copy{flex:1;min-width:0}.resource-card .card-title{word-break:break-all}

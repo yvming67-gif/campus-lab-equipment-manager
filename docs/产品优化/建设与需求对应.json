@@ -1,0 +1,99 @@
+[
+  {
+    "id": "OPT-01",
+    "goal": "按职责提供可办理的工作队列",
+    "ucs": [
+      "UC-08",
+      "UC-09",
+      "UC-10",
+      "UC-11",
+      "UC-12",
+      "UC-14",
+      "UC-17",
+      "UC-27"
+    ],
+    "files": [
+      "core/workbench.py",
+      "core/views.py",
+      "templates/dashboard.html"
+    ],
+    "acceptance": "卡片计数与跳转列表在身份、实验室范围、状态、自审批和历史维修参与上保持一致；个人卡片只查本人"
+  },
+  {
+    "id": "OPT-02",
+    "goal": "提供隐私保护的跨资源日程",
+    "ucs": [
+      "UC-02",
+      "UC-03"
+    ],
+    "files": [
+      "core/product_views.py",
+      "templates/schedule.html"
+    ],
+    "acceptance": "按日/实验室/类型/关键词分页；开放例外优先，待审核不占用；不显示他人身份、用途、预约编号；实际未结束明确提示，不把空白承诺成可约"
+  },
+  {
+    "id": "OPT-03",
+    "goal": "按资源、日历、人员和授权组织管理中心",
+    "ucs": [
+      "UC-18",
+      "UC-19",
+      "UC-20",
+      "UC-21",
+      "UC-23"
+    ],
+    "files": [
+      "templates/manage.html",
+      "templates/management_directory.html",
+      "core/views.py"
+    ],
+    "acceptance": "仅显示可访问分类；后端仍做角色及范围检查；系统管理不获得业务审批权"
+  },
+  {
+    "id": "OPT-04",
+    "goal": "小程序按目标时段发现资源并延续预约上下文",
+    "ucs": [
+      "UC-02",
+      "UC-03",
+      "UC-04",
+      "UC-05"
+    ],
+    "files": [
+      "miniprogram/controllers.js",
+      "miniprogram/pages/resources/index.wxml",
+      "miniprogram/utils/format.js"
+    ],
+    "acceptance": "显示结果时段，详情携带已成功查询时段；条件改变翻页不混合；未确认提交草稿优先保留，提交仍重新校验"
+  },
+  {
+    "id": "OPT-05",
+    "goal": "小程序展示下一次使用、培训资格与未读动态",
+    "ucs": [
+      "UC-06",
+      "UC-19",
+      "UC-22",
+      "UC-26"
+    ],
+    "files": [
+      "core/miniapi.py",
+      "miniprogram/controllers.js",
+      "miniprogram/pages/profile/index.wxml",
+      "miniprogram/pages/notifications/index.wxml"
+    ],
+    "acceptance": "仅本人数据；未读筛选在服务端执行；资格code唯一key、到期边界明确；当前有效不等同覆盖未来全时段"
+  },
+  {
+    "id": "OPT-06",
+    "goal": "改善窄屏导航和键盘定位",
+    "ucs": [
+      "UC-02",
+      "UC-26"
+    ],
+    "files": [
+      "templates/base.html",
+      "static/product.css",
+      "static/product.js"
+    ],
+    "acceptance": "桌面保留分组侧栏与底部管理齿轮；窄屏默认收起导航；可跳到正文，焦点可见；不依赖外部资源"
+  }
+]

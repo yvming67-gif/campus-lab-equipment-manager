@@ -22,7 +22,7 @@ from .demo_identity import verify_demo_password
 from .schedules import resource_schedule
 from .domain_labels import event_label, notification_label
 from .forms import BookingForm, QueryForm, ActionForm
-from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent
+from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification
 from .request_context import correlation_id
 
 SESSION_SECONDS = 7200
@@ -228,7 +228,11 @@ def logout(request):
 @endpoint("GET")
 def me(request):
     user = request.mini_user;mine = my_bookings(user);now = timezone.now()
+    upcoming=mine.filter(Q(status='IN_USE')|Q(status='CONFIRMED',ends_at__gt=now)).order_by('starts_at')[:3]
+    qualifications=UserQualification.objects.filter(user=user).select_related('qualification').order_by('qualification__code')
     return {"user": user_data(user), "policy": policy_data(), "server_time": date_text(now),
+            "upcoming":[booking_data(b) for b in upcoming],
+            "qualifications":[{"code":q.qualification.code,"name":q.qualification.name,"expires_at":date_text(q.expires_at),"valid":not q.revoked and q.issued_at<=now and (q.expires_at is None or q.expires_at>=now)} for q in qualifications],
             "overdue": s.overdue_for(user, now), "stats": {
                 "pending": mine.filter(status="PENDING").count(), "confirmed": mine.filter(status="CONFIRMED").count(),
                 "using": mine.filter(status="IN_USE").count(), "unread": user.notifications.filter(read_at__isnull=True).count(),
@@ -322,11 +326,13 @@ def cancel(request, pk):
 @endpoint("GET")
 def notifications(request):
     qs = Notification.objects.filter(recipient=request.mini_user).annotate(owned_booking=Exists(Reservation.objects.filter(applicant=request.mini_user, pk=OuterRef("audit__entity_id")))).select_related("audit").order_by("-created_at", "-pk")
+    unread=qs.filter(read_at__isnull=True).count()
+    if request.GET.get('unread')=='1':qs=qs.filter(read_at__isnull=True)
     def serialize(item):
         return {"id": item.pk, "kind": item.kind, "kind_label":notification_label(item.kind), "content": item.content, "created_at": date_text(item.created_at),
                 "read_at": date_text(item.read_at), "booking_id": item.audit.entity_id if item.audit.entity_type == "reservation" and item.owned_booking else None}
     result = page_data(request, qs, serialize)
-    result["unread"] = qs.filter(read_at__isnull=True).count()
+    result["unread"] = unread
     return result
 
 

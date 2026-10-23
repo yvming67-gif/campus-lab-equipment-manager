@@ -1,0 +1,51 @@
+{
+  "baseline_commit": "60c59e4d6c199a66631065e86c65f3de6be3c44e",
+  "date": "2026-10-24",
+  "backend": {
+    "total": 205,
+    "passed": 205,
+    "skipped": 0,
+    "postgresql": 17,
+    "scope": "独立本地模拟数据库，含3项显式启用的原生备份归档/恢复集成；不是Neon真实联合恢复"
+  },
+  "client_tests": {
+    "passed": 41,
+    "scope": "控制器和网络契约模拟，不是真机"
+  },
+  "native_compile": {
+    "pages": 7,
+    "wxml": "pass",
+    "wxss": "pass"
+  },
+  "windows_startup_unit": {
+    "passed": 11,
+    "scope": "启动器回归；本轮未重做全新电脑下载"
+  },
+  "independent": {
+    "backend": 15,
+    "client_scenes": 6,
+    "native_compile_pages": 7,
+    "findings": 9,
+    "confirmed_defects": 7,
+    "suggestions": 1,
+    "unverified_risks": 1
+  },
+  "web_viewports": [
+    [
+      1440,
+      1000
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "web_pages": [
+    "工作台",
+    "资源日程",
+    "管理中心日历",
+    "资源目录"
+  ],
+  "new_phone_acceptance": "未执行，按用户要求暂停；iPhone延期",
+  "cloud_deployment": "发布后另行记录，不以本地结果代替云端验收"
+}

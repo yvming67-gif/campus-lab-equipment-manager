@@ -76,7 +76,7 @@ class FollowupTests(TestCase):
         self.client.force_login(self.student);self.assertEqual(self.client.get('/manage/').status_code,403)
         self.client.force_login(self.admin);page=self.client.get('/manage/',{'user_q':'student'})
         self.assertEqual(page.context['user_page'].paginator.count,0)
-        self.assertNotContains(page,'维护授权')
+        self.assertNotContains(page,'href="/manage/grant/')
 
     def test_invalid_management_lab_identifiers_never_raise_server_errors(self):
         self.client.force_login(self.admin)

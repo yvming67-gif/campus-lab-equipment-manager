@@ -32,6 +32,36 @@ function page(name) {
 const values = () => ({ resource_id: 1, starts_at: '2027-01-01T10:00:00', ends_at: '2027-01-01T11:00:00', purpose: '模拟用途', participants: 1 });
 test.beforeEach(setup);
 
+test('time-oriented discovery sends the displayed interval and carries it to the detail form',async()=>{
+  signedIn();const p=page('resources');p.setData({timeSearch:true,slot:{date:'2027-01-02',start:'10:00',end:'11:00'}});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:1,kind:'EQUIPMENT',service_status:'NORMAL',available:true}],labs:[],page:1,has_more:false,total:1}}});
+  await p.load(1);assert.equal(requests[0].data.starts_at,'2027-01-02T10:00:00');
+  p.openResource({currentTarget:{dataset:{id:1}}});assert.match(navigations[0],/date=2027-01-02/);
+  const detail=page('resource');detail.onLoad({id:1,date:'2027-01-02',start:'10:00',end:'11:00'});
+  assert.equal(detail.data.form.date,'2027-01-02');assert.equal(detail.data.scheduleDay,'2027-01-02');
+});
+
+test('editing time or search before loading more replaces results instead of mixing queries',async()=>{
+  signedIn();const p=page('resources');p.setData({timeSearch:true,slot:{date:'2027-01-02',start:'10:00',end:'11:00'}});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:requests.length,kind:'EQUIPMENT',service_status:'NORMAL'}],labs:[],page:1,has_more:true,total:2}}});
+  await p.load(1);p.chooseQueryStart({detail:{value:'12:00'}});p.chooseQueryEnd({detail:{value:'13:00'}});await p.more();
+  assert.equal(requests[1].data.page,1);assert.equal(p.data.items.length,1);assert.equal(p.data.items[0].id,2);assert.match(p.data.appliedTime,/12:00/);
+});
+
+test('native absent storage value does not reset a manually selected booking filter',async()=>{
+  signedIn();global.wx.getStorageSync=k=>storage.has(k)?storage.get(k):'';
+  const p=page('bookings');p.setData({statusIndex:2});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[],page:1,has_more:false,total:0}}});
+  await p.onShow();assert.equal(p.data.statusIndex,2);
+  const home=page('resources');home.openBookings({currentTarget:{dataset:{status:'PENDING'}}});await p.onShow();
+  assert.equal(p.data.statusIndex,1);assert.equal(storage.has('campus-mini-booking-filter'),false);
+});
+
+test('unread messages use server-side filtering instead of filtering one loaded page',async()=>{
+  signedIn();const p=page('notifications');reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[],page:1,has_more:false,unread:4}}});
+  await p.chooseUnread({currentTarget:{dataset:{mode:'unread'}}});assert.equal(requests[0].data.unread,'1');assert.equal(p.data.unread,4);
+});
+
 test('AUD-0017 older notification reads cannot overwrite a newer result',async()=>{
   signedIn();const pending=[];reply=r=>pending.push(r);const p=page('notifications');
   const first=p.load(1),second=p.load(1);

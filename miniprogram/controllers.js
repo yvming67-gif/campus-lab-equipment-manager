@@ -4,7 +4,15 @@ const fmt = require('./utils/format');
 const statuses = [{ code: '', name: '全部' }, { code: 'PENDING', name: '待审核' }, { code: 'CONFIRMED', name: '已确认' }, { code: 'IN_USE', name: '使用中' }, { code: 'COMPLETED', name: '已完成' }, { code: 'CANCELLED', name: '已取消' }, { code: 'REJECTED', name: '已驳回' }, { code: 'EXPIRED', name: '已失效' }];
 function error(page, e) { page.setData({ error: api.errorText(e) }); }
 function input(event) { this.setData({ ['form.' + event.currentTarget.dataset.field]: event.detail.value, error: '' }); }
-function openResource(event) { wx.navigateTo({ url: '/pages/resource/index?id=' + event.currentTarget.dataset.id }); }
+function openResource(event) {
+  const slot = this._appliedSlot;
+  const query = slot ? '&date=' + encodeURIComponent(slot.date) + '&start=' + encodeURIComponent(slot.start) + '&end=' + encodeURIComponent(slot.end) : '';
+  wx.navigateTo({ url: '/pages/resource/index?id=' + event.currentTarget.dataset.id + query });
+}
+function openBookings(event) {
+  wx.setStorageSync('campus-mini-booking-filter', {status:event.currentTarget.dataset.status || ''});
+  wx.switchTab({url:'/pages/bookings/index'});
+}
 function openBooking(event) { wx.navigateTo({ url: '/pages/booking/index?id=' + event.currentTarget.dataset.id }); }
 function endRefresh() { if (wx.stopPullDownRefresh) wx.stopPullDownRefresh(); }
 function confirm(options) { return new Promise(resolve => wx.showModal(Object.assign({}, options, { success: r => resolve(r.confirm), fail: () => resolve(false) }))); }
@@ -23,23 +31,33 @@ const screens = {
     }
   },
   resources: {
-    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '' }, loading: false, error: '', hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 } },
+    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '' }, loading: false, error: '', hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, timeSearch: false, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
     async onShow() {
       if (!api.requireLogin()) return;
       this.setData({ user: api.session().user });
-      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, overdue: data.overdue }); } catch (e) { error(this, e); }
+      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, overdue: data.overdue, policy: data.policy, upcoming: (data.upcoming || []).map(fmt.booking), maxDate: fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000) }); } catch (e) { error(this, e); }
       return this.load(1);
     },
-    input, openResource,
+    input, openResource, openBooking, openBookings,
+    toggleTime() {this.setData({timeSearch:!this.data.timeSearch});if(!this.data.timeSearch)return this.load(1);},
+    chooseQueryDate(e) {this.setData({'slot.date':e.detail.value});},
+    chooseQueryStart(e) {this.setData({'slot.start':e.detail.value});},
+    chooseQueryEnd(e) {this.setData({'slot.end':e.detail.value});},
+    resetSearch() {this.setData({form:{q:''},labIndex:0,timeSearch:false});return this.load(1);},
     async load(page) {
       if (!api.requireLogin()) return;
       page = page || 1;
+      const slot = this.data.timeSearch ? Object.assign({},this.data.slot) : null;
+      if(slot && slot.start>=slot.end){this.setData({error:'查询结束时间必须晚于开始时间'});return;}
+      const querySignature=JSON.stringify([this.data.kind,this.data.form.q,(this.data.labs[this.data.labIndex] || this.data.labs[0]).id,slot]);
+      if(page>1 && querySignature!==this._appliedQuery) page=1;
       const serial = (this._serial || 0) + 1; this._serial = serial;
       this.setData({ loading: true, error: '' });
       try {
-        const data = await api.request('/resources/', 'GET', { kind: this.data.kind, q: this.data.form.q, lab: this.data.labs[this.data.labIndex].id, page });
+        const data = await api.request('/resources/', 'GET', Object.assign({ kind: this.data.kind, q: this.data.form.q, lab: (this.data.labs[this.data.labIndex] || this.data.labs[0]).id, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
         if (serial !== this._serial) return;
-        this.setData({ items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs: [{ id: '', name: '全部实验室' }].concat(data.labs), page: data.page, hasMore: data.has_more, total: data.total });
+        this._appliedSlot=slot;this._appliedQuery=querySignature;
+        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '', items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs: [{ id: '', name: '全部实验室' }].concat(data.labs), page: data.page, hasMore: data.has_more, total: data.total });
       } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
     search() { return this.load(1); },
@@ -53,6 +71,7 @@ const screens = {
     data: { id: null, item: null, form: fmt.defaultForm(), loading: false, busy: false, error: '', availability: '', available: null, minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000), scheduleDay: '', schedulePage: 1, scheduleTotal: 0, scheduleHasMore: false, scheduleBusy: false, scheduleError: '' },
     onLoad(options) {
       this.setData({ id: Number(options.id) });
+      if (/^\d{4}-\d{2}-\d{2}$/.test(options.date || '') && [options.start,options.end].every(t => /^\d{2}:\d{2}$/.test(t || ''))) this.setData({'form.date':options.date,'form.start':options.start,'form.end':options.end,scheduleDay:options.date});
       const pending = api.draft();
       if (pending && pending.values.resource_id === this.data.id) {
         const value = pending.values;
@@ -113,7 +132,12 @@ const screens = {
   },
   bookings: {
     data: { items: [], statuses, statusIndex: 0, form: { q: '' }, loading: false, error: '', page: 1, hasMore: false, total: 0 },
-    onShow() { if (api.requireLogin()) return this.load(1); },
+    onShow() {
+      if (!api.requireLogin()) return;
+      const status=wx.getStorageSync('campus-mini-booking-filter');
+      if(status && typeof status==='object' && typeof status.status==='string'){wx.removeStorageSync('campus-mini-booking-filter');const index=statuses.findIndex(s=>s.code===status.status);this.setData({statusIndex:index<0?0:index});}
+      return this.load(1);
+    },
     input, openBooking,
     async load(page) {
       page = page || 1;
@@ -158,17 +182,18 @@ const screens = {
     onPullDownRefresh() { return this.load().finally(endRefresh); }
   },
   notifications: {
-    data: { items: [], loading: false, busy: false, error: '', unread: 0, page: 1, hasMore: false },
+    data: { items: [], loading: false, busy: false, error: '', unread: 0, unreadOnly: false, page: 1, hasMore: false },
     onShow() { if (api.requireLogin()) return this.load(1); },
     async load(page) {
       const serial=(this._serial||0)+1;this._serial=serial;
       this.setData({ loading: true, error: '' });
       try {
-        const result = await api.request('/notifications/', 'GET', { page: page || 1 });
+        const result = await api.request('/notifications/', 'GET', { page: page || 1, unread: this.data.unreadOnly ? '1' : '' });
         if(serial!==this._serial)return;
         this.setData({ items: (page && page > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread });
       } catch (e) { if(serial===this._serial)error(this, e); } finally { if(serial===this._serial)this.setData({ loading: false }); }
     },
+    chooseUnread(e) {this.setData({unreadOnly:e.currentTarget.dataset.mode==='unread'});return this.load(1);},
     async open(e) {
       const id = Number(e.currentTarget.dataset.id);const item = this.data.items.find(x => x.id === id);
       if (!item || this.data.busy) return;
@@ -177,6 +202,7 @@ const screens = {
         this._serial=(this._serial||0)+1;
         if (item.unread) await api.request('/notifications/' + id + '/read/', 'POST', {});
         this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
+        if(this.data.unreadOnly) await this.load(1);
         if (item.booking_id) wx.navigateTo({ url: '/pages/booking/index?id=' + item.booking_id });
       } catch (e2) { error(this, e2); } finally { this.setData({ busy: false }); }
     },
@@ -192,11 +218,11 @@ const screens = {
     onPullDownRefresh() { return this.load(1).finally(endRefresh); }
   },
   profile: {
-    data: { user: null, stats: null, policy: null, loading: false, error: '', busy: false, roleLabel: '' },
+    data: { user: null, stats: null, policy: null, loading: false, error: '', busy: false, roleLabel: '', qualifications: [] },
     onShow() { if (api.requireLogin()) return this.load(); },
     async load() {
       this.setData({ loading: true, error: '' });
-      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, roleLabel: data.user.roles.map(x => x.name).join(' / ')}); }
+      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, qualifications: (data.qualifications || []).map(q=>Object.assign({},q,{expiry_label:q.expires_at ? fmt.dateTime(q.expires_at) : '未设到期时间'})), roleLabel: data.user.roles.map(x => x.name).join(' / ')}); }
       catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
     },
     async signout() {
@@ -211,6 +237,7 @@ function create(name) {
   const definition = screens[name];
   if (!definition) throw new Error('Unknown page: ' + name);
   const data = JSON.parse(JSON.stringify(definition.data));
+  if (name === 'resources') Object.assign(data,{slot:fmt.defaultForm(),minDate:fmt.day(),maxDate:fmt.day(Date.now()+14*86400000)});
   if (name === 'resource') Object.assign(data, { form: fmt.defaultForm(), minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000) });
   return Object.assign({}, definition, { data });
 }

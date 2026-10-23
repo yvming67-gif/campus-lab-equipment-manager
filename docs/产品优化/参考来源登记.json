@@ -1,0 +1,88 @@
+[
+  {
+    "id": "REF-P01",
+    "title": "DentalPin public demo",
+    "url": "https://demo.dentalpin.com/",
+    "method": "经用户提供的公开演示账号实际只读登录",
+    "observed": [
+      "首页今日安排与待确认事项",
+      "左下角Settings及General/Workspace/People/Clinical/Communications分类",
+      "Workspace的Cabinets、Clinic hours与Professional schedules",
+      "People的Clinic Users",
+      "日程Week/Day/Kanban、资源与人员筛选、前后日导航"
+    ],
+    "limit": "仅观察浏览器呈现；未获取或验证其后端源码、事务实现、数据库及部署架构；未修改第三方记录，不收录其患者信息",
+    "access_date": "2026-10-24"
+  },
+  {
+    "id": "REF-P02",
+    "title": "Open Dental Quick Manual / Appointments",
+    "url": "https://www.opendental.com/site/0_appointments.html",
+    "method": "官方文档阅读",
+    "observed": [
+      "日程和确认清单、待安排事项分离",
+      "日期与日/周视图、可配置资源视图",
+      "到场、安排与完成分别跟踪"
+    ],
+    "limit": "支持方案比较，不证明目标学校现状",
+    "access_date": "2026-10-24"
+  },
+  {
+    "id": "REF-P03",
+    "title": "Open Dental Setup and Security",
+    "url": "https://www.opendental.com/site/0_setup.html",
+    "links": [
+      "https://www.opendental.com/site/0_schedule.html",
+      "https://www.opendental.com/site/0_security.html",
+      "https://www.opendental.com/site/0_manage.html"
+    ],
+    "method": "官方文档阅读",
+    "observed": [
+      "开放安排和单日例外",
+      "用户组、多角色权限与审计",
+      "日常任务与配置分层"
+    ],
+    "limit": "未采用临床/保险/收费功能或宣称满足其法规",
+    "access_date": "2026-10-24"
+  },
+  {
+    "id": "REF-P04",
+    "title": "Open Dental Database Documentation 26.2.0.0",
+    "url": "https://www.opendental.com/OpenDentalDocumentation26-2.xml",
+    "method": "下载原XML并本地解析",
+    "sha256": "882c84880af7d6ecc347b9b0ca758f0a4126d028f7d051219a113e6358d78834",
+    "tables": 430,
+    "sampled_tables": [
+      "appointment",
+      "operatory",
+      "provider",
+      "schedule",
+      "userod",
+      "usergroup",
+      "grouppermission",
+      "securitylog",
+      "definition",
+      "task"
+    ],
+    "observed": [
+      "预约与资源/人员以编号关联",
+      "开放安排与预约分开建模",
+      "隐藏停用仍可保留历史引用",
+      "权限组与审计关联"
+    ],
+    "limit": "只抽样分析列与说明，不等同对430表逐字段审计；不把医疗表直接搬进本项目",
+    "access_date": "2026-10-24"
+  },
+  {
+    "id": "REF-P05",
+    "title": "Open Dental Trial Version",
+    "url": "https://opendental.com/site/trial.html",
+    "method": "官方安装说明阅读",
+    "observed": [
+      "试用版含模拟数据并与实际业务环境区分",
+      "服务器与工作站安装的依赖边界"
+    ],
+    "limit": "未下载安装试用软件或MariaDB；项目既有PostgreSQL环境无需为参考研究增加另一套数据库。下载页安装版本与XML版本不必相同，不混同二者",
+    "access_date": "2026-10-24"
+  }
+]

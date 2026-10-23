@@ -1,0 +1,154 @@
+[
+  {
+    "page": "/",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "screenshot": "workbench-1440.png",
+    "observed": {
+      "title": "工作台 · 实验资源中心",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "mainWidth": 1198,
+      "navOpen": true,
+      "headings": [
+        "你好，资源管理员"
+      ]
+    }
+  },
+  {
+    "page": "/schedule/?day=2026-10-25",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "screenshot": "schedule-1440.png",
+    "observed": {
+      "title": "资源日程 · 实验资源中心",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "mainWidth": 1198,
+      "navOpen": true,
+      "headings": [
+        "资源日程"
+      ]
+    }
+  },
+  {
+    "page": "/manage/?section=calendars",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "screenshot": "management-1440.png",
+    "observed": {
+      "title": "资源与配置 · 实验资源中心",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "mainWidth": 1198,
+      "navOpen": true,
+      "headings": [
+        "管理中心"
+      ]
+    }
+  },
+  {
+    "page": "/resources/",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "screenshot": "resources-1440.png",
+    "observed": {
+      "title": "资源目录 · 实验资源中心",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "bodyWidth": 1440,
+      "mainWidth": 1198,
+      "navOpen": true,
+      "headings": [
+        "资源目录"
+      ]
+    }
+  },
+  {
+    "page": "/",
+    "viewport": [
+      390,
+      844
+    ],
+    "screenshot": "workbench-390.png",
+    "observed": {
+      "title": "工作台 · 实验资源中心",
+      "width": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "mainWidth": 390,
+      "navOpen": false,
+      "headings": [
+        "你好，资源管理员"
+      ]
+    }
+  },
+  {
+    "page": "/schedule/?day=2026-10-25",
+    "viewport": [
+      390,
+      844
+    ],
+    "screenshot": "schedule-390.png",
+    "observed": {
+      "title": "资源日程 · 实验资源中心",
+      "width": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "mainWidth": 390,
+      "navOpen": false,
+      "headings": [
+        "资源日程"
+      ]
+    }
+  },
+  {
+    "page": "/manage/?section=calendars",
+    "viewport": [
+      390,
+      844
+    ],
+    "screenshot": "management-390.png",
+    "observed": {
+      "title": "资源与配置 · 实验资源中心",
+      "width": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "mainWidth": 390,
+      "navOpen": false,
+      "headings": [
+        "管理中心"
+      ]
+    }
+  },
+  {
+    "page": "/resources/",
+    "viewport": [
+      390,
+      844
+    ],
+    "screenshot": "resources-390.png",
+    "observed": {
+      "title": "资源目录 · 实验资源中心",
+      "width": 390,
+      "scrollWidth": 390,
+      "bodyWidth": 390,
+      "mainWidth": 390,
+      "navOpen": false,
+      "headings": [
+        "资源目录"
+      ]
+    }
+  }
+]

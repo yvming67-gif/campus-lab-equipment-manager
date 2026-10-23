@@ -1,6 +1,9 @@
 {% extends 'base.html' %}{% block content %}
-<div class="page-top"><div><div class="eyebrow">ADMINISTRATION</div><h1>资源与配置</h1><p>维护档案与规则参数，既有借还和审计事实继续保留。</p></div></div>
-{% if can_system %}
+<div class="page-top"><div><div class="eyebrow">ADMINISTRATION</div><h1>管理中心</h1><p>维护档案与规则参数，既有借还和审计事实继续保留。</p></div></div>
+<nav class="management-tabs" aria-label="管理分类"><a href="?section=overview" {% if section == 'overview' %}aria-current="page"{% endif %}>概览</a>{% if can_manage %}<a href="?section=resources" {% if section == 'resources' %}aria-current="page"{% endif %}>设备与场地</a>{% endif %}<a href="?section=calendars" {% if section == 'calendars' %}aria-current="page"{% endif %}>实验室与开放日历</a>{% if can_system %}<a href="?section=people" {% if section == 'people' %}aria-current="page"{% endif %}>用户与授权</a><a href="?section=access" {% if section == 'access' %}aria-current="page"{% endif %}>角色与培训目录</a>{% endif %}</nav>
+{% if section == 'overview' %}<div class="info-strip"><b>按职责维护，按范围生效</b><p>实验室管理员维护授权范围内的资源与服务限制；系统管理员维护身份授权、开放日历和规则。账号管理权不会自动获得业务审批或维修验收权。</p><div class="actions"><a href="{% url 'deliveries' %}">通知投递与人工联系 →</a>{% if can_audit %}<a href="{% url 'audit' %}">变更审计 →</a>{% endif %}</div></div>{% endif %}
+{% if section == 'calendars' or section == 'access' %}{% include 'management_directory.html' %}{% endif %}
+{% if can_system and section == 'overview' or can_system and section == 'people' %}
 <div class="management-grid">
   <a class="panel" href="{% url 'calendar-exception' %}"><h2>单日开放例外</h2><p>节假日、闭馆与临时开放</p></a>
   <a class="panel" href="{% url 'manage-form' 'policy' %}"><h2>预约与通知参数 ↗</h2><p>{{ policy.window_days }}天 / {{ policy.slot_minutes }}分钟 / 版本{{ policy.version }}</p></a>
@@ -9,7 +12,7 @@
 </div>
 <div class="section-heading"><h2>用户与授权</h2></div>
 <form method="get" class="filter-row panel" aria-label="用户筛选">
-  <input type="hidden" name="resource_q" value="{{ resource_q }}"><input type="hidden" name="resource_lab" value="{{ resource_lab }}">
+  <input type="hidden" name="section" value="{{ section }}"><input type="hidden" name="resource_q" value="{{ resource_q }}"><input type="hidden" name="resource_lab" value="{{ resource_lab }}">
   <div><label for="manage-user-q">姓名、账号或身份编号</label><input id="manage-user-q" name="user_q" value="{{ user_q }}" maxlength="150"></div>
   <div><label for="manage-user-role">角色</label><select id="manage-user-role" name="user_role"><option value="">全部角色</option>{% for role in roles %}<option value="{{ role.code }}" {% if user_role == role.code %}selected{% endif %}>{{ role.name }}</option>{% endfor %}</select></div>
   <button class="button">检索用户</button>
@@ -20,10 +23,10 @@
 </tbody></table></div>
 {% include 'pagination.html' with page=user_page filters=user_filters page_param='users_page' pagination_label='用户授权分页' %}
 {% endif %}
-{% if can_manage %}
+{% if can_manage and section == 'overview' or can_manage and section == 'resources' %}
 <div class="section-heading"><h2>资源档案</h2><a class="button" href="{% url 'manage-form' 'resource' %}">新增资源 ↗</a></div>
 <form method="get" class="filter-row panel" aria-label="资源档案筛选">
-  <input type="hidden" name="user_q" value="{{ user_q }}"><input type="hidden" name="user_role" value="{{ user_role }}">
+  <input type="hidden" name="section" value="{{ section }}"><input type="hidden" name="user_q" value="{{ user_q }}"><input type="hidden" name="user_role" value="{{ user_role }}">
   <div><label for="manage-resource-q">资源名称或编号</label><input id="manage-resource-q" name="resource_q" value="{{ resource_q }}" maxlength="150"></div>
   <div><label for="manage-resource-lab">实验室</label><select id="manage-resource-lab" name="resource_lab"><option value="">全部授权实验室</option>{% for lab in resource_labs %}<option value="{{ lab.pk }}" {% if resource_lab == lab.pk|stringformat:'s' %}selected{% endif %}>{{ lab.name }}</option>{% endfor %}</select></div>
   <button class="button">检索资源</button>

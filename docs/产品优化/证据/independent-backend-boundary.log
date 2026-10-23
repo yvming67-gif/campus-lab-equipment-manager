@@ -1,0 +1,54 @@
+Creating test database for alias 'default' ('test_product_independent')...
+
+Found 15 test(s).
+Operations to perform:
+  Synchronize unmigrated apps: messages, postgres, staticfiles
+  Apply all migrations: auth, contenttypes, core, sessions
+Synchronizing apps without migrations:
+  Creating tables...
+    Running deferred SQL...
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying core.0001_initial... OK
+  Applying core.0002_audit_immutable... OK
+  Applying core.0003_alter_resource_service_status... OK
+  Applying core.0004_audit_business_extensions... OK
+test_former_repair_performer_is_not_in_independent_acceptance_queue (core.product_tests.ProductTests.test_former_repair_performer_is_not_in_independent_acceptance_queue) ... ok
+test_management_role_and_lab_scope (core.product_tests.ProductTests.test_management_role_and_lab_scope) ... ok
+test_native_time_discovery_reuses_authoritative_availability (core.product_tests.ProductTests.test_native_time_discovery_reuses_authoritative_availability) ... ok
+test_personal_cards_filter_to_self_for_multi_role_manager (core.product_tests.ProductTests.test_personal_cards_filter_to_self_for_multi_role_manager) ... ok
+test_recheck_queue_excludes_self_and_incident_queue_matches_scope (core.product_tests.ProductTests.test_recheck_queue_excludes_self_and_incident_queue_matches_scope) ... ok
+test_review_queue_cannot_expand_authorization_or_include_self (core.product_tests.ProductTests.test_review_queue_cannot_expand_authorization_or_include_self) ... ok
+test_schedule_carries_unfinished_use_without_fabricating_end (core.product_tests.ProductTests.test_schedule_carries_unfinished_use_without_fabricating_end) ... ok
+test_schedule_excludes_pending_and_respects_closure_override (core.product_tests.ProductTests.test_schedule_excludes_pending_and_respects_closure_override) ... ok
+test_schedule_invalid_date_and_lab_never_throw (core.product_tests.ProductTests.test_schedule_invalid_date_and_lab_never_throw) ... ok
+test_schedule_requires_login_and_is_anonymized (core.product_tests.ProductTests.test_schedule_requires_login_and_is_anonymized) ... ok
+test_technician_sees_submitted_work_but_cannot_accept_it (core.product_tests.ProductTests.test_technician_sees_submitted_work_but_cannot_accept_it) ... ok
+test_unread_filter_returns_only_owned_unread_and_preserves_total (core.product_tests.ProductTests.test_unread_filter_returns_only_owned_unread_and_preserves_total) ... ok
+test_workbench_actions_and_mini_upcoming_have_same_record (core.product_tests.ProductTests.test_workbench_actions_and_mini_upcoming_have_same_record) ... ok
+test_duplicate_qualification_names_have_unique_api_keys (__main__.IndependentBoundaryTests.test_duplicate_qualification_names_have_unique_api_keys) ... ok
+test_previous_repair_worker_can_view_but_is_not_eligible_to_accept (__main__.IndependentBoundaryTests.test_previous_repair_worker_can_view_but_is_not_eligible_to_accept) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 1.416s
+
+OK
+Destroying test database for alias 'default' ('test_product_independent')...
+
+  Applying sessions.0001_initial... OK
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
