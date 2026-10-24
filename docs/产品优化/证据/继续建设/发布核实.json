@@ -1,0 +1,77 @@
+{
+  "code_commit": "fb43bedad8888989c62a4e987e1f8fd469182dca",
+  "github_ci": {
+    "id": 40063126441,
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/40063126441",
+    "jobs": [
+      {
+        "name": "test",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "cloud-profile",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "windows-first-install",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "cloud_readonly": {
+    "emptyText": true,
+    "fields": [
+      "section",
+      "directory_q",
+      "directory_lab",
+      "calendar_from",
+      "calendar_to"
+    ],
+    "pagination": [
+      {
+        "name": "实验室目录分页",
+        "text": "共2项 · 第1/1页\n　"
+      },
+      {
+        "name": "开放日历分页",
+        "text": "共14项 · 第1/1页\n　"
+      }
+    ],
+    "path": "/manage/",
+    "scrollWidth": 390,
+    "title": "管理中心 · 实验资源中心",
+    "viewport": 390
+  },
+  "cloud_scope": "公开健康与静态资源检查、公开演示身份登录后只读管理目录；未创建或改变预约、审批及维修业务记录",
+  "preview": {
+    "source_commit": "fb43bedad8888989c62a4e987e1f8fd469182dca",
+    "runtime_files_identical": 39,
+    "private_overrides": [
+      "AppID",
+      "projectname",
+      "libVersion"
+    ],
+    "official_preview_exit": 0,
+    "device_acceptance": "not executed; user paused",
+    "formal_release": "not uploaded or submitted for review",
+    "qr": "product-followup-preview-qr.jpg",
+    "package": {
+      "size": {
+        "total": 87932,
+        "packages": [
+          {
+            "name": "TOTAL",
+            "size": 87932
+          }
+        ]
+      }
+    }
+  },
+  "phone": "未执行，保持暂停；iPhone延期",
+  "formal_release": "未上传正式版本或提交审核"
+}

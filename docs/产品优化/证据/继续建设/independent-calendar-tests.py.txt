@@ -44,4 +44,3 @@ class ContinueIndependentTests(TestCase):
             with self.subTest(change=change):
                 page=self.query(**change);self.assertEqual(page.status_code,200);self.assertFalse(page.context['catalog_form'].is_valid());self.assertEqual(page.context['lab_catalog_page'].paginator.count,0)
         self.assertEqual(self.query(calendar_from='9999-12-31',calendar_to='9999-12-31').status_code,200)
-

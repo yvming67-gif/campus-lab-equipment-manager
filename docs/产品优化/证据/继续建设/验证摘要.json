@@ -33,5 +33,12 @@
     "waiting_external": 5
   },
   "phone": "未执行，保持暂停；iPhone延期",
-  "deployment": "按实际发布后记录"
+  "deployment": {
+    "code_commit": "fb43bedad8888989c62a4e987e1f8fd469182dca",
+    "github_ci_run": 40063126441,
+    "github_ci": "三项成功",
+    "cloud": "健康及新版管理目录只读核实通过",
+    "official_preview_bytes": 87932,
+    "formal_release": "未上传或审核"
+  }
 }
