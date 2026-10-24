@@ -18,7 +18,7 @@
   "UC-17": "core/services.py: accept_work",
   "UC-18": "core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
   "UC-19": "core/services.py: grant_user；core/miniapi.py: me",
-  "UC-20": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception",
+  "UC-20": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception；core/catalog.py: calendar_catalog",
   "UC-21": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py",
   "UC-22": "core/views.py: notifications；core/miniapi.py: notifications",
   "UC-23": "core/services.py: run_jobs、process_delivery、record_manual_contact",

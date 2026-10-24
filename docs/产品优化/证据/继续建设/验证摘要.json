@@ -1,0 +1,37 @@
+{
+  "baseline": "07779f04a7dc001ef85b2f9a136bfef1983d624a",
+  "backend": {
+    "total": 208,
+    "passed": 208,
+    "skipped": 0,
+    "scope": "本地隔离，包含归档恢复集成，不是Neon真实恢复"
+  },
+  "client": {
+    "passed": 44
+  },
+  "previous_independent_client": {
+    "passed": 6
+  },
+  "native_compile": {
+    "pages": 7,
+    "wxml": "pass",
+    "wxss": "pass"
+  },
+  "independent_followup": {
+    "backend": 7,
+    "client": 4
+  },
+  "web_cases": 4,
+  "new_issues": [
+    "AUD-0098",
+    "AUD-0099"
+  ],
+  "all_issue_counts": {
+    "total": 99,
+    "closed_in_scope": 89,
+    "waiting_policy": 5,
+    "waiting_external": 5
+  },
+  "phone": "未执行，保持暂停；iPhone延期",
+  "deployment": "按实际发布后记录"
+}

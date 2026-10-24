@@ -1,0 +1,108 @@
+[
+  {
+    "state": "default",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "observation": {
+      "empty": true,
+      "fields": [
+        "section",
+        "directory_q",
+        "directory_lab",
+        "calendar_from",
+        "calendar_to"
+      ],
+      "pagination": [
+        {
+          "name": "实验室目录分页",
+          "text": "共2项 · 第1/1页\n　"
+        },
+        {
+          "name": "开放日历分页",
+          "text": "共14项 · 第1/1页\n　"
+        }
+      ],
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "width": 1440
+    },
+    "screenshot": "continue-calendar-default-1440.png"
+  },
+  {
+    "state": "empty",
+    "viewport": [
+      1440,
+      1000
+    ],
+    "observation": {
+      "empty": true,
+      "fields": [
+        "section",
+        "directory_q",
+        "directory_lab",
+        "calendar_from",
+        "calendar_to"
+      ],
+      "pagination": [],
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "width": 1440
+    },
+    "screenshot": "continue-calendar-empty-1440.png"
+  },
+  {
+    "state": "default",
+    "viewport": [
+      390,
+      844
+    ],
+    "observation": {
+      "empty": true,
+      "fields": [
+        "section",
+        "directory_q",
+        "directory_lab",
+        "calendar_from",
+        "calendar_to"
+      ],
+      "pagination": [
+        {
+          "name": "实验室目录分页",
+          "text": "共2项 · 第1/1页\n　"
+        },
+        {
+          "name": "开放日历分页",
+          "text": "共14项 · 第1/1页\n　"
+        }
+      ],
+      "scrollWidth": 390,
+      "title": "管理中心 · 实验资源中心",
+      "width": 390
+    },
+    "screenshot": "continue-calendar-default-390.png"
+  },
+  {
+    "state": "empty",
+    "viewport": [
+      390,
+      844
+    ],
+    "observation": {
+      "empty": true,
+      "fields": [
+        "section",
+        "directory_q",
+        "directory_lab",
+        "calendar_from",
+        "calendar_to"
+      ],
+      "pagination": [],
+      "scrollWidth": 390,
+      "title": "管理中心 · 实验资源中心",
+      "width": 390
+    },
+    "screenshot": "continue-calendar-empty-390.png"
+  }
+]

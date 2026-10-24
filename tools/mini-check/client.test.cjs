@@ -32,6 +32,31 @@ function page(name) {
 const values = () => ({ resource_id: 1, starts_at: '2027-01-01T10:00:00', ends_at: '2027-01-01T11:00:00', purpose: '模拟用途', participants: 1 });
 test.beforeEach(setup);
 
+test('overview failure remains visible when resource discovery succeeds',async()=>{
+  signedIn();const p=page('resources');
+  reply=r=>r.url.endsWith('/me/') ? r.fail({errMsg:'request:fail timeout'}) : r.success({statusCode:200,data:{ok:true,data:{items:[],labs:[],page:1,total:0,has_more:false}}});
+  await p.onShow();assert.match(p.data.overviewError,/连接超时/);assert.equal(p.data.overviewReady,false);assert.equal(p.data.loading,false);assert.equal(p.data.overviewLoading,false);
+});
+
+test('overview refresh failure marks previous data stale and a successful retry clears the warning',async()=>{
+  signedIn();const p=page('resources');p.setData({overviewReady:true,stats:{pending:4},upcoming:[{id:9}]});
+  reply=r=>r.url.endsWith('/me/') ? r.fail({errMsg:'request:fail timeout'}) : r.success({statusCode:200,data:{ok:true,data:{items:[],labs:[],page:1,total:0,has_more:false}}});
+  await p.onShow();assert.equal(p.data.stats.pending,4);assert.equal(p.data.upcoming[0].id,9);assert.equal(p.data.overviewReady,true);assert.ok(p.data.overviewError);
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:r.url.endsWith('/me/') ? {user:{display_name:'模拟学生'},stats:{pending:0},policy:{window_days:14},upcoming:[]} : {items:[],labs:[],page:1,total:0,has_more:false}}});
+  await p.onShow();assert.equal(p.data.stats.pending,0);assert.equal(p.data.upcoming.length,0);assert.equal(p.data.overviewError,'');
+});
+
+test('slow overview does not delay discovery and older overview cannot overwrite new results',async()=>{
+  signedIn();const p=page('resources'),pending=[];
+  reply=r=>{if(r.url.endsWith('/me/'))pending.push(r);else r.success({statusCode:200,data:{ok:true,data:{items:[],labs:[],page:1,total:0,has_more:false}}});};
+  const old=p.onShow();await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(p.data.loading,false);assert.equal(p.data.overviewLoading,true);assert.equal(requests.length,2);
+  const latest=p.onShow();
+  pending[1].success({statusCode:200,data:{ok:true,data:{user:{display_name:'模拟学生'},stats:{pending:2},policy:{window_days:14},upcoming:[]}}});await latest;
+  pending[0].success({statusCode:200,data:{ok:true,data:{user:{display_name:'过期响应'},stats:{pending:8},policy:{window_days:14},upcoming:[]}}});await old;
+  assert.equal(p.data.stats.pending,2);assert.equal(p.data.overviewReady,true);assert.equal(p.data.overviewError,'');
+});
+
 test('time-oriented discovery sends the displayed interval and carries it to the detail form',async()=>{
   signedIn();const p=page('resources');p.setData({timeSearch:true,slot:{date:'2027-01-02',start:'10:00',end:'11:00'}});
   reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:1,kind:'EQUIPMENT',service_status:'NORMAL',available:true}],labs:[],page:1,has_more:false,total:1}}});

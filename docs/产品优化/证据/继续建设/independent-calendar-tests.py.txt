@@ -1,0 +1,47 @@
+from datetime import timedelta,time
+from django.test import TestCase
+from django.core.management import call_command
+from django.utils import timezone
+from django.http import QueryDict
+from core.models import User,Lab,OpeningPeriod,CalendarException
+
+class ContinueIndependentTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):call_command('seed_demo',verbosity=0)
+
+    def setUp(self):
+        self.system=User.objects.get(username='sysadmin');self.client.force_login(self.system)
+        self.lab=Lab.objects.order_by('pk').first();self.a=timezone.localdate()+timedelta(days=100);self.b=self.a+timedelta(days=10)
+
+    def query(self,**extra):
+        params={'section':'calendars','directory_lab':self.lab.pk,'calendar_from':self.a.isoformat(),'calendar_to':self.b.isoformat()};params.update(extra)
+        return self.client.get('/manage/',params)
+
+    def test_inclusive_version_intersection_excludes_both_outside_sides(self):
+        records=[]
+        for i,(a,b) in enumerate([(self.a-timedelta(days=4),self.a-timedelta(days=1)),(self.a-timedelta(days=4),self.a),(self.a+timedelta(days=1),self.b-timedelta(days=1)),(self.b,self.b+timedelta(days=3)),(self.b+timedelta(days=1),None)]):
+            records.append(OpeningPeriod.objects.create(lab=self.lab,weekday=2,starts_at=time(7,i),ends_at=time(20),valid_from=a,valid_to=b))
+        ids={o.pk for o in self.query().context['opening_periods']}
+        self.assertTrue(all(records[i].pk in ids for i in [1,2,3]));self.assertTrue(all(records[i].pk not in ids for i in [0,4]))
+        self.assertIn(records[4].pk,{o.pk for o in self.query(calendar_to='').context['opening_periods']})
+
+    def test_exception_edges_and_inactive_replaced_record(self):
+        records=[]
+        for d,active in [(self.a-timedelta(days=1),True),(self.a,True),(self.b,True),(self.b+timedelta(days=1),True),(self.a,False)]:
+            records.append(CalendarException.objects.create(lab=self.lab,day=d,closed=True,active=active,actor=self.system,reason='独立边界'))
+        self.assertEqual({e.pk for e in self.query().context['calendar_exceptions']},{records[1].pk,records[2].pk})
+
+    def test_three_pager_queries_keep_other_page_parameters_and_filter(self):
+        page=self.query(directory_q=self.lab.code,labs_page='2',openings_page='3',exceptions_page='4')
+        for name,own in [('lab','labs_page'),('opening','openings_page'),('exception','exceptions_page')]:
+            query=QueryDict(page.context[name+'_catalog_filters'])
+            self.assertNotIn(own,query);self.assertEqual(query['directory_q'],self.lab.code);self.assertEqual(query['calendar_from'],self.a.isoformat());self.assertEqual(query['calendar_to'],self.b.isoformat());self.assertEqual(query['section'],'calendars')
+            for other,value in [('labs_page','2'),('openings_page','3'),('exceptions_page','4')]:
+                if other!=own:self.assertEqual(query[other],value)
+
+    def test_extreme_and_invalid_form_values_do_not_throw_or_expose_results(self):
+        for change in [{'directory_lab':'9'*200},{'calendar_from':'2026-02-30'},{'calendar_from':''},{'directory_q':'q'*101}]:
+            with self.subTest(change=change):
+                page=self.query(**change);self.assertEqual(page.status_code,200);self.assertFalse(page.context['catalog_form'].is_valid());self.assertEqual(page.context['lab_catalog_page'].paginator.count,0)
+        self.assertEqual(self.query(calendar_from='9999-12-31',calendar_to='9999-12-31').status_code,200)
+

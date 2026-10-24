@@ -1,0 +1,12 @@
+✔ first overview failure survives successful resource query and a later manual resource reload (14.6294ms)
+✔ overview refresh failure preserves last successful figures and exposes separate failure (3.0615ms)
+✔ old failure cannot overwrite a newer successful overview or release its loading state (2.1785ms)
+✔ old success cannot clear the latest overview failure or replace existing figures (1.7652ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 206.4831

@@ -31,12 +31,17 @@ const screens = {
     }
   },
   resources: {
-    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '' }, loading: false, error: '', hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, timeSearch: false, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
+    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '' }, loading: false, error: '', hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, overviewReady: false, overviewLoading: false, overviewError: '', timeSearch: false, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
     async onShow() {
       if (!api.requireLogin()) return;
-      this.setData({ user: api.session().user });
-      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, overdue: data.overdue, policy: data.policy, upcoming: (data.upcoming || []).map(fmt.booking), maxDate: fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000) }); } catch (e) { error(this, e); }
-      return this.load(1);
+      const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
+      this.setData({user:api.session().user,overviewLoading:true,overviewError:''});
+      const overview=api.request('/me/').then(data=>{
+        if(serial!==this._overviewSerial)return;
+        this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000)});
+      }).catch(e=>{if(serial===this._overviewSerial)this.setData({overviewError:api.errorText(e)});})
+        .finally(()=>{if(serial===this._overviewSerial)this.setData({overviewLoading:false});});
+      return Promise.all([overview,this.load(1)]);
     },
     input, openResource, openBooking, openBookings,
     toggleTime() {this.setData({timeSearch:!this.data.timeSearch});if(!this.data.timeSearch)return this.load(1);},

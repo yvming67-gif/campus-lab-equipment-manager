@@ -4,7 +4,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
-from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent
+from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, OpeningPeriod, Lab
 from . import services as s
 
 
@@ -133,3 +133,45 @@ class ProductTests(TestCase):
         item=self.student.notifications.first();item.read_at=timezone.now();item.save(update_fields=['read_at'])
         data=self.mini('notifications/',unread='1').json()['data']
         self.assertTrue(all(x['read_at'] is None for x in data['items']));self.assertEqual(data['unread'],data['total'])
+
+    def test_calendar_catalog_pages_beyond_old_limits_and_preserves_filters(self):
+        today=timezone.localdate()
+        for i in range(105):
+            begin=today+timedelta(days=7*(i+1))
+            OpeningPeriod.objects.create(lab=self.eq.lab,weekday=1,starts_at='08:00',ends_at='20:00',valid_from=begin,valid_to=begin+timedelta(days=6))
+        CalendarException.objects.bulk_create([CalendarException(lab=self.eq.lab,day=today+timedelta(days=i+1),closed=True,actor=self.system,reason='分页例外') for i in range(35)])
+        self.client.force_login(self.system)
+        params={'section':'calendars','directory_q':self.eq.lab.code,'openings_page':4,'exceptions_page':2}
+        page=self.client.get('/manage/',params)
+        self.assertGreater(page.context['opening_catalog_page'].paginator.count,100)
+        self.assertEqual(page.context['opening_catalog_page'].number,4)
+        self.assertEqual(page.context['exception_catalog_page'].paginator.count,35)
+        self.assertEqual(len(page.context['calendar_exceptions']),15)
+        self.assertContains(page,'directory_q='+self.eq.lab.code)
+        self.assertContains(page,'section=calendars')
+        self.assertContains(page,'openings_page=3');self.assertContains(page,'单日例外分页')
+
+    def test_calendar_catalog_date_intersection_and_invalid_range(self):
+        today=timezone.localdate();a=today+timedelta(days=30);b=a+timedelta(days=7)
+        op=OpeningPeriod.objects.create(lab=self.eq.lab,weekday=1,starts_at='08:00',ends_at='20:00',valid_from=a,valid_to=b)
+        e=CalendarException.objects.create(lab=self.eq.lab,day=a,closed=True,actor=self.system,reason='日期交集')
+        self.client.force_login(self.system)
+        params={'section':'calendars','directory_lab':self.eq.lab_id,'calendar_from':a.isoformat(),'calendar_to':a.isoformat()}
+        page=self.client.get('/manage/',params)
+        self.assertIn(op,list(page.context['opening_periods']));self.assertEqual(list(page.context['calendar_exceptions']),[e])
+        params['calendar_to']=(a-timedelta(days=1)).isoformat()
+        invalid=self.client.get('/manage/',params)
+        self.assertContains(invalid,'结束日期不得早于起始日期');self.assertEqual(invalid.context['opening_catalog_page'].paginator.count,0)
+
+    def test_calendar_directory_pagination_cannot_expand_management_scope(self):
+        for i in range(15):Lab.objects.create(code=f'CAT-{i:02}',name=f'目录实验室{i}',location='模拟地点')
+        self.client.force_login(self.system)
+        page=self.client.get('/manage/',{'section':'calendars','directory_q':'CAT-','labs_page':2})
+        self.assertEqual(page.context['lab_catalog_page'].paginator.count,15)
+        self.assertEqual(len(page.context['directory_labs']),3)
+        limited=User.objects.create(username='calendar_limited',school_no='CAL_LIMIT',display_name='范围管理员')
+        UserRole.objects.create(user=limited,role=Role.objects.get(code='LAB_ADMIN'));LabGrant.objects.create(user=limited,lab=self.eq.lab)
+        hidden=Lab.objects.exclude(pk=self.eq.lab_id).first();self.client.force_login(limited)
+        page=self.client.get('/manage/',{'section':'calendars','directory_lab':hidden.pk})
+        self.assertFalse(page.context['catalog_form'].is_valid());self.assertEqual(page.context['lab_catalog_page'].paginator.count,0)
+        self.assertNotContains(page,hidden.name)

@@ -23,6 +23,7 @@ from .reports import utilization
 from .demo_identity import verify_demo_password
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
+from .catalog import calendar_catalog
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
@@ -346,13 +347,12 @@ def manage(request):
     if section not in ['overview','resources','people','calendars','access']:section='overview'
     if section in ['people','access']:protected(request.user.has_role('SYS_ADMIN'))
     visible_labs=Lab.objects.all() if request.user.has_role('SYS_ADMIN') else Lab.objects.filter(labgrant__user=request.user).distinct()
-    today=timezone.localdate()
     context_extra={'section':section,'directory_labs':visible_labs.order_by('code'),
-        'opening_periods':OpeningPeriod.objects.filter(lab__in=visible_labs).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=today)).select_related('lab').order_by('lab__code','weekday','valid_from')[:100],
-        'calendar_exceptions':CalendarException.objects.filter(lab__in=visible_labs,active=True,day__gte=today).select_related('lab').order_by('day','lab__code')[:30],
+
         'qualification_types':QualificationType.objects.order_by('code'),
         'role_directory':Role.objects.prefetch_related('users').order_by('code') if request.user.has_role('SYS_ADMIN') else Role.objects.none()}
-    return render(request,"manage.html",{**context_extra,"title":"资源与配置","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
+    if section=='calendars':context_extra.update(calendar_catalog(request,visible_labs))
+    return render(request,"manage.html",{**context_extra,"title":"管理中心","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
 
 @login_required
 def manage_form(request,action,pk=None):
