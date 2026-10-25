@@ -1,0 +1,70 @@
+[
+  {
+    "name": "accessory_large_quantity",
+    "method": "POST",
+    "path": "/manage/resource/{equipment_id}/",
+    "input": {
+      "accessories": "P1,模拟配件,2147483648"
+    },
+    "status": 500,
+    "exception": "DataError"
+  },
+  {
+    "name": "accessory_unicode_quantity",
+    "method": "POST",
+    "path": "/manage/resource/{equipment_id}/",
+    "input": {
+      "accessories": "P1,模拟配件,²"
+    },
+    "status": 500,
+    "exception": "ValueError"
+  },
+  {
+    "name": "booking_unicode_lab",
+    "method": "GET",
+    "path": "/bookings/?lab=²",
+    "status": 500,
+    "exception": "ValueError"
+  },
+  {
+    "name": "delivery_unicode_pk",
+    "method": "POST",
+    "path": "/deliveries/",
+    "input": {
+      "pk": "²"
+    },
+    "status": 500,
+    "exception": "ValueError"
+  },
+  {
+    "name": "formal_delivery_queue",
+    "method": "GET and POST",
+    "path": "/deliveries/",
+    "source_channel": "EXTERNAL",
+    "source_status": "FAILED",
+    "source_count": 1,
+    "listed_count": 0,
+    "get_status": 200,
+    "post_status": 404
+  },
+  {
+    "name": "report_max_end_date",
+    "method": "GET",
+    "path": "/reports/?end=9999-12-31",
+    "status": 500,
+    "exception": "OverflowError"
+  },
+  {
+    "name": "delivery_stale_lease",
+    "initial_attempts": 3,
+    "two_adapter_calls": "old failure after second lease acquired, then second provider success",
+    "processing_returns": {
+      "old": true,
+      "new": false
+    },
+    "final_status": "FAILED",
+    "success_attempt_count": 0,
+    "last_error": "已耗尽3次重试，需人工联系并追加联系记录",
+    "external_provider": "mock adapter only, no real delivery"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "client-44",
+    "exit": 0,
+    "log": "client-44.log"
+  },
+  {
+    "name": "independent-6",
+    "exit": 0,
+    "log": "independent-6.log"
+  },
+  {
+    "name": "independent-4",
+    "exit": 0,
+    "log": "independent-4.log"
+  },
+  {
+    "name": "native-compile",
+    "exit": 0,
+    "log": "native-compile.log"
+  }
+]

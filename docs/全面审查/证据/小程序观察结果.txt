@@ -1,0 +1,18 @@
+✔ observed: a late old-token 401 clears a newer authenticated session (4.7489ms)
+✔ observed: an earlier successful submission clears another in-flight draft and changes its retry key (1.1213ms)
+✔ observed: editing booking search before more appends page 2 of a new query to old results (4.9807ms)
+✔ observed: an older detail response overwrites a later cancelled result (1.3168ms)
+✔ observed: an old availability error overwrites current feedback and releases a newer loading state (1.9761ms)
+✔ observed: failed mark-all invalidates the pending list but leaves loading permanently true (1.1615ms)
+✔ falsified hypothesis: expired-session onShow still returns Promise because it is async (1.0598ms)
+✔ observed: existing resource page keeps a stale minimum date when shown on a later day (0.9948ms)
+✔ observed: filtered booking zero result uses the same create-first empty message (1.0116ms)
+✔ observed: three first-load failures satisfy both the error and normal-empty predicates (1.5297ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125.0565

@@ -1,0 +1,9 @@
+{
+  "renderer": "GitHub Markdown API, GFM context",
+  "scope": "GitHub-rendered content with local inspection stylesheet, not a screenshot of the live GitHub page",
+  "tables": 5,
+  "details": 1,
+  "readme_lines": 147,
+  "source_sha256": "7b268208fc545132593fabbba4ffae1a12e92974a34218be8acd575f3f4d83b0",
+  "digest_mode": "UTF-8 text with normalized LF, matching text sent to GitHub Markdown API; not raw Windows CRLF bytes"
+}

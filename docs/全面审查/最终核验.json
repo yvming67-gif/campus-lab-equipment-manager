@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-25",
+  "baseline": "a0c552b4b07592e0533a9fe1b99cc0cd6bbe782c",
+  "business_code_changed": false,
+  "formal_artifacts_changed": false,
+  "issues": {
+    "total": 114,
+    "by_type": {
+      "已确认缺陷": 71,
+      "需求待确认": 5,
+      "应用适配缺口": 19,
+      "优化建议": 17,
+      "待验证风险": 2
+    },
+    "by_severity": {
+      "严重": 15,
+      "一般": 58,
+      "轻微": 41
+    },
+    "by_status": {
+      "已复验关闭": 87,
+      "等待制度确认": 6,
+      "已确认待处理": 11,
+      "等待外部环境验证": 5,
+      "建议待处理": 5
+    }
+  },
+  "round_finding_ids": [
+    "AUD-0009",
+    "AUD-0018",
+    "AUD-0088",
+    "AUD-0101",
+    "AUD-0102",
+    "AUD-0103",
+    "AUD-0104",
+    "AUD-0105",
+    "AUD-0106",
+    "AUD-0107",
+    "AUD-0108",
+    "AUD-0109",
+    "AUD-0110",
+    "AUD-0111",
+    "AUD-0112",
+    "AUD-0113",
+    "AUD-0114"
+  ],
+  "round_distinct_ids": 17,
+  "new_ids": 14,
+  "reopened_ids": [
+    "AUD-0009",
+    "AUD-0018",
+    "AUD-0088"
+  ],
+  "existing_backend": {
+    "passed": 208,
+    "skipped": 0,
+    "source": "证据/后端既有回归.txt"
+  },
+  "client_passed": [
+    44,
+    6,
+    4
+  ],
+  "compiled_pages": 7,
+  "observations": {
+    "backend_focused": 7,
+    "backend_extra": 3,
+    "mini_scenarios": 10,
+    "mini_falsified_hypothesis": 1,
+    "meaning": "观察断言成立，不是修复验收通过"
+  },
+  "web": {
+    "observations": 82,
+    "roles": [
+      "student",
+      "teacher",
+      "admin",
+      "tech",
+      "sysadmin",
+      "director"
+    ],
+    "overflow": [],
+    "unlabelled": [],
+    "brokenImages": [],
+    "limits": "Chromium desktop/mobile viewport, not real mobile browser or native WeChat; no cloud writes; semantic and visual review separate"
+  },
+  "static_checks": [
+    {
+      "command": "python tools/validate_registry.py",
+      "exit_code": 0,
+      "result": "PASS: 27 FR/UC/SPEC, 46 BR + DC-01, 11 QR, 66 AC; source/business/message/field/model references and explicit operational trace\r\nPASS: vector ERD has all exported entities / fields / field-attached FK; six complete domains; no card-crossing connectors"
+    },
+    {
+      "command": "python tools/validate_analysis_models.py",
+      "exit_code": 0,
+      "result": "分析契约通过：27规约、4内部协作、43消息、9组可编辑模型；静态检查不代替语义及运行验收。"
+    }
+  ],
+  "local_link_checks": 75,
+  "known_private_value_scan": "pass; values never output",
+  "formal_word_matches_existing_rendered_delivery": true,
+  "remaining_limits": [
+    "真实云端恢复未执行",
+    "手机暂停，iPhone延期",
+    "非调试微信/平台审核/真实身份消息未验收",
+    "生产负载与完整可访问性未验收"
+  ],
+  "independence": "后端/小程序子任务保存运行证据，模型子任务中断后主流程补核；各自范围见分报告。未伪造额外独立签署。"
+}

@@ -1,0 +1,15 @@
+{
+  "observations": 82,
+  "roles": [
+    "student",
+    "teacher",
+    "admin",
+    "tech",
+    "sysadmin",
+    "director"
+  ],
+  "overflow": [],
+  "unlabelled": [],
+  "brokenImages": [],
+  "limits": "Chromium desktop/mobile viewport, not real mobile browser or native WeChat; no cloud writes; semantic and visual review separate"
+}

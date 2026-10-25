@@ -1,0 +1,90 @@
+from pathlib import Path
+from datetime import timedelta
+from threading import Event, Thread, current_thread
+from unittest.mock import patch
+import json
+from django.test import TestCase,TransactionTestCase,Client,override_settings
+from django.core.management import call_command
+from django.db import connections
+from django.utils import timezone
+from core.models import *
+from core import services as s
+
+HERE=Path(__file__).resolve().parent
+ROWS=[]
+def note(name,result):
+    ROWS.append({'name':name,**result});(HERE/'observations.json').write_text(json.dumps(ROWS,ensure_ascii=False,indent=2)+'\n','utf8')
+
+class InputObservations(TestCase):
+    @classmethod
+    def setUpTestData(cls):call_command('seed_demo',verbosity=0)
+    def setUp(self):
+        self.client=Client(raise_request_exception=False)
+        self.student=User.objects.get(username='student');self.admin=User.objects.get(username='admin');self.sys=User.objects.get(username='sysadmin')
+        self.eq=Resource.objects.get(code='EQ-OSC-01')
+    def test_observe_booking_unicode_lab(self):
+        self.client.force_login(self.student)
+        r=self.client.get('/bookings/',{'lab':'²'})
+        note('booking_unicode_lab',{'method':'GET','path':'/bookings/?lab=²','status':r.status_code,'exception':type(r.exc_info[1]).__name__ if r.exc_info else None})
+        self.assertEqual(r.status_code,500)
+    def test_observe_delivery_unicode_pk(self):
+        self.client.force_login(self.sys)
+        r=self.client.post('/deliveries/',{'pk':'²','reason':'独立审查模拟联系'})
+        note('delivery_unicode_pk',{'method':'POST','path':'/deliveries/','input':{'pk':'²'},'status':r.status_code,'exception':type(r.exc_info[1]).__name__ if r.exc_info else None})
+        self.assertEqual(r.status_code,500)
+    def test_observe_accessory_unicode_quantity(self):
+        self.client.force_login(self.admin)
+        r=self.client.post(f'/manage/resource/{self.eq.pk}/',{'code':self.eq.code,'name':self.eq.name,'kind':'EQUIPMENT','lab':self.eq.lab_id,'description':'模拟审查','category':'示波器','risk':'NORMAL','portable':'on','accessories':'P1,模拟配件,²','reason':'输入边界复核'})
+        note('accessory_unicode_quantity',{'method':'POST','path':'/manage/resource/{equipment_id}/','input':{'accessories':'P1,模拟配件,²'},'status':r.status_code,'exception':type(r.exc_info[1]).__name__ if r.exc_info else None})
+        self.assertEqual(r.status_code,500)
+        self.eq.refresh_from_db();self.assertNotEqual(self.eq.description,'模拟审查')
+    def test_observe_accessory_large_quantity(self):
+        self.client.force_login(self.admin)
+        r=self.client.post(f'/manage/resource/{self.eq.pk}/',{'code':self.eq.code,'name':self.eq.name,'kind':'EQUIPMENT','lab':self.eq.lab_id,'description':'模拟审查','category':'示波器','risk':'NORMAL','portable':'on','accessories':'P1,模拟配件,2147483648','reason':'输入边界复核'})
+        note('accessory_large_quantity',{'method':'POST','path':'/manage/resource/{equipment_id}/','input':{'accessories':'P1,模拟配件,2147483648'},'status':r.status_code,'exception':type(r.exc_info[1]).__name__ if r.exc_info else None})
+        self.assertEqual(r.status_code,500)
+    def test_observe_report_max_end_date(self):
+        self.client.force_login(self.admin)
+        r=self.client.get('/reports/',{'end':'9999-12-31'})
+        note('report_max_end_date',{'method':'GET','path':'/reports/?end=9999-12-31','status':r.status_code,'exception':type(r.exc_info[1]).__name__ if r.exc_info else None})
+        self.assertEqual(r.status_code,500)
+    @override_settings(DEMO_MODE=False)
+    def test_observe_formal_delivery_list_and_manual_entry(self):
+        event=s.audit(self.sys,self.eq,'AUDIT_PROBE',reason='隔离模拟投递记录')
+        s.notify(event,[self.student],'AUDIT_PROBE','独立模拟通知')
+        task=Delivery.objects.get(channel='EXTERNAL',notification__audit=event)
+        Delivery.objects.filter(pk=task.pk).update(status='FAILED')
+        self.client.force_login(self.sys)
+        get=self.client.get('/deliveries/')
+        post=self.client.post('/deliveries/',{'pk':str(task.pk),'reason':'应允许追加实际联系记录'})
+        note('formal_delivery_queue',{'method':'GET and POST','path':'/deliveries/','source_channel':'EXTERNAL','source_status':'FAILED','source_count':1,'listed_count':get.context['page'].paginator.count,'get_status':get.status_code,'post_status':post.status_code})
+        self.assertEqual(get.status_code,200);self.assertEqual(get.context['page'].paginator.count,0);self.assertEqual(post.status_code,404)
+        event=s.record_manual_contact(self.sys,task.pk,'直接服务可追加模拟联系')
+        self.assertEqual(event.action,'MANUAL_CONTACT')
+
+class DeliveryLeaseObservation(TransactionTestCase):
+    @override_settings(DEMO_MODE=False)
+    def test_observe_stale_failure_overwrites_new_lease_acceptance(self):
+        call_command('seed_demo',verbosity=0)
+        admin=User.objects.get(username='admin');student=User.objects.get(username='student');eq=Resource.objects.get(code='EQ-OSC-01')
+        at=timezone.now();ev=s.audit(admin,eq,'AUDIT_PROBE',reason='隔离超时租约模拟')
+        s.notify(ev,[student],'AUDIT_PROBE','独立模拟通知',at)
+        task=Delivery.objects.get(channel='EXTERNAL',notification__audit=ev)
+        for i in range(3):DeliveryAttempt.objects.create(delivery=task,attempt_no=i,outcome='ERROR',detail='模拟已失败尝试',attempted_at=at-timedelta(minutes=30-i))
+        a_enter,b_enter,a_release,b_release=Event(),Event(),Event(),Event();outcomes={}
+        def adapter(_):
+            if current_thread().name=='old-lease':
+                a_enter.set();assert a_release.wait(10);raise TimeoutError('simulated old request failure')
+            b_enter.set();assert b_release.wait(10);return {'accepted':True,'receipt_id':'simulated-new-lease-success'}
+        def run(name,when):
+            try:outcomes[name]=s.process_delivery(task.pk,at=when)
+            except Exception as e:outcomes[name]=type(e).__name__
+            finally:connections.close_all()
+        with patch('core.adapters.external_delivery',side_effect=adapter):
+            old=Thread(target=run,name='old-lease',args=('old',at));old.start();self.assertTrue(a_enter.wait(10))
+            new=Thread(target=run,name='new-lease',args=('new',at+timedelta(seconds=31)));new.start();self.assertTrue(b_enter.wait(10))
+            a_release.set();old.join(10);self.assertFalse(old.is_alive())
+            b_release.set();new.join(10);self.assertFalse(new.is_alive())
+        task.refresh_from_db()
+        note('delivery_stale_lease',{'initial_attempts':3,'two_adapter_calls':'old failure after second lease acquired, then second provider success','processing_returns':outcomes,'final_status':task.status,'success_attempt_count':task.attempts.filter(outcome='SUCCESS').count(),'last_error':task.last_error,'external_provider':'mock adapter only, no real delivery'})
+        self.assertEqual(task.status,'FAILED');self.assertEqual(task.attempts.filter(outcome='SUCCESS').count(),0)

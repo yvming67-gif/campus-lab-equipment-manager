@@ -1,0 +1,58 @@
+from pathlib import Path
+from datetime import timedelta,time
+from threading import Barrier
+from concurrent.futures import ThreadPoolExecutor
+import json,uuid
+from django.test import TestCase,TransactionTestCase
+from django.core.management import call_command
+from django.db import connections
+from django.utils import timezone
+from core.models import *
+from core import services as s,coordination as c
+from core.reports import utilization
+
+HERE=Path(__file__).resolve().parent;ROWS=[]
+def note(name,**data):
+    ROWS.append({'name':name,**data});(HERE/'extra-observations.json').write_text(json.dumps(ROWS,ensure_ascii=False,indent=2)+'\n','utf8')
+
+class CalendarAndRetryObservations(TestCase):
+    @classmethod
+    def setUpTestData(cls):call_command('seed_demo',verbosity=0)
+    def test_day_level_closure_changes_elapsed_day_report(self):
+        student=User.objects.get(username='student');admin=User.objects.get(username='admin');sys=User.objects.get(username='sysadmin');resource=Resource.objects.get(code='EQ-OSC-01')
+        today=timezone.localdate();a=timezone.make_aware(timezone.datetime.combine(today,time(8)));b=a+timedelta(hours=1)
+        Resource.objects.filter(pk=resource.pk).update(created_at=a-timedelta(hours=8));ServicePeriod.objects.filter(resource=resource,status='NORMAL').update(starts_at=a-timedelta(hours=8));resource.refresh_from_db()
+        booking=s.create_reservation(student,resource.pk,a,b,'模拟上午实验',at=a-timedelta(hours=1))
+        s.checkout(admin,booking.pk,student.school_no,resource.code,at=a)
+        s.return_equipment(admin,booking.pk,resource.code,'模拟完好',at=b)
+        clock=a+timedelta(hours=7)
+        before=utilization([resource],a,a+timedelta(hours=2),at=clock)[0]
+        c.calendar_exception(sys,resource.lab_id,today,True,None,None,'模拟下午临时关闭；口径待确认',at=clock)
+        after=utilization([resource],a,a+timedelta(hours=2),at=clock)[0]
+        keys=['capacity','actual','booked','rate'];note('midday_closure_recalculates_past_hours',before={k:before[k] for k in keys},after={k:after[k] for k in keys},completed_reservation_preserved=Reservation.objects.filter(pk=booking.pk,status='COMPLETED').exists(),decision='day-level override matches current BR40; whether it should change already elapsed-hours reports requires policy confirmation')
+        self.assertEqual((before['capacity'],before['actual'],before['rate']),(2,1,50));self.assertEqual((after['capacity'],after['actual'],after['rate']),(0,0,None))
+    def test_new_request_keys_allow_duplicate_pending_applications(self):
+        user=User.objects.get(username='student');resource=Resource.objects.get(code='EQ-CAM-01');start=timezone.localtime(timezone.now()+timedelta(days=1)).replace(hour=10,minute=0,second=0,microsecond=0)
+        first=s.create_reservation(user,resource.pk,start,start+timedelta(hours=1),'模拟同内容网络重试',request_key=uuid.uuid4())
+        second=s.create_reservation(user,resource.pk,start,start+timedelta(hours=1),'模拟同内容网络重试',request_key=uuid.uuid4())
+        note('different_keys_duplicate_pending',count=Reservation.objects.filter(applicant=user,resource=resource).count(),statuses=[first.status,second.status],same_record=first.pk==second.pk,scope='server consequence of client lost idempotency key; no assertion that distinct-key applications violate current pending/no-occupancy rules')
+        self.assertNotEqual(first.pk,second.pk);self.assertEqual((first.status,second.status),('PENDING','PENDING'))
+
+class TwoAdministratorApproval(TransactionTestCase):
+    def test_two_distinct_administrators_approve_competing_requests(self):
+        call_command('seed_demo',verbosity=0)
+        student=User.objects.get(username='student');teacher=User.objects.get(username='teacher');admin=User.objects.get(username='admin');resource=Resource.objects.get(code='EQ-CAM-01')
+        other=User.objects.create_user(username='audit_admin2',school_no='AUDIT-ADMIN-2',display_name='隔离模拟管理员二')
+        UserRole.objects.create(user=other,role=Role.objects.get(code='LAB_ADMIN'));LabGrant.objects.create(user=other,lab=resource.lab)
+        start=timezone.localtime(timezone.now()+timedelta(days=1)).replace(hour=10,minute=0,second=0,microsecond=0)
+        bookings=[s.create_reservation(user,resource.pk,start,start+timedelta(hours=1),'双管理员独立反例') for user in [student,teacher]]
+        barrier=Barrier(2)
+        def worker(pair):
+            actor,booking=pair
+            try:
+                barrier.wait(10);return s.approve(User.objects.get(pk=actor.pk),booking.pk,True,'模拟分别审核').status
+            except s.BusinessError:return 'RULE_REJECTED'
+            finally:connections.close_all()
+        with ThreadPoolExecutor(max_workers=2) as pool:results=list(pool.map(worker,zip([admin,other],bookings)))
+        note('two_distinct_admin_approval',outcomes=results,confirmed=Reservation.objects.filter(resource=resource,status='CONFIRMED').count(),scope='local PostgreSQL; two distinct administrator accounts')
+        self.assertEqual(results.count('CONFIRMED'),1);self.assertEqual(results.count('RULE_REJECTED'),1)

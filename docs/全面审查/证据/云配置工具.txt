@@ -1,0 +1,13 @@
+test_bad_database_configuration_never_echoes_credentials (__main__.CloudConfigurationTests.test_bad_database_configuration_never_echoes_credentials) ... ok
+test_cloud_profile_and_collectstatic_without_remote_calls (__main__.CloudConfigurationTests.test_cloud_profile_and_collectstatic_without_remote_calls) ... ok
+test_database_decodes_credentials_and_requires_tls (__main__.CloudConfigurationTests.test_database_decodes_credentials_and_requires_tls) ... ok
+test_failed_worker_stops_sibling_instead_of_leaving_false_ready_web (__main__.CloudConfigurationTests.test_failed_worker_stops_sibling_instead_of_leaving_false_ready_web) ... ok
+test_hostname_cannot_be_wildcard_or_url (__main__.CloudConfigurationTests.test_hostname_cannot_be_wildcard_or_url) ... ok
+test_missing_runtime_secret_is_not_replaced_with_ephemeral_key (__main__.CloudConfigurationTests.test_missing_runtime_secret_is_not_replaced_with_ephemeral_key) ... ok
+test_storage_preserves_private_objects_and_uses_explicit_credentials (__main__.CloudConfigurationTests.test_storage_preserves_private_objects_and_uses_explicit_credentials) ... ok
+test_waitress_accepts_the_render_proxy_configuration (__main__.CloudConfigurationTests.test_waitress_accepts_the_render_proxy_configuration) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.771s
+
+OK

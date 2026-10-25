@@ -1,0 +1,1677 @@
+[
+  {
+    "role": "anonymous",
+    "case": "login",
+    "requested_path": "/login/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "让每一次实验，\n有序开始。"
+      ],
+      "mainText": "CAMPUS LAB / 资源协同\n让每一次实验，\n有序开始。\n\n从设备预约、场地使用，到归还与维修，\n把资源状态和每一次交接连成完整记录。\n\n课程演示使用模拟身份和模拟消息服务。\n\n实验教学中心\n登录实验资源中心\n\n通过学校统一身份入口进入系统。登录后按角色获得相应功能与数据范围。\n\n进入统一身份入口 ↗\n课程演示环境\n\n本版本连接独立的模拟身份提供方。下一页可选择演示角色，不使用真实校园账号。\n\n统一资源信息\n自动冲突检查\n完整业务记录",
+      "path": "/login/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "统一身份入口 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "anonymous-login-390.png"
+  },
+  {
+    "role": "student",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，演示学生"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，演示学生\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n01\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n10-24 04:36\n\n预约8C13BA3455EF4B08已自动确认\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page0-1440.png"
+  },
+  {
+    "role": "student",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，演示学生"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，演示学生\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n01\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n10-24 04:36\n\n预约8C13BA3455EF4B08已自动确认\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page0-390.png"
+  },
+  {
+    "role": "student",
+    "case": "page1",
+    "requested_path": "/resources/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源目录"
+      ],
+      "mainText": "RESOURCE CATALOG\n资源目录\n\n查询目标时段的可用情况，再选择设备或场地。\n\n设备与场地分别预约\n资源名称或编号:\n资源类型:\n全部\n设备\n场地\n所属实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n查询开始时间:\n查询结束时间:\n查询资源\n重置条件\n10 项资源\n14天内 · 30分钟单位 · 最长8小时\n⌁\n正常\nEQ-CAM-01\n全画幅摄影套装\n\n机器人与数字影像实验室\n\n摄影设备 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-01\n数字示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-02\n混合信号示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-01\n便携式计算机\n\n电子与传感实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-02\n移动工作站\n\n机器人与数字影像实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-ROB-01\n协作机器人平台\n\n机器人与数字影像实验室\n\n机器人 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-01\n传感器教学套件\n\n电子与传感实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-02\n物联网传感套件\n\n机器人与数字影像实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-101\n电子与传感实验室整间场地\n\n电子与传感实验室\n\n场地 · 容量 32人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-202\n机器人与数字影像实验室整间场地\n\n机器人与数字影像实验室\n\n场地 · 容量 24人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n共10项 · 第1/1页\n　",
+      "path": "/resources/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "资源目录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page1",
+    "requested_path": "/resources/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源目录"
+      ],
+      "mainText": "RESOURCE CATALOG\n资源目录\n\n查询目标时段的可用情况，再选择设备或场地。\n\n资源名称或编号:\n资源类型:\n全部\n设备\n场地\n所属实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n查询开始时间:\n查询结束时间:\n查询资源\n重置条件\n10 项资源\n⌁\n正常\nEQ-CAM-01\n全画幅摄影套装\n\n机器人与数字影像实验室\n\n摄影设备 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-01\n数字示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-02\n混合信号示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-01\n便携式计算机\n\n电子与传感实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-02\n移动工作站\n\n机器人与数字影像实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-ROB-01\n协作机器人平台\n\n机器人与数字影像实验室\n\n机器人 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-01\n传感器教学套件\n\n电子与传感实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-02\n物联网传感套件\n\n机器人与数字影像实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-101\n电子与传感实验室整间场地\n\n电子与传感实验室\n\n场地 · 容量 32人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-202\n机器人与数字影像实验室整间场地\n\n机器人与数字影像实验室\n\n场地 · 容量 24人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n共10项 · 第1/1页\n　",
+      "path": "/resources/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "资源目录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page1-390.png"
+  },
+  {
+    "role": "student",
+    "case": "page2",
+    "requested_path": "/resources/1/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "数字示波器"
+      ],
+      "mainText": "← 资源目录\n数字示波器\n\nEQ-OSC-01 / 电子与传感实验室 / 实验楼 A101\n\n正常\nRESOURCE PROFILE\n资源信息\n\n可独立借用，示例信息。\n\n资源类型\n设备\n确认方式\n普通设备通过规则检查后自动确认\n设备分级\n普通\n当前实物状态\n在库\n培训资格\n无专项要求\n配件清单\n\n电源与连接线\n× 1\n\n便携保护箱\n× 1\n\n已确认占用\n查看占用日期\n按日查看\n全部后续占用\n\n共0项 · 本页显示0项。使用中记录保留至实际结束；仅展示时段及状态。\n\n暂无已确认的占用。\n\n报告资源异常\nNEW RESERVATION\n预约设备\n\n所有条件以提交检查为准。开放时间以实验室日历为准，默认08:00—20:00。\n\n开始时间:\n结束时间:\n使用目的:\n确认并保存 →",
+      "path": "/resources/1/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "数字示波器 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n共1项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n共1项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page3-390.png"
+  },
+  {
+    "role": "student",
+    "case": "page4",
+    "requested_path": "/bookings/?q=NO-MATCH-AUDIT",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。",
+      "path": "/bookings/",
+      "query": "?q=NO-MATCH-AUDIT",
+      "scrollWidth": 1440,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page5",
+    "requested_path": "/incidents/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "异常追踪"
+      ],
+      "mainText": "INCIDENT TRACKING\n异常追踪\n\n记录事实、核实处置，必要时进入维修闭环。\n\n报告资源异常 ↗\n全部异常\n待核实\n已确认\n已解决\n已排除\n资源与编号\t类型\t上报人\t时间\t状态\t\n暂无异常记录。",
+      "path": "/incidents/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "异常追踪 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page6",
+    "requested_path": "/incidents/new/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "提交资源异常"
+      ],
+      "mainText": "← 返回\n提交资源异常\n\n请描述可核查的事实，场地和设备分别记录。\n\n业务操作\n异常资源:\n---------\n数字示波器\n传感器教学套件\n便携式计算机\n全画幅摄影套装\n协作机器人平台\n物联网传感套件\n移动工作站\n混合信号示波器\n电子与传感实验室整间场地\n机器人与数字影像实验室整间场地\n关联预约（可选）:\n---------\nReservation object (1)\n异常类型:\n损坏\n缺件\n运行或场地异常\n具体情况:\n发现时间:\n确认并保存 →",
+      "path": "/incidents/new/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "提交资源异常 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page7",
+    "requested_path": "/notifications/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "消息中心"
+      ],
+      "mainText": "NOTIFICATIONS\n消息中心\n\n站内通知随业务保存，外部投递失败不影响已保存业务。\n\n全部标记已读\n预约8C13BA3455EF4B08已自动确认\n2026-10-24 04:36 · 自动确认\n\n站内：已发送 模拟外部：待处理\n\n共1项 · 第1/1页\n　",
+      "path": "/notifications/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "消息中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page7",
+    "requested_path": "/notifications/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "消息中心"
+      ],
+      "mainText": "NOTIFICATIONS\n消息中心\n\n站内通知随业务保存，外部投递失败不影响已保存业务。\n\n全部标记已读\n预约8C13BA3455EF4B08已自动确认\n2026-10-24 04:36 · 自动确认\n\n站内：已发送 模拟外部：待处理\n\n共1项 · 第1/1页\n　",
+      "path": "/notifications/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "消息中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page7-390.png"
+  },
+  {
+    "role": "student",
+    "case": "page8",
+    "requested_path": "/schedule/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源日程"
+      ],
+      "mainText": "RESOURCE SCHEDULE\n资源日程\n\n把开放安排、预约承诺与实际使用放在同一天查看。\n\n按时段查可用资源\n日期:\n资源类型:\n全部类型\n设备\n场地\n实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n资源名称或编号:\n更新日程\n回到今天\n← 前一天\n2026年10月25日\n后一天 →\n已确认\n使用中\n待复核\n\n时间均为北京时间。浅绿带为开放时段，色条为计划时段；实际使用未结束会另外标明。空白不代表一定可约，资格、配额、固定设备依赖与最终冲突以提交检查为准。待审核申请不占时段，不公开他人身份与用途。\n\n资源 / 开放安排\n00:00\n06:00\n12:00\n18:00\n24:00\n数字示波器\nEQ-OSC-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 10:00—10-25 11:00\n\n混合信号示波器\nEQ-OSC-02 · 电子与传感实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n便携式计算机\nEQ-PC-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n传感器教学套件\nEQ-SEN-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 12:30—10-25 13:30\n\n电子与传感实验室整间场地\nROOM-101 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 12:30—10-25 13:30\n\n已确认 10-25 14:00—10-25 15:00\n\n全画幅摄影套装\nEQ-CAM-01 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n移动工作站\nEQ-PC-02 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n协作机器人平台\nEQ-ROB-01 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n物联网传感套件\nEQ-SEN-02 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n机器人与数字影像实验室整间场地\nROOM-202 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n共10项 · 第1/1页\n　",
+      "path": "/schedule/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "资源日程 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page9",
+    "requested_path": "/manage/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/manage/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page10",
+    "requested_path": "/audit/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/audit/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "student",
+    "case": "page11",
+    "requested_path": "/reports/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page11-1440.png"
+  },
+  {
+    "role": "student",
+    "case": "page11",
+    "requested_path": "/reports/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "student-page11-390.png"
+  },
+  {
+    "role": "teacher",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，演示教师"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，演示教师\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n01\n等待审核，不占用资源时段 →\n我的已确认\n02\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n已确认电子与传感实验室整间场地\n10-25 14:00—15:00 · 电子与传感实验室\n未读动态\n消息中心 →\n10-25 12:26\n\n预约56E82BC9430C4267：已确认。模拟教学安排通过\n\n10-24 04:36\n\n预约4E397BFE3CF740FE：已确认。隔离演示场景\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "teacher-page0-1440.png"
+  },
+  {
+    "role": "teacher",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，演示教师"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，演示教师\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n01\n等待审核，不占用资源时段 →\n我的已确认\n02\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n已确认电子与传感实验室整间场地\n10-25 14:00—15:00 · 电子与传感实验室\n未读动态\n消息中心 →\n10-25 12:26\n\n预约56E82BC9430C4267：已确认。模拟教学安排通过\n\n10-24 04:36\n\n预约4E397BFE3CF740FE：已确认。隔离演示场景\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "teacher-page0-390.png"
+  },
+  {
+    "role": "teacher",
+    "case": "page1",
+    "requested_path": "/resources/?kind=ROOM",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源目录"
+      ],
+      "mainText": "RESOURCE CATALOG\n资源目录\n\n查询目标时段的可用情况，再选择设备或场地。\n\n设备与场地分别预约\n资源名称或编号:\n资源类型:\n全部\n设备\n场地\n所属实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n查询开始时间:\n查询结束时间:\n查询资源\n重置条件\n2 项资源\n14天内 · 30分钟单位 · 最长8小时\n▦\n正常\nROOM-101\n电子与传感实验室整间场地\n\n电子与传感实验室\n\n场地 · 容量 32人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-202\n机器人与数字影像实验室整间场地\n\n机器人与数字影像实验室\n\n场地 · 容量 24人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n共2项 · 第1/1页\n　",
+      "path": "/resources/",
+      "query": "?kind=ROOM",
+      "scrollWidth": 1440,
+      "title": "资源目录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "teacher",
+    "case": "page2",
+    "requested_path": "/resources/9/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "电子与传感实验室整间场地"
+      ],
+      "mainText": "← 资源目录\n电子与传感实验室整间场地\n\nROOM-101 / 电子与传感实验室 / 实验楼 A101\n\n正常\nRESOURCE PROFILE\n资源信息\n\n场地与室内设备分别预约。\n\n资源类型\n场地\n确认方式\n人工审核，待审核不占用时段\n容量\n32人\n使用说明\n结束时整理工位、关闭电源并交接。\n已确认占用\n查看占用日期\n按日查看\n全部后续占用\n\n共1项 · 本页显示1项。使用中记录保留至实际结束；仅展示时段及状态。\n\n10-25 14:00 — 15:00\n已确认\n\n共1项 · 第1/1页\n　\n报告资源异常\nNEW RESERVATION\n预约场地\n\n所有条件以提交检查为准。开放时间以实验室日历为准，默认08:00—20:00。\n\n开始时间:\n结束时间:\n使用目的:\n参与人数:\n确认并保存 →",
+      "path": "/resources/9/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "电子与传感实验室整间场地 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "teacher",
+    "case": "page2",
+    "requested_path": "/resources/9/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "电子与传感实验室整间场地"
+      ],
+      "mainText": "← 资源目录\n电子与传感实验室整间场地\n\nROOM-101 / 电子与传感实验室 / 实验楼 A101\n\n正常\nRESOURCE PROFILE\n资源信息\n\n场地与室内设备分别预约。\n\n资源类型\n场地\n确认方式\n人工审核，待审核不占用时段\n容量\n32人\n使用说明\n结束时整理工位、关闭电源并交接。\n已确认占用\n查看占用日期\n按日查看\n全部后续占用\n\n共1项 · 本页显示1项。使用中记录保留至实际结束；仅展示时段及状态。\n\n10-25 14:00 — 15:00\n已确认\n\n共1项 · 第1/1页\n　\n报告资源异常\nNEW RESERVATION\n预约场地\n\n所有条件以提交检查为准。开放时间以实验室日历为准，默认08:00—20:00。\n\n开始时间:\n结束时间:\n使用目的:\n参与人数:\n确认并保存 →",
+      "path": "/resources/9/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "电子与传感实验室整间场地 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "teacher-page2-390.png"
+  },
+  {
+    "role": "teacher",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n共3项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "teacher",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n共3项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "teacher-page3-390.png"
+  },
+  {
+    "role": "teacher",
+    "case": "page4",
+    "requested_path": "/incidents/new/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "提交资源异常"
+      ],
+      "mainText": "← 返回\n提交资源异常\n\n请描述可核查的事实，场地和设备分别记录。\n\n业务操作\n异常资源:\n---------\n数字示波器\n传感器教学套件\n便携式计算机\n全画幅摄影套装\n协作机器人平台\n物联网传感套件\n移动工作站\n混合信号示波器\n电子与传感实验室整间场地\n机器人与数字影像实验室整间场地\n关联预约（可选）:\n---------\nReservation object (5)\nReservation object (3)\nReservation object (2)\n异常类型:\n损坏\n缺件\n运行或场地异常\n具体情况:\n发现时间:\n确认并保存 →",
+      "path": "/incidents/new/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "提交资源异常 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "teacher",
+    "case": "page5",
+    "requested_path": "/schedule/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源日程"
+      ],
+      "mainText": "RESOURCE SCHEDULE\n资源日程\n\n把开放安排、预约承诺与实际使用放在同一天查看。\n\n按时段查可用资源\n日期:\n资源类型:\n全部类型\n设备\n场地\n实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n资源名称或编号:\n更新日程\n回到今天\n← 前一天\n2026年10月25日\n后一天 →\n已确认\n使用中\n待复核\n\n时间均为北京时间。浅绿带为开放时段，色条为计划时段；实际使用未结束会另外标明。空白不代表一定可约，资格、配额、固定设备依赖与最终冲突以提交检查为准。待审核申请不占时段，不公开他人身份与用途。\n\n资源 / 开放安排\n00:00\n06:00\n12:00\n18:00\n24:00\n数字示波器\nEQ-OSC-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 10:00—10-25 11:00\n\n混合信号示波器\nEQ-OSC-02 · 电子与传感实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n便携式计算机\nEQ-PC-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n传感器教学套件\nEQ-SEN-01 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 12:30—10-25 13:30\n\n电子与传感实验室整间场地\nROOM-101 · 电子与传感实验室\n正常\n08:00—20:00\n\n已确认 10-25 12:30—10-25 13:30\n\n已确认 10-25 14:00—10-25 15:00\n\n全画幅摄影套装\nEQ-CAM-01 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n移动工作站\nEQ-PC-02 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n协作机器人平台\nEQ-ROB-01 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n物联网传感套件\nEQ-SEN-02 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n机器人与数字影像实验室整间场地\nROOM-202 · 机器人与数字影像实验室\n正常\n08:00—20:00\n\n当日暂无已确认占用。\n\n共10项 · 第1/1页\n　",
+      "path": "/schedule/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "资源日程 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，资源管理员"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，资源管理员\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\n我的工作队列\n按当前角色与实验室授权范围汇总\n待审核申请\n1\n\n先核对用途、资格与可用时段\n\n进入处理队列 →\n待复核承诺\n0\n\n条件变化后先复核，再交接\n\n进入处理队列 →\n今日待交接\n4\n\n已确认不代表已经领取或入场\n\n进入处理队列 →\n超期未结束\n0\n\n核实实物与人员，协调后续使用\n\n进入处理队列 →\n异常待核实\n0\n\n核实事实后决定隔离、处置或维修\n\n进入处理队列 →\n维修待验收\n0\n\n执行人与验收人分离\n\n进入处理队列 →\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n10-25 12:25\n\n预约56E82BC9430C4267待审核\n\n10-24 04:36\n\n预约4E397BFE3CF740FE待审核\n\n10-24 04:36\n\n预约75EC5B12F52E4543待审核\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n传感器教学套件\nEQ-SEN-01 · LAB-101\n\t另一位学生\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page0-1440.png"
+  },
+  {
+    "role": "admin",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，资源管理员"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，资源管理员\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\n我的工作队列\n待审核申请\n1\n\n先核对用途、资格与可用时段\n\n进入处理队列 →\n待复核承诺\n0\n\n条件变化后先复核，再交接\n\n进入处理队列 →\n今日待交接\n4\n\n已确认不代表已经领取或入场\n\n进入处理队列 →\n超期未结束\n0\n\n核实实物与人员，协调后续使用\n\n进入处理队列 →\n异常待核实\n0\n\n核实事实后决定隔离、处置或维修\n\n进入处理队列 →\n维修待验收\n0\n\n执行人与验收人分离\n\n进入处理队列 →\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n10-25 12:25\n\n预约56E82BC9430C4267待审核\n\n10-24 04:36\n\n预约4E397BFE3CF740FE待审核\n\n10-24 04:36\n\n预约75EC5B12F52E4543待审核\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n传感器教学套件\nEQ-SEN-01 · LAB-101\n\t另一位学生\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page0-390.png"
+  },
+  {
+    "role": "admin",
+    "case": "page1",
+    "requested_path": "/resources/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源目录"
+      ],
+      "mainText": "RESOURCE CATALOG\n资源目录\n\n查询目标时段的可用情况，再选择设备或场地。\n\n设备与场地分别预约\n资源名称或编号:\n资源类型:\n全部\n设备\n场地\n所属实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n查询开始时间:\n查询结束时间:\n查询资源\n重置条件\n10 项资源\n14天内 · 30分钟单位 · 最长8小时\n⌁\n正常\nEQ-CAM-01\n全画幅摄影套装\n\n机器人与数字影像实验室\n\n摄影设备 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-01\n数字示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-02\n混合信号示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-01\n便携式计算机\n\n电子与传感实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-02\n移动工作站\n\n机器人与数字影像实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-ROB-01\n协作机器人平台\n\n机器人与数字影像实验室\n\n机器人 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-01\n传感器教学套件\n\n电子与传感实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-02\n物联网传感套件\n\n机器人与数字影像实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-101\n电子与传感实验室整间场地\n\n电子与传感实验室\n\n场地 · 容量 32人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-202\n机器人与数字影像实验室整间场地\n\n机器人与数字影像实验室\n\n场地 · 容量 24人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n共10项 · 第1/1页\n　",
+      "path": "/resources/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "资源目录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page1",
+    "requested_path": "/resources/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "资源目录"
+      ],
+      "mainText": "RESOURCE CATALOG\n资源目录\n\n查询目标时段的可用情况，再选择设备或场地。\n\n资源名称或编号:\n资源类型:\n全部\n设备\n场地\n所属实验室:\n全部实验室\n电子与传感实验室\n机器人与数字影像实验室\n查询开始时间:\n查询结束时间:\n查询资源\n重置条件\n10 项资源\n⌁\n正常\nEQ-CAM-01\n全画幅摄影套装\n\n机器人与数字影像实验室\n\n摄影设备 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-01\n数字示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-OSC-02\n混合信号示波器\n\n电子与传感实验室\n\n示波器 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-01\n便携式计算机\n\n电子与传感实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-PC-02\n移动工作站\n\n机器人与数字影像实验室\n\n计算机 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-ROB-01\n协作机器人平台\n\n机器人与数字影像实验室\n\n机器人 · 在库\n受限设备 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-01\n传感器教学套件\n\n电子与传感实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n⌁\n正常\nEQ-SEN-02\n物联网传感套件\n\n机器人与数字影像实验室\n\n传感器套件 · 在库\n普通设备 · 自动确认\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-101\n电子与传感实验室整间场地\n\n电子与传感实验室\n\n场地 · 容量 32人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n▦\n正常\nROOM-202\n机器人与数字影像实验室整间场地\n\n机器人与数字影像实验室\n\n场地 · 容量 24人\n教师申请 · 人工审核\n请选择目标时段查询\n查看详情 ↗\n共10项 · 第1/1页\n　",
+      "path": "/resources/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "资源目录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page1-390.png"
+  },
+  {
+    "role": "admin",
+    "case": "page2",
+    "requested_path": "/resources/2/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "传感器教学套件"
+      ],
+      "mainText": "← 资源目录\n传感器教学套件\n\nEQ-SEN-01 / 电子与传感实验室 / 实验楼 A101\n\n正常\nRESOURCE PROFILE\n资源信息\n\n可独立借用，示例信息。\n\n资源类型\n设备\n确认方式\n普通设备通过规则检查后自动确认\n设备分级\n普通\n当前实物状态\n在库\n培训资格\n无专项要求\n配件清单\n\n电源与连接线\n× 1\n\n便携保护箱\n× 1\n\n已确认占用\n查看占用日期\n按日查看\n全部后续占用\n\n共0项 · 本页显示0项。使用中记录保留至实际结束；仅展示时段及状态。\n\n暂无已确认的占用。\n\n报告资源异常\n维护资源档案\nNEW RESERVATION\n预约设备\n设备预约供学生和教师使用。",
+      "path": "/resources/2/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "传感器教学套件 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n传感器教学套件\nEQ-SEN-01 · LAB-101\n\t另一位学生\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n共5项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page3",
+    "requested_path": "/bookings/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 12:30 至 13:30\t已确认\t查看 →\n传感器教学套件\nEQ-SEN-01 · LAB-101\n\t另一位学生\t10-25 12:30 至 13:30\t已确认\t查看 →\n电子与传感实验室整间场地\nROOM-101 · LAB-101\n\t演示教师\t10-25 14:00 至 15:00\t已确认\t查看 →\n全画幅摄影套装\nEQ-CAM-01 · LAB-202\n\t演示教师\n提交于10-24 04:36 · 等待1 日，9 小时\n\t10-25 11:00 至 12:00\t待审核\t查看 →\n数字示波器\nEQ-OSC-01 · LAB-101\n\t演示学生\t10-25 10:00 至 11:00\t已确认\t查看 →\n共5项 · 第1/1页\n　",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page3-390.png"
+  },
+  {
+    "role": "admin",
+    "case": "page4",
+    "requested_path": "/bookings/4/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "传感器教学套件"
+      ],
+      "mainText": "← 预约与使用记录\n传感器教学套件\n\n预约编号 CBF95F6DEEA34B60\n\n已确认\n预约详情\n协调预约\n申请人\n另一位学生 · S-DEMO-02\n时段\n2026-10-25 12:30 — 13:30\n确认方式\n自动确认\n用途\n当前时段课程演示（模拟已获准申请）\n人数\n1\n状态说明\n暂无补充说明\n办理设备借出\n报告异常\n过程记录\n10-25 12:25:00\n提交资源预约\n另一位学生 · 提交申请",
+      "path": "/bookings/4/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约详情 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page4",
+    "requested_path": "/bookings/4/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "传感器教学套件"
+      ],
+      "mainText": "← 预约与使用记录\n传感器教学套件\n\n预约编号 CBF95F6DEEA34B60\n\n已确认\n预约详情\n协调预约\n申请人\n另一位学生 · S-DEMO-02\n时段\n2026-10-25 12:30 — 13:30\n确认方式\n自动确认\n用途\n当前时段课程演示（模拟已获准申请）\n人数\n1\n状态说明\n暂无补充说明\n办理设备借出\n报告异常\n过程记录\n10-25 12:25:00\n提交资源预约\n另一位学生 · 提交申请",
+      "path": "/bookings/4/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "预约详情 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page4-390.png"
+  },
+  {
+    "role": "admin",
+    "case": "page5",
+    "requested_path": "/bookings/5/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "电子与传感实验室整间场地"
+      ],
+      "mainText": "← 预约与使用记录\n电子与传感实验室整间场地\n\n预约编号 56E82BC9430C4267\n\n已确认\n预约详情\n协调预约\n申请人\n演示教师 · T-DEMO-01\n时段\n2026-10-25 12:30 — 13:30\n确认方式\n人工审核\n用途\n当前时段课程演示（模拟已获准申请）\n人数\n18\n状态说明\n模拟教学安排通过\n登记入场\n报告异常\n过程记录\n10-25 12:25:00\n提交资源预约\n演示教师 · 提交申请\n10-25 12:26:00\n模拟教学安排通过\n资源管理员 · 审核通过",
+      "path": "/bookings/5/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约详情 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page6",
+    "requested_path": "/incidents/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "异常追踪"
+      ],
+      "mainText": "INCIDENT TRACKING\n异常追踪\n\n记录事实、核实处置，必要时进入维修闭环。\n\n报告资源异常 ↗\n全部异常\n待核实\n已确认\n已解决\n已排除\n资源与编号\t类型\t上报人\t时间\t状态\t\n暂无异常记录。",
+      "path": "/incidents/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "异常追踪 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page7",
+    "requested_path": "/incidents/new/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "提交资源异常"
+      ],
+      "mainText": "← 返回\n提交资源异常\n\n请描述可核查的事实，场地和设备分别记录。\n\n业务操作\n异常资源:\n---------\n数字示波器\n传感器教学套件\n便携式计算机\n全画幅摄影套装\n协作机器人平台\n物联网传感套件\n移动工作站\n混合信号示波器\n电子与传感实验室整间场地\n机器人与数字影像实验室整间场地\n关联预约（可选）:\n---------\nReservation object (4)\nReservation object (5)\nReservation object (3)\nReservation object (2)\nReservation object (1)\n异常类型:\n损坏\n缺件\n运行或场地异常\n具体情况:\n发现时间:\n确认并保存 →",
+      "path": "/incidents/new/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "提交资源异常 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page8",
+    "requested_path": "/work/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "维修任务"
+      ],
+      "mainText": "MAINTENANCE WORKSPACE\n维修任务\n\n接单、记录维修过程、提交结果，并由管理员验收。\n\n维修与验收分工\n全部任务\n我正在处理\n待独立验收\n已关闭\n工单与资源\t维修负责人\t创建时间\t状态\t\n当前没有维修任务。",
+      "path": "/work/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "维修任务 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page9",
+    "requested_path": "/manage/?section=overview",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n设备与场地\n实验室与开放日历\n按职责维护，按范围生效\n\n实验室管理员维护授权范围内的资源与服务限制；系统管理员维护身份授权、开放日历和规则。账号管理权不会自动获得业务审批或维修验收权。\n\n通知投递与人工联系 →\n变更审计 →\n资源档案\n新增资源 ↗\n资源名称或编号\n实验室\n全部授权实验室\n电子与传感实验室\n机器人与数字影像实验室\n检索资源\n资源\t实验室\t状态\t维护\n全画幅摄影套装\nEQ-CAM-01\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n数字示波器\nEQ-OSC-01\n\t电子与传感实验室\t正常\t档案　服务限制\n混合信号示波器\nEQ-OSC-02\n\t电子与传感实验室\t正常\t档案　服务限制\n便携式计算机\nEQ-PC-01\n\t电子与传感实验室\t正常\t档案　服务限制\n移动工作站\nEQ-PC-02\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n协作机器人平台\nEQ-ROB-01\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n传感器教学套件\nEQ-SEN-01\n\t电子与传感实验室\t正常\t档案　服务限制\n物联网传感套件\nEQ-SEN-02\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n电子与传感实验室整间场地\nROOM-101\n\t电子与传感实验室\t正常\t档案　服务限制\n机器人与数字影像实验室整间场地\nROOM-202\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n共10项 · 第1/1页\n　",
+      "path": "/manage/",
+      "query": "?section=overview",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page10",
+    "requested_path": "/manage/?section=resources",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n设备与场地\n实验室与开放日历\n资源档案\n新增资源 ↗\n资源名称或编号\n实验室\n全部授权实验室\n电子与传感实验室\n机器人与数字影像实验室\n检索资源\n资源\t实验室\t状态\t维护\n全画幅摄影套装\nEQ-CAM-01\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n数字示波器\nEQ-OSC-01\n\t电子与传感实验室\t正常\t档案　服务限制\n混合信号示波器\nEQ-OSC-02\n\t电子与传感实验室\t正常\t档案　服务限制\n便携式计算机\nEQ-PC-01\n\t电子与传感实验室\t正常\t档案　服务限制\n移动工作站\nEQ-PC-02\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n协作机器人平台\nEQ-ROB-01\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n传感器教学套件\nEQ-SEN-01\n\t电子与传感实验室\t正常\t档案　服务限制\n物联网传感套件\nEQ-SEN-02\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n电子与传感实验室整间场地\nROOM-101\n\t电子与传感实验室\t正常\t档案　服务限制\n机器人与数字影像实验室整间场地\nROOM-202\n\t机器人与数字影像实验室\t正常\t档案　服务限制\n共10项 · 第1/1页\n　",
+      "path": "/manage/",
+      "query": "?section=resources",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page11",
+    "requested_path": "/manage/?section=calendars",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n设备与场地\n实验室与开放日历\n实验室名称、编号或地点:\n实验室:\n全部有权实验室\n电子与传感实验室\n机器人与数字影像实验室\n日历起始日期:\n日历结束日期（可留空）:\n检索实验室与日历\n重置筛选\n\n日期条件用于筛选相交的每周版本和区间内的单日例外；实验室目录按名称、编号、地点和授权范围检索。三组结果分别分页，翻页保留筛选条件。\n\n实验室目录\nLAB-101\n电子与传感实验室\n\n实验楼 A101\n\n示波器与传感器教学。全部为模拟资源。\n\n开放服务\n资源日程 →\nLAB-202\n机器人与数字影像实验室\n\n实验楼 B202\n\n机器人、摄影与协同课程。\n\n开放服务\n资源日程 →\n共2项 · 第1/1页\n　\n开放日历\n\n展示与所选日期范围相交的每周版本；清空结束日期可查看全部后续版本。单日例外替代当天的每周安排。授权变更与日历变更均保留历史。\n\n实验室\t星期\t开放时间\t生效范围\n电子与传感实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n共14项 · 第1/1页\n　\n单日例外\n\n展示所选区间各日期当前生效的例外；已替代版本保留于历史，不在此重复列出。\n\n实验室\t日期\t安排\t依据\n所选日期范围内暂无生效例外。",
+      "path": "/manage/",
+      "query": "?section=calendars",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page11-1440.png"
+  },
+  {
+    "role": "admin",
+    "case": "page11",
+    "requested_path": "/manage/?section=calendars",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n设备与场地\n实验室与开放日历\n实验室名称、编号或地点:\n实验室:\n全部有权实验室\n电子与传感实验室\n机器人与数字影像实验室\n日历起始日期:\n日历结束日期（可留空）:\n检索实验室与日历\n重置筛选\n\n日期条件用于筛选相交的每周版本和区间内的单日例外；实验室目录按名称、编号、地点和授权范围检索。三组结果分别分页，翻页保留筛选条件。\n\n实验室目录\nLAB-101\n电子与传感实验室\n\n实验楼 A101\n\n示波器与传感器教学。全部为模拟资源。\n\n开放服务\n资源日程 →\nLAB-202\n机器人与数字影像实验室\n\n实验楼 B202\n\n机器人、摄影与协同课程。\n\n开放服务\n资源日程 →\n共2项 · 第1/1页\n　\n开放日历\n\n展示与所选日期范围相交的每周版本；清空结束日期可查看全部后续版本。单日例外替代当天的每周安排。授权变更与日历变更均保留历史。\n\n实验室\t星期\t开放时间\t生效范围\n电子与传感实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n共14项 · 第1/1页\n　\n单日例外\n\n展示所选区间各日期当前生效的例外；已替代版本保留于历史，不在此重复列出。\n\n实验室\t日期\t安排\t依据\n所选日期范围内暂无生效例外。",
+      "path": "/manage/",
+      "query": "?section=calendars",
+      "scrollWidth": 390,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page11-390.png"
+  },
+  {
+    "role": "admin",
+    "case": "page12",
+    "requested_path": "/manage/resource/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "维护资源档案"
+      ],
+      "mainText": "← 返回\n维护资源档案\n\n变更将保留操作者与依据，既有借还事实及审计不可覆盖。\n\n业务操作\n唯一设备标签或场地编号:\n资源名称:\n类型:\n设备\n场地\n所属实验室:\n---------\n电子与传感实验室\n机器人与数字影像实验室\n资源说明:\n设备类别（设备必填）:\n设备分级:\n普通\n高价值\n危险\n要求培训资质:\n---------\n机器人平台安全培训（模拟）\n可独立外借（固定设备取消勾选）:\n固定设备关联场地:\n---------\n电子与传感实验室整间场地\n机器人与数字影像实验室整间场地\n设备交接地点:\n场地容量:\n配件（每行：编码,名称,数量；保留历史交接快照）:\n变更依据:\n确认并保存 →",
+      "path": "/manage/resource/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "维护资源档案 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page13",
+    "requested_path": "/deliveries/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "外部通知投递"
+      ],
+      "mainText": "MESSAGE DELIVERY\n外部通知投递\n\n失败后依次在1、5、15分钟后重试，最多3次。站内通知始终保留。\n\n模拟外部服务\n预约56E82BC9430C4267：已确认。模拟教学安排通过\n待处理\n\n演示教师 · 重试0次 · 下次10-25 12:26:00\n\n预约56E82BC9430C4267待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-25 12:25:00\n\n预约CBF95F6DEEA34B60已自动确认\n待处理\n\n另一位学生 · 重试0次 · 下次10-25 12:25:00\n\n预约4E397BFE3CF740FE：已确认。隔离演示场景\n待处理\n\n演示教师 · 重试0次 · 下次10-24 04:36:38\n\n预约4E397BFE3CF740FE待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-24 04:36:38\n\n预约75EC5B12F52E4543待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-24 04:36:38\n\n预约8C13BA3455EF4B08已自动确认\n待处理\n\n演示学生 · 重试0次 · 下次10-24 04:36:38\n\n共7项 · 第1/1页\n　",
+      "path": "/deliveries/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "外部通知投递 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page14",
+    "requested_path": "/audit/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "审计记录"
+      ],
+      "mainText": "AUDIT TRAIL\n审计记录\n\n关键业务保存原状态、新状态、操作者、时间与原因，历史仅追加。\n\n只读记录\n检索审计记录\n查询\n10-25 12:26:00\n模拟教学安排通过\n资源管理员\nAPPROVE\n10-25 12:25:00\n提交资源预约\n演示教师\nSUBMIT\n10-25 12:25:00\n提交资源预约\n另一位学生\nSUBMIT\n10-24 04:36:38\n隔离演示场景\n资源管理员\nAPPROVE\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示学生\nSUBMIT\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n共17项 · 第1/1页\n　",
+      "path": "/audit/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "审计记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "admin",
+    "case": "page15",
+    "requested_path": "/reports/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "利用与运行报表"
+      ],
+      "mainText": "RESOURCE INSIGHTS\n利用与运行报表\n\n实际使用与计划占用分别统计，维护停用时段从可服务时数扣除。\n\n模拟数据统计\n起始日期\n结束日期\n计算报表\n资源\t可服务时数\t计划占用时数\t实际使用时数\t实际利用率\n全画幅摄影套装\nEQ-CAM-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n数字示波器\nEQ-OSC-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n混合信号示波器\nEQ-OSC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n便携式计算机\nEQ-PC-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n移动工作站\nEQ-PC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n协作机器人平台\nEQ-ROB-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n传感器教学套件\nEQ-SEN-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n物联网传感套件\nEQ-SEN-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n电子与传感实验室整间场地\nROOM-101\n\t18.37 h\t1.37 h\t0.0 h\t\n0.0%\n机器人与数字影像实验室整间场地\nROOM-202\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n第1页 / 共1页 · 10项资源 · 每页最多50项\n统计口径\n\n利用率＝实际借用或场地使用时数 ÷ 可服务时数。两者均与历史开放日历、正常服务状态区间和统计窗口求交集。可服务时数为零时显示“不适用”。单次统计区间最多31天，未完成使用截至当前时刻。\n\n课程案例没有真实实施前基线；模拟数据不代表学校实际效率或利用率。",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "利用与运行报表 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page15-1440.png"
+  },
+  {
+    "role": "admin",
+    "case": "page15",
+    "requested_path": "/reports/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "利用与运行报表"
+      ],
+      "mainText": "RESOURCE INSIGHTS\n利用与运行报表\n\n实际使用与计划占用分别统计，维护停用时段从可服务时数扣除。\n\n起始日期\n结束日期\n计算报表\n资源\t可服务时数\t计划占用时数\t实际使用时数\t实际利用率\n全画幅摄影套装\nEQ-CAM-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n数字示波器\nEQ-OSC-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n混合信号示波器\nEQ-OSC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n便携式计算机\nEQ-PC-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n移动工作站\nEQ-PC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n协作机器人平台\nEQ-ROB-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n传感器教学套件\nEQ-SEN-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n物联网传感套件\nEQ-SEN-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n电子与传感实验室整间场地\nROOM-101\n\t18.37 h\t1.37 h\t0.0 h\t\n0.0%\n机器人与数字影像实验室整间场地\nROOM-202\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n统计口径\n\n利用率＝实际借用或场地使用时数 ÷ 可服务时数。两者均与历史开放日历、正常服务状态区间和统计窗口求交集。可服务时数为零时显示“不适用”。单次统计区间最多31天，未完成使用截至当前时刻。\n\n课程案例没有真实实施前基线；模拟数据不代表学校实际效率或利用率。",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "利用与运行报表 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "admin-page15-390.png"
+  },
+  {
+    "role": "tech",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，维修工程师"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，维修工程师\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\n我的工作队列\n按当前角色与实验室授权范围汇总\n我的维修任务\n0\n\n更新处理过程，提交后等待独立验收\n\n进入处理队列 →\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "tech-page0-1440.png"
+  },
+  {
+    "role": "tech",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，维修工程师"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，维修工程师\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\n我的工作队列\n我的维修任务\n0\n\n更新处理过程，提交后等待独立验收\n\n进入处理队列 →\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "tech-page0-390.png"
+  },
+  {
+    "role": "tech",
+    "case": "page1",
+    "requested_path": "/work/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "维修任务"
+      ],
+      "mainText": "MAINTENANCE WORKSPACE\n维修任务\n\n接单、记录维修过程、提交结果，并由管理员验收。\n\n维修与验收分工\n全部任务\n我正在处理\n待独立验收\n已关闭\n工单与资源\t维修负责人\t创建时间\t状态\t\n当前没有维修任务。",
+      "path": "/work/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "维修任务 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "tech",
+    "case": "page2",
+    "requested_path": "/incidents/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "异常追踪"
+      ],
+      "mainText": "INCIDENT TRACKING\n异常追踪\n\n记录事实、核实处置，必要时进入维修闭环。\n\n全部异常\n待核实\n已确认\n已解决\n已排除\n资源与编号\t类型\t上报人\t时间\t状态\t\n暂无异常记录。",
+      "path": "/incidents/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "异常追踪 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "tech",
+    "case": "page3",
+    "requested_path": "/notifications/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "消息中心"
+      ],
+      "mainText": "NOTIFICATIONS\n消息中心\n\n站内通知随业务保存，外部投递失败不影响已保存业务。\n\n全部标记已读\n暂无通知。",
+      "path": "/notifications/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "消息中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "tech",
+    "case": "page3",
+    "requested_path": "/notifications/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "消息中心"
+      ],
+      "mainText": "NOTIFICATIONS\n消息中心\n\n站内通知随业务保存，外部投递失败不影响已保存业务。\n\n全部标记已读\n暂无通知。",
+      "path": "/notifications/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "消息中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "tech-page3-390.png"
+  },
+  {
+    "role": "tech",
+    "case": "page4",
+    "requested_path": "/manage/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/manage/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "tech",
+    "case": "page5",
+    "requested_path": "/reports/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "tech-page5-1440.png"
+  },
+  {
+    "role": "tech",
+    "case": "page5",
+    "requested_path": "/reports/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "tech-page5-390.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，系统管理员"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，系统管理员\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page0-1440.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，系统管理员"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，系统管理员\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page0-390.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page1",
+    "requested_path": "/manage/?section=overview",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n实验室与开放日历\n用户与授权\n角色与培训目录\n按职责维护，按范围生效\n\n实验室管理员维护授权范围内的资源与服务限制；系统管理员维护身份授权、开放日历和规则。账号管理权不会自动获得业务审批或维修验收权。\n\n通知投递与人工联系 →\n变更审计 →\n单日开放例外\n\n节假日、闭馆与临时开放\n\n预约与通知参数 ↗\n\n14天 / 30分钟 / 版本1\n\n开放日历版本 ↗\n\n未来日期生效，保留历史口径\n\n新增实验室 ↗\n\n编号、地点与基础信息\n\n用户与授权\n姓名、账号或身份编号\n角色\n全部角色\n实验教学中心主任\n实验室管理员\n学生\n系统管理员\n教师\n维修人员\n检索用户\n用户\t身份编号\t角色\t状态\t操作\n资源管理员\tA-DEMO-01\t实验室管理员\t有效\t维护授权 →\n中心主任\tD-DEMO-01\t实验教学中心主任\t有效\t维护授权 →\n维修工程师\tM-DEMO-01\t维修人员\t有效\t维护授权 →\n演示学生\tS-DEMO-01\t学生\t有效\t维护授权 →\n另一位学生\tS-DEMO-02\t学生\t有效\t维护授权 →\n演示教师\tT-DEMO-01\t教师\t有效\t维护授权 →\n系统管理员\tY-DEMO-01\t系统管理员\t有效\t维护授权 →\n共7项 · 第1/1页\n　",
+      "path": "/manage/",
+      "query": "?section=overview",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page2",
+    "requested_path": "/manage/?section=people",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n实验室与开放日历\n用户与授权\n角色与培训目录\n单日开放例外\n\n节假日、闭馆与临时开放\n\n预约与通知参数 ↗\n\n14天 / 30分钟 / 版本1\n\n开放日历版本 ↗\n\n未来日期生效，保留历史口径\n\n新增实验室 ↗\n\n编号、地点与基础信息\n\n用户与授权\n姓名、账号或身份编号\n角色\n全部角色\n实验教学中心主任\n实验室管理员\n学生\n系统管理员\n教师\n维修人员\n检索用户\n用户\t身份编号\t角色\t状态\t操作\n资源管理员\tA-DEMO-01\t实验室管理员\t有效\t维护授权 →\n中心主任\tD-DEMO-01\t实验教学中心主任\t有效\t维护授权 →\n维修工程师\tM-DEMO-01\t维修人员\t有效\t维护授权 →\n演示学生\tS-DEMO-01\t学生\t有效\t维护授权 →\n另一位学生\tS-DEMO-02\t学生\t有效\t维护授权 →\n演示教师\tT-DEMO-01\t教师\t有效\t维护授权 →\n系统管理员\tY-DEMO-01\t系统管理员\t有效\t维护授权 →\n共7项 · 第1/1页\n　",
+      "path": "/manage/",
+      "query": "?section=people",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page3",
+    "requested_path": "/manage/?section=access",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n实验室与开放日历\n用户与授权\n角色与培训目录\n角色职责与授权边界\n维护用户授权 →\n\n角色对应既定业务权限，不在此任意新增权限代码；用户可持有多个角色，实际业务仍受实验室范围与独立验收条件限制。\n\n角色\t代码\t已关联用户数\t主要职责\n实验教学中心主任\tDIRECTOR\t1\t查看利用报表与审计，不自动获得借还办理权\n实验室管理员\tLAB_ADMIN\t1\t授权实验室内审批、现场交接、异常核实与独立维修验收\n学生\tSTUDENT\t2\t申请设备、查询本人记录、报告异常\n系统管理员\tSYS_ADMIN\t1\t维护用户授权、业务参数与开放日历，不自动获得业务审批权\n教师\tTEACHER\t1\t申请设备与整间场地、查询本人记录、报告异常\n维修人员\tTECHNICIAN\t1\t处理指派给本人的维修任务，提交结果，不自行验收\n培训类型目录\nROBOT-SAFE\n机器人平台安全培训（模拟）\n\n在用户授权中维护资格有效期或撤销；提交与批准时核验覆盖整个预约时段。",
+      "path": "/manage/",
+      "query": "?section=access",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page4",
+    "requested_path": "/manage/?section=calendars",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n实验室与开放日历\n用户与授权\n角色与培训目录\n实验室名称、编号或地点:\n实验室:\n全部有权实验室\n电子与传感实验室\n机器人与数字影像实验室\n日历起始日期:\n日历结束日期（可留空）:\n检索实验室与日历\n重置筛选\n\n日期条件用于筛选相交的每周版本和区间内的单日例外；实验室目录按名称、编号、地点和授权范围检索。三组结果分别分页，翻页保留筛选条件。\n\n实验室目录\n新增实验室\nLAB-101\n电子与传感实验室\n\n实验楼 A101\n\n示波器与传感器教学。全部为模拟资源。\n\n开放服务\n资源日程 →\nLAB-202\n机器人与数字影像实验室\n\n实验楼 B202\n\n机器人、摄影与协同课程。\n\n开放服务\n资源日程 →\n共2项 · 第1/1页\n　\n开放日历\n新增每周日历版本\n设置单日例外\n\n展示与所选日期范围相交的每周版本；清空结束日期可查看全部后续版本。单日例外替代当天的每周安排。授权变更与日历变更均保留历史。\n\n实验室\t星期\t开放时间\t生效范围\n电子与传感实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n共14项 · 第1/1页\n　\n单日例外\n\n展示所选区间各日期当前生效的例外；已替代版本保留于历史，不在此重复列出。\n\n实验室\t日期\t安排\t依据\n所选日期范围内暂无生效例外。",
+      "path": "/manage/",
+      "query": "?section=calendars",
+      "scrollWidth": 1440,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page4-1440.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page4",
+    "requested_path": "/manage/?section=calendars",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "管理中心"
+      ],
+      "mainText": "ADMINISTRATION\n管理中心\n\n维护档案与规则参数，既有借还和审计事实继续保留。\n\n概览\n实验室与开放日历\n用户与授权\n角色与培训目录\n实验室名称、编号或地点:\n实验室:\n全部有权实验室\n电子与传感实验室\n机器人与数字影像实验室\n日历起始日期:\n日历结束日期（可留空）:\n检索实验室与日历\n重置筛选\n\n日期条件用于筛选相交的每周版本和区间内的单日例外；实验室目录按名称、编号、地点和授权范围检索。三组结果分别分页，翻页保留筛选条件。\n\n实验室目录\n新增实验室\nLAB-101\n电子与传感实验室\n\n实验楼 A101\n\n示波器与传感器教学。全部为模拟资源。\n\n开放服务\n资源日程 →\nLAB-202\n机器人与数字影像实验室\n\n实验楼 B202\n\n机器人、摄影与协同课程。\n\n开放服务\n资源日程 →\n共2项 · 第1/1页\n　\n开放日历\n新增每周日历版本\n设置单日例外\n\n展示与所选日期范围相交的每周版本；清空结束日期可查看全部后续版本。单日例外替代当天的每周安排。授权变更与日历变更均保留历史。\n\n实验室\t星期\t开放时间\t生效范围\n电子与传感实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n电子与传感实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t1（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t2（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t3（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t4（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t5（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t6（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n机器人与数字影像实验室\t7（周一为1）\t08:00—20:00\t2025-10-24 至 长期\n共14项 · 第1/1页\n　\n单日例外\n\n展示所选区间各日期当前生效的例外；已替代版本保留于历史，不在此重复列出。\n\n实验室\t日期\t安排\t依据\n所选日期范围内暂无生效例外。",
+      "path": "/manage/",
+      "query": "?section=calendars",
+      "scrollWidth": 390,
+      "title": "管理中心 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page4-390.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page5",
+    "requested_path": "/manage/policy/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与通知参数"
+      ],
+      "mainText": "← 返回\n预约与通知参数\n\n变更将保留操作者与依据，既有借还事实及审计不可覆盖。\n\n业务操作\n可提前预约天数:\n时间粒度（分钟）:\n15\n30\n60\n单次最长小时:\n未来设备预约配额:\n未来场地预约配额:\n同时设备使用上限:\n迟到宽限（分钟）:\n模拟外部消息服务不可用（仅演示）:\n修改依据:\n确认并保存 →",
+      "path": "/manage/policy/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约与通知参数 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page6",
+    "requested_path": "/manage/opening/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "开放日历版本"
+      ],
+      "mainText": "← 返回\n开放日历版本\n\n变更将保留操作者与依据，既有借还事实及审计不可覆盖。\n\n业务操作\n实验室:\n---------\n电子与传感实验室\n机器人与数字影像实验室\n星期（1至7）:\n开放时间:\n关闭时间:\n生效日期（至少为明天）:\n变更原因:\n确认并保存 →",
+      "path": "/manage/opening/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "开放日历版本 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page7",
+    "requested_path": "/manage/lab/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "新增实验室"
+      ],
+      "mainText": "← 返回\n新增实验室\n\n变更将保留操作者与依据，既有借还事实及审计不可覆盖。\n\n业务操作\n实验室编号:\n实验室名称:\n地点:\n说明:\n创建依据:\n确认并保存 →",
+      "path": "/manage/lab/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "新增实验室 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page8",
+    "requested_path": "/operations/calendar/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "单日开放例外"
+      ],
+      "mainText": "← 返回\n单日开放例外\n\n保留每次版本；全天关闭或替代当日每周开放时间。\n\n业务操作\n操作原因或说明:\n实验室:\n---------\n电子与传感实验室\n机器人与数字影像实验室\n生效日期:\n全天关闭（取消勾选时填写例外开放时段）:\n例外开放时间:\n例外关闭时间:\n确认并保存 →",
+      "path": "/operations/calendar/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "单日开放例外 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page9",
+    "requested_path": "/deliveries/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "外部通知投递"
+      ],
+      "mainText": "MESSAGE DELIVERY\n外部通知投递\n\n失败后依次在1、5、15分钟后重试，最多3次。站内通知始终保留。\n\n模拟外部服务\n预约56E82BC9430C4267：已确认。模拟教学安排通过\n待处理\n\n演示教师 · 重试0次 · 下次10-25 12:26:00\n\n预约56E82BC9430C4267待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-25 12:25:00\n\n预约CBF95F6DEEA34B60已自动确认\n待处理\n\n另一位学生 · 重试0次 · 下次10-25 12:25:00\n\n预约4E397BFE3CF740FE：已确认。隔离演示场景\n待处理\n\n演示教师 · 重试0次 · 下次10-24 04:36:38\n\n预约4E397BFE3CF740FE待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-24 04:36:38\n\n预约75EC5B12F52E4543待审核\n待处理\n\n资源管理员 · 重试0次 · 下次10-24 04:36:38\n\n预约8C13BA3455EF4B08已自动确认\n待处理\n\n演示学生 · 重试0次 · 下次10-24 04:36:38\n\n共7项 · 第1/1页\n　",
+      "path": "/deliveries/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "外部通知投递 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page10",
+    "requested_path": "/audit/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "审计记录"
+      ],
+      "mainText": "AUDIT TRAIL\n审计记录\n\n关键业务保存原状态、新状态、操作者、时间与原因，历史仅追加。\n\n只读记录\n检索审计记录\n查询\n10-25 14:22:02\n课程模拟身份断言校验通过\n系统管理员\nLOGIN\n10-25 14:21:57\n课程模拟身份断言校验通过\n维修工程师\nLOGIN\n10-25 14:21:46\n课程模拟身份断言校验通过\n资源管理员\nLOGIN\n10-25 14:21:41\n课程模拟身份断言校验通过\n演示教师\nLOGIN\n10-25 14:21:32\n课程模拟身份断言校验通过\n演示学生\nLOGIN\n10-25 12:58:33\n课程模拟身份断言校验通过\n演示学生\nLOGIN\n10-25 12:26:00\n模拟教学安排通过\n资源管理员\nAPPROVE\n10-25 12:25:00\n提交资源预约\n演示教师\nSUBMIT\n10-25 12:25:00\n提交资源预约\n另一位学生\nSUBMIT\n10-24 12:31:24\n课程模拟身份断言校验通过\n系统管理员\nLOGIN\n10-24 04:36:38\n隔离演示场景\n资源管理员\nAPPROVE\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示学生\nSUBMIT\n10-24 04:35:33\n课程模拟身份断言校验通过\n资源管理员\nLOGIN\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n共25项 · 第1/1页\n　",
+      "path": "/audit/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "审计记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page11",
+    "requested_path": "/operations/health/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [],
+      "mainText": "{\"worker_recent\": false, \"backup_recent\": false, \"delivery_failed\": 0, \"delivery_overdue\": 7, \"replica_verified\": false, \"storage_ok\": true, \"backup_bytes\": 0, \"free_bytes\": 264014303232}",
+      "path": "/operations/health/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page12",
+    "requested_path": "/reports/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page12-1440.png"
+  },
+  {
+    "role": "sysadmin",
+    "case": "page12",
+    "requested_path": "/reports/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "sysadmin-page12-390.png"
+  },
+  {
+    "role": "director",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，中心主任"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，中心主任\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "director-page0-1440.png"
+  },
+  {
+    "role": "director",
+    "case": "page0",
+    "requested_path": "/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "你好，中心主任"
+      ],
+      "mainText": "WORKSPACE / 2026.10.25\n你好，中心主任\n\n先处理需要行动的事项，再安排下一次实验。\n\n查看资源日程\n查找可用资源 ↗\nBOOK / USE / RETURN\n一次预约，清楚知道下一步。\n\n普通设备自动确认，受限设备与场地人工审核；确认后仍需现场交接。\n\n2 间实验室 · 10 项资源\n我的待审核\n00\n等待审核，不占用资源时段 →\n我的已确认\n00\n等待领取或入场 →\n我的使用中\n00\n到期前办理归还或离场 →\n预约规则\n14天\n30分钟粒度 · 最长8小时\n接下来要使用\n我的记录 →\n\n暂无已确认或使用中的预约。可从资源目录开始查询。\n\n未读动态\n消息中心 →\n\n暂无未读消息。\n\n系统内通知保留业务进展；外部渠道投递结果单独记录。\n\n近期预约\n全部记录 →\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。\n预约与交接的边界\n\n待审核不占时段，批准时再次检查。可移动设备与场地独立预约；固定设备还需符合关联场地限制。系统记录不代替实物检查与现场交接。",
+      "path": "/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "工作台 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "director-page0-390.png"
+  },
+  {
+    "role": "director",
+    "case": "page1",
+    "requested_path": "/reports/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "利用与运行报表"
+      ],
+      "mainText": "RESOURCE INSIGHTS\n利用与运行报表\n\n实际使用与计划占用分别统计，维护停用时段从可服务时数扣除。\n\n模拟数据统计\n起始日期\n结束日期\n计算报表\n资源\t可服务时数\t计划占用时数\t实际使用时数\t实际利用率\n全画幅摄影套装\nEQ-CAM-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n数字示波器\nEQ-OSC-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n混合信号示波器\nEQ-OSC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n便携式计算机\nEQ-PC-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n移动工作站\nEQ-PC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n协作机器人平台\nEQ-ROB-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n传感器教学套件\nEQ-SEN-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n物联网传感套件\nEQ-SEN-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n电子与传感实验室整间场地\nROOM-101\n\t18.37 h\t1.37 h\t0.0 h\t\n0.0%\n机器人与数字影像实验室整间场地\nROOM-202\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n第1页 / 共1页 · 10项资源 · 每页最多50项\n统计口径\n\n利用率＝实际借用或场地使用时数 ÷ 可服务时数。两者均与历史开放日历、正常服务状态区间和统计窗口求交集。可服务时数为零时显示“不适用”。单次统计区间最多31天，未完成使用截至当前时刻。\n\n课程案例没有真实实施前基线；模拟数据不代表学校实际效率或利用率。",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "利用与运行报表 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "director-page1-1440.png"
+  },
+  {
+    "role": "director",
+    "case": "page1",
+    "requested_path": "/reports/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "利用与运行报表"
+      ],
+      "mainText": "RESOURCE INSIGHTS\n利用与运行报表\n\n实际使用与计划占用分别统计，维护停用时段从可服务时数扣除。\n\n起始日期\n结束日期\n计算报表\n资源\t可服务时数\t计划占用时数\t实际使用时数\t实际利用率\n全画幅摄影套装\nEQ-CAM-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n数字示波器\nEQ-OSC-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n混合信号示波器\nEQ-OSC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n便携式计算机\nEQ-PC-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n移动工作站\nEQ-PC-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n协作机器人平台\nEQ-ROB-01\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n传感器教学套件\nEQ-SEN-01\n\t18.37 h\t1.0 h\t0.0 h\t\n0.0%\n物联网传感套件\nEQ-SEN-02\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n电子与传感实验室整间场地\nROOM-101\n\t18.37 h\t1.37 h\t0.0 h\t\n0.0%\n机器人与数字影像实验室整间场地\nROOM-202\n\t18.37 h\t0.0 h\t0.0 h\t\n0.0%\n统计口径\n\n利用率＝实际借用或场地使用时数 ÷ 可服务时数。两者均与历史开放日历、正常服务状态区间和统计窗口求交集。可服务时数为零时显示“不适用”。单次统计区间最多31天，未完成使用截至当前时刻。\n\n课程案例没有真实实施前基线；模拟数据不代表学校实际效率或利用率。",
+      "path": "/reports/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "利用与运行报表 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "director-page1-390.png"
+  },
+  {
+    "role": "director",
+    "case": "page2",
+    "requested_path": "/audit/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "审计记录"
+      ],
+      "mainText": "AUDIT TRAIL\n审计记录\n\n关键业务保存原状态、新状态、操作者、时间与原因，历史仅追加。\n\n只读记录\n检索审计记录\n查询\n10-25 14:22:10\n课程模拟身份断言校验通过\n中心主任\nLOGIN\n10-25 14:22:02\n课程模拟身份断言校验通过\n系统管理员\nLOGIN\n10-25 14:21:57\n课程模拟身份断言校验通过\n维修工程师\nLOGIN\n10-25 14:21:46\n课程模拟身份断言校验通过\n资源管理员\nLOGIN\n10-25 14:21:41\n课程模拟身份断言校验通过\n演示教师\nLOGIN\n10-25 14:21:32\n课程模拟身份断言校验通过\n演示学生\nLOGIN\n10-25 12:58:33\n课程模拟身份断言校验通过\n演示学生\nLOGIN\n10-25 12:26:00\n模拟教学安排通过\n资源管理员\nAPPROVE\n10-25 12:25:00\n提交资源预约\n演示教师\nSUBMIT\n10-25 12:25:00\n提交资源预约\n另一位学生\nSUBMIT\n10-24 12:31:24\n课程模拟身份断言校验通过\n系统管理员\nLOGIN\n10-24 04:36:38\n隔离演示场景\n资源管理员\nAPPROVE\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示教师\nSUBMIT\n10-24 04:36:38\n提交资源预约\n演示学生\nSUBMIT\n10-24 04:35:33\n课程模拟身份断言校验通过\n资源管理员\nLOGIN\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n10-24 04:30:03\n模拟资源初始化\n系统规则\nRESOURCE_CREATE\n共26项 · 第1/1页\n　",
+      "path": "/audit/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "审计记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "director",
+    "case": "page3",
+    "requested_path": "/manage/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "没有此操作的权限"
+      ],
+      "mainText": "403\n没有此操作的权限\n\n请使用获授权的角色，并确认资源属于你的管理范围。\n\n返回工作台",
+      "path": "/manage/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "· 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "director",
+    "case": "page4",
+    "requested_path": "/bookings/",
+    "width": 1440,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 1440,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 1440
+    },
+    "scope": "isolated mock environment; GET view only"
+  },
+  {
+    "role": "director",
+    "case": "page4",
+    "requested_path": "/bookings/",
+    "width": 390,
+    "observed": {
+      "brokenImages": [],
+      "h1": [
+        "预约与使用记录"
+      ],
+      "mainText": "RESERVATION & USAGE\n预约与使用记录\n\n普通用户查看本人记录，管理员按实验室授权范围查看。\n\n新建预约 ↗\n资源、编号或申请人\n实验室\n全部\n电子与传感实验室\n机器人与数字影像实验室\n日期\n状态\n全部状态\n待审核\n已确认\n已驳回\n已取消\n已失效\n使用中\n已完成\n筛选\n预约资源\t申请人\t使用时段\t状态\t\n当前没有符合条件的预约记录。",
+      "path": "/bookings/",
+      "query": "",
+      "scrollWidth": 390,
+      "title": "预约与使用记录 · 实验资源中心",
+      "unlabelled": [],
+      "viewport": 390
+    },
+    "scope": "isolated mock environment; GET view only",
+    "screenshot": "director-page4-390.png"
+  }
+]

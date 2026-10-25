@@ -1,0 +1,198 @@
+{
+  "date": "2026-10-25",
+  "baseline": "a0c552b4b07592e0533a9fe1b99cc0cd6bbe782c",
+  "existing_tests": {
+    "main_client": 44,
+    "independent_previous": 6,
+    "independent_followup": 4,
+    "native_template_pages": 7,
+    "result": "all passed"
+  },
+  "exploratory": {
+    "scenarios": 10,
+    "completed": 10,
+    "confirmed_observations": 9,
+    "falsified_hypothesis": 1,
+    "meaning": "scenario assertions deliberately confirm current undesirable state; not 10 quality acceptance passes"
+  },
+  "findings": {
+    "total_records": 10,
+    "new_ids": 8,
+    "existing_omission_ids": [
+      "AUD-0018",
+      "AUD-0088"
+    ],
+    "confirmed_defects": 7,
+    "suggestions": 3
+  },
+  "cloud_requests": 0,
+  "phone": false,
+  "iphone": false,
+  "official_devtools_runtime_this_round": false,
+  "tooling_corrections": [
+    "最初假设onShow早退导致finally未定义；实际async仍返回Promise，最初7通过1断言失败，已证伪并保留更正。",
+    "一次Python打印Node勾选字符遇GBK编码错误；原测试日志已写入，随后以UTF-8明确输出重跑成功。"
+  ],
+  "files": [
+    {
+      "path": "miniprogram/app.js",
+      "sha256": "fc894271c849604e6113a34e40cfaf9d0f6d4e55412f09d81fe270bc8bc2ff49"
+    },
+    {
+      "path": "miniprogram/app.json",
+      "sha256": "e6d428e06ab783ecfcb8e09d0fe16317fe67bb0cc101ad18568087277837e072"
+    },
+    {
+      "path": "miniprogram/app.wxss",
+      "sha256": "904733f3c39cd5b8706f571edc0841e71e4b9cf13334408e3aad05e412b2f330"
+    },
+    {
+      "path": "miniprogram/config.js",
+      "sha256": "81160534a05cd9086be1525917088f165ef92f4a630696c6f4860aacd9b066ca"
+    },
+    {
+      "path": "miniprogram/controllers.js",
+      "sha256": "8b3cfce7d93628e2a4c2f06d9eae525b6cc2c12f9443d1628de8c5c5607c57c5"
+    },
+    {
+      "path": "miniprogram/project.config.json",
+      "sha256": "0c647b5346b4cae67eaff92cd0ffe9e4b1c2abc7430e8ed7969b11cb6c63240b"
+    },
+    {
+      "path": "miniprogram/README.md",
+      "sha256": "063496bff0fbf391044037099f25e4229486890b9887a40837d52117e940d66f"
+    },
+    {
+      "path": "miniprogram/sitemap.json",
+      "sha256": "2460622a335f47da1fea056f0147903d341cea2794b4c2d464b412e32f445350"
+    },
+    {
+      "path": "miniprogram/assets/brand-icon.png",
+      "sha256": "be0a1a7e0a0cfe396db933fd51946506e7c291e23d633e032f03cb656c4e8048"
+    },
+    {
+      "path": "miniprogram/assets/brand-icon.svg",
+      "sha256": "b52252a9307522fbb8d056986f7cf66a11c17fd2e493663be035b43648cddba9"
+    },
+    {
+      "path": "miniprogram/utils/api.js",
+      "sha256": "20285fc159d4084c3ab3f3ed953091beae649f028cbb8fa0fc9d2f9e2af0765f"
+    },
+    {
+      "path": "miniprogram/utils/format.js",
+      "sha256": "8ce13a330b5d24b708abbae0ad0e9abd94e2e0807aca3b26c2f40037473d9f7c"
+    },
+    {
+      "path": "miniprogram/pages/booking/index.js",
+      "sha256": "509c721240c4c472df6160079807872cd88641511f8143cc73e3139efab2418b"
+    },
+    {
+      "path": "miniprogram/pages/booking/index.json",
+      "sha256": "369a52b1009e5c16f94984243b9cfe72df5921e54b6c62850760059d2966f2f7"
+    },
+    {
+      "path": "miniprogram/pages/booking/index.wxml",
+      "sha256": "e7d4f134e866dc9c3b2fa695d3ef9662757026939855c4958d2e5d8acb450abf"
+    },
+    {
+      "path": "miniprogram/pages/booking/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/bookings/index.js",
+      "sha256": "7c36731a0147aba2a6b6d811720c92bba02e05730714b7f9245106f3400bc195"
+    },
+    {
+      "path": "miniprogram/pages/bookings/index.json",
+      "sha256": "f581ef173120085d537a998a28d07a76f70dfc3294db53d8207aea5d8ced8987"
+    },
+    {
+      "path": "miniprogram/pages/bookings/index.wxml",
+      "sha256": "ff140f02d9e572030e2dd27abaa4d578a79a2bfdcd1b3a0d249cf2c8f5b957cd"
+    },
+    {
+      "path": "miniprogram/pages/bookings/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/login/index.js",
+      "sha256": "a0b7f8048237e27a1f8bd363e2134c4e429c96c62e0c0b3cc92404e454a6f4b8"
+    },
+    {
+      "path": "miniprogram/pages/login/index.json",
+      "sha256": "36118c08f361df3c4bc4babd0115f7990d419085704f8bc59e71188efdfaf447"
+    },
+    {
+      "path": "miniprogram/pages/login/index.wxml",
+      "sha256": "48f578b9692e24c1273231f527502458337c952eb405f4e86d8edad126cf48bb"
+    },
+    {
+      "path": "miniprogram/pages/login/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/notifications/index.js",
+      "sha256": "abf25e47a1ece50a7ea5094f10850e76692d807b85be9d739d5ac3db33e115bb"
+    },
+    {
+      "path": "miniprogram/pages/notifications/index.json",
+      "sha256": "bdc2ea7b2a4510ca4aa9779239099c2311848d3a4f94ec71212729958e90594a"
+    },
+    {
+      "path": "miniprogram/pages/notifications/index.wxml",
+      "sha256": "53f2c64c19e960a42242f6ccf1bc92679dcadca275b66f6af26082e4afeb82fc"
+    },
+    {
+      "path": "miniprogram/pages/notifications/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/profile/index.js",
+      "sha256": "404abfa180a54a6e65d35a410c916bcdad97127551a03bff2726d6f1c27b6e33"
+    },
+    {
+      "path": "miniprogram/pages/profile/index.json",
+      "sha256": "847006a1dfdbd14dc8215f273f49b4786a0c67d38617586ac4093698d0a37d6a"
+    },
+    {
+      "path": "miniprogram/pages/profile/index.wxml",
+      "sha256": "af463922a87aa4135fc71673fc75005cac9e9a1420d0e528890b4d4d1ada03be"
+    },
+    {
+      "path": "miniprogram/pages/profile/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/resource/index.js",
+      "sha256": "394cedd2ec29cdf5777db12a9d8e5a4eff779cef3ac5577445154e427b393603"
+    },
+    {
+      "path": "miniprogram/pages/resource/index.json",
+      "sha256": "c8623082f75a89d41eaf8c0b16eb077bb98a627884b9c8421dcae62b76d2e0b9"
+    },
+    {
+      "path": "miniprogram/pages/resource/index.wxml",
+      "sha256": "ed2be0b1135831c4c20b363962b24f5b5e9b1ad94999c437b277cdab6f074548"
+    },
+    {
+      "path": "miniprogram/pages/resource/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    },
+    {
+      "path": "miniprogram/pages/resources/index.js",
+      "sha256": "fcd9c2417bcd6f87c8ec4ed1bb1c39ed743ac7361d6b21255a323eb4b10f632f"
+    },
+    {
+      "path": "miniprogram/pages/resources/index.json",
+      "sha256": "039d336a9861d8c57b491008d4c23780d7902085bcf67ee97e3a84e1dc130eb1"
+    },
+    {
+      "path": "miniprogram/pages/resources/index.wxml",
+      "sha256": "c5d5802e27eead2f4cd77da360cc6c6394a59285786555943c3e840b36e55682"
+    },
+    {
+      "path": "miniprogram/pages/resources/index.wxss",
+      "sha256": "3c36c005f7807ff14221318dc43d1293addd4af2b250efdb4fbd359a99768bea"
+    }
+  ]
+}

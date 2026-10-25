@@ -1,0 +1,12 @@
+[
+  {
+    "tool": "test_cloud.py",
+    "exit_code": 0,
+    "scope": "isolated tool/unit checks; no actual Render/Neon deployment or fresh-computer installation"
+  },
+  {
+    "tool": "test_startup.py",
+    "exit_code": 0,
+    "scope": "isolated tool/unit checks; no actual Render/Neon deployment or fresh-computer installation"
+  }
+]

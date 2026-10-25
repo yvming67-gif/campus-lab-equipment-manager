@@ -1,0 +1,38 @@
+[
+  {
+    "name": "midday_closure_recalculates_past_hours",
+    "before": {
+      "capacity": 2.0,
+      "actual": 1.0,
+      "booked": 1.0,
+      "rate": 50.0
+    },
+    "after": {
+      "capacity": 0.0,
+      "actual": 0.0,
+      "booked": 0.0,
+      "rate": null
+    },
+    "completed_reservation_preserved": true,
+    "decision": "day-level override matches current BR40; whether it should change already elapsed-hours reports requires policy confirmation"
+  },
+  {
+    "name": "different_keys_duplicate_pending",
+    "count": 2,
+    "statuses": [
+      "PENDING",
+      "PENDING"
+    ],
+    "same_record": false,
+    "scope": "server consequence of client lost idempotency key; no assertion that distinct-key applications violate current pending/no-occupancy rules"
+  },
+  {
+    "name": "two_distinct_admin_approval",
+    "outcomes": [
+      "RULE_REJECTED",
+      "CONFIRMED"
+    ],
+    "confirmed": 1,
+    "scope": "local PostgreSQL; two distinct administrator accounts"
+  }
+]
