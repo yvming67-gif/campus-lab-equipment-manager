@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-25",
+  "commit": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+  "maintenance_process_configuration_present": {
+    "DATABASE_URL": false,
+    "AWS_ENDPOINT_URL_S3": false,
+    "AWS_ACCESS_KEY_ID": false,
+    "AWS_SECRET_ACCESS_KEY": false,
+    "CAMPUS_STORAGE_BUCKET": false,
+    "NEON_API_KEY": false,
+    "RENDER_API_KEY": false
+  },
+  "authorized_browser": "agent-browser --auto-connect：未找到可连接Chrome；没有读取浏览器用户资料或登录凭据",
+  "cloud_export_executed": false,
+  "cloud_restore_executed": false,
+  "source_modified": false,
+  "backup_issue": "AUD-0030 remains waiting for external verification",
+  "required_next_condition": "可信维护进程中配置Neon Direct TLS及同分支私有存储读取权限；不要在聊天或公开仓库传递凭据"
+}

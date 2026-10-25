@@ -1,0 +1,19 @@
+[
+  {
+    "attempt": 1,
+    "method": "GET",
+    "path": "/health/",
+    "timeout_seconds": 30,
+    "result": "TimeoutError during read; no HTTP result obtained",
+    "source": "initial cloud_probe.py run; stopped at first request",
+    "cause": "not determined; do not infer quota, cold start or application defect"
+  },
+  {
+    "attempt": 2,
+    "method": "GET",
+    "path": "/health/",
+    "status": 200,
+    "ready": true,
+    "elapsed_seconds": 1.02
+  }
+]

@@ -1,0 +1,457 @@
+{
+  "baseline_use_case_ids_match": true,
+  "counts": {
+    "use_cases": 27,
+    "rules": 46,
+    "constraints": 1,
+    "quality": 11,
+    "acceptance": 66,
+    "models": 36,
+    "fields": 289,
+    "fk": 61
+  },
+  "report_case_headers": {
+    "UC-01": true,
+    "UC-02": true,
+    "UC-03": true,
+    "UC-04": true,
+    "UC-05": true,
+    "UC-06": true,
+    "UC-07": true,
+    "UC-08": true,
+    "UC-09": true,
+    "UC-10": true,
+    "UC-11": true,
+    "UC-12": true,
+    "UC-13": true,
+    "UC-14": true,
+    "UC-15": true,
+    "UC-16": true,
+    "UC-17": true,
+    "UC-18": true,
+    "UC-19": true,
+    "UC-20": true,
+    "UC-21": true,
+    "UC-22": true,
+    "UC-23": true,
+    "UC-24": true,
+    "UC-25": true,
+    "UC-26": true,
+    "UC-27": true
+  },
+  "report_rule_exact_text": {
+    "BR-01": true,
+    "BR-02": true,
+    "BR-03": true,
+    "BR-04": true,
+    "BR-05": true,
+    "BR-06": true,
+    "BR-07": true,
+    "BR-08": true,
+    "BR-09": true,
+    "BR-10": true,
+    "BR-11": true,
+    "BR-12": true,
+    "BR-13": true,
+    "BR-14": true,
+    "BR-15": true,
+    "BR-16": true,
+    "BR-17": true,
+    "BR-18": true,
+    "BR-19": true,
+    "BR-20": true,
+    "BR-21": true,
+    "BR-22": true,
+    "BR-23": true,
+    "BR-24": true,
+    "BR-25": true,
+    "BR-26": true,
+    "BR-27": true,
+    "BR-28": true,
+    "BR-29": true,
+    "BR-30": true,
+    "BR-31": true,
+    "BR-32": true,
+    "BR-33": true,
+    "BR-34": true,
+    "BR-35": true,
+    "BR-36": true,
+    "BR-37": true,
+    "BR-38": true,
+    "BR-39": true,
+    "BR-40": true,
+    "BR-41": true,
+    "BR-42": true,
+    "BR-43": true,
+    "BR-44": true,
+    "BR-45": true,
+    "BR-46": true
+  },
+  "implementation_symbols": [
+    {
+      "uc": "UC-01",
+      "file": "core/views.py",
+      "symbol": "login_page",
+      "exists": true
+    },
+    {
+      "uc": "UC-01",
+      "file": "core/views.py",
+      "symbol": "identity",
+      "exists": true
+    },
+    {
+      "uc": "UC-01",
+      "file": "core/views.py",
+      "symbol": "callback",
+      "exists": true
+    },
+    {
+      "uc": "UC-02",
+      "file": "core/views.py",
+      "symbol": "resources",
+      "exists": true
+    },
+    {
+      "uc": "UC-02",
+      "file": "core/views.py",
+      "symbol": "resource_detail",
+      "exists": true
+    },
+    {
+      "uc": "UC-02",
+      "file": "core/product_views.py",
+      "symbol": "schedule",
+      "exists": true
+    },
+    {
+      "uc": "UC-02",
+      "file": "miniprogram/controllers.js",
+      "symbols": [
+        "resources"
+      ],
+      "exists": true,
+      "scope": "file existence only for JS page name"
+    },
+    {
+      "uc": "UC-03",
+      "file": "core/services.py",
+      "symbol": "availability",
+      "exists": true
+    },
+    {
+      "uc": "UC-03",
+      "file": "core/views.py",
+      "symbol": "resources",
+      "exists": true
+    },
+    {
+      "uc": "UC-03",
+      "file": "core/product_views.py",
+      "symbol": "schedule",
+      "exists": true
+    },
+    {
+      "uc": "UC-03",
+      "file": "core/miniapi.py",
+      "symbol": "resources",
+      "exists": true
+    },
+    {
+      "uc": "UC-04",
+      "file": "core/services.py",
+      "symbol": "create_reservation",
+      "exists": true
+    },
+    {
+      "uc": "UC-04",
+      "file": "core/services.py",
+      "symbol": "validate",
+      "exists": true
+    },
+    {
+      "uc": "UC-05",
+      "file": "core/services.py",
+      "symbol": "create_reservation",
+      "exists": true
+    },
+    {
+      "uc": "UC-05",
+      "file": "core/services.py",
+      "symbol": "validate",
+      "exists": true
+    },
+    {
+      "uc": "UC-06",
+      "file": "core/views.py",
+      "symbol": "booking",
+      "exists": true
+    },
+    {
+      "uc": "UC-06",
+      "file": "core/services.py",
+      "symbol": "review_note",
+      "exists": true
+    },
+    {
+      "uc": "UC-07",
+      "file": "core/services.py",
+      "symbol": "cancel",
+      "exists": true
+    },
+    {
+      "uc": "UC-08",
+      "file": "core/services.py",
+      "symbol": "approve",
+      "exists": true
+    },
+    {
+      "uc": "UC-09",
+      "file": "core/services.py",
+      "symbol": "checkout",
+      "exists": true
+    },
+    {
+      "uc": "UC-09",
+      "file": "core/coordination.py",
+      "symbol": "coordinate",
+      "exists": true
+    },
+    {
+      "uc": "UC-09",
+      "file": "core/coordination.py",
+      "symbol": "check_dependency",
+      "exists": true
+    },
+    {
+      "uc": "UC-10",
+      "file": "core/services.py",
+      "symbol": "return_equipment",
+      "exists": true
+    },
+    {
+      "uc": "UC-11",
+      "file": "core/services.py",
+      "symbol": "start_room",
+      "exists": true
+    },
+    {
+      "uc": "UC-11",
+      "file": "core/coordination.py",
+      "symbol": "coordinate",
+      "exists": true
+    },
+    {
+      "uc": "UC-11",
+      "file": "core/coordination.py",
+      "symbol": "check_dependency",
+      "exists": true
+    },
+    {
+      "uc": "UC-12",
+      "file": "core/services.py",
+      "symbol": "end_room",
+      "exists": true
+    },
+    {
+      "uc": "UC-13",
+      "file": "core/services.py",
+      "symbol": "report_incident",
+      "exists": true
+    },
+    {
+      "uc": "UC-14",
+      "file": "core/services.py",
+      "symbol": "verify_incident",
+      "exists": true
+    },
+    {
+      "uc": "UC-14",
+      "file": "core/coordination.py",
+      "symbol": "respond_incident",
+      "exists": true
+    },
+    {
+      "uc": "UC-15",
+      "file": "core/services.py",
+      "symbol": "create_work_order",
+      "exists": true
+    },
+    {
+      "uc": "UC-15",
+      "file": "core/coordination.py",
+      "symbol": "reassign_work",
+      "exists": true
+    },
+    {
+      "uc": "UC-16",
+      "file": "core/services.py",
+      "symbol": "update_work",
+      "exists": true
+    },
+    {
+      "uc": "UC-17",
+      "file": "core/services.py",
+      "symbol": "accept_work",
+      "exists": true
+    },
+    {
+      "uc": "UC-18",
+      "file": "core/services.py",
+      "symbol": "save_resource",
+      "exists": true
+    },
+    {
+      "uc": "UC-18",
+      "file": "core/services.py",
+      "symbol": "set_resource_hold",
+      "exists": true
+    },
+    {
+      "uc": "UC-18",
+      "file": "core/views.py",
+      "symbol": "manage_form",
+      "exists": true
+    },
+    {
+      "uc": "UC-19",
+      "file": "core/services.py",
+      "symbol": "grant_user",
+      "exists": true
+    },
+    {
+      "uc": "UC-19",
+      "file": "core/miniapi.py",
+      "symbol": "me",
+      "exists": true
+    },
+    {
+      "uc": "UC-20",
+      "file": "core/services.py",
+      "symbol": "save_policy",
+      "exists": true
+    },
+    {
+      "uc": "UC-20",
+      "file": "core/services.py",
+      "symbol": "change_opening",
+      "exists": true
+    },
+    {
+      "uc": "UC-20",
+      "file": "core/coordination.py",
+      "symbol": "calendar_exception",
+      "exists": true
+    },
+    {
+      "uc": "UC-20",
+      "file": "core/catalog.py",
+      "symbol": "calendar_catalog",
+      "exists": true
+    },
+    {
+      "uc": "UC-21",
+      "file": "core/views.py",
+      "symbol": "audit_list",
+      "exists": true
+    },
+    {
+      "uc": "UC-21",
+      "file": "core/migrations/0002_audit_immutable.py",
+      "exists": true,
+      "scope": "module reference without named symbol"
+    },
+    {
+      "uc": "UC-22",
+      "file": "core/views.py",
+      "symbol": "notifications",
+      "exists": true
+    },
+    {
+      "uc": "UC-22",
+      "file": "core/miniapi.py",
+      "symbol": "notifications",
+      "exists": true
+    },
+    {
+      "uc": "UC-23",
+      "file": "core/services.py",
+      "symbol": "run_jobs",
+      "exists": true
+    },
+    {
+      "uc": "UC-23",
+      "file": "core/services.py",
+      "symbol": "process_delivery",
+      "exists": true
+    },
+    {
+      "uc": "UC-23",
+      "file": "core/services.py",
+      "symbol": "record_manual_contact",
+      "exists": true
+    },
+    {
+      "uc": "UC-24",
+      "file": "core/reports.py",
+      "symbol": "utilization",
+      "exists": true
+    },
+    {
+      "uc": "UC-24",
+      "file": "core/views.py",
+      "symbol": "reports",
+      "exists": true
+    },
+    {
+      "uc": "UC-25",
+      "file": "core/services.py",
+      "symbol": "upload_evidence",
+      "exists": true
+    },
+    {
+      "uc": "UC-25",
+      "file": "core/views.py",
+      "symbol": "evidence_download",
+      "exists": true
+    },
+    {
+      "uc": "UC-26",
+      "file": "core/views.py",
+      "symbol": "bookings",
+      "exists": true
+    },
+    {
+      "uc": "UC-26",
+      "file": "core/views.py",
+      "symbol": "booking",
+      "exists": true
+    },
+    {
+      "uc": "UC-26",
+      "file": "core/workbench.py",
+      "symbol": "booking_queue",
+      "exists": true
+    },
+    {
+      "uc": "UC-26",
+      "file": "core/workbench.py",
+      "symbol": "tasks_for",
+      "exists": true
+    },
+    {
+      "uc": "UC-27",
+      "file": "core/coordination.py",
+      "symbol": "recheck",
+      "exists": true
+    },
+    {
+      "uc": "UC-27",
+      "file": "core/coordination_views.py",
+      "symbol": "booking_operation",
+      "exists": true
+    }
+  ],
+  "report_sha256": "5bfc41c7efc730191acabda15fb8c472dac0d8eb8d45dbb2e73ff58a2b7bcfe1",
+  "erd_sha256": "39ee0a1b5f23de6a224afb7745aa0cf958bf68cd882702259efd4c298e317ad0"
+}

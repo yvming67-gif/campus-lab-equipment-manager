@@ -1,0 +1,28 @@
+{
+  "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+  "issue_count": 100,
+  "by_type": {
+    "已确认缺陷": 63,
+    "需求待确认": 4,
+    "应用适配缺口": 19,
+    "优化建议": 12,
+    "待验证风险": 2
+  },
+  "by_severity": {
+    "严重": 15,
+    "一般": 50,
+    "轻微": 35
+  },
+  "by_status": {
+    "已复验关闭": 90,
+    "等待制度确认": 5,
+    "等待外部环境验证": 5
+  },
+  "omission_instances": 10,
+  "report_unchanged": true,
+  "report_matches_existing_104_page_receipt": true,
+  "erd_unchanged": true,
+  "review_navigation_corrected": true,
+  "mini_adapter_gate_order_documented": true,
+  "scope": "local static document consistency only; no cloud or phone verification"
+}

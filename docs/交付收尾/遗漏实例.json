@@ -1,0 +1,122 @@
+[
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0052",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/演示操作说明.md",
+    "original_line": 11,
+    "problem": "操作说明仍把所有异常一律隔离",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "按责任关联、安全分级和核实结果阻断；维修执行与独立验收分别承担。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0026",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/微信小程序扩展说明.md",
+    "original_line": 54,
+    "problem": "非演示登录描述遗漏已实现适配路径与外层拦截顺序",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "未配置适配器先503；已配置时校验code，再按适配结果处理，未宣称真实学校接入完成。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0027",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/演示操作说明.md",
+    "original_line": 14,
+    "problem": "本机23小时自动备份和.local持久化未限定环境",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "明确本机runtime配置前提，云端Neon/S3持久化与Render临时盘、休眠及备份边界。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0027",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/整改/运行与恢复指南.md",
+    "original_line": 9,
+    "problem": "文件存储备份命令没有指明仅供本机配置",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "标明本机文件存储路径，另链云端配置存储联合归档。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0027",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/整改/生产部署边界.md",
+    "original_line": 3,
+    "problem": "机构正式HTTPS未验收与已验证共享演示HTTPS未区分",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "明确config.production和config.cloud_settings两类配置及各自实测范围。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0087",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "README.md",
+    "original_line": 49,
+    "problem": "小程序默认固定云端但入口要求先启动本机",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "明确默认云端无本机启动前提，本地开发需改私有开发配置。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0087",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/微信小程序扩展说明.md",
+    "original_line": 75,
+    "problem": "扩展说明仍把当前渠道限定为同机本地",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "以固定云端为当前配置，公开占位AppID、私有账号及开发副本分别说明。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0037",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/微信小程序扩展说明.md",
+    "original_line": 89,
+    "problem": "将旧测试号平台状态当作当前账号状态",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "保留旧号无编辑入口事实，补自有账号已提交资料、最近反馈审核中；本次未查询结果。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0037",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/整改/待确认与外部依赖.md",
+    "original_line": 6,
+    "problem": "外部依赖导航仍停留在旧测试号",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "同步自有账号已提交及待审核核实边界，不宣称平台已通过。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  },
+  {
+    "date": "2026-10-25",
+    "id": "AUD-0027",
+    "baseline": "cd6766aba8b798e3c585f3f3ba5fe899e42c2e8d",
+    "file": "docs/演示操作说明.md",
+    "original_line": 5,
+    "problem": "演示步骤固定端口并缺少已存在云端入口",
+    "evidence_status": "代码与文档对照确认；修订后静态复核",
+    "decision": "按启动窗口实际端口访问，明确云端与本地模拟数据互相独立。",
+    "acceptance": "对照当前代码、近期证据和新文案逐处复核；不以文档修订替代外部联调或手机验收",
+    "status": "文档遗漏已修订，原问题总状态按其外部或制度边界保留"
+  }
+]
