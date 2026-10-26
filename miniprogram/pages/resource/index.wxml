@@ -15,7 +15,7 @@
       <view class="time-row" wx:for="{{item.schedule}}" wx:for-item="slot" wx:key="starts_at">{{slot.time_label}} · {{slot.status_label}}</view>
       <view wx:if="{{scheduleError}}" class="error">{{scheduleError}}</view>
       <view wx:if="{{scheduleBusy}}" class="loading">正在读取占用时段…</view>
-      <view wx:if="{{!scheduleBusy && !item.schedule.length}}" class="hint">所选范围暂无已确认占用。</view>
+      <view wx:if="{{!loading && !error && !scheduleBusy && !scheduleError && !item.schedule.length}}" class="hint">所选范围暂无已确认占用。</view>
       <button wx:if="{{scheduleHasMore}}" class="secondary" bindtap="moreSchedule" disabled="{{scheduleBusy || loading}}">继续查看占用时段</button>
       <view class="hint">仅显示时段及状态，不公开他人的申请人或使用目的。</view>
     </view>

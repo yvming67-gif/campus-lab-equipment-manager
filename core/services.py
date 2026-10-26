@@ -16,6 +16,13 @@ class BusinessError(ValueError): pass
 def require(ok, message):
     if not ok: raise BusinessError(message)
 
+def positive_integer(value, maximum=9223372036854775807):
+    """Parse bounded ASCII decimal input before passing it to ORM/int fields."""
+    text=str(value)
+    if not text or len(text)>len(str(maximum)) or not text.isascii() or not text.isdecimal():return None
+    number=int(text)
+    return number if 0<number<=maximum else None
+
 def manager(actor, resource):
     return actor.has_role("LAB_ADMIN") and LabGrant.objects.filter(user=actor, lab=resource.lab).exists()
 
@@ -514,7 +521,8 @@ def process_delivery(delivery_id,at=None):
     with transaction.atomic():
         task=Delivery.objects.select_for_update(skip_locked=True).filter(pk=delivery_id).first()
         if not task or task.status in ["SENT","FAILED"] or task.next_attempt_at>at or (task.status=="PROCESSING" and task.locked_until and task.locked_until>at):return False
-        task.status="PROCESSING";task.locked_until=at+timedelta(seconds=30);task.save(update_fields=["status","locked_until"])
+        lease_until=at+timedelta(seconds=30)
+        task.status="PROCESSING";task.locked_until=lease_until;task.save(update_fields=["status","locked_until"])
     detail="";fail=False
     if task.channel=="MOCK_EXTERNAL" and settings.DEMO_MODE:
         fail=Policy.objects.get(pk=1).mock_delivery_failure and not MockReceipt.objects.filter(delivery_id=delivery_id).exists()
@@ -532,7 +540,11 @@ def process_delivery(delivery_id,at=None):
         fail=True;detail="渠道与演示/正式模式不匹配，安全拒绝"
     with transaction.atomic():
         task=Delivery.objects.select_for_update().get(pk=delivery_id)
-        if task.status!="PROCESSING":return False
+        # A legitimate takeover happens at/after the previous deadline, so its
+        # deadline is strictly later. Match the exact claimed deadline as well
+        # as state: a stale provider callback cannot finish another worker's
+        # lease, even when that worker is also currently PROCESSING.
+        if task.status!="PROCESSING" or task.locked_until!=lease_until:return False
         attempt=task.attempts.count()
         if attempt>3:return False
         DeliveryAttempt.objects.create(delivery=task,attempt_no=attempt,outcome="ERROR" if fail else "SUCCESS",detail=detail,attempted_at=at)
@@ -604,7 +616,9 @@ def save_resource(actor, data, resource_id=None, at=None):
     for line in data.get("accessories","").splitlines():
         if not line.strip():continue
         cells=[x.strip() for x in line.split(",")]
-        require(len(cells)==3 and cells[2].isdigit() and int(cells[2])>0,"配件须按 编码,名称,正整数数量 填写")
+        require(len(cells)==3,"配件须按 编码,名称,正整数数量 填写")
+        quantity=positive_integer(cells[2],2147483647)
+        require(quantity is not None,"配件数量须为1至2147483647的十进制正整数")
         require(len(cells[0])<=32 and len(cells[1])<=80,"配件编号或名称过长");parsed.append(cells)
     require(len({x[0] for x in parsed})==len(parsed),"配件编码重复")
     if resource_id:

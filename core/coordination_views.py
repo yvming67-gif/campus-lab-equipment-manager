@@ -33,7 +33,7 @@ def calendar(request):
             d=form.cleaned_data;c.calendar_exception(request.user,d['lab'].pk,d['day'],d['closed'],d['starts_at'],d['ends_at'],d['reason'])
             messages.success(request,'单日例外已保存，受影响预约已通知待协调');return redirect('manage')
         except s.BusinessError as error:form.add_error(None,str(error))
-    return render(request,'form.html',{'title':'单日开放例外','form':form,'subtitle':'保留每次版本；全天关闭或替代当日每周开放时间。'})
+    return render(request,'form.html',{'title':'单日开放例外','form':form,'subtitle':'例外替代所选日期的整日开放安排；今天的变更也会重算今天已发生时段的报表，原始使用记录保留。保存前请核对日期、范围及原因。'})
 
 
 @login_required

@@ -1,9 +1,11 @@
 const config = require('../config');
 const SESSION_KEY = 'campus-mini-session';
 const DRAFT_KEY = 'campus-mini-draft';
+const DRAFTS_KEY = 'campus-mini-pending-drafts';
 const CONFIGURED_BASE = normalizeBase(config.backendBaseUrl);
 const PREFIX = '/api/mini/v1';
 let redirecting = false;
+const submissions = new Map();
 
 function baseUrl() { return CONFIGURED_BASE; }
 function normalizeBase(value) {
@@ -13,13 +15,22 @@ function normalizeBase(value) {
   }
   return base;
 }
-function clearSession() { wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync('campus-mini-base'); }
+function sameSession(saved) {
+  const current = wx.getStorageSync(SESSION_KEY);
+  return !!(saved && current && current.token === saved.token && current.base === saved.base && current.user && current.user.id === saved.user.id);
+}
+function clearSession(expected) {
+  if (expected && !sameSession(expected)) return false;
+  wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync(DRAFTS_KEY); wx.removeStorageSync('campus-mini-base');
+  return true;
+}
 function session() {
   const value = wx.getStorageSync(SESSION_KEY);
   if (!value || !value.token || !value.user || value.expiresAt <= Date.now() || value.base !== CONFIGURED_BASE) {
     if (value) clearSession();
     return null;
   }
+  if (!value.draftScope) { value.draftScope = uuid(); wx.setStorageSync(SESSION_KEY, value); }
   return value;
 }
 function goLogin() {
@@ -40,12 +51,15 @@ function request(path, method, data, options) {
     wx.request({
       url: baseUrl() + PREFIX + path, method: method || 'GET', data: data || {}, header, timeout: options.timeout || 10000,
       success(result) {
+        if (auth && !sameSession(saved)) {
+          const stale = new Error('登录身份已变化，请重新打开当前页面'); stale.code = 'SESSION_CHANGED'; reject(stale); return;
+        }
         const body = result.data;
         if (result.statusCode >= 200 && result.statusCode < 300 && body && body.ok === true) { resolve(body.data); return; }
         const detail = body && body.error || {};
         const error = new Error(detail.message || '服务暂时异常，请稍后重试');
         error.code = detail.code; error.fields = detail.fields || {}; error.status = result.statusCode;
-        if (auth && (result.statusCode === 401 || detail.code === 'ROLE_NOT_SUPPORTED')) { clearSession(); goLogin(); }
+        if (auth && (result.statusCode === 401 || detail.code === 'ROLE_NOT_SUPPORTED') && clearSession(saved)) goLogin();
         reject(error);
       },
       fail(detail) {
@@ -62,29 +76,60 @@ function request(path, method, data, options) {
 }
 async function login(username, password) {
   const data = await request('/auth/login/', 'POST', { username, password }, { auth: false, timeout: 60000 });
-  wx.setStorageSync(SESSION_KEY, { token: data.token, user: data.user, base: CONFIGURED_BASE, expiresAt: Date.now() + data.expires_in * 1000 });
+  wx.setStorageSync(SESSION_KEY, { token: data.token, user: data.user, base: CONFIGURED_BASE, expiresAt: Date.now() + data.expires_in * 1000, draftScope: uuid() });
   wx.removeStorageSync('campus-mini-base');
   wx.removeStorageSync(DRAFT_KEY);
+  wx.removeStorageSync(DRAFTS_KEY);
   return data;
 }
-async function logout() { try { await request('/auth/logout/', 'POST', {}); } finally { clearSession(); } }
+async function logout() { const saved = session(); try { await request('/auth/logout/', 'POST', {}); } finally { if (saved) clearSession(saved); } }
 function uuid() { return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const n = Math.floor(Math.random() * 16); return (c === 'x' ? n : (n & 3) | 8).toString(16); }); }
-function draft() {
-  const value = wx.getStorageSync(DRAFT_KEY), saved = session();
-  return value && saved && value.userId === saved.user.id && value.base === baseUrl() ? value : null;
+function pendingDrafts(saved) {
+  const list = wx.getStorageSync(DRAFTS_KEY);
+  if (list && list.scope === saved.draftScope && Array.isArray(list.items)) return list.items;
+  const legacy = wx.getStorageSync(DRAFT_KEY);
+  if (legacy && legacy.userId === saved.user.id && legacy.base === baseUrl() && (!legacy.scope || legacy.scope === saved.draftScope)) {
+    const item = Object.assign({}, legacy, { scope: saved.draftScope });
+    wx.setStorageSync(DRAFTS_KEY, { scope: saved.draftScope, items: [item] });
+    return [item];
+  }
+  return [];
+}
+function saveDrafts(saved, items) {
+  if (!sameSession(saved)) return;
+  if (items.length) {
+    wx.setStorageSync(DRAFTS_KEY, { scope: saved.draftScope, items });
+    wx.setStorageSync(DRAFT_KEY, items[items.length - 1]);
+  } else { wx.removeStorageSync(DRAFTS_KEY); wx.removeStorageSync(DRAFT_KEY); }
+}
+function draft(resourceId) {
+  const saved = session();
+  if (!saved) return null;
+  const items = pendingDrafts(saved);
+  for (let i = items.length - 1; i >= 0; i--) if (resourceId === undefined || items[i].values.resource_id === resourceId) return items[i];
+  return null;
 }
 async function submitBooking(values) {
-  if (!session()) { goLogin(); throw new Error("请先登录"); }
+  const saved = session();
+  if (!saved) { goLogin(); throw new Error("请先登录"); }
   // This UUID is an idempotency key, never an authentication credential.
   const identity = JSON.stringify([values.resource_id, values.starts_at, values.ends_at, values.purpose, values.participants]);
-  let pending = draft();
-  if (!pending || pending.identity !== identity) {
-    pending = { identity, values, key: uuid(), userId: session().user.id, base: baseUrl() };
-    wx.setStorageSync(DRAFT_KEY, pending);
-  }
-  const result = await request('/bookings/', 'POST', Object.assign({}, values, { request_key: pending.key }));
-  wx.removeStorageSync(DRAFT_KEY);
-  return result;
+  const flight = saved.draftScope + ':' + identity;
+  if (submissions.has(flight)) return submissions.get(flight);
+  let items = pendingDrafts(saved), pending = items.find(item => item.identity === identity);
+  if (!pending) pending = { identity, values: Object.assign({}, values), key: uuid(), userId: saved.user.id, base: baseUrl(), scope: saved.draftScope };
+  items = items.filter(item => item.key !== pending.key).concat(pending); saveDrafts(saved, items);
+  const sending = request('/bookings/', 'POST', Object.assign({}, values, { request_key: pending.key })).then(result => {
+    if (sameSession(saved)) {
+      const legacy = wx.getStorageSync(DRAFT_KEY);
+      saveDrafts(saved, pendingDrafts(saved).filter(item => item.key !== pending.key));
+      // Other unresolved submissions remain in the session-scoped collection.
+      if (legacy && legacy.key === pending.key) wx.removeStorageSync(DRAFT_KEY);
+    }
+    return result;
+  });
+  submissions.set(flight, sending);
+  try { return await sending; } finally { if (submissions.get(flight) === sending) submissions.delete(flight); }
 }
 function errorText(error) {
   const names = { starts_at: '开始时间', ends_at: '结束时间', purpose: '使用目的', participants: '参与人数', reason: '取消原因', request_key: '请求编号', username: '账号', password: '密码', page: '页码' };

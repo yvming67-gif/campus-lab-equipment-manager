@@ -15,6 +15,12 @@ function openBookings(event) {
 }
 function openBooking(event) { wx.navigateTo({ url: '/pages/booking/index?id=' + event.currentTarget.dataset.id }); }
 function endRefresh() { if (wx.stopPullDownRefresh) wx.stopPullDownRefresh(); }
+function invalidateAvailability(page) {
+  page._availabilitySerial=(page._availabilitySerial||0)+1;
+  const loading=page._availabilityPending ? false : page.data.loading;
+  page._availabilityPending=false;
+  return loading;
+}
 function confirm(options) { return new Promise(resolve => wx.showModal(Object.assign({}, options, { success: r => resolve(r.confirm), fail: () => resolve(false) }))); }
 
 const screens = {
@@ -35,7 +41,7 @@ const screens = {
     async onShow() {
       if (!api.requireLogin()) return;
       const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
-      this.setData({user:api.session().user,overviewLoading:true,overviewError:''});
+      this.setData({user:api.session().user,overviewLoading:true,overviewError:'',minDate:fmt.day()});
       const overview=api.request('/me/').then(data=>{
         if(serial!==this._overviewSerial)return;
         this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000)});
@@ -77,15 +83,16 @@ const screens = {
     onLoad(options) {
       this.setData({ id: Number(options.id) });
       if (/^\d{4}-\d{2}-\d{2}$/.test(options.date || '') && [options.start,options.end].every(t => /^\d{2}:\d{2}$/.test(t || ''))) this.setData({'form.date':options.date,'form.start':options.start,'form.end':options.end,scheduleDay:options.date});
-      const pending = api.draft();
+      const pending = api.draft(this.data.id);
       if (pending && pending.values.resource_id === this.data.id) {
         const value = pending.values;
         this.setData({ form: { date: value.starts_at.slice(0, 10), start: value.starts_at.slice(11, 16), end: value.ends_at.slice(11, 16), purpose: value.purpose, participants: String(value.participants) } });
       }
     },
-    onShow() { if (api.requireLogin()) return this.load(); },
+    onShow() { if (api.requireLogin()) { this.setData({minDate:fmt.day()}); return this.load(); } },
     async load() {
       const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
+      invalidateAvailability(this);
       this.setData({ loading: true, scheduleBusy: false, error: '' });
       try {
         const item = await api.request('/resources/' + this.data.id + '/', 'GET', {schedule_day:this.data.scheduleDay,schedule_page:1});
@@ -108,17 +115,18 @@ const screens = {
     clearScheduleDay() {this.setData({scheduleDay:'','item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
     moreSchedule() {if(this.data.scheduleHasMore&&!this.data.scheduleBusy&&!this.data.loading)return this.loadSchedule(this.data.schedulePage+1);},
     input,
-    chooseDate(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.date': e.detail.value, availability: '', available: null }); },
-    chooseStart(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.start': e.detail.value, availability: '', available: null }); },
-    chooseEnd(e) { this._availabilitySerial=(this._availabilitySerial||0)+1; this.setData({ 'form.end': e.detail.value, availability: '', available: null }); },
+    chooseDate(e) { this.setData({ 'form.date': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
+    chooseStart(e) { this.setData({ 'form.start': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
+    chooseEnd(e) { this.setData({ 'form.end': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
     async checkAvailability() {
       const f = Object.assign({},this.data.form);
       const serial=(this._availabilitySerial||0)+1;this._availabilitySerial=serial;
+      this._availabilityPending=true;
       this.setData({ loading: true, error: '' });
       try {
         const item = await api.request('/resources/' + this.data.id + '/', 'GET', { starts_at: f.date + 'T' + f.start + ':00', ends_at: f.date + 'T' + f.end + ':00' });
         if(serial===this._availabilitySerial)this.setData({ availability: item.available_label, available: item.available });
-      } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
+      } catch (e) { if(serial===this._availabilitySerial)error(this, e); } finally { if(serial===this._availabilitySerial){this._availabilityPending=false;this.setData({ loading: false });} }
     },
     async submit() {
       if (this.data.busy || !this.data.item || !api.requireLogin()) return;
@@ -136,7 +144,7 @@ const screens = {
     }
   },
   bookings: {
-    data: { items: [], statuses, statusIndex: 0, form: { q: '' }, loading: false, error: '', page: 1, hasMore: false, total: 0 },
+    data: { items: [], statuses, statusIndex: 0, form: { q: '' }, loading: false, error: '', page: 1, hasMore: false, total: 0, appliedFilter:false },
     onShow() {
       if (!api.requireLogin()) return;
       const status=wx.getStorageSync('campus-mini-booking-filter');
@@ -146,12 +154,16 @@ const screens = {
     input, openBooking,
     async load(page) {
       page = page || 1;
+      const query={status:statuses[this.data.statusIndex].code,q:this.data.form.q};
+      const signature=JSON.stringify(query);
+      if(page>1 && signature!==this._appliedQuery)page=1;
       const serial = (this._serial || 0) + 1; this._serial = serial;
       this.setData({ loading: true, error: '' });
       try {
-        const result = await api.request('/bookings/', 'GET', { status: statuses[this.data.statusIndex].code, q: this.data.form.q, page });
+        const result = await api.request('/bookings/', 'GET', Object.assign({},query,{page}));
         if (serial !== this._serial) return;
-        this.setData({ items: (page === 1 ? [] : this.data.items).concat(result.items.map(fmt.booking)), page: result.page, hasMore: result.has_more, total: result.total });
+        this._appliedQuery=signature;
+        this.setData({ items: (page === 1 ? [] : this.data.items).concat(result.items.map(fmt.booking)), page: result.page, hasMore: result.has_more, total: result.total, appliedFilter:!!(query.status || query.q.trim()) });
       } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
     chooseStatus(e) { this.setData({ statusIndex: Number(e.currentTarget.dataset.index) }); return this.load(1); },
@@ -166,23 +178,30 @@ const screens = {
     onShow() { if (api.requireLogin()) return this.load(); },
     input,
     async load() {
+      if(this._cancelPending)return;
+      const serial=(this._detailSerial||0)+1;this._detailSerial=serial;
       this.setData({ loading: true, error: '' });
       try {
         const item = await api.request('/bookings/' + this.data.id + '/');
+        if(serial!==this._detailSerial)return;
         item.timeline = item.timeline.map(t => Object.assign({}, t, { time_label: fmt.dateTime(t.at) }));
         this.setData({ item: fmt.booking(item) });
-      } catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
+      } catch (e) { if(serial===this._detailSerial)error(this, e); } finally { if(serial===this._detailSerial)this.setData({ loading: false }); }
     },
     async cancel() {
       if (this.data.busy || !this.data.item) return;
       const reason = this.data.form.reason.trim();
       if (!reason) { this.setData({ error: '请填写取消原因' }); return; }
       if (!await confirm({ title: '取消这项预约？', content: '确认后会释放尚未使用的时段。', confirmText: '确认取消', confirmColor: '#9b5b43' })) return;
-      this.setData({ busy: true, error: '' });
+      if(this.data.busy)return;
+      this._detailSerial=(this._detailSerial||0)+1;this._cancelPending=true;
+      this.setData({ busy: true, loading:false, error: '' });
       try {
-        await api.request('/bookings/' + this.data.id + '/cancel/', 'POST', { reason, version: this.data.item.version });
+        const item=await api.request('/bookings/' + this.data.id + '/cancel/', 'POST', { reason, version: this.data.item.version });
+        if(item && item.id){item.timeline=(item.timeline||[]).map(t=>Object.assign({},t,{time_label:fmt.dateTime(t.at)}));this.setData({item:fmt.booking(item)});}
+        this._cancelPending=false;
         await this.load(); wx.showToast({ title: '预约已取消', icon: 'success' });
-      } catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
+      } catch (e) { error(this, e); } finally { this._cancelPending=false;this.setData({ busy: false }); }
     },
     onPullDownRefresh() { return this.load().finally(endRefresh); }
   },
@@ -202,18 +221,18 @@ const screens = {
     async open(e) {
       const id = Number(e.currentTarget.dataset.id);const item = this.data.items.find(x => x.id === id);
       if (!item || this.data.busy) return;
-      this.setData({ busy: true, error: '' });
+      this.setData({ busy: true, loading:false, error: '' });
       try {
-        this._serial=(this._serial||0)+1;
+        const serial=(this._serial||0)+1;this._serial=serial;
         if (item.unread) await api.request('/notifications/' + id + '/read/', 'POST', {});
-        this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
-        if(this.data.unreadOnly) await this.load(1);
+        if(serial===this._serial)this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
+        if(this.data.unreadOnly || serial!==this._serial) await this.load(1);
         if (item.booking_id) wx.navigateTo({ url: '/pages/booking/index?id=' + item.booking_id });
       } catch (e2) { error(this, e2); } finally { this.setData({ busy: false }); }
     },
     async markAll() {
       if (this.data.busy) return;
-      this.setData({ busy: true, error: '' });
+      this.setData({ busy: true, loading:false, error: '' });
       this._serial=(this._serial||0)+1;
       try { await api.request('/notifications/read-all/', 'POST', {}); await this.load(1); }
       catch (e) { error(this, e); } finally { this.setData({ busy: false }); }

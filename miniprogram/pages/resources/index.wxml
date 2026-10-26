@@ -14,6 +14,6 @@
   <view wx:if="{{kind === 'ROOM' && !user.can_book_room}}" class="notice">整间场地仅教师可预约，学生可查看场地信息。</view>
   <view class="row section-label"><text>资源目录</text><text>{{total}} 项</text></view>
   <view class="card resource-card" wx:for="{{items}}" wx:key="id" data-id="{{item.id}}" bindtap="openResource"><view class="row"><text class="card-kicker">{{item.code}}</text><text class="chip {{item.tone}}">{{item.service_label}}</text></view><view class="card-title">{{item.name}}</view><view class="card-meta">{{item.category_label}}</view><view class="card-meta">{{item.lab.location}} · {{item.lab.name}}</view><view wx:if="{{appliedTime}}" class="availability-result {{item.availability_tone}}">{{item.available_label}}</view><view class="row card-footer"><text class="chip">{{item.mode_label}}</text><text class="action-link">查看与预约　↗</text></view></view>
-  <view wx:if="{{loading}}" class="loading">正在更新资源…</view><view wx:if="{{!loading && items.length === 0}}" class="empty"><view class="empty-title">暂无匹配资源</view>试试其他名称或实验室。</view>
+  <view wx:if="{{loading}}" class="loading">正在更新资源…</view><view wx:if="{{!loading && !error && items.length === 0}}" class="empty"><view class="empty-title">暂无匹配资源</view>试试其他名称或实验室。</view>
   <button wx:if="{{hasMore}}" class="text-button top-gap" bindtap="more" disabled="{{loading}}">加载更多</button>
 </view>

@@ -167,7 +167,10 @@ def bookings(request):
         if queue in ['review','recheck']:qs=qs.exclude(applicant=request.user)
     if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
     if status:qs=qs.filter(status=status)
-    if lab.isdigit():qs=qs.filter(resource__lab_id=lab)
+    if lab:
+        lab_id=s.positive_integer(lab)
+        if lab_id is None:qs=qs.none();messages.error(request,"请选择有效的实验室")
+        else:qs=qs.filter(resource__lab_id=lab_id)
     if day:
         try:qs=qs.filter(starts_at__date=datetime.strptime(day,"%Y-%m-%d").date())
         except ValueError:messages.error(request,"日期格式应为年-月-日")
@@ -326,7 +329,8 @@ def reports(request):
         if not request.user.has_role("DIRECTOR"):qs=qs.filter(lab__labgrant__user=request.user)
         page=Paginator(qs.order_by("code"),50).get_page(request.GET.get("page",1));rows=utilization(page.object_list,start,end)
     except (ValueError,s.BusinessError) as e:rows=[];error=str(e)
-    return render(request,"reports.html",{"title":"利用与运行报表","rows":rows,"start":start,"end":end,"error":error,"page":page})
+    except OverflowError:rows=[];error="结束日期超出可统计范围，请选择有效日期"
+    return render(request,"reports.html",{"title":"利用与运行报表","rows":rows,"start":start,"end":end,"start_input":request.GET.get("start") or timezone.localdate(start).isoformat(),"end_input":request.GET.get("end") or timezone.localdate(end).isoformat(),"error":error,"page":page})
 
 @login_required
 def manage(request):
@@ -389,14 +393,16 @@ def manage_form(request,action,pk=None):
 @login_required
 def deliveries(request):
     protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN"))
-    qs=Delivery.objects.filter(channel="MOCK_EXTERNAL").select_related("notification__recipient","notification__audit")
+    channel="MOCK_EXTERNAL" if settings.DEMO_MODE else "EXTERNAL"
+    qs=Delivery.objects.filter(channel=channel).select_related("notification__recipient","notification__audit")
     if not request.user.has_role("SYS_ADMIN"):qs=qs.filter(notification__audit__lab__labgrant__user=request.user)
     if request.method=="POST":
         raw_pk=request.POST.get("pk", "")
-        if not raw_pk.isdigit() or len(raw_pk)>18:
+        delivery_id=s.positive_integer(raw_pk)
+        if delivery_id is None:
             messages.error(request,"请选择有效投递记录")
             return redirect("deliveries")
-        task=get_object_or_404(qs,pk=int(raw_pk))
+        task=get_object_or_404(qs,pk=delivery_id)
         try:s.record_manual_contact(request.user,task.pk,request.POST.get("reason",""));messages.success(request,"人工联系结果已追加至审计")
         except s.BusinessError as e:messages.error(request,str(e))
         return redirect("deliveries")
