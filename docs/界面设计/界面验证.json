@@ -30,5 +30,20 @@
     "os_reduce_transparency_observed": true
   },
   "mini_style_documents": 7,
-  "image_review": "9 final website/style-preview images opened; source distinctions retained"
+  "image_review": "9 final website/style-preview images opened; source distinctions retained",
+  "physical_acceptance_followup": {
+    "date": "2026-10-27",
+    "code_commit": "2f9a75f48a621e6bdabf0f1db150cb3b8aa48c56",
+    "source": "user-assisted Android WeChat official preview; user text confirmation",
+    "new_light_blue_interface": "user confirmed",
+    "login": "user confirmed success",
+    "reservation_flow": "not rechecked in this follow-up",
+    "glass_effect_and_performance": "not separately confirmed",
+    "device_model_and_wechat_version": "not provided",
+    "simulator": "launch failed; not passed",
+    "compile_hints": "preview dialog showed 2 hints; details not reviewed in this follow-up",
+    "account_name_review": "no new account-backend result available",
+    "formal_release": false,
+    "evidence": "Android新版确认.md"
+  }
 }
