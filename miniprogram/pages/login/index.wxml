@@ -9,7 +9,7 @@
     <view class="field"><text class="field-label">演示密码</text><view class="field-box"><input password value="{{form.password}}" data-field="password" bindinput="input" placeholder="输入演示密码" maxlength="256" /></view></view>
     <view class="hint top-gap">当前连接云端演示环境，使用模拟身份和数据。</view>
     <view class="hint">默认演示密码：Demo@2026。测试号真机联调请开启小程序调试模式。</view>
-    <button class="primary top-gap" loading="{{busy}}" disabled="{{busy}}" bindtap="submit">{{busy ? '正在连接…' : '进入实验室'}}</button>
+    <button hover-class="control-pressed" hover-start-time="20" hover-stay-time="80" class="primary top-gap" loading="{{busy}}" disabled="{{busy}}" bindtap="submit">{{busy ? '正在连接…' : '进入实验室'}}</button>
     <view class="hint top-gap" wx:if="{{busy}}">首次连接云端演示可能需要约1分钟，请保持页面打开。</view>
   </view>
   <view class="login-foot">模拟身份与数据 · 设备和整间场地分别预约</view>

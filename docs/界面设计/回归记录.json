@@ -1,0 +1,32 @@
+{
+  "client": {
+    "command": [
+      "node",
+      "--test",
+      "tools/mini-check/client.test.cjs",
+      "tools/mini-check/audit-fixes.test.cjs",
+      "docs/产品优化/证据/independent-client.test.cjs",
+      "docs/产品优化/证据/继续建设/continue-independent-client.test.cjs"
+    ],
+    "exit_code": 0
+  },
+  "compile": {
+    "command": [
+      "node",
+      "tools/mini-check/compile.cjs"
+    ],
+    "exit_code": 0
+  },
+  "web-script": {
+    "command": [
+      "node",
+      "--check",
+      "static/product.js"
+    ],
+    "exit_code": 0
+  },
+  "date": "2026-10-27",
+  "client_tests": 80,
+  "compiled_native_pages": 7,
+  "source": "actual current source; no device-runtime claim"
+}

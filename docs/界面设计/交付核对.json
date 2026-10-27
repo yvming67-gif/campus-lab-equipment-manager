@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-27",
+  "baseline": "7dccb20977ad364bc012198259b0bd475e8d0823",
+  "local_links_checked": 56,
+  "icons_checked": 8,
+  "image_sha256": {
+    "mini-login-preview.png": "4206b4db08ba10ac139e5310b53cb2ffa78269c847172493bb29cd0f06e12c7a",
+    "mini-profile-preview.png": "8d99faf399f6f6f0d6a5c587d94b0bd0380311074c72167c193a5f507dfeb6b8",
+    "mini-resources-preview.png": "0466c67c0cdec3cd708f48bba4adf41cd8bbf98363f46463adb1d711daa923d7",
+    "web-login.png": "6df6655fae0bc31029893520d1ae18c0d1fddcee4680a5e45f5d8872fe2ecde0",
+    "web-management.png": "a76fb2c4519a97c17c0b33e68e68124465a6a2be44c9500f03ba997700163c28",
+    "web-mobile.png": "4460e78695bcc9194f7d64bb8c756be853578f2e69deb7895a6491b4453ab869",
+    "web-resources.png": "40364e6cc1810d317cb64e64e293547275a58a14346575ed1701c48c7dcac729",
+    "web-schedule.png": "8064ceb65a3edbc52e0b1be29b89be2b2cbd190db0fe22886254707061dd8ef2",
+    "web-workbench.png": "fa62426977f0cf767a6be1cf7a3fb33fd4aaa7f5abdf2025d04c0196eaf855a7"
+  },
+  "known_private_value_scan": "pass; values not output",
+  "business_controllers_and_rule_baseline": "unchanged",
+  "formal_word_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff",
+  "actual_device_acceptance": false
+}
