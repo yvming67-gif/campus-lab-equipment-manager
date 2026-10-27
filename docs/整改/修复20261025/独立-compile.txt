@@ -1,0 +1,1 @@
+{"compiler":"miniprogram-compiler@0.2.3","native_pages":7,"wxml":"pass","wxss":"pass","scope":"official wcc/wcsc syntax validation; not a WeChat device runtime"}

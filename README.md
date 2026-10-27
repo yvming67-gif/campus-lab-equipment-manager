@@ -9,7 +9,8 @@
   <a href="#快速开始">快速开始</a><br>
   <a href="docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx">分析报告</a> ·
   <a href="models/ERD/分域ERD图册.pdf">数据模型</a> ·
-  <a href="docs/全面审查/README.md">全面审查</a>
+  <a href="docs/全面审查/README.md">全面审查</a> ·
+  <a href="docs/整改/修复20261025/修复记录.md">修复与复验</a>
 </p>
 
 [![自动检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml)
@@ -127,7 +128,11 @@ tools/         本地启动、校验、备份与恢复工具
 
 [GitHub自动检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions)包括业务测试、客户端检查、云端配置测试和Windows首次安装验证。完整测试通过仍可能遗漏反例；本次独立全面审查将确认问题、优化建议、制度待确认和外部待验事项分别记录。
 
-[全面审查概览与覆盖](docs/全面审查/README.md) · [问题完整台账](docs/整改/问题整改台账.md) · [此前交付状态](docs/交付收尾/当前交付状态.md) · [历史测试记录](docs/测试与验收记录.md)
+[本轮修复与复验](docs/整改/修复20261025/修复记录.md) · [全面审查基线与覆盖](docs/全面审查/README.md) · [问题完整台账](docs/整改/问题整改台账.md) · [历史交付状态](docs/交付收尾/当前交付状态.md) · [历史测试记录](docs/测试与验收记录.md)
+
+本轮修复覆盖异常输入、报表日期上界、正式投递入口、通知任务租约，以及小程序会话、未知提交结果、取消、已读、分页与错误反馈。Word终稿同步调整用例图，并在正文对照真实参考资料解释方案取舍。修复依据及尚待确认的制度、外部环境和手机范围分别记录，不用本地测试代替真实校园验收。
+
+截至2026年10月27日，完整台账共118项：限定范围关闭106项，制度待确认6项，外部环境待验5项，开发工具维护建议1项。当前状态见[修复记录](docs/整改/修复20261025/修复记录.md)，历史发现不等于当前仍然存在的行为。
 
 本轮手机复验保持暂停，iPhone延期。历史Android证据、控制器测试、原生编译和最新页面的实际手机验证分别记录，不相互替代。
 

@@ -1,0 +1,543 @@
+{
+  "date": "2026-10-26",
+  "scope": "render-2 104页中的前52页，150dpi完整单页PNG",
+  "method": "逐页使用view_image detail=original和模型原生视觉；未发送第三方识图",
+  "total_pages_reviewed": 52,
+  "by_status": {
+    "轻微排字建议": 6,
+    "通过": 46
+  },
+  "critical_layout_findings": [],
+  "suggestion_pages": [
+    6,
+    18,
+    19,
+    35,
+    44,
+    46
+  ],
+  "suggestion_disposition": "已通知主流程，保留轻微排字建议，未修改正式Word；既有AUD-0070是否同根因由主台账核对",
+  "final_document_equivalence": "待材料任务确认最终仅书目标题修订对前52页无影响；本回执不直接推定等价",
+  "pages": [
+    {
+      "page": 1,
+      "status": "通过",
+      "observation": "封面姓名宋明俞、学号1602240221、信管1402和课程标题清晰；未出现分析对象一行，无裁切。",
+      "image": "work/fixes20261025/report/render-2/page-1.png",
+      "sha256": "b96fe65c795a6744b7cdedef49727f79975ba8cc22d8c881e0c8de586ddf2d44",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 2,
+      "status": "通过",
+      "observation": "摘要三段与关键词完整，正文及页眉页脚清晰；摘要独页留白属于前置内容安排。",
+      "image": "work/fixes20261025/report/render-2/page-2.png",
+      "sha256": "96eb21e738687af2ff8e3dae32eca0d9085c91a719c2e25ef0552aeacf1076c4",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 3,
+      "status": "通过",
+      "observation": "目录层级、点引导和右侧页码可读，无条目重叠；最后参考资料条目完整。",
+      "image": "work/fixes20261025/report/render-2/page-3.png",
+      "sha256": "60177748cb743859bfb2cf574983dc273aab8232560b6d61b64184ca59f3a528",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 4,
+      "status": "通过",
+      "observation": "项目概述、表1-1及1.3正文均完整；表格列宽、底色和行文无裁切，页底标题有正文承接。",
+      "image": "work/fixes20261025/report/render-2/page-4.png",
+      "sha256": "2e9413c7968174d9257985d896da277c49dc0ca4fb9b2686273a5238722ea56d",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 5,
+      "status": "通过",
+      "observation": "项目范围、假设表与需求依据开头可读；1.7标题有足够正文，来源登记首条正常续页。",
+      "image": "work/fixes20261025/report/render-2/page-5.png",
+      "sha256": "0c76cb73c8ed4df647ffe32b9f3d89ee1896b6fddf62fbf804816f1460bf5ea0",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 6,
+      "status": "轻微排字建议",
+      "observation": "来源登记完整，无字形缺失；末SRC-E02日期2026-10-20分为2026-10-与20两行，属于日期可读性建议，未误记成业务事实错误。",
+      "image": "work/fixes20261025/report/render-2/page-6.png",
+      "sha256": "6667c490f70ce5be49a40926010713db51d83cfc49a65175f1e3dc171546c5d9",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 7,
+      "status": "通过",
+      "observation": "来源续文、拟调研方法与表1-3主体完整；跨页表格行未被破坏。",
+      "image": "work/fixes20261025/report/render-2/page-7.png",
+      "sha256": "712155ac6eb5d70cee3c49f8ec5f4a39f313db002147a74ac4e2d254c8f05561",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 8,
+      "status": "通过",
+      "observation": "表1-3重复表头及最后一行完整；第二章标题、愿景、文献比较和涉众表清晰。",
+      "image": "work/fixes20261025/report/render-2/page-8.png",
+      "sha256": "2bb5230df3928e20d717f5111d4cfa2372c077988c712e5c410f08311fbf9341",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 9,
+      "status": "通过",
+      "observation": "愿景指标表及八项度量方法可读，Σ/≤及百分比显示正常，未截断。",
+      "image": "work/fixes20261025/report/render-2/page-9.png",
+      "sha256": "09766646ed264caeee61ffef40f92e4c2977b3192ec3fee802f56f4834e9d747",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 10,
+      "status": "通过",
+      "observation": "边界与角色定义正文清晰，表3-1主体完整，无孤立标题。",
+      "image": "work/fixes20261025/report/render-2/page-10.png",
+      "sha256": "f01080dd3ac6a46878d638b3b56795e42732a519db6aaacac4ce6760cb54a503",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 11,
+      "status": "通过",
+      "observation": "表3-1续表头正常，工人目录、实体目录主体无跨页破损；长字段名能读。",
+      "image": "work/fixes20261025/report/render-2/page-11.png",
+      "sha256": "5aaf90d79b546d962da47b206aee4fa9f47b5de4726019af8635afc67a5ef270",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 12,
+      "status": "通过",
+      "observation": "实体目录续行正常；BUC-01至03各小节及说明完整，页底无孤立标题。",
+      "image": "work/fixes20261025/report/render-2/page-12.png",
+      "sha256": "25b1f0904dd81e24e4156ad37874e6ff4ee219d57abbe4ae7b7c8ade0ed0353e",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 13,
+      "status": "通过",
+      "observation": "BUC-04至06边界、职责与业务结果清晰；无重叠或字形异常。",
+      "image": "work/fixes20261025/report/render-2/page-13.png",
+      "sha256": "61c3355e4f528a5d3c4038328d5fed9a900ba02fd7e928cd86761593987ef288",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 14,
+      "status": "通过",
+      "observation": "重绘图3-1组织边界、椭圆、角色和六项价值可辨；关联线无穿用例文字，图后分析及3.4正文完整。",
+      "image": "work/fixes20261025/report/render-2/page-14.png",
+      "sha256": "f32fbe3652cb3811c9c1408aac315c0bffa20cef578fc8a77990d85568e1c4f0",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 15,
+      "status": "通过",
+      "observation": "设备现状序列图单页可读，alt/opt、消息编号与图题均完整；无图像裁边。",
+      "image": "work/fixes20261025/report/render-2/page-15.png",
+      "sha256": "491dcf4c71cba98cc592b9ce5b38a70bc1ec703569af08a18060996ee1bba6ac",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 16,
+      "status": "通过",
+      "observation": "场地现状序列图及图后解释可读，嵌套片段边界完整，未混入明显压叠文字。",
+      "image": "work/fixes20261025/report/render-2/page-16.png",
+      "sha256": "a26315df355e694f5d8f04b4ffa6d1f1cac191e4640a64c8b94785307c7bbdad",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 17,
+      "status": "通过",
+      "observation": "异常维修及利用信息两图均有图前引用与图题，消息及生命线可读，无相邻图重叠。",
+      "image": "work/fixes20261025/report/render-2/page-17.png",
+      "sha256": "d88e082d0fdcb35a961d2c7e6c4727086c941855de1f1584331612f1675ef97d",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 18,
+      "status": "轻微排字建议",
+      "observation": "问题分析与表3-4完整；TR-01末列的T0-E01在连字符后换行，编号未丢失，建议同类标识成组不换行。",
+      "image": "work/fixes20261025/report/render-2/page-18.png",
+      "sha256": "281f3d74e479c7e68795574691dead3cd0fda7f5b22efff2231629740ca3f011",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 19,
+      "status": "轻微排字建议",
+      "observation": "两张比较表可读、表头与续表完整；表3-5 TR-07末列UC-27分成UC与-27，未丢字，属于短标识排字建议。",
+      "image": "work/fixes20261025/report/render-2/page-19.png",
+      "sha256": "24da93e3cf3887de9166cdeb5081a37d965de5214eb589b452c015a8b5614ac2",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 20,
+      "status": "通过",
+      "observation": "原大图前余白现由有依据的比较论证利用；3.8标题和四段论证连贯完整，仍留自然页尾空间，无孤立标题。",
+      "image": "work/fixes20261025/report/render-2/page-20.png",
+      "sha256": "7b7a5ab27c4aab644dfa9b14bd90784490c0171a83c242c6dbb890a426044718",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 21,
+      "status": "通过",
+      "observation": "设备改进序列图及普通/受限和检查失败分支、图题和图后说明完整；字形清楚。",
+      "image": "work/fixes20261025/report/render-2/page-21.png",
+      "sha256": "0127f0057bebb14ee7922624baa3a4cc06c71d096c24d13b66dbd696ae3ba113",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 22,
+      "status": "通过",
+      "observation": "场地改进序列图及开始结束独立事实清晰；长消息未越界或遮住其他消息。",
+      "image": "work/fixes20261025/report/render-2/page-22.png",
+      "sha256": "ad6f98a5a776b08b54888da8f4720b2ff4546a7762f3224e494360f0d51da7ef",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 23,
+      "status": "通过",
+      "observation": "异常维修改进图的分级、维修与验收分支可读；图后说明未裁切。",
+      "image": "work/fixes20261025/report/render-2/page-23.png",
+      "sha256": "aa0bfcbd7674ce2c948e3d8eb9965e9a5287eab852082f3d09e85cc542c2434a",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 24,
+      "status": "通过",
+      "observation": "利用信息改进图和表3-7完整，表头、行文、图号无重叠。",
+      "image": "work/fixes20261025/report/render-2/page-24.png",
+      "sha256": "6e682202d0fbe66fbffe5669788d4bd97807685399961bee5def35cbe1d354c3",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 25,
+      "status": "通过",
+      "observation": "系统边界、角色权限表和用例图说明可读，章节层级明确，未见坏表格。",
+      "image": "work/fixes20261025/report/render-2/page-25.png",
+      "sha256": "c53cda629b97348cb1535060f25cb418eaa01e13fcae1729b47c4279f46c6149",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 26,
+      "status": "通过",
+      "observation": "系统总图四区与27用例可读；总图信息较密，细节由后续分图承接；未见关联穿过用例正文或角色文字叠压。",
+      "image": "work/fixes20261025/report/render-2/page-26.png",
+      "sha256": "7a81714b80941e4ee978384302a94fb54b3a9332cc186997532f27a627641060",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 27,
+      "status": "通过",
+      "observation": "预约服务分图学生/教师独立线路及仅教师场地能力可辨，边界、用例及说明完整。",
+      "image": "work/fixes20261025/report/render-2/page-27.png",
+      "sha256": "067fee9a2bf03005d3b1125f61a6db30f38a6a4fbda2b384d684400550c36fdd",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 28,
+      "status": "通过",
+      "observation": "借还与维护两分图完整；维护图普通用户条件注释清晰，线条无穿节点文字或图题。",
+      "image": "work/fixes20261025/report/render-2/page-28.png",
+      "sha256": "dc8cad7303423ba0d10e1f865d70907e981e4cb7c8dcaebdd13bb60a0796eff7",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 29,
+      "status": "通过",
+      "observation": "统计支撑分图角色及关联可辨，图后说明、功能需求开头与表4-2首行完整。",
+      "image": "work/fixes20261025/report/render-2/page-29.png",
+      "sha256": "52470c1fc5d0d25d8276b9190077b1027e57975056d5daeea08adbdac1cb5b01",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 30,
+      "status": "通过",
+      "observation": "功能需求表续表头完整，所有行及来源编号可读，未出现单元格文字截断。",
+      "image": "work/fixes20261025/report/render-2/page-30.png",
+      "sha256": "a32b6fe5ef7409c41964c76911918216895dd19d2fdfd9b42b6543d5639426b9",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 31,
+      "status": "通过",
+      "observation": "功能表末行、4.4说明和UC-01基本备选流程完整；标题均有正文承接。",
+      "image": "work/fixes20261025/report/render-2/page-31.png",
+      "sha256": "342881270d7c70d708bae75ad2fdf5ca1c12f0f7a023c824d996ed775b221f8c",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 32,
+      "status": "通过",
+      "observation": "UC-01异常、字段表和结束段正常；UC-02标题及基本流程首步不孤立，无坏表。",
+      "image": "work/fixes20261025/report/render-2/page-32.png",
+      "sha256": "470d1baffce4080c237658c81b1ef16b562ad4615c756880b98cb11f17fdb4ba",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 33,
+      "status": "通过",
+      "observation": "UC-02续文、字段表及UC-03开头完整，页底保留多个说明段。",
+      "image": "work/fixes20261025/report/render-2/page-33.png",
+      "sha256": "1d90bd05abd1e4d2adc19d98960dfe90e2997540e59265bc730feb1e8c7066d5",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 34,
+      "status": "通过",
+      "observation": "UC-03基本/异常流程与字段表可读；≤和Asia/Shanghai正常，行内编号未缺失。",
+      "image": "work/fixes20261025/report/render-2/page-34.png",
+      "sha256": "939c3170934b9f763c6b07d195731b907e37072bfa993410ba906069aadc3ea4",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 35,
+      "status": "轻微排字建议",
+      "observation": "UC-04主体与流程完整；页首关联实体UserQualification被断为UserQua及lification，未缺字，建议长英文实体标识改用可读的换行策略。",
+      "image": "work/fixes20261025/report/render-2/page-35.png",
+      "sha256": "6cbcf1c4dd9f2f3d0cdd7989967461bbaedffd719342b05c12a1a17eb917e595",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 36,
+      "status": "通过",
+      "observation": "UC-04异常及输入字段表正常，数据、规则及约束续文可读；列表较密但未裁切。",
+      "image": "work/fixes20261025/report/render-2/page-36.png",
+      "sha256": "19154de7df07eb2c9371cb3a23617df9c918fd81680a01f0382075d549da22e8",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 37,
+      "status": "通过",
+      "observation": "UC-05全部主要、备选和异常段落清晰，长行未越界，分级状态与编号字形正常。",
+      "image": "work/fixes20261025/report/render-2/page-37.png",
+      "sha256": "ce6b743abcf109ac8b6656a72b3ff709737d89140c2349ded78625d7d8ca838e",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 38,
+      "status": "通过",
+      "observation": "UC-05字段表和后置说明完整，UC-06标题带版本、目标正文，不是孤立标题。",
+      "image": "work/fixes20261025/report/render-2/page-38.png",
+      "sha256": "ad715a0c05bc047d1e06b1ca7467ad5e42099fbf11c0a2cc80fb976b7816ae94",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 39,
+      "status": "通过",
+      "observation": "UC-06基本流程、字段表及关联实体清楚，表内多行说明没有裁切或压叠。",
+      "image": "work/fixes20261025/report/render-2/page-39.png",
+      "sha256": "b0b877ea895e8653abd374d6a4537e9caa2c71703a3c62f83984644081e072ef",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 40,
+      "status": "通过",
+      "observation": "UC-07主体、取消流程及字段表首行完整；表格于下一页续排，未拆破首行。",
+      "image": "work/fixes20261025/report/render-2/page-40.png",
+      "sha256": "cd9f1741ba3bc7d387d758a2971586af1f717cd1baa694624fd117f494bdd031",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 41,
+      "status": "通过",
+      "observation": "UC-07续表重复表头完整，UC-08正文和基本步骤连续可读；无页底孤立标题。",
+      "image": "work/fixes20261025/report/render-2/page-41.png",
+      "sha256": "c410d8ec71640dd94da5ae170ae53c5bc8ab00fc6f952a8a4254f69365aa754d",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 42,
+      "status": "通过",
+      "observation": "UC-08流程、字段表与规则说明完整，表头底色和边框正常，无文字截断。",
+      "image": "work/fixes20261025/report/render-2/page-42.png",
+      "sha256": "94a49952b75f3cedf93ae5b17c7101efeb525f2007290a36d3c8d3c1fe9e8a08",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 43,
+      "status": "通过",
+      "observation": "UC-09设备借出规约完整可读，流程编号及英文字段没有乱码，页尾异常段有完整行文。",
+      "image": "work/fixes20261025/report/render-2/page-43.png",
+      "sha256": "7bb54db45aa00491c68a80e063dc7426c05d8f278166adf316f59f6fb0d00e6d",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 44,
+      "status": "轻微排字建议",
+      "observation": "借出字段表无破损；关联实体Notification被断为Notifica及tion，未缺字，属于与35页同类英文标识换行建议。",
+      "image": "work/fixes20261025/report/render-2/page-44.png",
+      "sha256": "2aa99ef04c653139513c5f3d1e9de62ffe222c64d24abd62210a6ffcde2002de",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 45,
+      "status": "通过",
+      "observation": "UC-10归还主要、备选和异常流程清晰；页内标题与说明都有承接，无图文叠压。",
+      "image": "work/fixes20261025/report/render-2/page-45.png",
+      "sha256": "1cb4ebfba8e1a6476eb5b7440c23ec8bf789485eefd727bf30804ba29ba8659b",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 46,
+      "status": "轻微排字建议",
+      "observation": "归还字段表完整；关联实体AuditEvent被断为Au及ditEvent，未缺字，建议长英文标识按组换行。",
+      "image": "work/fixes20261025/report/render-2/page-46.png",
+      "sha256": "59ab09a2378d4543035b6328afb5890183df88cc7d69895d44dba76df1f30ee2",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 47,
+      "status": "通过",
+      "observation": "UC-11场地开始规约及全部流程完整，段落层级和特殊状态字形正常，无裁切。",
+      "image": "work/fixes20261025/report/render-2/page-47.png",
+      "sha256": "dbf599f17d0c9d0168a158f9f10b424718b9b6cd2633c4f85a82dc3c938f1229",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 48,
+      "status": "通过",
+      "observation": "UC-11字段表与后置段正常；UC-12标题后有版本、目标与执行者等说明，不孤立。",
+      "image": "work/fixes20261025/report/render-2/page-48.png",
+      "sha256": "caed481fd973de7fce111b2232249047c57debcb9f43abf24870f6fc33701de4",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 49,
+      "status": "通过",
+      "observation": "UC-12场地结束流程和字段表完整，≤等符号清晰，无跨页坏行。",
+      "image": "work/fixes20261025/report/render-2/page-49.png",
+      "sha256": "61e6318b75f5f6d44b348e048f2488c496d4a4c86aceac0f59146e01ce863d67",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 50,
+      "status": "通过",
+      "observation": "UC-12结束段及UC-13主要说明、流程可读，英文blocks_service完整，无文字溢出。",
+      "image": "work/fixes20261025/report/render-2/page-50.png",
+      "sha256": "48c35b29516e6eee54b8e0faf1c10dc195a84b16e80976e4b6b511be034cc5e5",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 51,
+      "status": "通过",
+      "observation": "UC-13字段表、规则与后置说明完整，表头与单元格换行正常。",
+      "image": "work/fixes20261025/report/render-2/page-51.png",
+      "sha256": "ed93a9b2456dbd491e3114506e69edebc8c75796133e13d9d2d776ba7d2803fd",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    },
+    {
+      "page": 52,
+      "status": "通过",
+      "observation": "UC-14核实处置、备选及异常流程清晰；字段表首行完整，未在单元格中间截断。",
+      "image": "work/fixes20261025/report/render-2/page-52.png",
+      "sha256": "d87ba0557f5d01a15b3732b31df0fe3cda0fe27b031efaaf6bfbffbc84285cd1",
+      "width": 1241,
+      "height": 1754,
+      "inspection": "原生视觉逐页打开完整原图，非缩略拼图"
+    }
+  ]
+}

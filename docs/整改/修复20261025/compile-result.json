@@ -1,0 +1,8 @@
+{
+  "command": [
+    "tools/mini-check/compile.cjs"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.3,
+  "scope": "owned isolated local verification; not cloud or device acceptance"
+}

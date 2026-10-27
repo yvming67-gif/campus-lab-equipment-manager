@@ -1,5 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="507" height="465" viewBox="0 0 507 465"><rect width="100%" height="100%" fill="white"/>
 <rect x="96" y="5" width="318" height="445" fill="none" stroke="#24384b"/>
+<polyline points="42.0,148.6 61.5,148.6 61.5,81.5 144.0,81.5" fill="none" stroke="#536872" stroke-width="0.7"/>
+<polyline points="42.0,150.2 68.5,150.2 68.5,143.5 144.0,143.5" fill="none" stroke="#536872" stroke-width="0.7"/>
+<polyline points="42.0,151.8 75.5,151.8 75.5,205.5 144.0,205.5" fill="none" stroke="#536872" stroke-width="0.7"/>
+<polyline points="42.0,153.4 82.5,153.4 82.5,327.5 144.58536993430454,327.5" fill="none" stroke="#536872" stroke-width="0.7"/>
+<polyline points="42.0,294.0 72.0,294.0 72.0,267.5 144.0,267.5" fill="none" stroke="#6e655d" stroke-width="0.7"/>
+<polyline points="463.0,310.0 434.0,310.0 434.0,331.5 365.41463006569546,331.5" fill="none" stroke="#4b716b" stroke-width="0.7"/>
+<polyline points="463.0,406.0 434.0,406.0 434.0,391.5 366.0,391.5" fill="none" stroke="#5f687d" stroke-width="0.7"/>
 <text x="255" y="28.85" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="11" fill="#2a3436">某高校实验教学中心</text>
 <ellipse cx="255.0" cy="81.5" rx="111.0" ry="19.5" fill="#eef3ef" stroke="#356f69"/>
 <text x="255.0" y="78.5" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="10" fill="#2a3436">BUC-01</text>
@@ -24,29 +31,22 @@
 <polyline points="19.0,150 41.0,150" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="20.0,174 30.0,160 40.0,174" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="30.0" y="191.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">学生、教师</text>
-<polyline points="46,152 76,152 76,81.5 144,81.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
-<polyline points="46,152 76,152 76,143.5 144,143.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
-<polyline points="46,152 76,152 76,205.5 144,205.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
-<polyline points="46,152 76,152 76,329.5 144,329.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="30.0" cy="280" r="5" fill="none" stroke="#24384b"/>
 <polyline points="30.0,285 30.0,303" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="19.0,293 41.0,293" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="20.0,317 30.0,303 40.0,317" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="30.0" y="334.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教师</text>
-<polyline points="46,295 76,295 76,267.5 144,267.5" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="475.0" cy="296" r="5" fill="none" stroke="#24384b"/>
 <polyline points="475.0,301 475.0,319" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="464.0,309 486.0,309" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="465.0,333 475.0,319 485.0,333" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="475.0" y="344.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">维修支持</text>
 <text x="475.0" y="356.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">岗位〔假设〕</text>
-<polyline points="366,329.5 435,329.5 435,311 459,311" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <circle cx="475.0" cy="392" r="5" fill="none" stroke="#24384b"/>
 <polyline points="475.0,397 475.0,415" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="464.0,405 486.0,405" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="465.0,429 475.0,415 485.0,429" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="475.0" y="440.075" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">教学管理</text>
 <text x="475.0" y="452.575" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">部门〔假设〕</text>
-<polyline points="366,391.5 435,391.5 435,407 459,407" fill="none" stroke="#6d7778" stroke-width="0.7"/>
 <text x="255" y="445.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#356f69">管理员、主任为内部业务工人；维修恢复为支持过程SP-01</text>
 </svg>

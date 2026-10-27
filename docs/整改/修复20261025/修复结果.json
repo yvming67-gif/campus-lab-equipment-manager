@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-27",
+  "baseline": "7b13381b87235394a2e1fb85a746c912d1c4824d",
+  "issue_count": 118,
+  "stats": {
+    "total": 118,
+    "by_type": {
+      "已确认缺陷": 74,
+      "需求待确认": 5,
+      "应用适配缺口": 19,
+      "优化建议": 18,
+      "待验证风险": 2
+    },
+    "by_severity": {
+      "严重": 15,
+      "一般": 58,
+      "轻微": 45
+    },
+    "by_status": {
+      "已复验关闭": 106,
+      "等待制度确认": 6,
+      "等待外部环境验证": 5,
+      "建议待处理": 1
+    }
+  },
+  "updated_ids": [
+    "AUD-0070",
+    "AUD-0009",
+    "AUD-0017",
+    "AUD-0018",
+    "AUD-0088",
+    "AUD-0101",
+    "AUD-0102",
+    "AUD-0103",
+    "AUD-0104",
+    "AUD-0106",
+    "AUD-0107",
+    "AUD-0108",
+    "AUD-0109",
+    "AUD-0110",
+    "AUD-0111",
+    "AUD-0112",
+    "AUD-0118",
+    "AUD-0117",
+    "AUD-0115",
+    "AUD-0105",
+    "AUD-0114"
+  ],
+  "formal_materials_present": true,
+  "phone_acceptance": "暂停，iPhone延期",
+  "deployment": "代码a560b3c已发布，线上限定页面已验证；范围见发布验证.json及自动检查与发布验证.md",
+  "business_schema_changes": false
+}

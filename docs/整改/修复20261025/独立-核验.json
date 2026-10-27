@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-26",
+  "baseline": "7b13381b87235394a2e1fb85a746c912d1c4824d",
+  "method": "独立只读代码复核与本地模拟客户端回归；不重复主流程后端整套测试",
+  "commands": {
+    "client": {
+      "command": [
+        "node",
+        "--test",
+        "tools/mini-check/client.test.cjs",
+        "tools/mini-check/audit-fixes.test.cjs",
+        "docs/产品优化/证据/independent-client.test.cjs",
+        "docs/产品优化/证据/继续建设/continue-independent-client.test.cjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.328
+    },
+    "compile": {
+      "command": [
+        "node",
+        "tools/mini-check/compile.cjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.156
+    }
+  },
+  "reviewed_file_sha256": {
+    "core/services.py": "38285a6716dc63af15504ad433ee7546d3afa9e146531846bb16ba324460a18b",
+    "core/views.py": "68717776375cce6f61a1c178c4301ed7eeefbda64a50969e1a49af2b7e17e627",
+    "core/audit_fix_tests.py": "d40986d1b630a1c85c7698d6994ad0390d26fba502c3c7e1f2a307aee2e85608",
+    "miniprogram/utils/api.js": "ebf4116398b61fee7915d864cb9f96e228992f81e7173d1d33e7f2b211d9ae83",
+    "miniprogram/controllers.js": "713fd4725080b66f65dd97270fe57ce661f95d1755472a57cfe79c11b04e52de",
+    "tools/mini-check/audit-fixes.test.cjs": "e34a6500ac413215dd130c348faccf2d4f1c9ba5edf180383462b00a73943507",
+    "miniprogram/pages/booking/index.wxml": "3bc021f380ab5fa2ddd85c52f4433adb64c50bbcb487ecd42e0f4671c5241c54",
+    "miniprogram/pages/bookings/index.wxml": "1c65e5cf8df1ba6a20b6056552da4b7ff99eda8deac0a47dc59138c27b99b465",
+    "miniprogram/pages/login/index.wxml": "48f578b9692e24c1273231f527502458337c952eb405f4e86d8edad126cf48bb",
+    "miniprogram/pages/notifications/index.wxml": "e1190c618972848ac7a15d7c561494eac2b3fd889b2ddb4498f12e76d5e1f2d2",
+    "miniprogram/pages/profile/index.wxml": "af463922a87aa4135fc71673fc75005cac9e9a1420d0e528890b4d4d1ada03be",
+    "miniprogram/pages/resource/index.wxml": "da6e359f8f444d19498b46a0758b07ae2bd685a3ba4f7315cc593a7b4bdda459",
+    "miniprogram/pages/resources/index.wxml": "01cddc36a009524a769e9d2a806564f50b6db0910bb469c65bd79eb63f7b4e22",
+    "templates/reports.html": "002b0c3a156839ffedb6393fa9a01b3ffbecc9066e26d20496e115cc36b60140"
+  },
+  "new_code_defects_found": 1,
+  "limitations": [
+    "未执行真实微信容器和手机测试",
+    "未接入真实消息提供方",
+    "后端226通过由主流程日志证实，非本子任务重新执行",
+    "代码复核仅覆盖本轮修改及相邻路径，不能证明所有潜在缺陷已发现"
+  ],
+  "incremental_review": {
+    "date": "2026-10-26",
+    "issue": "AUD-0106",
+    "finding": "保留错误原输入后，默认date()回退绕过本地时区，凌晨可能显示前一天",
+    "correction": "原请求值优先；默认采用timezone.localdate(start/end).isoformat()",
+    "evidence": "代码只读确认；新增UTC 2026-10-25 16:30对应中国2026-10-26 00:30场景；已读取主流程audit-targeted.log确认19项通过",
+    "status": "修正已代码确认且主流程19项定向通过",
+    "tests_reexecuted_by_this_agent": false
+  },
+  "new_code_defects_status": "同AUD-0106日期展示遗漏实例，已最小修正且19项定向通过；未另造编号"
+}

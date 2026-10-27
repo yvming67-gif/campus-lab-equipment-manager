@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-27",
+  "changed_text_files_scanned": 64,
+  "known_private_values": "pass; values not output",
+  "token_pattern_check": "pass; not a comprehensive secret scanner",
+  "scope": "changed/new public text artifacts only; no original private profiles copied"
+}

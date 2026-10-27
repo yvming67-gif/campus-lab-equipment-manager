@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-27",
+  "stable_ids": 118,
+  "statuses": {
+    "已复验关闭": 106,
+    "等待制度确认": 6,
+    "等待外部环境验证": 5,
+    "建议待处理": 1
+  },
+  "markdown": {
+    "docs/整改/问题整改台账.md": {
+      "current_index_issues": 118,
+      "distinct_ids_including_cross_batch_history": 118,
+      "sections_including_historical_supplements": 123,
+      "cross_batch_reference_ids": []
+    },
+    "docs/逻辑整改/逻辑整改问题记录.md": {
+      "current_index_issues": 70,
+      "distinct_ids_including_cross_batch_history": 72,
+      "sections_including_historical_supplements": 75,
+      "cross_batch_reference_ids": [
+        "AUD-0009",
+        "AUD-0018"
+      ]
+    }
+  },
+  "word_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff",
+  "historical_index_63_rows": "unchanged from a560b3c",
+  "basis": "current ledger index/details/statistics, actual logs and formal QA; not a new real-campus acceptance"
+}

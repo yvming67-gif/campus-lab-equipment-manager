@@ -1,0 +1,1211 @@
+{
+  "date": "2026-10-27",
+  "word": "docs\\分析报告\\校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx",
+  "word_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff",
+  "original_sha256": "5bfc41c7efc730191acabda15fb8c472dac0d8eb8d45dbb2e73ff58a2b7bcfe1",
+  "changed_package_parts": [
+    "word/document.xml",
+    "word/media/image1.png",
+    "word/media/image10.png",
+    "word/media/image11.png",
+    "word/media/image13.png",
+    "word/media/image14.png"
+  ],
+  "A4_portrait": true,
+  "reference_count": 11,
+  "cited_reference_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "unreferenced_entries": [],
+  "missing_entries": [],
+  "diagram_checks": [
+    {
+      "figure": "图3-1-业务用例图",
+      "associations": 7,
+      "nodes": 13,
+      "same_associations_and_labels": true
+    },
+    {
+      "figure": "图4-1-系统总用例图",
+      "associations": 33,
+      "nodes": 44,
+      "same_associations_and_labels": true
+    },
+    {
+      "figure": "图4-2-预约服务用例分图",
+      "associations": 17,
+      "nodes": 15,
+      "same_associations_and_labels": true
+    },
+    {
+      "figure": "图4-4-维护用例分图",
+      "associations": 12,
+      "nodes": 14,
+      "same_associations_and_labels": true
+    },
+    {
+      "figure": "图4-5-统计支撑用例分图",
+      "associations": 17,
+      "nodes": 15,
+      "same_associations_and_labels": true
+    }
+  ],
+  "total_associations": 86,
+  "style_numbering_headers_footers_parts_unchanged": true,
+  "render_status": "最终文件已渲染并逐页原图核验",
+  "pages": 104,
+  "pdf_sha256": "e484a584c49af28e8eb43d590bc27863b4bee108ec6b98ed7f01aa30455fe524",
+  "toc": {
+    "摘要": 2,
+    "一 项目概述": 4,
+    "1.1 项目背景": 4,
+    "1.2 当前业务问题": 4,
+    "1.3 项目建设目标": 4,
+    "1.4 项目范围": 5,
+    "1.5 目标用户与利益相关者": 5,
+    "1.6 业务假设与限制": 5,
+    "1.7 需求获取与依据": 5,
+    "二 项目愿景": 8,
+    "2.1 愿景陈述": 8,
+    "2.2 用户需求与业务价值": 8,
+    "2.3 项目成功指标": 9,
+    "三 业务建模": 10,
+    "2.4 项目边界": 10,
+    "2.5 不在本期范围内的内容": 10,
+    "3.1 业务参与者与实现要素": 10,
+    "3.2 业务用例说明": 12,
+    "3.3 业务用例图": 14,
+    "3.4 现状业务流程分析": 14,
+    "3.5 现状业务序列图": 15,
+    "3.6 现状问题总结": 18,
+    "3.7 职责迁移与改进措施": 18,
+    "3.8 改进后的业务序列图": 20,
+    "3.9 改进前后对比": 24,
+    "四 系统需求": 25,
+    "4.1 系统边界与使用者": 25,
+    "4.2 系统用例图": 25,
+    "4.3 功能需求": 29,
+    "4.4 用例规约": 31,
+    "4.5 业务规则与状态事件": 71,
+    "4.6 质量需求与设计约束": 77,
+    "4.7 验收标准": 77,
+    "五 系统分析模型": 86,
+    "5.1 分析模型的边界": 86,
+    "5.2 分析类与职责分配": 87,
+    "5.3 核心用例的内部协作": 90,
+    "5.4 状态与事件约束": 95,
+    "5.5 分析模型到数据与实现": 96,
+    "六 需求追踪": 97,
+    "6.1 需求追踪矩阵": 97,
+    "6.2 结论": 103,
+    "参考资料": 104
+  },
+  "missing_heading_locations": [],
+  "blank_text_pages": [],
+  "render_dir": "work\\fixes20261025\\report\\render-final-release",
+  "acceptance_passed": true,
+  "toc_cache_checks": [
+    {
+      "heading": "摘要",
+      "cached_page": 2,
+      "actual_page": 2
+    },
+    {
+      "heading": "一 项目概述",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.1 项目背景",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.2 当前业务问题",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.3 项目建设目标",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.4 项目范围",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.5 目标用户与利益相关者",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.6 业务假设与限制",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.7 需求获取与依据",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "二 项目愿景",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.1 愿景陈述",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.2 用户需求与业务价值",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.3 项目成功指标",
+      "cached_page": 9,
+      "actual_page": 9
+    },
+    {
+      "heading": "2.4 项目边界",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "2.5 不在本期范围内的内容",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "三 业务建模",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "3.1 业务参与者与实现要素",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "3.2 业务用例说明",
+      "cached_page": 12,
+      "actual_page": 12
+    },
+    {
+      "heading": "3.3 业务用例图",
+      "cached_page": 14,
+      "actual_page": 14
+    },
+    {
+      "heading": "3.4 现状业务流程分析",
+      "cached_page": 14,
+      "actual_page": 14
+    },
+    {
+      "heading": "3.5 现状业务序列图",
+      "cached_page": 15,
+      "actual_page": 15
+    },
+    {
+      "heading": "3.6 现状问题总结",
+      "cached_page": 18,
+      "actual_page": 18
+    },
+    {
+      "heading": "3.7 职责迁移与改进措施",
+      "cached_page": 18,
+      "actual_page": 18
+    },
+    {
+      "heading": "3.8 改进后的业务序列图",
+      "cached_page": 20,
+      "actual_page": 20
+    },
+    {
+      "heading": "3.9 改进前后对比",
+      "cached_page": 24,
+      "actual_page": 24
+    },
+    {
+      "heading": "四 系统需求",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.1 系统边界与使用者",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.2 系统用例图",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.3 功能需求",
+      "cached_page": 29,
+      "actual_page": 29
+    },
+    {
+      "heading": "4.4 用例规约",
+      "cached_page": 31,
+      "actual_page": 31
+    },
+    {
+      "heading": "4.5 业务规则与状态事件",
+      "cached_page": 71,
+      "actual_page": 71
+    },
+    {
+      "heading": "4.6 质量需求与设计约束",
+      "cached_page": 77,
+      "actual_page": 77
+    },
+    {
+      "heading": "4.7 验收标准",
+      "cached_page": 77,
+      "actual_page": 77
+    },
+    {
+      "heading": "五 系统分析模型",
+      "cached_page": 86,
+      "actual_page": 86
+    },
+    {
+      "heading": "5.1 分析模型的边界",
+      "cached_page": 86,
+      "actual_page": 86
+    },
+    {
+      "heading": "5.2 分析类与职责分配",
+      "cached_page": 87,
+      "actual_page": 87
+    },
+    {
+      "heading": "5.3 核心用例的内部协作",
+      "cached_page": 90,
+      "actual_page": 90
+    },
+    {
+      "heading": "5.4 状态与事件约束",
+      "cached_page": 95,
+      "actual_page": 95
+    },
+    {
+      "heading": "5.5 分析模型到数据与实现",
+      "cached_page": 96,
+      "actual_page": 96
+    },
+    {
+      "heading": "六 需求追踪",
+      "cached_page": 97,
+      "actual_page": 97
+    },
+    {
+      "heading": "6.1 需求追踪矩阵",
+      "cached_page": 97,
+      "actual_page": 97
+    },
+    {
+      "heading": "6.2 结论",
+      "cached_page": 103,
+      "actual_page": 103
+    },
+    {
+      "heading": "参考资料",
+      "cached_page": 104,
+      "actual_page": 104
+    }
+  ],
+  "toc_cache_consistent": true,
+  "final_render_input_matches_formal_word": true,
+  "visual_review": {
+    "pages": 104,
+    "method": "bc636候选104页原始PNG分两组逐页目视；局部修订后重渲染，最终10页变化已逐张重新打开检查，其余94页PNG逐字节相同。不是抽样或只读文本。",
+    "changed_pages_reinspected": [
+      3,
+      6,
+      77,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104
+    ],
+    "byte_identical_pages": 94,
+    "records": [
+      "ready-front-visual.json",
+      "ready-back-visual.json"
+    ]
+  },
+  "final_page_hashes": [
+    {
+      "page": 1,
+      "before_sha256": "b96fe65c795a6744b7cdedef49727f79975ba8cc22d8c881e0c8de586ddf2d44",
+      "after_sha256": "b96fe65c795a6744b7cdedef49727f79975ba8cc22d8c881e0c8de586ddf2d44"
+    },
+    {
+      "page": 2,
+      "before_sha256": "96eb21e738687af2ff8e3dae32eca0d9085c91a719c2e25ef0552aeacf1076c4",
+      "after_sha256": "96eb21e738687af2ff8e3dae32eca0d9085c91a719c2e25ef0552aeacf1076c4"
+    },
+    {
+      "page": 3,
+      "before_sha256": "4ddb84437f0799a116fdce909d60fc25e194c55c1e2cc87d5064ed6ee8deb4ab",
+      "after_sha256": "1d70c5f1ac79a2c90767c2b9ba0b71de12539818bad73087238ec28b87d33b77"
+    },
+    {
+      "page": 4,
+      "before_sha256": "2e9413c7968174d9257985d896da277c49dc0ca4fb9b2686273a5238722ea56d",
+      "after_sha256": "2e9413c7968174d9257985d896da277c49dc0ca4fb9b2686273a5238722ea56d"
+    },
+    {
+      "page": 5,
+      "before_sha256": "fb58f4f56934d0c9787df5925a3af0e6ea4d7b9253cb7ade300eeb3c5bcd6dde",
+      "after_sha256": "fb58f4f56934d0c9787df5925a3af0e6ea4d7b9253cb7ade300eeb3c5bcd6dde"
+    },
+    {
+      "page": 6,
+      "before_sha256": "7a4a999fedc0e2970611f9ca29a6a3bc17389a936e3532c4d8822e8b4a3c922e",
+      "after_sha256": "e6cbe5e91351b6b5abcfc596f305989130f17e9fc9a101b318235992af4365b0"
+    },
+    {
+      "page": 7,
+      "before_sha256": "712155ac6eb5d70cee3c49f8ec5f4a39f313db002147a74ac4e2d254c8f05561",
+      "after_sha256": "712155ac6eb5d70cee3c49f8ec5f4a39f313db002147a74ac4e2d254c8f05561"
+    },
+    {
+      "page": 8,
+      "before_sha256": "e515b1596bf1a844cfe50fd0bd4b147892d3c015c7b5edb2e78f69fd9f912f9c",
+      "after_sha256": "e515b1596bf1a844cfe50fd0bd4b147892d3c015c7b5edb2e78f69fd9f912f9c"
+    },
+    {
+      "page": 9,
+      "before_sha256": "09766646ed264caeee61ffef40f92e4c2977b3192ec3fee802f56f4834e9d747",
+      "after_sha256": "09766646ed264caeee61ffef40f92e4c2977b3192ec3fee802f56f4834e9d747"
+    },
+    {
+      "page": 10,
+      "before_sha256": "50698123ab43d454cce983d16892bbe40dd363981b5f082725040679ffc6a245",
+      "after_sha256": "50698123ab43d454cce983d16892bbe40dd363981b5f082725040679ffc6a245"
+    },
+    {
+      "page": 11,
+      "before_sha256": "5a9ab1c5eb61cbcff9190e76a2d310be0f8dfdb4451397be4cd1f55c777e4e51",
+      "after_sha256": "5a9ab1c5eb61cbcff9190e76a2d310be0f8dfdb4451397be4cd1f55c777e4e51"
+    },
+    {
+      "page": 12,
+      "before_sha256": "3c26e7d1f9f418f63ba32f8e77761305d9c2d5b3cbb81c21ce1cb650b44d0c00",
+      "after_sha256": "3c26e7d1f9f418f63ba32f8e77761305d9c2d5b3cbb81c21ce1cb650b44d0c00"
+    },
+    {
+      "page": 13,
+      "before_sha256": "ab7d3f216ab0fdb04ff0e86b0e1d7e2eb3ad0f8ca588add2d28a8305720de5e7",
+      "after_sha256": "ab7d3f216ab0fdb04ff0e86b0e1d7e2eb3ad0f8ca588add2d28a8305720de5e7"
+    },
+    {
+      "page": 14,
+      "before_sha256": "f32fbe3652cb3811c9c1408aac315c0bffa20cef578fc8a77990d85568e1c4f0",
+      "after_sha256": "f32fbe3652cb3811c9c1408aac315c0bffa20cef578fc8a77990d85568e1c4f0"
+    },
+    {
+      "page": 15,
+      "before_sha256": "491dcf4c71cba98cc592b9ce5b38a70bc1ec703569af08a18060996ee1bba6ac",
+      "after_sha256": "491dcf4c71cba98cc592b9ce5b38a70bc1ec703569af08a18060996ee1bba6ac"
+    },
+    {
+      "page": 16,
+      "before_sha256": "a26315df355e694f5d8f04b4ffa6d1f1cac191e4640a64c8b94785307c7bbdad",
+      "after_sha256": "a26315df355e694f5d8f04b4ffa6d1f1cac191e4640a64c8b94785307c7bbdad"
+    },
+    {
+      "page": 17,
+      "before_sha256": "d88e082d0fdcb35a961d2c7e6c4727086c941855de1f1584331612f1675ef97d",
+      "after_sha256": "d88e082d0fdcb35a961d2c7e6c4727086c941855de1f1584331612f1675ef97d"
+    },
+    {
+      "page": 18,
+      "before_sha256": "8d0773a1d88c1e02ac1b0eae5fd734442bd9c0043db6581dc5ab9a8910cc984d",
+      "after_sha256": "8d0773a1d88c1e02ac1b0eae5fd734442bd9c0043db6581dc5ab9a8910cc984d"
+    },
+    {
+      "page": 19,
+      "before_sha256": "4e5d226b38ffa2d21c7b677efda03552dbaf0c88d38534a3efb538f174dfe745",
+      "after_sha256": "4e5d226b38ffa2d21c7b677efda03552dbaf0c88d38534a3efb538f174dfe745"
+    },
+    {
+      "page": 20,
+      "before_sha256": "a8e94857c65278a3f32981c96f896dc33b64d07ac44fd3e81d24f243c59f07fd",
+      "after_sha256": "a8e94857c65278a3f32981c96f896dc33b64d07ac44fd3e81d24f243c59f07fd"
+    },
+    {
+      "page": 21,
+      "before_sha256": "0127f0057bebb14ee7922624baa3a4cc06c71d096c24d13b66dbd696ae3ba113",
+      "after_sha256": "0127f0057bebb14ee7922624baa3a4cc06c71d096c24d13b66dbd696ae3ba113"
+    },
+    {
+      "page": 22,
+      "before_sha256": "ad6f98a5a776b08b54888da8f4720b2ff4546a7762f3224e494360f0d51da7ef",
+      "after_sha256": "ad6f98a5a776b08b54888da8f4720b2ff4546a7762f3224e494360f0d51da7ef"
+    },
+    {
+      "page": 23,
+      "before_sha256": "8b0242ff6672016bb047e70cb5087dc036c9e92988eec4e86fa90ccc7b8c4f72",
+      "after_sha256": "8b0242ff6672016bb047e70cb5087dc036c9e92988eec4e86fa90ccc7b8c4f72"
+    },
+    {
+      "page": 24,
+      "before_sha256": "6e682202d0fbe66fbffe5669788d4bd97807685399961bee5def35cbe1d354c3",
+      "after_sha256": "6e682202d0fbe66fbffe5669788d4bd97807685399961bee5def35cbe1d354c3"
+    },
+    {
+      "page": 25,
+      "before_sha256": "c53cda629b97348cb1535060f25cb418eaa01e13fcae1729b47c4279f46c6149",
+      "after_sha256": "c53cda629b97348cb1535060f25cb418eaa01e13fcae1729b47c4279f46c6149"
+    },
+    {
+      "page": 26,
+      "before_sha256": "7a81714b80941e4ee978384302a94fb54b3a9332cc186997532f27a627641060",
+      "after_sha256": "7a81714b80941e4ee978384302a94fb54b3a9332cc186997532f27a627641060"
+    },
+    {
+      "page": 27,
+      "before_sha256": "067fee9a2bf03005d3b1125f61a6db30f38a6a4fbda2b384d684400550c36fdd",
+      "after_sha256": "067fee9a2bf03005d3b1125f61a6db30f38a6a4fbda2b384d684400550c36fdd"
+    },
+    {
+      "page": 28,
+      "before_sha256": "dc8cad7303423ba0d10e1f865d70907e981e4cb7c8dcaebdd13bb60a0796eff7",
+      "after_sha256": "dc8cad7303423ba0d10e1f865d70907e981e4cb7c8dcaebdd13bb60a0796eff7"
+    },
+    {
+      "page": 29,
+      "before_sha256": "5dd4ac17d7283fb545c92625d7abeb28a3b6f24ce7b2ebfd0002bfc36b8e835b",
+      "after_sha256": "5dd4ac17d7283fb545c92625d7abeb28a3b6f24ce7b2ebfd0002bfc36b8e835b"
+    },
+    {
+      "page": 30,
+      "before_sha256": "de66b74b7ef3fa4c92a9be8fef5d341d6bafcc4705d3c54e9197a87716e97352",
+      "after_sha256": "de66b74b7ef3fa4c92a9be8fef5d341d6bafcc4705d3c54e9197a87716e97352"
+    },
+    {
+      "page": 31,
+      "before_sha256": "4c39e8d72e0d66ac62c0d6f895fe4a2bb4662f07b82fbdccdef35e89903917ea",
+      "after_sha256": "4c39e8d72e0d66ac62c0d6f895fe4a2bb4662f07b82fbdccdef35e89903917ea"
+    },
+    {
+      "page": 32,
+      "before_sha256": "c90139f1799591690fbb1f654aa67eacc65bebf32ba5bda0085b1762a484e72c",
+      "after_sha256": "c90139f1799591690fbb1f654aa67eacc65bebf32ba5bda0085b1762a484e72c"
+    },
+    {
+      "page": 33,
+      "before_sha256": "f42e5cceee34e7aaf7ac24cc05fcc645142e2eafc6fbf790ae7b5a86474fac03",
+      "after_sha256": "f42e5cceee34e7aaf7ac24cc05fcc645142e2eafc6fbf790ae7b5a86474fac03"
+    },
+    {
+      "page": 34,
+      "before_sha256": "019b7fffb88b98ce504b0445dce1e4d8431ce0f3d4069268f797a32365358fff",
+      "after_sha256": "019b7fffb88b98ce504b0445dce1e4d8431ce0f3d4069268f797a32365358fff"
+    },
+    {
+      "page": 35,
+      "before_sha256": "f8d04771be1c26316756d8e46a38192ed2f4d21207e4ac48773dda2b0d71e2a5",
+      "after_sha256": "f8d04771be1c26316756d8e46a38192ed2f4d21207e4ac48773dda2b0d71e2a5"
+    },
+    {
+      "page": 36,
+      "before_sha256": "668f60d9e6d882997c18329ca25af57efcfe21d430bf64754df472b03f29590a",
+      "after_sha256": "668f60d9e6d882997c18329ca25af57efcfe21d430bf64754df472b03f29590a"
+    },
+    {
+      "page": 37,
+      "before_sha256": "62a277f4978bafb9db768a1621f39dd6dad33772d55475aaad7f4167b84a47b0",
+      "after_sha256": "62a277f4978bafb9db768a1621f39dd6dad33772d55475aaad7f4167b84a47b0"
+    },
+    {
+      "page": 38,
+      "before_sha256": "7c11db139b54d46a302c75bd2a732710b1d0b8da267b731de30b9ccf60c683e2",
+      "after_sha256": "7c11db139b54d46a302c75bd2a732710b1d0b8da267b731de30b9ccf60c683e2"
+    },
+    {
+      "page": 39,
+      "before_sha256": "0222563d3bfaa096094234c5e99b6606d0abcc54310d6e9655d4c10a55da7ecf",
+      "after_sha256": "0222563d3bfaa096094234c5e99b6606d0abcc54310d6e9655d4c10a55da7ecf"
+    },
+    {
+      "page": 40,
+      "before_sha256": "ff9fdf8615a6c206d72d14506fbfc83eccd4e65b70c3db48e48a5943b88547c7",
+      "after_sha256": "ff9fdf8615a6c206d72d14506fbfc83eccd4e65b70c3db48e48a5943b88547c7"
+    },
+    {
+      "page": 41,
+      "before_sha256": "49883c7031b10d5bf3d77751bec8536a56e9c8199377095d4d9942f50caed4b7",
+      "after_sha256": "49883c7031b10d5bf3d77751bec8536a56e9c8199377095d4d9942f50caed4b7"
+    },
+    {
+      "page": 42,
+      "before_sha256": "53656332416b36d1f9e396f798a92322b435cfde894fb9a036eef6d14960f533",
+      "after_sha256": "53656332416b36d1f9e396f798a92322b435cfde894fb9a036eef6d14960f533"
+    },
+    {
+      "page": 43,
+      "before_sha256": "028faf12fb5fbe72c38a4a7e97b2b59b510aa5b628a3b86b96547a48e9f541ee",
+      "after_sha256": "028faf12fb5fbe72c38a4a7e97b2b59b510aa5b628a3b86b96547a48e9f541ee"
+    },
+    {
+      "page": 44,
+      "before_sha256": "6a97b462b411849050e89161b7a48d208084f7fd69d9ec2dde3410931b322cf1",
+      "after_sha256": "6a97b462b411849050e89161b7a48d208084f7fd69d9ec2dde3410931b322cf1"
+    },
+    {
+      "page": 45,
+      "before_sha256": "50389292e10c51b47de8be0a872ce97f0594d157a5dee00811e76e28a1d7a27f",
+      "after_sha256": "50389292e10c51b47de8be0a872ce97f0594d157a5dee00811e76e28a1d7a27f"
+    },
+    {
+      "page": 46,
+      "before_sha256": "ade3447a4f8599beb41c30add654ed6818caf3eb0f1117211b5a0eda8e50514a",
+      "after_sha256": "ade3447a4f8599beb41c30add654ed6818caf3eb0f1117211b5a0eda8e50514a"
+    },
+    {
+      "page": 47,
+      "before_sha256": "ab9aff59094db7b3961098ec1e6d0e3121634cde41e8906764206978ea162a11",
+      "after_sha256": "ab9aff59094db7b3961098ec1e6d0e3121634cde41e8906764206978ea162a11"
+    },
+    {
+      "page": 48,
+      "before_sha256": "37e66922a74a1461458b324d2cb32705af7218d9be6e28085367bb331544f351",
+      "after_sha256": "37e66922a74a1461458b324d2cb32705af7218d9be6e28085367bb331544f351"
+    },
+    {
+      "page": 49,
+      "before_sha256": "6d4c7a28a7fdf4f0d786a7f8111afefae52fb7b8ce2004f71ee4065a0cc6a411",
+      "after_sha256": "6d4c7a28a7fdf4f0d786a7f8111afefae52fb7b8ce2004f71ee4065a0cc6a411"
+    },
+    {
+      "page": 50,
+      "before_sha256": "17c2e5c0e29e3e90e9ca5a2690a94b0c67224c8966b0364e8b96c3f32a67037a",
+      "after_sha256": "17c2e5c0e29e3e90e9ca5a2690a94b0c67224c8966b0364e8b96c3f32a67037a"
+    },
+    {
+      "page": 51,
+      "before_sha256": "4943ec33495fe988d6d5c39dd716450be62ca473a6a70e8b64c94ccad64c15e2",
+      "after_sha256": "4943ec33495fe988d6d5c39dd716450be62ca473a6a70e8b64c94ccad64c15e2"
+    },
+    {
+      "page": 52,
+      "before_sha256": "80d43a8ae44eec5a5bc5eea0dafbf560e05261b44ab286e697804b20270e98e9",
+      "after_sha256": "80d43a8ae44eec5a5bc5eea0dafbf560e05261b44ab286e697804b20270e98e9"
+    },
+    {
+      "page": 53,
+      "before_sha256": "77ef82d5a22c3c41cb5caf90430dcd2aa4ee48050566178969ffbde0ce53204d",
+      "after_sha256": "77ef82d5a22c3c41cb5caf90430dcd2aa4ee48050566178969ffbde0ce53204d"
+    },
+    {
+      "page": 54,
+      "before_sha256": "3284498234d38b2e8de86591d750d0313a122158e8316e1499a4ff4e846c9b72",
+      "after_sha256": "3284498234d38b2e8de86591d750d0313a122158e8316e1499a4ff4e846c9b72"
+    },
+    {
+      "page": 55,
+      "before_sha256": "18c52f6b2a5706e475966451a7e6c547158a0b16e485ea2ef0541d713b558875",
+      "after_sha256": "18c52f6b2a5706e475966451a7e6c547158a0b16e485ea2ef0541d713b558875"
+    },
+    {
+      "page": 56,
+      "before_sha256": "43dec323c038dc201aa0118f026fb7776ef98c410b4ffdb5bbb5c71abb498ec6",
+      "after_sha256": "43dec323c038dc201aa0118f026fb7776ef98c410b4ffdb5bbb5c71abb498ec6"
+    },
+    {
+      "page": 57,
+      "before_sha256": "346e053c10bee6974434c53c3ac89694bfb8798349451e0da80d237073868cfd",
+      "after_sha256": "346e053c10bee6974434c53c3ac89694bfb8798349451e0da80d237073868cfd"
+    },
+    {
+      "page": 58,
+      "before_sha256": "fdb4bc9654270968804878fd49768320db1bfd69340918e78a14bd93dcfdbadc",
+      "after_sha256": "fdb4bc9654270968804878fd49768320db1bfd69340918e78a14bd93dcfdbadc"
+    },
+    {
+      "page": 59,
+      "before_sha256": "83a8d39c931426514eaeaacf9bb58065f7079e3de33d89442cc64076e77188b2",
+      "after_sha256": "83a8d39c931426514eaeaacf9bb58065f7079e3de33d89442cc64076e77188b2"
+    },
+    {
+      "page": 60,
+      "before_sha256": "22f24febbf29a7fb1bcd6fa3af35eb563ae126ca370f40f8ac3cc63504802439",
+      "after_sha256": "22f24febbf29a7fb1bcd6fa3af35eb563ae126ca370f40f8ac3cc63504802439"
+    },
+    {
+      "page": 61,
+      "before_sha256": "c46af2a8bd7ea912a5f3ba90b9b4b429dd41a08290394c7d4c7f81871742ffa9",
+      "after_sha256": "c46af2a8bd7ea912a5f3ba90b9b4b429dd41a08290394c7d4c7f81871742ffa9"
+    },
+    {
+      "page": 62,
+      "before_sha256": "ab05f577f6fff390e84af798159a87410286d95f367a5c09c47d7980d0e6084d",
+      "after_sha256": "ab05f577f6fff390e84af798159a87410286d95f367a5c09c47d7980d0e6084d"
+    },
+    {
+      "page": 63,
+      "before_sha256": "9d694fc26fa42bf157dbec6ce3ac003f25a1933fd67f1c3fdb1bd5f5d1df77d5",
+      "after_sha256": "9d694fc26fa42bf157dbec6ce3ac003f25a1933fd67f1c3fdb1bd5f5d1df77d5"
+    },
+    {
+      "page": 64,
+      "before_sha256": "ce94f0a5b0a54b08ba25db3148dd7243eb171d391b17e16a061db1efb3e3e4ca",
+      "after_sha256": "ce94f0a5b0a54b08ba25db3148dd7243eb171d391b17e16a061db1efb3e3e4ca"
+    },
+    {
+      "page": 65,
+      "before_sha256": "c646a9c815050254637ce5e0324ac19a9688d6c8ac2c0176188776d8f8cc0103",
+      "after_sha256": "c646a9c815050254637ce5e0324ac19a9688d6c8ac2c0176188776d8f8cc0103"
+    },
+    {
+      "page": 66,
+      "before_sha256": "b673d3582bc5aa439683b1dec0f537168c4db74ed66c13748ddcd1de8a5eaff0",
+      "after_sha256": "b673d3582bc5aa439683b1dec0f537168c4db74ed66c13748ddcd1de8a5eaff0"
+    },
+    {
+      "page": 67,
+      "before_sha256": "f217c4fc26ee9f716786fdf66faee611d52f953c649173c26076e35e67c5e33a",
+      "after_sha256": "f217c4fc26ee9f716786fdf66faee611d52f953c649173c26076e35e67c5e33a"
+    },
+    {
+      "page": 68,
+      "before_sha256": "f5c1905faa96e9d82ffd89cf72c9bbf40a19f770618732513afd8acf78824806",
+      "after_sha256": "f5c1905faa96e9d82ffd89cf72c9bbf40a19f770618732513afd8acf78824806"
+    },
+    {
+      "page": 69,
+      "before_sha256": "3a49307724d10d9a23eb574f369a2af95f108bf566b0d72f8c4a894a6920b327",
+      "after_sha256": "3a49307724d10d9a23eb574f369a2af95f108bf566b0d72f8c4a894a6920b327"
+    },
+    {
+      "page": 70,
+      "before_sha256": "636c06b262a85975b8026e6f2fa7cc8bf88aabc57415fafffab2e95019d61e56",
+      "after_sha256": "636c06b262a85975b8026e6f2fa7cc8bf88aabc57415fafffab2e95019d61e56"
+    },
+    {
+      "page": 71,
+      "before_sha256": "f91052d62f25a88b446d1df564e5bd62d50e52bfa117bb6853006a99121b7b6c",
+      "after_sha256": "f91052d62f25a88b446d1df564e5bd62d50e52bfa117bb6853006a99121b7b6c"
+    },
+    {
+      "page": 72,
+      "before_sha256": "c70f6f72c7e3927d140aa2279e8bdf82420ad21a1712053e853518e56400175a",
+      "after_sha256": "c70f6f72c7e3927d140aa2279e8bdf82420ad21a1712053e853518e56400175a"
+    },
+    {
+      "page": 73,
+      "before_sha256": "880dfed0c90b7eceae92ac28a3e5de59612744a47d62855e106d2539c37a25c9",
+      "after_sha256": "880dfed0c90b7eceae92ac28a3e5de59612744a47d62855e106d2539c37a25c9"
+    },
+    {
+      "page": 74,
+      "before_sha256": "95012771f7f35b6c41e2956d5e4fd11b96af7bf10b07e70587a5667cd5cab143",
+      "after_sha256": "95012771f7f35b6c41e2956d5e4fd11b96af7bf10b07e70587a5667cd5cab143"
+    },
+    {
+      "page": 75,
+      "before_sha256": "75acade5554e3019252ede0d4a4744832f64bfff56d6f98896386afea754af37",
+      "after_sha256": "75acade5554e3019252ede0d4a4744832f64bfff56d6f98896386afea754af37"
+    },
+    {
+      "page": 76,
+      "before_sha256": "832e78c8bf151c015532902b1947d8ee5774b57fe8f7a887f9dab5a8db1e0c58",
+      "after_sha256": "832e78c8bf151c015532902b1947d8ee5774b57fe8f7a887f9dab5a8db1e0c58"
+    },
+    {
+      "page": 77,
+      "before_sha256": "1967af78a079513b2789fa29178b55e210be250ec1a96f3cf08f87afa5db21ae",
+      "after_sha256": "b3260ee4413b10d1307f31d61fcc14ddc6fd9cd3d82ae4807d40e9feeef29569"
+    },
+    {
+      "page": 78,
+      "before_sha256": "6f1cbd33cdf7d3d271dce9797125b5a1fa22fb799a0f5add0a6e09a9cd3874b9",
+      "after_sha256": "6f1cbd33cdf7d3d271dce9797125b5a1fa22fb799a0f5add0a6e09a9cd3874b9"
+    },
+    {
+      "page": 79,
+      "before_sha256": "a98e57f3a9e357ea2b0535d5d2769a6c301141605d0045c4deb953e63eb2c14d",
+      "after_sha256": "a98e57f3a9e357ea2b0535d5d2769a6c301141605d0045c4deb953e63eb2c14d"
+    },
+    {
+      "page": 80,
+      "before_sha256": "e4e2caf9a57e23979b3f7ee85898262ff5dd5c233b4e8f1a9a73d835a84b125a",
+      "after_sha256": "e4e2caf9a57e23979b3f7ee85898262ff5dd5c233b4e8f1a9a73d835a84b125a"
+    },
+    {
+      "page": 81,
+      "before_sha256": "c18fee49c03386b9e4c5ad43a228deae25aa2491ac7d1d5313b7a3e788ce6f2e",
+      "after_sha256": "c18fee49c03386b9e4c5ad43a228deae25aa2491ac7d1d5313b7a3e788ce6f2e"
+    },
+    {
+      "page": 82,
+      "before_sha256": "31c9fe948eb87d821118a378e10fcd38e37ecd8363dbd52263f534d3aaf8bd93",
+      "after_sha256": "31c9fe948eb87d821118a378e10fcd38e37ecd8363dbd52263f534d3aaf8bd93"
+    },
+    {
+      "page": 83,
+      "before_sha256": "8e3d667a94a6737c46aacf76e3b18587c8749831c8daea8bf6cf24d1d984fb26",
+      "after_sha256": "8e3d667a94a6737c46aacf76e3b18587c8749831c8daea8bf6cf24d1d984fb26"
+    },
+    {
+      "page": 84,
+      "before_sha256": "b7658c26f9ef00652f4223169a99f8f5acb223fca6446cfe958aad5bc4bf4246",
+      "after_sha256": "b7658c26f9ef00652f4223169a99f8f5acb223fca6446cfe958aad5bc4bf4246"
+    },
+    {
+      "page": 85,
+      "before_sha256": "06825cf8a77ac4e8f284b64dacefeccb8c292b5fffbf2ea4ecc0cddbb4bb21a5",
+      "after_sha256": "06825cf8a77ac4e8f284b64dacefeccb8c292b5fffbf2ea4ecc0cddbb4bb21a5"
+    },
+    {
+      "page": 86,
+      "before_sha256": "ed7374b71f972f980bb17c09e07c8f0e1548280e95151604f8458759a398117d",
+      "after_sha256": "ed7374b71f972f980bb17c09e07c8f0e1548280e95151604f8458759a398117d"
+    },
+    {
+      "page": 87,
+      "before_sha256": "911826fe9dba829e044d21351c386b72f695176cf0b81dcbbf280cee0c724bea",
+      "after_sha256": "911826fe9dba829e044d21351c386b72f695176cf0b81dcbbf280cee0c724bea"
+    },
+    {
+      "page": 88,
+      "before_sha256": "352c082e64263c0340bca7198a3d4ee1d7cd815311e5eb70a41b70497896e471",
+      "after_sha256": "352c082e64263c0340bca7198a3d4ee1d7cd815311e5eb70a41b70497896e471"
+    },
+    {
+      "page": 89,
+      "before_sha256": "a942036d816732c49cef45b8b3986e4c6f02c39ca2a4da0522ffd02fec765b59",
+      "after_sha256": "a942036d816732c49cef45b8b3986e4c6f02c39ca2a4da0522ffd02fec765b59"
+    },
+    {
+      "page": 90,
+      "before_sha256": "b9d06034ae70e58ccf47f5669db5a428d9499b61a0cf0452ee04a92ad151ed24",
+      "after_sha256": "b9d06034ae70e58ccf47f5669db5a428d9499b61a0cf0452ee04a92ad151ed24"
+    },
+    {
+      "page": 91,
+      "before_sha256": "28a4a6e5d3ecc340dc59d8bb2b055e3f13f2890eb679d70077bc037552ae68a9",
+      "after_sha256": "28a4a6e5d3ecc340dc59d8bb2b055e3f13f2890eb679d70077bc037552ae68a9"
+    },
+    {
+      "page": 92,
+      "before_sha256": "139645cae5ed0f2f796b6304565647674c32400c87792d9dcddc3ad1adfa9bfd",
+      "after_sha256": "139645cae5ed0f2f796b6304565647674c32400c87792d9dcddc3ad1adfa9bfd"
+    },
+    {
+      "page": 93,
+      "before_sha256": "59d0dd805cdeb10498a6851a657fea9c6f6e14b5346943dd65b08056c78112a6",
+      "after_sha256": "59d0dd805cdeb10498a6851a657fea9c6f6e14b5346943dd65b08056c78112a6"
+    },
+    {
+      "page": 94,
+      "before_sha256": "60e63d394677d7c564bfc81d6688827e30416c1f19d0256b06f24d00680728a9",
+      "after_sha256": "60e63d394677d7c564bfc81d6688827e30416c1f19d0256b06f24d00680728a9"
+    },
+    {
+      "page": 95,
+      "before_sha256": "95d1a1ee3011dae93b9576c09a1970350626e51db6f6890a42f29abff7657884",
+      "after_sha256": "95d1a1ee3011dae93b9576c09a1970350626e51db6f6890a42f29abff7657884"
+    },
+    {
+      "page": 96,
+      "before_sha256": "1f671af8d59352ae47b68b4dfa2c4deb33c86326ec22a954e8bbc99e6e10f9dd",
+      "after_sha256": "1f671af8d59352ae47b68b4dfa2c4deb33c86326ec22a954e8bbc99e6e10f9dd"
+    },
+    {
+      "page": 97,
+      "before_sha256": "5c5d6e69f8034625d893ae472afa91162d6c13e9916036a2c49b0a383506371c",
+      "after_sha256": "5c5d6e69f8034625d893ae472afa91162d6c13e9916036a2c49b0a383506371c"
+    },
+    {
+      "page": 98,
+      "before_sha256": "b0de5ed8c1ad64cc650c53b76fd674197b3ceaa65980eb3584ad7670ffb6e3cd",
+      "after_sha256": "97647568f8efa52d7499674cb5cd9c9d0220ff076e119156814a0b45dceef233"
+    },
+    {
+      "page": 99,
+      "before_sha256": "77de46b25d5a8e71e6ebeb256faec3bb546d7c4333c9716494d42d90755c3272",
+      "after_sha256": "4e09af43cf97cbce5fb6da659d1d6b1bebdddcaf9e915c97fd465875df70d8cb"
+    },
+    {
+      "page": 100,
+      "before_sha256": "83e5bab61bf429a2a0ff36325cadd3fb0e54a59fd32a261ba2c2fba9ae2b0905",
+      "after_sha256": "6d02a3745e221385192d37bf06976f770aba81637db1c00bb31a4b88cf5b99b6"
+    },
+    {
+      "page": 101,
+      "before_sha256": "a14e6f04ab693d7b2873e4ef4c65180187fde047ecca8d091e96b1d8b405a209",
+      "after_sha256": "14ed7ab55cf29832fa160a4f8f3423a19f8de3acc113cfc863742d77e420bbc5"
+    },
+    {
+      "page": 102,
+      "before_sha256": "d5abb4cb8eb7dd024cc85c241b4bda21e4740dc5fa4ff78067b9c681c1d8430e",
+      "after_sha256": "65eec881e9d8b506a749bab3a786a964353438f25a6eeb9accbbed08536c7ff2"
+    },
+    {
+      "page": 103,
+      "before_sha256": "a4dbf09089340c6478d0a217a9943d2d592cf7d0f6ec330681cb3dcc4274b8d8",
+      "after_sha256": "17d450709a14472adeec62b718ea8fc587985619c6e283d0600aa788a10eb195"
+    },
+    {
+      "page": 104,
+      "before_sha256": "90716190357bc63a7131235adbb9ab7b3c3a35c75a4f851d20bbfd7605899bb0",
+      "after_sha256": "2940898e055fd165e5c7c6b09914d894ba1d9626dcbfb627b523eddbf545bedf"
+    }
+  ],
+  "local_changes": {
+    "date": "2026-10-27",
+    "before_sha256": "bc6369a9c3ab9a35998b886c663e944fe2d7950d1403bdf4d8b12b433916e331",
+    "after_sha256": "f087a6a6b972bf5b8e51a9dbf81360648fb4d1d38a742477692dd5ec62c930a6",
+    "changes": [
+      {
+        "issue": "AUD-0117",
+        "page_before": 77,
+        "xml_paragraph_1_based": 2432,
+        "before": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。；历史编号BR-47用于旧证据定位。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+        "after": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。历史编号BR-47用于旧证据定位。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+        "change": "删除重复分号，不改变留存及历史编号说明"
+      },
+      {
+        "issue": "AUD-0070",
+        "page_before": 98,
+        "table_1_based": 46,
+        "row_1_based": 10,
+        "cell_1_based": 4,
+        "before": "TO-E08/TO-E09/TO-E09a/\nTO-E10/TO-E11/TO-E10b；FR-09→UC-09",
+        "after": "TO-E08/TO-E09/TO-E09a/\nTO-E10/TO-E11/TO-E10b；\nFR-09→UC-09",
+        "change": "仅在TRACE-09实现引用单元格完整FR-09前增加合法换行点"
+      }
+    ],
+    "scope": "two local fixes only; other package parts retained"
+  },
+  "reference_break_changes": {
+    "date": "2026-10-27",
+    "issue": "AUD-0070",
+    "before_sha256": "f087a6a6b972bf5b8e51a9dbf81360648fb4d1d38a742477692dd5ec62c930a6",
+    "after_sha256": "b3daef7ed9d1b9d06cab1438b1bacd93891a34ac73bb36f3f7eb9b1ef504dd55",
+    "canonical_text_unchanged": true,
+    "scope": "表6-2规则引用列的完整编号之间slash仅增空格；两处TRACE-OPS-01在语义分隔符处换行；不改URLs、路径、业务字段、字体、列宽和其他正文。",
+    "changes": [
+      {
+        "table": 47,
+        "row": 2,
+        "cell": 2,
+        "old": "SPEC-01；BR-01/BR-29/\nBR-30/BR-46",
+        "new": "SPEC-01；BR-01 / BR-29 / \nBR-30 / BR-46",
+        "slash_breaks": 3
+      },
+      {
+        "table": 47,
+        "row": 3,
+        "cell": 2,
+        "old": "SPEC-02；BR-01/BR-29/\nBR-31",
+        "new": "SPEC-02；BR-01 / BR-29 / \nBR-31",
+        "slash_breaks": 2
+      },
+      {
+        "table": 47,
+        "row": 4,
+        "cell": 2,
+        "old": "SPEC-03；BR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-29/BR-39/BR-40/BR-44",
+        "new": "SPEC-03；BR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-29 / BR-39 / BR-40 / BR-44",
+        "slash_breaks": 9
+      },
+      {
+        "table": 47,
+        "row": 5,
+        "cell": 2,
+        "old": "SPEC-04；BR-01/BR-02/\nBR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-09/BR-10/BR-12/BR-13/BR-14/BR-26/BR-27/BR-35/BR-39/BR-40",
+        "new": "SPEC-04；BR-01 / BR-02 / \nBR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-09 / BR-10 / BR-12 / BR-13 / BR-14 / BR-26 / BR-27 / BR-35 / BR-39 / BR-40",
+        "slash_breaks": 17
+      },
+      {
+        "table": 47,
+        "row": 6,
+        "cell": 2,
+        "old": "SPEC-05；BR-01/BR-02/\nBR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-09/BR-11/BR-12/BR-14/BR-26/BR-27/BR-35/BR-39/BR-40",
+        "new": "SPEC-05；BR-01 / BR-02 / \nBR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-09 / BR-11 / BR-12 / BR-14 / BR-26 / BR-27 / BR-35 / BR-39 / BR-40",
+        "slash_breaks": 16
+      },
+      {
+        "table": 47,
+        "row": 7,
+        "cell": 2,
+        "old": "SPEC-06；BR-08/BR-15/\nBR-26/BR-29/BR-45",
+        "new": "SPEC-06；BR-08 / BR-15 / \nBR-26 / BR-29 / BR-45",
+        "slash_breaks": 4
+      },
+      {
+        "table": 47,
+        "row": 8,
+        "cell": 2,
+        "old": "SPEC-07；BR-07/BR-09/\nBR-16/BR-26/BR-27/BR-35",
+        "new": "SPEC-07；BR-07 / BR-09 / \nBR-16 / BR-26 / BR-27 / BR-35",
+        "slash_breaks": 5
+      },
+      {
+        "table": 47,
+        "row": 9,
+        "cell": 2,
+        "old": "SPEC-08；BR-03/BR-05/\nBR-06/BR-07/BR-08/BR-09/BR-10/BR-11/BR-12/BR-13/BR-14/BR-15/BR-26/BR-27/BR-35/BR-36/BR-39/BR-40/BR-41",
+        "new": "SPEC-08；BR-03 / BR-05 / \nBR-06 / BR-07 / BR-08 / BR-09 / BR-10 / BR-11 / BR-12 / BR-13 / BR-14 / BR-15 / BR-26 / BR-27 / BR-35 / BR-36 / BR-39 / BR-40 / BR-41",
+        "slash_breaks": 18
+      },
+      {
+        "table": 47,
+        "row": 10,
+        "cell": 2,
+        "old": "SPEC-09；BR-12/BR-13/\nBR-17/BR-18/BR-19/BR-26/BR-27/BR-35/BR-36/BR-38/BR-40/BR-44/BR-45/BR-39",
+        "new": "SPEC-09；BR-12 / BR-13 / \nBR-17 / BR-18 / BR-19 / BR-26 / BR-27 / BR-35 / BR-36 / BR-38 / BR-40 / BR-44 / BR-45 / BR-39",
+        "slash_breaks": 13
+      },
+      {
+        "table": 47,
+        "row": 11,
+        "cell": 2,
+        "old": "SPEC-10；BR-18/BR-20/\nBR-21/BR-22/BR-25/BR-26/BR-27/BR-35/BR-42/BR-44/BR-45",
+        "new": "SPEC-10；BR-18 / BR-20 / \nBR-21 / BR-22 / BR-25 / BR-26 / BR-27 / BR-35 / BR-42 / BR-44 / BR-45",
+        "slash_breaks": 10
+      },
+      {
+        "table": 47,
+        "row": 12,
+        "cell": 2,
+        "old": "SPEC-11；BR-02/BR-11/\nBR-12/BR-17/BR-18/BR-21/BR-26/BR-27/BR-35/BR-36/BR-38/BR-40/BR-44/BR-45/BR-39",
+        "new": "SPEC-11；BR-02 / BR-11 / \nBR-12 / BR-17 / BR-18 / BR-21 / BR-26 / BR-27 / BR-35 / BR-36 / BR-38 / BR-40 / BR-44 / BR-45 / BR-39",
+        "slash_breaks": 14
+      },
+      {
+        "table": 47,
+        "row": 13,
+        "cell": 2,
+        "old": "SPEC-12；BR-02/BR-12/\nBR-21/BR-22/BR-25/BR-26/BR-27/BR-35/BR-44/BR-45",
+        "new": "SPEC-12；BR-02 / BR-12 / \nBR-21 / BR-22 / BR-25 / BR-26 / BR-27 / BR-35 / BR-44 / BR-45",
+        "slash_breaks": 9
+      },
+      {
+        "table": 47,
+        "row": 14,
+        "cell": 2,
+        "old": "SPEC-13；BR-22/BR-26/\nBR-27/BR-29/BR-32/BR-37/BR-42",
+        "new": "SPEC-13；BR-22 / BR-26 / \nBR-27 / BR-29 / BR-32 / BR-37 / BR-42",
+        "slash_breaks": 6
+      },
+      {
+        "table": 47,
+        "row": 15,
+        "cell": 2,
+        "old": "SPEC-14；BR-22/BR-24/\nBR-25/\nBR-26/BR-27/BR-29/BR-37/BR-42",
+        "new": "SPEC-14；BR-22 / BR-24 / \nBR-25 / \nBR-26 / BR-27 / BR-29 / BR-37 / BR-42",
+        "slash_breaks": 7
+      },
+      {
+        "table": 47,
+        "row": 16,
+        "cell": 2,
+        "old": "SPEC-15；BR-02/BR-22/\nBR-23/BR-25/BR-26/BR-27/BR-28/BR-35/BR-43",
+        "new": "SPEC-15；BR-02 / BR-22 / \nBR-23 / BR-25 / BR-26 / BR-27 / BR-28 / BR-35 / BR-43",
+        "slash_breaks": 8
+      },
+      {
+        "table": 47,
+        "row": 17,
+        "cell": 2,
+        "old": "SPEC-16；BR-24/BR-25/\nBR-26/BR-27/BR-29/BR-43",
+        "new": "SPEC-16；BR-24 / BR-25 / \nBR-26 / BR-27 / BR-29 / BR-43",
+        "slash_breaks": 5
+      },
+      {
+        "table": 47,
+        "row": 18,
+        "cell": 2,
+        "old": "SPEC-17；BR-24/BR-25/\nBR-26/BR-27/BR-29/BR-43",
+        "new": "SPEC-17；BR-24 / BR-25 / \nBR-26 / BR-27 / BR-29 / BR-43",
+        "slash_breaks": 5
+      },
+      {
+        "table": 47,
+        "row": 19,
+        "cell": 2,
+        "old": "SPEC-18；BR-06/BR-23/\nBR-25/BR-26/BR-29/\nBR-31/BR-35/BR-36/BR-39",
+        "new": "SPEC-18；BR-06 / BR-23 / \nBR-25 / BR-26 / BR-29 / \nBR-31 / BR-35 / BR-36 / BR-39",
+        "slash_breaks": 8
+      },
+      {
+        "table": 47,
+        "row": 20,
+        "cell": 2,
+        "old": "SPEC-19；BR-13/BR-26/\nBR-29/BR-30/BR-41/BR-44",
+        "new": "SPEC-19；BR-13 / BR-26 / \nBR-29 / BR-30 / BR-41 / BR-44",
+        "slash_breaks": 5
+      },
+      {
+        "table": 47,
+        "row": 21,
+        "cell": 2,
+        "old": "SPEC-20；BR-03/BR-04/\nBR-05/BR-09/BR-10/BR-17/BR-26/BR-28/BR-33/BR-40",
+        "new": "SPEC-20；BR-03 / BR-04 / \nBR-05 / BR-09 / BR-10 / BR-17 / BR-26 / BR-28 / BR-33 / BR-40",
+        "slash_breaks": 9
+      },
+      {
+        "table": 47,
+        "row": 22,
+        "cell": 2,
+        "old": "SPEC-21；BR-26/BR-29",
+        "new": "SPEC-21；BR-26 / BR-29",
+        "slash_breaks": 1
+      },
+      {
+        "table": 47,
+        "row": 23,
+        "cell": 2,
+        "old": "SPEC-22；BR-27/BR-28/\nBR-29/BR-35/BR-46",
+        "new": "SPEC-22；BR-27 / BR-28 / \nBR-29 / BR-35 / BR-46",
+        "slash_breaks": 4
+      },
+      {
+        "table": 47,
+        "row": 24,
+        "cell": 2,
+        "old": "SPEC-23；BR-17/BR-26/\nBR-27/BR-28/BR-35/BR-41/BR-46",
+        "new": "SPEC-23；BR-17 / BR-26 / \nBR-27 / BR-28 / BR-35 / BR-41 / BR-46",
+        "slash_breaks": 6
+      },
+      {
+        "table": 47,
+        "row": 25,
+        "cell": 2,
+        "old": "SPEC-24；BR-05/BR-25/\nBR-29/BR-33/BR-34",
+        "new": "SPEC-24；BR-05 / BR-25 / \nBR-29 / BR-33 / BR-34",
+        "slash_breaks": 4
+      },
+      {
+        "table": 47,
+        "row": 26,
+        "cell": 2,
+        "old": "SPEC-25；BR-26/BR-29/\nBR-32/BR-42",
+        "new": "SPEC-25；BR-26 / BR-29 / \nBR-32 / BR-42",
+        "slash_breaks": 3
+      },
+      {
+        "table": 47,
+        "row": 27,
+        "cell": 2,
+        "old": "SPEC-26；BR-26/BR-29/\nBR-31/BR-35/BR-45",
+        "new": "SPEC-26；BR-26 / BR-29 / \nBR-31 / BR-35 / BR-45",
+        "slash_breaks": 4
+      },
+      {
+        "table": 47,
+        "row": 28,
+        "cell": 2,
+        "old": "SPEC-27；BR-26/BR-27/\nBR-29/BR-33/BR-36/BR-37/BR-40/BR-44/BR-09/BR-38",
+        "new": "SPEC-27；BR-26 / BR-27 / \nBR-29 / BR-33 / BR-36 / BR-37 / BR-40 / BR-44 / BR-09 / BR-38",
+        "slash_breaks": 9
+      },
+      {
+        "table": 46,
+        "row": 29,
+        "cell": 1,
+        "old": "TRACE-OPS-01",
+        "new": "TRACE-\nOPS-01",
+        "change": "TRACE-与OPS-01之间允许语义换行，不拆OPS"
+      },
+      {
+        "table": 47,
+        "row": 29,
+        "cell": 1,
+        "old": "TRACE-OPS-01",
+        "new": "TRACE-\nOPS-01",
+        "change": "TRACE-与OPS-01之间允许语义换行，不拆OPS"
+      }
+    ]
+  },
+  "migration_notes_removed": {
+    "date": "2026-10-27",
+    "before_sha256": "b3daef7ed9d1b9d06cab1438b1bacd93891a34ac73bb36f3f7eb9b1ef504dd55",
+    "after_sha256": "632f9f5565135c21dc9b1853525736db0d2d0305b677c804506d0c9a90e5da3e",
+    "changes": [
+      {
+        "issue": "AUD-0118",
+        "xml_paragraph_1_based": 155,
+        "before": "支持范围：08:00—20:00、30分钟领取宽限、固定设备依赖、复核保留占用、维修独立验收、异常分级、逾期协调和消息重试构成本课程方案。 对应：BR-05 / 12 / 17 / 18 / 22至28/36至46及DC-01（历史BR-47）。限制：有课程需求版本依据，不等于学校正式批准；不擅自调整参数。",
+        "after": "支持范围：08:00—20:00、30分钟领取宽限、固定设备依赖、复核保留占用、维修独立验收、异常分级、逾期协调和消息重试构成本课程方案。 对应：BR-05 / 12 / 17 / 18 / 22至28/36至46及DC-01。限制：有课程需求版本依据，不等于学校正式批准；不擅自调整参数。",
+        "removed": "（历史BR-47）"
+      },
+      {
+        "issue": "AUD-0118",
+        "xml_paragraph_1_based": 2432,
+        "before": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。历史编号BR-47用于旧证据定位。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+        "after": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+        "removed": "历史编号BR-47用于旧证据定位。"
+      },
+      {
+        "issue": "AUD-0118",
+        "xml_paragraph_1_based": 2947,
+        "before": "DC-01（历史BR-47）；\nDC-01",
+        "after": "DC-01",
+        "removed": "（历史BR-47）；\nDC-01"
+      }
+    ],
+    "business_constraint_unchanged": true,
+    "scope": "只移除三处编号迁移制作说明/重复DC-01；编号迁移历史保留外部修订材料及原始台账，不改变运维恢复规则"
+  },
+  "toc_final_sync": {
+    "checked": 43,
+    "updates": [
+      {
+        "heading": "参考资料",
+        "old": "103",
+        "new": "104"
+      }
+    ],
+    "word_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff"
+  },
+  "bibliography_argument": {
+    "references": 11,
+    "unmatched": [],
+    "comparison_locations": [
+      "3.8 改进后的业务序列图（第20页）",
+      "5.1 分析模型的边界（第86页）"
+    ],
+    "argument": "比较LibreBooking/MRBS的时段与审批配置、Snipe-IT的实物责任；用UML区分行为结果与交互、Django事务与PostgreSQL区间约束说明实现支持及边界；课程规则独立标明，不用同类产品推定目标学校现状。",
+    "limits": "未提供作者及出版信息的教学文本如实标注；未开展真实访谈、问卷或学校实地调查。"
+  },
+  "issue_dispositions": {
+    "AUD-0070": "复核既有局部修复遗漏实例，精准调整完整编号、日期与长术语换行；TRACE-09的FR-09另补合法换行点，表6-2规则列完整编号之间slash加可断空格，两处TRACE-OPS-01在语义分隔符处断行。没有降低字号或把全部引用强制成单行。",
+    "AUD-0105": "5张图重新分离路由，角色、用例标签和86条关联集合与基线逐项等价；图源、预览及Word内嵌图一致。86为5图关联总数，不是独立系统关系数。",
+    "AUD-0114": "第20/86页在大图前补充有来源的比较论证；图题与图形未分离，无半页以上无意义空白。",
+    "AUD-0115": "43条目录缓存标题与最终正文实际页码逐条相符；保留初稿旧页码及修正历史。参考资料最终为104页。",
+    "AUD-0117": "第77页DC-01重复句号分号已局部修正，无规则含义变化。",
+    "AUD-0118": "移除SRC-D02、DC-01段及追踪规则格三处编号迁移制作说明，并去除重复DC-01；编号迁移证据保留外部台账。全文仅剩UC25不覆盖旧证据的业务保证，属于正常事实保全要求。"
+  },
+  "limitations": [
+    "Windows下LibreOffice渲染为版式证据；不同Word版本或字体替换仍可能导致重新分页，不能承诺所有编辑器像素一致。",
+    "本次形式复核不替代真实学校调研、生产身份/消息接入或完整手机平台验收。",
+    "仅交付正式Word；渲染PDF与104张PNG存放私有核验目录，不新增正式报告PDF。"
+  ]
+}

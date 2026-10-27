@@ -1,0 +1,13 @@
+2026-10-26T13:48:21.5621267Z Ran 227 tests in 41.980s
+2026-10-26T13:48:21.5622140Z OK (skipped=3)
+2026-10-26T13:48:23.6140717Z # skipped 0
+2026-10-26T13:48:23.7598715Z # skipped 0
+2026-10-26T13:48:23.8749968Z # skipped 0
+2026-10-26T13:48:23.9931392Z # skipped 0
+2026-10-26T13:48:25.7001177Z npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-10-26T13:48:25.7069418Z npm warn deprecated glob@7.2.3: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+2026-10-26T13:48:26.5302200Z test_busy_port_is_skipped (__main__.StartupTests.test_busy_port_is_skipped) ... ok
+2026-10-26T13:48:26.5303985Z test_chinese_temp_with_short_names_disabled (__main__.StartupTests.test_chinese_temp_with_short_names_disabled) ... skipped 'Windows directory junction validation'
+2026-10-26T13:48:26.5305303Z test_directory_alias_cannot_target_another_project (__main__.StartupTests.test_directory_alias_cannot_target_another_project) ... skipped 'Windows directory junction validation'
+2026-10-26T13:48:28.2093788Z Ran 11 tests in 1.679s
+2026-10-26T13:48:28.2094065Z OK (skipped=2)

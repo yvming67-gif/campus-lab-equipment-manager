@@ -1,0 +1,12 @@
+{
+  "command": [
+    "--test",
+    "tools/mini-check/client.test.cjs",
+    "tools/mini-check/audit-fixes.test.cjs",
+    "docs/产品优化/证据/independent-client.test.cjs",
+    "docs/产品优化/证据/继续建设/continue-independent-client.test.cjs"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 0.39,
+  "scope": "owned isolated local verification; not cloud or device acceptance"
+}

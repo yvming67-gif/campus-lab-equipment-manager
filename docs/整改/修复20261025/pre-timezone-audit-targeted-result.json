@@ -1,0 +1,11 @@
+{
+  "command": [
+    "manage.py",
+    "test",
+    "core.audit_fix_tests",
+    "--noinput"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 318.78,
+  "scope": "owned isolated local verification; not cloud or device acceptance"
+}

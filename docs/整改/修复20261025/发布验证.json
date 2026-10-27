@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-27",
+  "code_commit": "a560b3c135c74179d4e4fabb0b2b1b094b886817",
+  "run": 40333644378,
+  "jobs": {
+    "test": "success",
+    "windows-first-install": "success",
+    "cloud-profile": "success"
+  },
+  "ci_backend": {
+    "discovered": 227,
+    "skipped": 3,
+    "reason": "PortableBackupTests require CAMPUS_TEST_PG_BIN"
+  },
+  "ci_startup_linux": {
+    "discovered": 11,
+    "skipped": 2
+  },
+  "ci_startup_windows": {
+    "executed": 11,
+    "skipped": 0
+  },
+  "ci_windows_restore": {
+    "verified": true,
+    "attachments": 0
+  },
+  "cloud_observation": {
+    "url": "https://campus-lab-equipment-manager.onrender.com/reports/?end=9999-12-31",
+    "end": "9999-12-31",
+    "boundary": true,
+    "policy": true,
+    "horizontalOverflow": false,
+    "render_deploy_id": "未独立读取",
+    "business_record_writes": false
+  },
+  "limitations": [
+    "非真实消息与学校身份验收",
+    "非Neon/S3联合恢复",
+    "非手机或正式微信发布验收"
+  ],
+  "validation_browser": "专用会话已关闭，未操作用户浏览器"
+}

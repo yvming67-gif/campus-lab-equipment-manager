@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-27",
+  "before_sha256": "bc6369a9c3ab9a35998b886c663e944fe2d7950d1403bdf4d8b12b433916e331",
+  "after_sha256": "f087a6a6b972bf5b8e51a9dbf81360648fb4d1d38a742477692dd5ec62c930a6",
+  "changes": [
+    {
+      "issue": "AUD-0117",
+      "page_before": 77,
+      "xml_paragraph_1_based": 2432,
+      "before": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。；历史编号BR-47用于旧证据定位。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+      "after": "DC-01 运行恢复约束：恢复必须从指定既有归档到新目标库与空媒体目录，验证摘要和路径并排除会话；应用账号不得拥有表或禁用审计保护。恢复及保留参数为课程运维方案，正式学校留存制度另行确认。历史编号BR-47用于旧证据定位。它约束运维恢复，不伪挂审计查询或证据上传用例；关联QR-07、QR-09和AC-64。",
+      "change": "删除重复分号，不改变留存及历史编号说明"
+    },
+    {
+      "issue": "AUD-0070",
+      "page_before": 98,
+      "table_1_based": 46,
+      "row_1_based": 10,
+      "cell_1_based": 4,
+      "before": "TO-E08/TO-E09/TO-E09a/\nTO-E10/TO-E11/TO-E10b；FR-09→UC-09",
+      "after": "TO-E08/TO-E09/TO-E09a/\nTO-E10/TO-E11/TO-E10b；\nFR-09→UC-09",
+      "change": "仅在TRACE-09实现引用单元格完整FR-09前增加合法换行点"
+    }
+  ],
+  "scope": "two local fixes only; other package parts retained"
+}

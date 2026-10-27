@@ -1,0 +1,673 @@
+{
+  "date": "2026-10-27",
+  "reviewer": "/root/finish_word_final_20261027/visual_back_final",
+  "candidate_docx_sha256": "bc6369a9c3ab9a35998b886c663e944fe2d7950d1403bdf4d8b12b433916e331",
+  "scope": "render-ready实际逐页图像53至104，共52页；不是最终修订版的无条件通过结论。",
+  "method": "调用view_image逐页打开PNG，以当前模型原生视觉核验；未使用任何外部识图服务。",
+  "pages": [
+    {
+      "page": 53,
+      "png_sha256": "77ef82d5a22c3c41cb5caf90430dcd2aa4ee48050566178969ffbde0ce53204d",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 54,
+      "png_sha256": "3284498234d38b2e8de86591d750d0313a122158e8316e1499a4ff4e846c9b72",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 55,
+      "png_sha256": "18c52f6b2a5706e475966451a7e6c547158a0b16e485ea2ef0541d713b558875",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 56,
+      "png_sha256": "43dec323c038dc201aa0118f026fb7776ef98c410b4ffdb5bbb5c71abb498ec6",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 57,
+      "png_sha256": "346e053c10bee6974434c53c3ac89694bfb8798349451e0da80d237073868cfd",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 58,
+      "png_sha256": "fdb4bc9654270968804878fd49768320db1bfd69340918e78a14bd93dcfdbadc",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 59,
+      "png_sha256": "83a8d39c931426514eaeaacf9bb58065f7079e3de33d89442cc64076e77188b2",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 60,
+      "png_sha256": "22f24febbf29a7fb1bcd6fa3af35eb563ae126ca370f40f8ac3cc63504802439",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 61,
+      "png_sha256": "c46af2a8bd7ea912a5f3ba90b9b4b429dd41a08290394c7d4c7f81871742ffa9",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 62,
+      "png_sha256": "ab05f577f6fff390e84af798159a87410286d95f367a5c09c47d7980d0e6084d",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 63,
+      "png_sha256": "9d694fc26fa42bf157dbec6ce3ac003f25a1933fd67f1c3fdb1bd5f5d1df77d5",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 64,
+      "png_sha256": "ce94f0a5b0a54b08ba25db3148dd7243eb171d391b17e16a061db1efb3e3e4ca",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 65,
+      "png_sha256": "c646a9c815050254637ce5e0324ac19a9688d6c8ac2c0176188776d8f8cc0103",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 66,
+      "png_sha256": "b673d3582bc5aa439683b1dec0f537168c4db74ed66c13748ddcd1de8a5eaff0",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 67,
+      "png_sha256": "f217c4fc26ee9f716786fdf66faee611d52f953c649173c26076e35e67c5e33a",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 68,
+      "png_sha256": "f5c1905faa96e9d82ffd89cf72c9bbf40a19f770618732513afd8acf78824806",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 69,
+      "png_sha256": "3a49307724d10d9a23eb574f369a2af95f108bf566b0d72f8c4a894a6920b327",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 70,
+      "png_sha256": "636c06b262a85975b8026e6f2fa7cc8bf88aabc57415fafffab2e95019d61e56",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 71,
+      "png_sha256": "f91052d62f25a88b446d1df564e5bd62d50e52bfa117bb6853006a99121b7b6c",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 72,
+      "png_sha256": "c70f6f72c7e3927d140aa2279e8bdf82420ad21a1712053e853518e56400175a",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 73,
+      "png_sha256": "880dfed0c90b7eceae92ac28a3e5de59612744a47d62855e106d2539c37a25c9",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 74,
+      "png_sha256": "95012771f7f35b6c41e2956d5e4fd11b96af7bf10b07e70587a5667cd5cab143",
+      "opened_original_page_image": true,
+      "observation": "字段长标识在点号或下划线处换行；无字形缺失、无内容裁切；属于可解释的技术字段分行。"
+    },
+    {
+      "page": 75,
+      "png_sha256": "75acade5554e3019252ede0d4a4744832f64bfff56d6f98896386afea754af37",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 76,
+      "png_sha256": "832e78c8bf151c015532902b1947d8ee5774b57fe8f7a887f9dab5a8db1e0c58",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 77,
+      "png_sha256": "1967af78a079513b2789fa29178b55e210be250ec1a96f3cf08f87afa5db21ae",
+      "opened_original_page_image": true,
+      "observation": "发现重复标点“另行确认。；”；已报告父agent，后由其局部修改并重渲染。"
+    },
+    {
+      "page": 78,
+      "png_sha256": "6f1cbd33cdf7d3d271dce9797125b5a1fa22fb799a0f5add0a6e09a9cd3874b9",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 79,
+      "png_sha256": "a98e57f3a9e357ea2b0535d5d2769a6c301141605d0045c4deb953e63eb2c14d",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 80,
+      "png_sha256": "e4e2caf9a57e23979b3f7ee85898262ff5dd5c233b4e8f1a9a73d835a84b125a",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 81,
+      "png_sha256": "c18fee49c03386b9e4c5ad43a228deae25aa2491ac7d1d5313b7a3e788ce6f2e",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 82,
+      "png_sha256": "31c9fe948eb87d821118a378e10fcd38e37ecd8363dbd52263f534d3aaf8bd93",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 83,
+      "png_sha256": "8e3d667a94a6737c46aacf76e3b18587c8749831c8daea8bf6cf24d1d984fb26",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 84,
+      "png_sha256": "b7658c26f9ef00652f4223169a99f8f5acb223fca6446cfe958aad5bc4bf4246",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 85,
+      "png_sha256": "06825cf8a77ac4e8f284b64dacefeccb8c292b5fffbf2ea4ecc0cddbb4bb21a5",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 86,
+      "png_sha256": "ed7374b71f972f980bb17c09e07c8f0e1548280e95151604f8458759a398117d",
+      "opened_original_page_image": true,
+      "observation": "补充正文对UML、课程资料、Django事务和PostgreSQL约束作边界比较，主要版心已有连贯论证，无原先半页空白。"
+    },
+    {
+      "page": 87,
+      "png_sha256": "911826fe9dba829e044d21351c386b72f695176cf0b81dcbbf280cee0c724bea",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 88,
+      "png_sha256": "352c082e64263c0340bca7198a3d4ee1d7cd815311e5eb70a41b70497896e471",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 89,
+      "png_sha256": "a942036d816732c49cef45b8b3986e4c6f02c39ca2a4da0522ffd02fec765b59",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 90,
+      "png_sha256": "b9d06034ae70e58ccf47f5669db5a428d9499b61a0cf0452ee04a92ad151ed24",
+      "opened_original_page_image": true,
+      "observation": "控制职责表中的长技术路径/函数串自然折行，代码引用完整；无编号内部拆分；非页面溢出。"
+    },
+    {
+      "page": 91,
+      "png_sha256": "28a4a6e5d3ecc340dc59d8bb2b055e3f13f2890eb679d70077bc037552ae68a9",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 92,
+      "png_sha256": "139645cae5ed0f2f796b6304565647674c32400c87792d9dcddc3ad1adfa9bfd",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 93,
+      "png_sha256": "59d0dd805cdeb10498a6851a657fea9c6f6e14b5346943dd65b08056c78112a6",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 94,
+      "png_sha256": "60e63d394677d7c564bfc81d6688827e30416c1f19d0256b06f24d00680728a9",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 95,
+      "png_sha256": "95d1a1ee3011dae93b9576c09a1970350626e51db6f6890a42f29abff7657884",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 96,
+      "png_sha256": "1f671af8d59352ae47b68b4dfa2c4deb33c86326ec22a954e8bbc99e6e10f9dd",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 97,
+      "png_sha256": "5c5d6e69f8034625d893ae472afa91162d6c13e9916036a2c49b0a383506371c",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 98,
+      "png_sha256": "b0de5ed8c1ad64cc650c53b76fd674197b3ceaa65980eb3584ad7670ffb6e3cd",
+      "opened_original_page_image": true,
+      "observation": "TRACE-09改进职责列FR-09内部断为FR-0 / 9；已报告父agent。"
+    },
+    {
+      "page": 99,
+      "png_sha256": "77de46b25d5a8e71e6ebeb256faec3bb546d7c4333c9716494d42d90755c3272",
+      "opened_original_page_image": true,
+      "observation": "规则列多处BR编号内部拆分；TRACE-OPS-01在OPS内部断开，父agent亦独立确认，需局部重排。"
+    },
+    {
+      "page": 100,
+      "png_sha256": "83e5bab61bf429a2a0ff36325cadd3fb0e54a59fd32a261ba2c2fba9ae2b0905",
+      "opened_original_page_image": true,
+      "observation": "规则列TRACE08/09/10/11/12/13/14/15多处BR编号内部拆分，需局部重排。"
+    },
+    {
+      "page": 101,
+      "png_sha256": "a14e6f04ab693d7b2873e4ef4c65180187fde047ecca8d091e96b1d8b405a209",
+      "opened_original_page_image": true,
+      "observation": "规则列TRACE20/23/27多处BR编号内部拆分；TRACE-OPS-01在OPS内部断开，需局部重排。"
+    },
+    {
+      "page": 102,
+      "png_sha256": "d5abb4cb8eb7dd024cc85c241b4bda21e4740dc5fa4ff78067b9c681c1d8430e",
+      "opened_original_page_image": true,
+      "observation": "原尺寸页面已查看；文字、表格或图形可读，无乱码、裁切、重叠、孤立标题及明显编号内部拆分。"
+    },
+    {
+      "page": 103,
+      "png_sha256": "a4dbf09089340c6478d0a217a9943d2d592cf7d0f6ec330681cb3dcc4274b8d8",
+      "opened_original_page_image": true,
+      "observation": "三列表延续有重复表头，结论及参考资料标题与正文同页；无孤立标题。"
+    },
+    {
+      "page": 104,
+      "png_sha256": "90716190357bc63a7131235adbb9ab7b3c3a35c75a4f851d20bbfd7605899bb0",
+      "opened_original_page_image": true,
+      "observation": "书目3至11续排清楚，URL自然换行可读；末页余白为书目结束，无空白页。"
+    }
+  ],
+  "findings": [
+    {
+      "page": 77,
+      "issue": "重复标点",
+      "status": "已向父agent报告待最终差异复核"
+    },
+    {
+      "page": 98,
+      "issue": "FR-09内部拆分",
+      "status": "已向父agent报告待最终差异复核"
+    },
+    {
+      "pages": [
+        99,
+        100,
+        101
+      ],
+      "issue": "规则链BR编号内部拆分及TRACE-OPS-01缩写内部拆分",
+      "status": "父agent同步独立发现并局部调整；待最终差异复核"
+    }
+  ],
+  "final_review": {
+    "date": "2026-10-27",
+    "docx_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff",
+    "changed_pages_viewed": [
+      77,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104
+    ],
+    "unchanged_pages_in_scope": 44,
+    "all_pages_53_to_104_covered": true,
+    "result": "通过本次视觉范围核验；不声称已做真实业务调研或全部潜在缺陷审查。",
+    "pages": [
+      {
+        "page": 53,
+        "png_sha256": "77ef82d5a22c3c41cb5caf90430dcd2aa4ee48050566178969ffbde0ce53204d",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 54,
+        "png_sha256": "3284498234d38b2e8de86591d750d0313a122158e8316e1499a4ff4e846c9b72",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 55,
+        "png_sha256": "18c52f6b2a5706e475966451a7e6c547158a0b16e485ea2ef0541d713b558875",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 56,
+        "png_sha256": "43dec323c038dc201aa0118f026fb7776ef98c410b4ffdb5bbb5c71abb498ec6",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 57,
+        "png_sha256": "346e053c10bee6974434c53c3ac89694bfb8798349451e0da80d237073868cfd",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 58,
+        "png_sha256": "fdb4bc9654270968804878fd49768320db1bfd69340918e78a14bd93dcfdbadc",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 59,
+        "png_sha256": "83a8d39c931426514eaeaacf9bb58065f7079e3de33d89442cc64076e77188b2",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 60,
+        "png_sha256": "22f24febbf29a7fb1bcd6fa3af35eb563ae126ca370f40f8ac3cc63504802439",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 61,
+        "png_sha256": "c46af2a8bd7ea912a5f3ba90b9b4b429dd41a08290394c7d4c7f81871742ffa9",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 62,
+        "png_sha256": "ab05f577f6fff390e84af798159a87410286d95f367a5c09c47d7980d0e6084d",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 63,
+        "png_sha256": "9d694fc26fa42bf157dbec6ce3ac003f25a1933fd67f1c3fdb1bd5f5d1df77d5",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 64,
+        "png_sha256": "ce94f0a5b0a54b08ba25db3148dd7243eb171d391b17e16a061db1efb3e3e4ca",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 65,
+        "png_sha256": "c646a9c815050254637ce5e0324ac19a9688d6c8ac2c0176188776d8f8cc0103",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 66,
+        "png_sha256": "b673d3582bc5aa439683b1dec0f537168c4db74ed66c13748ddcd1de8a5eaff0",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 67,
+        "png_sha256": "f217c4fc26ee9f716786fdf66faee611d52f953c649173c26076e35e67c5e33a",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 68,
+        "png_sha256": "f5c1905faa96e9d82ffd89cf72c9bbf40a19f770618732513afd8acf78824806",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 69,
+        "png_sha256": "3a49307724d10d9a23eb574f369a2af95f108bf566b0d72f8c4a894a6920b327",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 70,
+        "png_sha256": "636c06b262a85975b8026e6f2fa7cc8bf88aabc57415fafffab2e95019d61e56",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 71,
+        "png_sha256": "f91052d62f25a88b446d1df564e5bd62d50e52bfa117bb6853006a99121b7b6c",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 72,
+        "png_sha256": "c70f6f72c7e3927d140aa2279e8bdf82420ad21a1712053e853518e56400175a",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 73,
+        "png_sha256": "880dfed0c90b7eceae92ac28a3e5de59612744a47d62855e106d2539c37a25c9",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 74,
+        "png_sha256": "95012771f7f35b6c41e2956d5e4fd11b96af7bf10b07e70587a5667cd5cab143",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 75,
+        "png_sha256": "75acade5554e3019252ede0d4a4744832f64bfff56d6f98896386afea754af37",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 76,
+        "png_sha256": "832e78c8bf151c015532902b1947d8ee5774b57fe8f7a887f9dab5a8db1e0c58",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 77,
+        "png_sha256": "b3260ee4413b10d1307f31d61fcc14ddc6fd9cd3d82ae4807d40e9feeef29569",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "DC-01重复标点及历史迁移制作说明已清除；段落可读，4.7标题与解释同页。"
+      },
+      {
+        "page": 78,
+        "png_sha256": "6f1cbd33cdf7d3d271dce9797125b5a1fa22fb799a0f5add0a6e09a9cd3874b9",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 79,
+        "png_sha256": "a98e57f3a9e357ea2b0535d5d2769a6c301141605d0045c4deb953e63eb2c14d",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 80,
+        "png_sha256": "e4e2caf9a57e23979b3f7ee85898262ff5dd5c233b4e8f1a9a73d835a84b125a",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 81,
+        "png_sha256": "c18fee49c03386b9e4c5ad43a228deae25aa2491ac7d1d5313b7a3e788ce6f2e",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 82,
+        "png_sha256": "31c9fe948eb87d821118a378e10fcd38e37ecd8363dbd52263f534d3aaf8bd93",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 83,
+        "png_sha256": "8e3d667a94a6737c46aacf76e3b18587c8749831c8daea8bf6cf24d1d984fb26",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 84,
+        "png_sha256": "b7658c26f9ef00652f4223169a99f8f5acb223fca6446cfe958aad5bc4bf4246",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 85,
+        "png_sha256": "06825cf8a77ac4e8f284b64dacefeccb8c292b5fffbf2ea4ecc0cddbb4bb21a5",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 86,
+        "png_sha256": "ed7374b71f972f980bb17c09e07c8f0e1548280e95151604f8458759a398117d",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 87,
+        "png_sha256": "911826fe9dba829e044d21351c386b72f695176cf0b81dcbbf280cee0c724bea",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 88,
+        "png_sha256": "352c082e64263c0340bca7198a3d4ee1d7cd815311e5eb70a41b70497896e471",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 89,
+        "png_sha256": "a942036d816732c49cef45b8b3986e4c6f02c39ca2a4da0522ffd02fec765b59",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 90,
+        "png_sha256": "b9d06034ae70e58ccf47f5669db5a428d9499b61a0cf0452ee04a92ad151ed24",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 91,
+        "png_sha256": "28a4a6e5d3ecc340dc59d8bb2b055e3f13f2890eb679d70077bc037552ae68a9",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 92,
+        "png_sha256": "139645cae5ed0f2f796b6304565647674c32400c87792d9dcddc3ad1adfa9bfd",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 93,
+        "png_sha256": "59d0dd805cdeb10498a6851a657fea9c6f6e14b5346943dd65b08056c78112a6",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 94,
+        "png_sha256": "60e63d394677d7c564bfc81d6688827e30416c1f19d0256b06f24d00680728a9",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 95,
+        "png_sha256": "95d1a1ee3011dae93b9576c09a1970350626e51db6f6890a42f29abff7657884",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 96,
+        "png_sha256": "1f671af8d59352ae47b68b4dfa2c4deb33c86326ec22a954e8bbc99e6e10f9dd",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 97,
+        "png_sha256": "5c5d6e69f8034625d893ae472afa91162d6c13e9916036a2c49b0a383506371c",
+        "coverage": "原候选已逐页目视且最终PNG字节相同",
+        "observation": "与已逐页目视候选PNG完全一致，未见新排版问题。"
+      },
+      {
+        "page": 98,
+        "png_sha256": "97647568f8efa52d7499674cb5cd9c9d0220ff076e119156814a0b45dceef233",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "TRACE09中的FR-09→UC-09完整同一行；表格无裁切。"
+      },
+      {
+        "page": 99,
+        "png_sha256": "4e09af43cf97cbce5fb6da659d1d6b1bebdddcaf9e915c97fd465875df70d8cb",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "完整BR编号均保持，斜杠间有合法断点；TRACE-OPS-01仅在语义连字符处分两行，OPS未拆；续表表头清楚，无破损或溢出。"
+      },
+      {
+        "page": 100,
+        "png_sha256": "6d02a3745e221385192d37bf06976f770aba81637db1c00bb31a4b88cf5b99b6",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "完整BR编号均保持，斜杠间有合法断点；TRACE-OPS-01仅在语义连字符处分两行，OPS未拆；续表表头清楚，无破损或溢出。"
+      },
+      {
+        "page": 101,
+        "png_sha256": "14ed7ab55cf29832fa160a4f8f3423a19f8de3acc113cfc863742d77e420bbc5",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "完整BR编号均保持，斜杠间有合法断点；TRACE-OPS-01仅在语义连字符处分两行，OPS未拆；续表表头清楚，无破损或溢出。"
+      },
+      {
+        "page": 102,
+        "png_sha256": "65eec881e9d8b506a749bab3a786a964353438f25a6eeb9accbbed08536c7ff2",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "完整BR编号均保持，斜杠间有合法断点；TRACE-OPS-01仅在语义连字符处分两行，OPS未拆；续表表头清楚，无破损或溢出。"
+      },
+      {
+        "page": 103,
+        "png_sha256": "17d450709a14472adeec62b718ea8fc587985619c6e283d0600aa788a10eb195",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "三列续表、结论及页脚正常；文字未截断。"
+      },
+      {
+        "page": 104,
+        "png_sha256": "2940898e055fd165e5c7c6b09914d894ba1d9626dcbfb627b523eddbf545bedf",
+        "coverage": "最终approved变化页已再次调用view_image原尺寸目视，release PNG字节相同",
+        "observation": "全部11条书目同页，参考资料标题及正文清楚；URL自然换行可读，无空白页。"
+      }
+    ]
+  }
+}

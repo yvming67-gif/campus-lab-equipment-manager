@@ -1,0 +1,242 @@
+{
+  "date": "2026-10-27",
+  "issue": "AUD-0070",
+  "before_sha256": "f087a6a6b972bf5b8e51a9dbf81360648fb4d1d38a742477692dd5ec62c930a6",
+  "after_sha256": "b3daef7ed9d1b9d06cab1438b1bacd93891a34ac73bb36f3f7eb9b1ef504dd55",
+  "canonical_text_unchanged": true,
+  "scope": "表6-2规则引用列的完整编号之间slash仅增空格；两处TRACE-OPS-01在语义分隔符处换行；不改URLs、路径、业务字段、字体、列宽和其他正文。",
+  "changes": [
+    {
+      "table": 47,
+      "row": 2,
+      "cell": 2,
+      "old": "SPEC-01；BR-01/BR-29/\nBR-30/BR-46",
+      "new": "SPEC-01；BR-01 / BR-29 / \nBR-30 / BR-46",
+      "slash_breaks": 3
+    },
+    {
+      "table": 47,
+      "row": 3,
+      "cell": 2,
+      "old": "SPEC-02；BR-01/BR-29/\nBR-31",
+      "new": "SPEC-02；BR-01 / BR-29 / \nBR-31",
+      "slash_breaks": 2
+    },
+    {
+      "table": 47,
+      "row": 4,
+      "cell": 2,
+      "old": "SPEC-03；BR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-29/BR-39/BR-40/BR-44",
+      "new": "SPEC-03；BR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-29 / BR-39 / BR-40 / BR-44",
+      "slash_breaks": 9
+    },
+    {
+      "table": 47,
+      "row": 5,
+      "cell": 2,
+      "old": "SPEC-04；BR-01/BR-02/\nBR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-09/BR-10/BR-12/BR-13/BR-14/BR-26/BR-27/BR-35/BR-39/BR-40",
+      "new": "SPEC-04；BR-01 / BR-02 / \nBR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-09 / BR-10 / BR-12 / BR-13 / BR-14 / BR-26 / BR-27 / BR-35 / BR-39 / BR-40",
+      "slash_breaks": 17
+    },
+    {
+      "table": 47,
+      "row": 6,
+      "cell": 2,
+      "old": "SPEC-05；BR-01/BR-02/\nBR-03/BR-04/\nBR-05/BR-06/BR-07/BR-08/BR-09/BR-11/BR-12/BR-14/BR-26/BR-27/BR-35/BR-39/BR-40",
+      "new": "SPEC-05；BR-01 / BR-02 / \nBR-03 / BR-04 / \nBR-05 / BR-06 / BR-07 / BR-08 / BR-09 / BR-11 / BR-12 / BR-14 / BR-26 / BR-27 / BR-35 / BR-39 / BR-40",
+      "slash_breaks": 16
+    },
+    {
+      "table": 47,
+      "row": 7,
+      "cell": 2,
+      "old": "SPEC-06；BR-08/BR-15/\nBR-26/BR-29/BR-45",
+      "new": "SPEC-06；BR-08 / BR-15 / \nBR-26 / BR-29 / BR-45",
+      "slash_breaks": 4
+    },
+    {
+      "table": 47,
+      "row": 8,
+      "cell": 2,
+      "old": "SPEC-07；BR-07/BR-09/\nBR-16/BR-26/BR-27/BR-35",
+      "new": "SPEC-07；BR-07 / BR-09 / \nBR-16 / BR-26 / BR-27 / BR-35",
+      "slash_breaks": 5
+    },
+    {
+      "table": 47,
+      "row": 9,
+      "cell": 2,
+      "old": "SPEC-08；BR-03/BR-05/\nBR-06/BR-07/BR-08/BR-09/BR-10/BR-11/BR-12/BR-13/BR-14/BR-15/BR-26/BR-27/BR-35/BR-36/BR-39/BR-40/BR-41",
+      "new": "SPEC-08；BR-03 / BR-05 / \nBR-06 / BR-07 / BR-08 / BR-09 / BR-10 / BR-11 / BR-12 / BR-13 / BR-14 / BR-15 / BR-26 / BR-27 / BR-35 / BR-36 / BR-39 / BR-40 / BR-41",
+      "slash_breaks": 18
+    },
+    {
+      "table": 47,
+      "row": 10,
+      "cell": 2,
+      "old": "SPEC-09；BR-12/BR-13/\nBR-17/BR-18/BR-19/BR-26/BR-27/BR-35/BR-36/BR-38/BR-40/BR-44/BR-45/BR-39",
+      "new": "SPEC-09；BR-12 / BR-13 / \nBR-17 / BR-18 / BR-19 / BR-26 / BR-27 / BR-35 / BR-36 / BR-38 / BR-40 / BR-44 / BR-45 / BR-39",
+      "slash_breaks": 13
+    },
+    {
+      "table": 47,
+      "row": 11,
+      "cell": 2,
+      "old": "SPEC-10；BR-18/BR-20/\nBR-21/BR-22/BR-25/BR-26/BR-27/BR-35/BR-42/BR-44/BR-45",
+      "new": "SPEC-10；BR-18 / BR-20 / \nBR-21 / BR-22 / BR-25 / BR-26 / BR-27 / BR-35 / BR-42 / BR-44 / BR-45",
+      "slash_breaks": 10
+    },
+    {
+      "table": 47,
+      "row": 12,
+      "cell": 2,
+      "old": "SPEC-11；BR-02/BR-11/\nBR-12/BR-17/BR-18/BR-21/BR-26/BR-27/BR-35/BR-36/BR-38/BR-40/BR-44/BR-45/BR-39",
+      "new": "SPEC-11；BR-02 / BR-11 / \nBR-12 / BR-17 / BR-18 / BR-21 / BR-26 / BR-27 / BR-35 / BR-36 / BR-38 / BR-40 / BR-44 / BR-45 / BR-39",
+      "slash_breaks": 14
+    },
+    {
+      "table": 47,
+      "row": 13,
+      "cell": 2,
+      "old": "SPEC-12；BR-02/BR-12/\nBR-21/BR-22/BR-25/BR-26/BR-27/BR-35/BR-44/BR-45",
+      "new": "SPEC-12；BR-02 / BR-12 / \nBR-21 / BR-22 / BR-25 / BR-26 / BR-27 / BR-35 / BR-44 / BR-45",
+      "slash_breaks": 9
+    },
+    {
+      "table": 47,
+      "row": 14,
+      "cell": 2,
+      "old": "SPEC-13；BR-22/BR-26/\nBR-27/BR-29/BR-32/BR-37/BR-42",
+      "new": "SPEC-13；BR-22 / BR-26 / \nBR-27 / BR-29 / BR-32 / BR-37 / BR-42",
+      "slash_breaks": 6
+    },
+    {
+      "table": 47,
+      "row": 15,
+      "cell": 2,
+      "old": "SPEC-14；BR-22/BR-24/\nBR-25/\nBR-26/BR-27/BR-29/BR-37/BR-42",
+      "new": "SPEC-14；BR-22 / BR-24 / \nBR-25 / \nBR-26 / BR-27 / BR-29 / BR-37 / BR-42",
+      "slash_breaks": 7
+    },
+    {
+      "table": 47,
+      "row": 16,
+      "cell": 2,
+      "old": "SPEC-15；BR-02/BR-22/\nBR-23/BR-25/BR-26/BR-27/BR-28/BR-35/BR-43",
+      "new": "SPEC-15；BR-02 / BR-22 / \nBR-23 / BR-25 / BR-26 / BR-27 / BR-28 / BR-35 / BR-43",
+      "slash_breaks": 8
+    },
+    {
+      "table": 47,
+      "row": 17,
+      "cell": 2,
+      "old": "SPEC-16；BR-24/BR-25/\nBR-26/BR-27/BR-29/BR-43",
+      "new": "SPEC-16；BR-24 / BR-25 / \nBR-26 / BR-27 / BR-29 / BR-43",
+      "slash_breaks": 5
+    },
+    {
+      "table": 47,
+      "row": 18,
+      "cell": 2,
+      "old": "SPEC-17；BR-24/BR-25/\nBR-26/BR-27/BR-29/BR-43",
+      "new": "SPEC-17；BR-24 / BR-25 / \nBR-26 / BR-27 / BR-29 / BR-43",
+      "slash_breaks": 5
+    },
+    {
+      "table": 47,
+      "row": 19,
+      "cell": 2,
+      "old": "SPEC-18；BR-06/BR-23/\nBR-25/BR-26/BR-29/\nBR-31/BR-35/BR-36/BR-39",
+      "new": "SPEC-18；BR-06 / BR-23 / \nBR-25 / BR-26 / BR-29 / \nBR-31 / BR-35 / BR-36 / BR-39",
+      "slash_breaks": 8
+    },
+    {
+      "table": 47,
+      "row": 20,
+      "cell": 2,
+      "old": "SPEC-19；BR-13/BR-26/\nBR-29/BR-30/BR-41/BR-44",
+      "new": "SPEC-19；BR-13 / BR-26 / \nBR-29 / BR-30 / BR-41 / BR-44",
+      "slash_breaks": 5
+    },
+    {
+      "table": 47,
+      "row": 21,
+      "cell": 2,
+      "old": "SPEC-20；BR-03/BR-04/\nBR-05/BR-09/BR-10/BR-17/BR-26/BR-28/BR-33/BR-40",
+      "new": "SPEC-20；BR-03 / BR-04 / \nBR-05 / BR-09 / BR-10 / BR-17 / BR-26 / BR-28 / BR-33 / BR-40",
+      "slash_breaks": 9
+    },
+    {
+      "table": 47,
+      "row": 22,
+      "cell": 2,
+      "old": "SPEC-21；BR-26/BR-29",
+      "new": "SPEC-21；BR-26 / BR-29",
+      "slash_breaks": 1
+    },
+    {
+      "table": 47,
+      "row": 23,
+      "cell": 2,
+      "old": "SPEC-22；BR-27/BR-28/\nBR-29/BR-35/BR-46",
+      "new": "SPEC-22；BR-27 / BR-28 / \nBR-29 / BR-35 / BR-46",
+      "slash_breaks": 4
+    },
+    {
+      "table": 47,
+      "row": 24,
+      "cell": 2,
+      "old": "SPEC-23；BR-17/BR-26/\nBR-27/BR-28/BR-35/BR-41/BR-46",
+      "new": "SPEC-23；BR-17 / BR-26 / \nBR-27 / BR-28 / BR-35 / BR-41 / BR-46",
+      "slash_breaks": 6
+    },
+    {
+      "table": 47,
+      "row": 25,
+      "cell": 2,
+      "old": "SPEC-24；BR-05/BR-25/\nBR-29/BR-33/BR-34",
+      "new": "SPEC-24；BR-05 / BR-25 / \nBR-29 / BR-33 / BR-34",
+      "slash_breaks": 4
+    },
+    {
+      "table": 47,
+      "row": 26,
+      "cell": 2,
+      "old": "SPEC-25；BR-26/BR-29/\nBR-32/BR-42",
+      "new": "SPEC-25；BR-26 / BR-29 / \nBR-32 / BR-42",
+      "slash_breaks": 3
+    },
+    {
+      "table": 47,
+      "row": 27,
+      "cell": 2,
+      "old": "SPEC-26；BR-26/BR-29/\nBR-31/BR-35/BR-45",
+      "new": "SPEC-26；BR-26 / BR-29 / \nBR-31 / BR-35 / BR-45",
+      "slash_breaks": 4
+    },
+    {
+      "table": 47,
+      "row": 28,
+      "cell": 2,
+      "old": "SPEC-27；BR-26/BR-27/\nBR-29/BR-33/BR-36/BR-37/BR-40/BR-44/BR-09/BR-38",
+      "new": "SPEC-27；BR-26 / BR-27 / \nBR-29 / BR-33 / BR-36 / BR-37 / BR-40 / BR-44 / BR-09 / BR-38",
+      "slash_breaks": 9
+    },
+    {
+      "table": 46,
+      "row": 29,
+      "cell": 1,
+      "old": "TRACE-OPS-01",
+      "new": "TRACE-\nOPS-01",
+      "change": "TRACE-与OPS-01之间允许语义换行，不拆OPS"
+    },
+    {
+      "table": 47,
+      "row": 29,
+      "cell": 1,
+      "old": "TRACE-OPS-01",
+      "new": "TRACE-\nOPS-01",
+      "change": "TRACE-与OPS-01之间允许语义换行，不拆OPS"
+    }
+  ]
+}

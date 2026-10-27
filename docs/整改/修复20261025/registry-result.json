@@ -1,0 +1,8 @@
+{
+  "command": [
+    "tools/validate_registry.py"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 13.2,
+  "scope": "owned isolated local verification; not cloud or device acceptance"
+}
