@@ -14,6 +14,7 @@ NOTIFICATION_LABELS = {
     "WORK_PROGRESS": "维修处理进展", "APPROVAL_ESCALATION": "审批待办升级",
 }
 EVENT_LABELS = {
+    "MINI_ACTION_RECEIPT": "小程序操作回执",
     "LOGIN": "身份登录", "SUBMIT": "提交申请", "CREATE": "提交申请",
     "AUTO_CONFIRM": "自动确认", "APPROVE": "审核通过", "REJECT": "审核驳回",
     "CANCEL": "取消预约", "CHECKOUT": "设备借出", "RETURN": "设备归还",

@@ -15,9 +15,9 @@ def resource_profile(resource):
     return {'risk':e.risk,'qualification_id':e.qualification_id,'portable':e.portable,'access_room_id':e.access_room_id}
 
 
-def check_calendar(resource,start,end):
+def check_calendar(resource,start,end,snapshot=None):
     a,b=start.astimezone(s.TZ),end.astimezone(s.TZ)
-    exception=CalendarException.objects.filter(lab_id=resource.lab_id,day=a.date(),active=True).first()
+    exception=snapshot.exception(resource,a.date()) if snapshot is not None else CalendarException.objects.filter(lab_id=resource.lab_id,day=a.date(),active=True).first()
     if exception:
         s.require(not exception.closed,'该日实验室关闭')
         s.require(exception.starts_at<=a.time().replace(tzinfo=None) and b.time().replace(tzinfo=None)<=exception.ends_at,'超出该日例外开放时段')
@@ -25,7 +25,7 @@ def check_calendar(resource,start,end):
     return False
 
 
-def check_dependency(resource,start,end,applicant=None,at=None,check_actual=False):
+def check_dependency(resource,start,end,applicant=None,at=None,check_actual=False,snapshot=None):
     at=at or timezone.now()
     if resource.kind=='ROOM':
         if check_actual:
@@ -34,7 +34,8 @@ def check_dependency(resource,start,end,applicant=None,at=None,check_actual=Fals
             s.require(not using.exists(),'固定设备仍由他人实际使用，不能开始场地使用，请协调真实结束')
         fixed=Reservation.objects.filter(resource__equipment__access_room=resource,resource__equipment__portable=False,status__in=s.ACTIVE,starts_at__lt=end,ends_at__gt=start)
         if applicant:fixed=fixed.exclude(applicant=applicant)
-        s.require(not fixed.exists(),'场地时段与固定设备使用冲突，请联系管理员协调')
+        conflicting=snapshot.dependency_conflict(start,end,applicant) if snapshot is not None else fixed.exists()
+        s.require(not conflicting,'场地时段与固定设备使用冲突，请联系管理员协调')
         return
     if resource.kind!='EQUIPMENT' or resource.equipment.portable:return
     room=resource.equipment.access_room
@@ -44,10 +45,11 @@ def check_dependency(resource,start,end,applicant=None,at=None,check_actual=Fals
         using=RoomUse.objects.filter(reservation__resource=room,ended_at__isnull=True,started_at__lte=at)
         if applicant:using=using.exclude(reservation__applicant=applicant)
         s.require(not using.exists(),'依赖场地仍由他人实际使用，不能交接固定设备')
-    check_calendar(room,start,end)
+    check_calendar(room,start,end,snapshot=snapshot)
     clashes=Reservation.objects.filter(resource=room,status__in=s.ACTIVE,starts_at__lt=end,ends_at__gt=start)
     if applicant:clashes=clashes.exclude(applicant=applicant)
-    s.require(not clashes.exists(),'固定设备取放与场地占用冲突，请联系管理员协调')
+    conflicting=snapshot.dependency_conflict(start,end,applicant) if snapshot is not None else clashes.exists()
+    s.require(not conflicting,'固定设备取放与场地占用冲突，请联系管理员协调')
 
 
 def flag_affected(queryset,actor,reason,at):

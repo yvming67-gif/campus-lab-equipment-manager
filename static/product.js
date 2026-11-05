@@ -68,3 +68,19 @@ window.addEventListener('pageshow', () => {
     button.classList.remove('is-submitting'); button.removeAttribute('aria-busy');
   });
 });
+
+// Echo the actual form values; choosing a suggestion never submits the booking.
+const reservationSummary = document.querySelector('[data-reservation-summary]');
+if (reservationSummary) {
+  const start = document.querySelector('#reservation-form input[name=starts_at]');
+  const end = document.querySelector('#reservation-form input[name=ends_at]');
+  const output = reservationSummary.querySelector('[data-time-summary]');
+  const update = () => {
+    output.textContent = start.value && end.value
+      ? `${start.value.replace('T', ' ')} — ${end.value.replace('T', ' ')}（北京时间）`
+      : '请填写完整起止时间。';
+  };
+  if (start && end && output) {
+    start.addEventListener('input', update); end.addEventListener('input', update); update();
+  }
+}

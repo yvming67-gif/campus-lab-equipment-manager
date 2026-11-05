@@ -1,0 +1,72 @@
+[
+  {
+    "file": "tests-19436.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "mini-client-final.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "independent-client.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "mini-compile-final.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "mini-final-checks.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "http-scenario.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "web-verification.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "web-observations.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "profile-baseline.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "profile-current.json",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "registry.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "analysis-models.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "tests-25356.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "tests-13424.txt",
+    "origin": "本期隔离环境实际执行记录",
+    "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  }
+]

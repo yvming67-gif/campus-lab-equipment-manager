@@ -1,0 +1,25 @@
+<view class="screen {{reducedEffects ? 'reduced-effects' : ''}}">
+  <view class="eyebrow">RESOURCE / INCIDENT</view><view class="page-title">把异常说明清楚</view><view class="sub">保留发现事实，由管理员核实并安排后续处理。</view>
+  <view wx:if="{{loading}}" class="loading">正在核对资源与关联预约…</view>
+  <view wx:if="{{error}}" class="error" role="alert">{{error}}</view>
+  <view wx:if="{{item}}" class="card plain-card">
+    <view class="row"><view class="resource-mark {{item.icon_class}}" aria-role="img" aria-label="{{item.icon_label}}">{{item.icon_mark}}</view><view class="identity-copy"><view class="card-title">{{item.name}}</view><view class="card-meta">{{item.code}} · {{item.lab.name}}</view></view></view>
+    <view class="hint">{{booking ? '关联本人预约：'+booking.code : '未关联预约，管理员将核实现场事实。'}}</view>
+  </view>
+  <view wx:if="{{result}}" class="card plain-card">
+    <view class="card-title">异常说明已保存</view><view class="kv"><text class="kv-key">异常编号</text><text class="kv-value">{{result.code}}</text></view><view class="kv"><text class="kv-key">处理状态</text><text class="kv-value">{{result.status_label}}</text></view>
+    <view class="notice">{{result.blocks_service ? '已按现有规则限制资源服务，请等待管理员核实与处置。' : '报告已进入管理员核实流程，不代表故障已经确认或维修完成。'}}</view>
+    <view class="hint">保留编号以便后续核对。核实结果通过站内通知告知；涉及现场安全时请及时联系在场管理员。</view>
+    <button class="secondary top-gap" hover-class="control-pressed" bindtap="returnToResource">返回资源详情</button>
+  </view>
+  <view wx:if="{{item && !result}}">
+    <view wx:if="{{pendingUnknown}}" class="notice">上一项提交结果尚未确认。请保持原内容重试；同一请求不会重复登记。<button class="text-button" hover-class="control-pressed" bindtap="checkPending" disabled="{{busy}}">核对原操作结果</button><button class="text-button" hover-class="control-pressed" bindtap="restorePending">恢复原提交内容</button></view>
+    <view class="card plain-card">
+      <view class="field first"><text class="field-label">异常类型</text><picker range="{{kinds}}" range-key="name" value="{{kindIndex}}" bindchange="chooseKind"><view class="field-value">{{kinds[kindIndex].name}}　⌄</view></picker></view>
+      <view class="form-times"><view class="field"><text class="field-label">发现日期（北京时间）</text><picker mode="date" value="{{form.date}}" bindchange="chooseDate"><view class="field-value">{{form.date}}　⌄</view></picker></view><view class="field"><text class="field-label">发现时间</text><picker mode="time" value="{{form.time}}" bindchange="chooseTime"><view class="field-value">{{form.time}}　⌄</view></picker></view></view>
+      <view class="field"><text class="field-label">具体情况</text><view class="field-box"><textarea value="{{form.description}}" data-field="description" bindinput="input" placeholder="说明发现的现象、缺少的配件及对使用的影响，请勿填写密码或无关个人信息。" maxlength="2000" /></view><view class="hint">{{form.description.length}} / 2000字；请描述实际观察，不确定的原因可以写“待核实”。</view></view>
+    </view>
+    <view class="notice">本次提交文字事实。需要证据附件时，由有权限人员通过现有网页异常记录入口补充；附件不是本次提交的前置条件。</view>
+    <button class="primary top-gap" hover-class="control-pressed" loading="{{busy}}" disabled="{{busy || loading}}" bindtap="submit">{{pendingUnknown ? '重试原异常说明' : '提交异常说明'}}</button>
+  </view>
+</view>

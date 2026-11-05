@@ -6,7 +6,8 @@
     "pages/bookings/index",
     "pages/booking/index",
     "pages/notifications/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/incident/index"
   ],
   "window": {
     "navigationBarTitleText": "校园实验资源中心",

@@ -97,7 +97,7 @@ def maximum_overlap(start, end, intervals):
         current += change; best = max(best, current)
     return best
 
-def validate_time(resource, start, end, policy, at):
+def validate_time(resource, start, end, policy, at, snapshot=None):
     require(timezone.is_aware(start) and timezone.is_aware(end), "时间必须具有时区")
     require(start < end and start >= at, "开始必须早于结束，且不得早于当前时间")
     require(end <= at + timedelta(days=policy.window_days), f"起止时段须位于未来{policy.window_days}天预约窗口内")
@@ -106,25 +106,29 @@ def validate_time(resource, start, end, policy, at):
     require(a.date() == b.date(), "日间预约不能跨日")
     require(all(x.minute % policy.slot_minutes == 0 and x.second == 0 and x.microsecond == 0 for x in [a,b]), f"起止时间必须符合{policy.slot_minutes}分钟粒度")
     from .coordination import check_calendar
-    if not check_calendar(resource,start,end):
-        require(OpeningPeriod.objects.filter(lab=resource.lab, weekday=a.isoweekday(), valid_from__lte=a.date(), starts_at__lte=a.time().replace(tzinfo=None), ends_at__gte=b.time().replace(tzinfo=None)).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists(), "目标时段超出实验室开放时间")
+    if not check_calendar(resource,start,end,snapshot=snapshot):
+        opened = snapshot.opening_allows(resource,start,end) if snapshot is not None else OpeningPeriod.objects.filter(lab=resource.lab, weekday=a.isoweekday(), valid_from__lte=a.date(), starts_at__lte=a.time().replace(tzinfo=None), ends_at__gte=b.time().replace(tzinfo=None)).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists()
+        require(opened, "目标时段超出实验室开放时间")
 
 
-def validate(booking, policy, at, exclude=None, time_at=None):
+def validate(booking, policy, at, exclude=None, time_at=None, snapshot=None):
     user, resource = booking.applicant, booking.resource
     require(user.is_active, "账号已停用")
-    require(user.has_role("TEACHER") if resource.kind == "ROOM" else user.has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
+    has_role = snapshot.has_role if snapshot is not None else user.has_role
+    require(has_role("TEACHER") if resource.kind == "ROOM" else has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
     start, end = booking.starts_at, booking.ends_at
-    validate_time(resource, start, end, policy, time_at if time_at is not None else at)
+    if snapshot is not None:snapshot.ensure(user,resource,at,start,end)
+    validate_time(resource, start, end, policy, time_at if time_at is not None else at, snapshot=snapshot)
     require(resource.lab.is_active and resource.service_status == "NORMAL", "资源停用、维护或异常隔离，不可预约")
     from .coordination import check_dependency
-    check_dependency(resource,start,end,user)
-    require(not overdue_for(user, at), "存在逾期未结束使用，不能新预约或获得确认")
-    require(not overdue_resource(resource, at), "资源存在超期未归还或未结束使用，暂不能承诺新预约")
+    check_dependency(resource,start,end,user,snapshot=snapshot)
+    require(not (snapshot.user_overdue if snapshot is not None else overdue_for(user, at)), "存在逾期未结束使用，不能新预约或获得确认")
+    require(not (snapshot.resource_overdue if snapshot is not None else overdue_resource(resource, at)), "资源存在超期未归还或未结束使用，暂不能承诺新预约")
     if resource.kind == "EQUIPMENT":
         qid = resource.equipment.qualification_id
         if qid:
-            require(UserQualification.objects.filter(user=user, qualification_id=qid, revoked=False, issued_at__lte=at).filter(Q(expires_at__isnull=True) | Q(expires_at__gte=end)).exists(), "缺少覆盖预约时段的有效培训资格")
+            qualified = snapshot.qualified(qid,end) if snapshot is not None else UserQualification.objects.filter(user=user, qualification_id=qid, revoked=False, issued_at__lte=at).filter(Q(expires_at__isnull=True) | Q(expires_at__gte=end)).exists()
+            require(qualified, "缺少覆盖预约时段的有效培训资格")
     else:
         require(1 <= booking.participants <= resource.room.capacity, "人数必须在场地容量范围内")
     future = Reservation.objects.filter(applicant=user, resource__kind=resource.kind, status__in=FUTURE, starts_at__gt=at)
@@ -134,17 +138,22 @@ def validate(booking, policy, at, exclude=None, time_at=None):
     # Reviewing a current commitment within its original handover grace period
     # must not count it as a fourth future reservation.
     if start > at:
-        require(future.count() < quota, f"未来此类预约额度已满（最多{quota}项）")
+        count = snapshot.future_count(resource.kind,exclude) if snapshot is not None else future.count()
+        require(count < quota, f"未来此类预约额度已满（最多{quota}项）")
     conflict = Reservation.objects.filter(resource=resource, status__in=ACTIVE, starts_at__lt=end, ends_at__gt=start)
     personal = Reservation.objects.filter(applicant=user, resource__kind=resource.kind, status__in=ACTIVE, starts_at__lt=end, ends_at__gt=start)
     if exclude: conflict = conflict.exclude(pk=exclude); personal = personal.exclude(pk=exclude)
-    require(not conflict.exists(), "该资源时段已被确认占用，存在时间冲突")
+    conflicting = snapshot.resource_conflict(start,end,exclude) if snapshot is not None else conflict.exists()
+    require(not conflicting, "该资源时段已被确认占用，存在时间冲突")
     if resource.kind == "ROOM":
         pending = Reservation.objects.filter(applicant=user, resource__kind="ROOM", status__in=FUTURE, starts_at__lt=end, ends_at__gt=start)
         if exclude: pending = pending.exclude(pk=exclude)
-        require(not personal.exists() and not pending.exists(), "同一教师同一时段只能负责一间场地")
+        personal_exists = bool(snapshot.personal_intervals(start,end,exclude)) if snapshot is not None else personal.exists()
+        pending_exists = snapshot.pending_room_conflict(start,end,exclude) if snapshot is not None else pending.exists()
+        require(not personal_exists and not pending_exists, "同一教师同一时段只能负责一间场地")
     else:
-        require(maximum_overlap(start, end, personal.values_list("starts_at", "ends_at")) <= policy.simultaneous_equipment, f"同一时段最多使用{policy.simultaneous_equipment}台或套设备")
+        intervals = snapshot.personal_intervals(start,end,exclude) if snapshot is not None else personal.values_list("starts_at", "ends_at")
+        require(maximum_overlap(start, end, intervals) <= policy.simultaneous_equipment, f"同一时段最多使用{policy.simultaneous_equipment}台或套设备")
 
 def availability(resource, start, end, at=None, applicant=None):
     at = at or timezone.now()

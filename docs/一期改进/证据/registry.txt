@@ -1,0 +1,2 @@
+PASS: 27 FR/UC/SPEC, 46 BR + DC-01, 11 QR, 66 AC; source/business/message/field/model references and explicit operational trace
+PASS: vector ERD has all exported entities / fields / field-attached FK; six complete domains; no card-crossing connectors

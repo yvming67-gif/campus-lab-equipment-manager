@@ -1,0 +1,13 @@
+✔ REV02: a confirmation started by another account cannot submit under the replacement account (14.3928ms)
+✔ late receipt lookup from a replaced account cannot clear the new account pending action (1.8262ms)
+✔ REV02: old logout confirmation cannot log out a replacement account (2.4186ms)
+✔ REV02: old cancellation confirmation does not inject an error into a replacement account page (3.4111ms)
+✔ a server failure retains the original mutation identity for a later retry (2.5689ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.3026

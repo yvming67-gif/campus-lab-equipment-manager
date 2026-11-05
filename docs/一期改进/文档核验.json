@@ -1,0 +1,298 @@
+{
+  "date": "2026-11-05",
+  "input_sha256": "bf71bea02c076e53b9df3a137c2376174836546095290ef9f5df67a354e1d092",
+  "baseline_sha256": "a76439b6a0e1602944e679e6cae1e483e68775c98cbe55150ec2ae353c7ee8ff",
+  "pages": 104,
+  "all_pages_rendered": 104,
+  "coordinate_changed_pages": [
+    5,
+    63,
+    64
+  ],
+  "pixel_changed_pages": [
+    5,
+    63,
+    64
+  ],
+  "identical_pages": 101,
+  "blank_pages": [],
+  "off_page_text_pages": [],
+  "reference_count": 11,
+  "reference_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "visual_review": {
+    "changed_original_pages_opened": [
+      5,
+      63,
+      64
+    ],
+    "all_page_overview": {
+      "contact_sheets_opened": 18,
+      "pages": 104,
+      "method": "18张六页拼图均以high显示并实际目视；界面缩放为1312×1894，检查全篇页面结构，不作为逐字原图检查"
+    },
+    "unchanged_pages": {
+      "count": 101,
+      "method": "与a764已验收版本逐页像素完全一致，沿用原逐页视觉证据；本轮未将101页再次逐张原图打开"
+    },
+    "finding": "三张受影响原图无截断、重叠或表格破损；全篇概览无新增空白页或分页异常"
+  },
+  "word": "docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx",
+  "changed_package_parts": [
+    "word/document.xml"
+  ],
+  "style_numbering_images_headers_footers_unchanged": true,
+  "A4_portrait": true,
+  "toc_cache_checks": [
+    {
+      "heading": "摘要",
+      "cached_page": 2,
+      "actual_page": 2
+    },
+    {
+      "heading": "一 项目概述",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.1 项目背景",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.2 当前业务问题",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.3 项目建设目标",
+      "cached_page": 4,
+      "actual_page": 4
+    },
+    {
+      "heading": "1.4 项目范围",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.5 目标用户与利益相关者",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.6 业务假设与限制",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "1.7 需求获取与依据",
+      "cached_page": 5,
+      "actual_page": 5
+    },
+    {
+      "heading": "二 项目愿景",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.1 愿景陈述",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.2 用户需求与业务价值",
+      "cached_page": 8,
+      "actual_page": 8
+    },
+    {
+      "heading": "2.3 项目成功指标",
+      "cached_page": 9,
+      "actual_page": 9
+    },
+    {
+      "heading": "2.4 项目边界",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "2.5 不在本期范围内的内容",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "三 业务建模",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "3.1 业务参与者与实现要素",
+      "cached_page": 10,
+      "actual_page": 10
+    },
+    {
+      "heading": "3.2 业务用例说明",
+      "cached_page": 12,
+      "actual_page": 12
+    },
+    {
+      "heading": "3.3 业务用例图",
+      "cached_page": 14,
+      "actual_page": 14
+    },
+    {
+      "heading": "3.4 现状业务流程分析",
+      "cached_page": 14,
+      "actual_page": 14
+    },
+    {
+      "heading": "3.5 现状业务序列图",
+      "cached_page": 15,
+      "actual_page": 15
+    },
+    {
+      "heading": "3.6 现状问题总结",
+      "cached_page": 18,
+      "actual_page": 18
+    },
+    {
+      "heading": "3.7 职责迁移与改进措施",
+      "cached_page": 18,
+      "actual_page": 18
+    },
+    {
+      "heading": "3.8 改进后的业务序列图",
+      "cached_page": 20,
+      "actual_page": 20
+    },
+    {
+      "heading": "3.9 改进前后对比",
+      "cached_page": 24,
+      "actual_page": 24
+    },
+    {
+      "heading": "四 系统需求",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.1 系统边界与使用者",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.2 系统用例图",
+      "cached_page": 25,
+      "actual_page": 25
+    },
+    {
+      "heading": "4.3 功能需求",
+      "cached_page": 29,
+      "actual_page": 29
+    },
+    {
+      "heading": "4.4 用例规约",
+      "cached_page": 31,
+      "actual_page": 31
+    },
+    {
+      "heading": "4.5 业务规则与状态事件",
+      "cached_page": 71,
+      "actual_page": 71
+    },
+    {
+      "heading": "4.6 质量需求与设计约束",
+      "cached_page": 77,
+      "actual_page": 77
+    },
+    {
+      "heading": "4.7 验收标准",
+      "cached_page": 77,
+      "actual_page": 77
+    },
+    {
+      "heading": "五 系统分析模型",
+      "cached_page": 86,
+      "actual_page": 86
+    },
+    {
+      "heading": "5.1 分析模型的边界",
+      "cached_page": 86,
+      "actual_page": 86
+    },
+    {
+      "heading": "5.2 分析类与职责分配",
+      "cached_page": 87,
+      "actual_page": 87
+    },
+    {
+      "heading": "5.3 核心用例的内部协作",
+      "cached_page": 90,
+      "actual_page": 90
+    },
+    {
+      "heading": "5.4 状态与事件约束",
+      "cached_page": 95,
+      "actual_page": 95
+    },
+    {
+      "heading": "5.5 分析模型到数据与实现",
+      "cached_page": 96,
+      "actual_page": 96
+    },
+    {
+      "heading": "六 需求追踪",
+      "cached_page": 97,
+      "actual_page": 97
+    },
+    {
+      "heading": "6.1 需求追踪矩阵",
+      "cached_page": 97,
+      "actual_page": 97
+    },
+    {
+      "heading": "6.2 结论",
+      "cached_page": 103,
+      "actual_page": 103
+    },
+    {
+      "heading": "参考资料",
+      "cached_page": 104,
+      "actual_page": 104
+    }
+  ],
+  "toc_cache_consistent": true,
+  "render_input_matches_formal_word": true,
+  "validation_commands": [
+    {
+      "command": "python tools/validate_registry.py",
+      "exit_code": 0,
+      "scope": "27规约、46规则、11质量需求、66验收、来源与追踪、ERD静态完整性"
+    },
+    {
+      "command": "python tools/validate_analysis_models.py",
+      "exit_code": 0,
+      "scope": "27规约、4内部协作、43消息、9组可编辑模型静态契约"
+    }
+  ],
+  "history": {
+    "previous_receipt": "docs/整改/修复20261025/正式材料核验.json",
+    "preserved": true,
+    "private_qa_failure": "首次辅助检查未识别原书目标题参考资料，已修正检查器重新完成；原失败输出保留私有目录"
+  },
+  "limits": [
+    "本记录为文档协作与差异核验，不代替独立软件复核、运行回归或真实学校调研",
+    "原生容器、Android新流程、iPhone、正式发布及名称审核状态须分别查实际证据，本文不宣称通过",
+    "LibreOffice及本机字体渲染不保证所有Word版本像素一致；正式交付仅Word，渲染PDF和PNG保留私有核验目录"
+  ]
+}

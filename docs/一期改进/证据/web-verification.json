@@ -1,0 +1,140 @@
+{
+  "date": "2026-11-05",
+  "web_observations": 44,
+  "widths": [
+    1440,
+    768,
+    390,
+    320
+  ],
+  "roles": [
+    "student",
+    "admin"
+  ],
+  "first_layout_observations": "web-observations.json; no document overflow, but image review found review-grid and missing icon issues; first images preserved privately",
+  "corrected_approval_layouts": [
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "rows": [
+        {
+          "row": 728,
+          "value": 631
+        },
+        {
+          "row": 728,
+          "value": 631
+        },
+        {
+          "row": 728,
+          "value": 631
+        },
+        {
+          "row": 728,
+          "value": 631
+        },
+        {
+          "row": 728,
+          "value": 631
+        }
+      ],
+      "authenticated": true
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "rows": [
+        {
+          "row": 396,
+          "value": 299
+        },
+        {
+          "row": 396,
+          "value": 299
+        },
+        {
+          "row": 396,
+          "value": 299
+        },
+        {
+          "row": 396,
+          "value": 299
+        },
+        {
+          "row": 396,
+          "value": 299
+        }
+      ],
+      "authenticated": true
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "rows": [
+        {
+          "row": 276,
+          "value": 198
+        },
+        {
+          "row": 276,
+          "value": 198
+        },
+        {
+          "row": 276,
+          "value": 198
+        },
+        {
+          "row": 276,
+          "value": 198
+        },
+        {
+          "row": 276,
+          "value": 198
+        }
+      ],
+      "authenticated": true
+    },
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "rows": [
+        {
+          "row": 206,
+          "value": 128
+        },
+        {
+          "row": 206,
+          "value": 128
+        },
+        {
+          "row": 206,
+          "value": 128
+        },
+        {
+          "row": 206,
+          "value": 128
+        },
+        {
+          "row": 206,
+          "value": 128
+        }
+      ],
+      "authenticated": true
+    }
+  ],
+  "selected_slot_prefill": {
+    "start": "2026-11-06T08:00",
+    "end": "2026-11-06T09:00",
+    "summary": "2026-11-06 08:00 — 2026-11-06 09:00（北京时间）",
+    "queryStart": "2026-11-06T08:00:00+08:00",
+    "slotDayCount": 1,
+    "back": "/resources/?q=%E7%A4%BA%E6%B3%A2%E5%99%A8&starts_at=2026-11-06T08%3A00%3A00%2B08%3A00&ends_at=2026-11-06T09%3A00%3A00%2B08%3A00"
+  },
+  "glass_scope": {
+    "navigation": "blur(28px) saturate(1.6)",
+    "readingCard": "none"
+  },
+  "scope": "actual local Django/PostgreSQL; data only simulated; no reservation/approval POST by browser run; interface API workflow covered separately",
+  "physical_device": false,
+  "screenshot_glass_choice": "on; readable cards opaque"
+}

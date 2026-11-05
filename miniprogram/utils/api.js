@@ -2,6 +2,7 @@ const config = require('../config');
 const SESSION_KEY = 'campus-mini-session';
 const DRAFT_KEY = 'campus-mini-draft';
 const DRAFTS_KEY = 'campus-mini-pending-drafts';
+const ACTIONS_KEY = 'campus-mini-action-drafts';
 const CONFIGURED_BASE = normalizeBase(config.backendBaseUrl);
 const PREFIX = '/api/mini/v1';
 let redirecting = false;
@@ -21,7 +22,7 @@ function sameSession(saved) {
 }
 function clearSession(expected) {
   if (expected && !sameSession(expected)) return false;
-  wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync(DRAFTS_KEY); wx.removeStorageSync('campus-mini-base');
+  wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync(DRAFTS_KEY); wx.removeStorageSync(ACTIONS_KEY); wx.removeStorageSync('campus-mini-booking-filter'); wx.removeStorageSync('campus-mini-base');
   return true;
 }
 function session() {
@@ -68,7 +69,8 @@ function request(path, method, data, options) {
         if (/timeout/i.test(message)) reason = '连接超时，云端演示可能正在唤醒，请稍候重试';
         else if (/url not in domain list|not in.*domain|合法域名/i.test(message)) reason = '域名校验未通过，测试号请在右上角开启调试，退出后重新进入';
         else if (/ssl|tls|certificate|cert_/i.test(message)) reason = '安全连接未建立，请检查手机网络和系统时间后重试';
-        const e = new Error(method === 'POST' && path.indexOf('/bookings/') === 0 ? '未能确认操作结果，请保持内容并重试，或查看预约记录' : reason);
+        const mutating = method === 'POST' && (path.indexOf('/bookings/') === 0 || path === '/incidents/');
+        const e = new Error(mutating ? '未能确认操作结果，请保持原内容后重试，或先核对相关记录' : reason);
         e.network = true; reject(e);
       }
     });
@@ -80,6 +82,8 @@ async function login(username, password) {
   wx.removeStorageSync('campus-mini-base');
   wx.removeStorageSync(DRAFT_KEY);
   wx.removeStorageSync(DRAFTS_KEY);
+  wx.removeStorageSync(ACTIONS_KEY);
+  wx.removeStorageSync('campus-mini-booking-filter');
   return data;
 }
 async function logout() { const saved = session(); try { await request('/auth/logout/', 'POST', {}); } finally { if (saved) clearSession(saved); } }
@@ -132,8 +136,52 @@ async function submitBooking(values) {
   try { return await sending; } finally { if (submissions.get(flight) === sending) submissions.delete(flight); }
 }
 function errorText(error) {
-  const names = { starts_at: '开始时间', ends_at: '结束时间', purpose: '使用目的', participants: '参与人数', reason: '取消原因', request_key: '请求编号', username: '账号', password: '密码', page: '页码' };
+  const names = { starts_at: '开始时间', ends_at: '结束时间', purpose: '使用目的', participants: '参与人数', reason: '操作说明', request_key: '请求编号', username: '账号', password: '密码', page: '页码', description: '异常情况', occurred_at: '发现时间', resource_id: '异常资源', resource: '异常资源', reservation: '关联预约', kind: '异常类型', duration_minutes: '使用时长', slot_day: '候选日期' };
   const fields = Object.keys(error.fields || {}).map(k => (names[k] || k) + '：' + error.fields[k].join('；'));
   return fields.length ? fields.join('\n') : error.message || '操作未完成，请重试';
 }
-module.exports = { baseUrl, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, errorText, uuid };
+function actionItems(saved) {
+  const value = wx.getStorageSync(ACTIONS_KEY);
+  return value && value.scope === saved.draftScope && Array.isArray(value.items) ? value.items : [];
+}
+function saveActions(saved, items) {
+  if (!sameSession(saved)) return;
+  if (items.length) wx.setStorageSync(ACTIONS_KEY, {scope:saved.draftScope,items});
+  else wx.removeStorageSync(ACTIONS_KEY);
+}
+function actionDraft(context) {
+  const saved=session();
+  return saved ? actionItems(saved).find(item=>item.context===context) || null : null;
+}
+async function submitAction(path, values, context) {
+  const saved=session();
+  if(!saved){goLogin();throw new Error('请先登录');}
+  context=context || path;
+  const identity=JSON.stringify([path,values]),flight=saved.draftScope+':action:'+context;
+  const previous=actionItems(saved).find(item=>item.context===context);
+  if(previous && previous.identity!==identity) throw new Error('上一项操作结果尚未确认，请先恢复原内容并重试，避免重复登记');
+  if(submissions.has(flight)) return submissions.get(flight);
+  const pending=previous || {context,identity,path,values:Object.assign({},values),key:uuid()};
+  const all=actionItems(saved);
+  if(!previous && all.length>=20)throw new Error('尚有较多未确认操作，请先核对并重试原操作');
+  saveActions(saved,all.filter(item=>item.context!==context).concat(pending));
+  const sending=request(path,'POST',Object.assign({},pending.values,{request_key:pending.key})).then(result=>{
+    saveActions(saved,actionItems(saved).filter(item=>item.key!==pending.key));
+    return result;
+  }).catch(e=>{
+    // A definite validation/rule rejection created no action; corrected fields may use a new key.
+    // Network errors and server failures retain the same payload/key until the result is confirmed.
+    if(e.status>=400 && e.status<500)saveActions(saved,actionItems(saved).filter(item=>item.key!==pending.key));
+    throw e;
+  });
+  submissions.set(flight,sending);
+  try{return await sending;}finally{if(submissions.get(flight)===sending)submissions.delete(flight);}
+}
+async function checkAction(context) {
+  const saved=session(),pending=actionDraft(context);
+  if(!saved || !pending)throw new Error('没有待核对的原操作，请刷新相关记录');
+  const outcome=await request('/receipts/'+pending.key+'/');
+  if(outcome.found)saveActions(saved,actionItems(saved).filter(item=>item.key!==pending.key));
+  return outcome;
+}
+module.exports = { baseUrl, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, actionDraft, submitAction, checkAction, errorText, uuid };

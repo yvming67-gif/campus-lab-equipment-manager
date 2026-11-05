@@ -108,14 +108,17 @@ test('AUD-0036 offline logout clears local credentials and returns to login',asy
   const login=page('login');const count=navigations.length;login.onShow();assert.equal(navigations.length,count);
 });
 
-test('all seven native pages and lifecycle entry files exist', () => {
+test('all registered native pages and lifecycle entry files exist', () => {
   const config = JSON.parse(fs.readFileSync(path.join(root, 'app.json'), 'utf8'));
-  assert.equal(config.pages.length, 7);
+  assert.deepEqual(config.pages.map(stem => path.basename(path.dirname(stem))).sort(),
+    ['login', 'resources', 'resource', 'bookings', 'booking', 'notifications', 'profile', 'incident'].sort());
   for (const stem of config.pages) for (const ext of ['.js', '.json', '.wxml', '.wxss']) assert.ok(fs.existsSync(path.join(root, stem + ext)));
   assert.equal(config.tabBar.list.length, 4);
 });
 test('WXML event bindings point to actual controller methods', () => {
-  for (const name of ['login', 'resources', 'resource', 'bookings', 'booking', 'notifications', 'profile']) {
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'app.json'), 'utf8'));
+  for (const stem of config.pages) {
+    const name = path.basename(path.dirname(stem));
     const text = fs.readFileSync(path.join(root, 'pages', name, 'index.wxml'), 'utf8');
     const definition = page(name);
     for (const match of text.matchAll(/bind(?:tap|input|change|confirm)="([A-Za-z]+)"/g)) assert.equal(typeof definition[match[1]], 'function', name + ':' + match[1]);

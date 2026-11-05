@@ -1,0 +1,47 @@
+Creating test database for alias 'default'...
+
+........................................................................................................................................................................................................................................................................sss........
+----------------------------------------------------------------------
+Ran 275 tests in 65.897s
+
+OK (skipped=3)
+Destroying test database for alias 'default'...
+
+Found 275 test(s).
+System check identified no issues (0 silenced).
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Existing demo data preserved; initialization skipped.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Slot preview measurement: 23 candidates, 11 database queries
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.
+Demo seed ready: 7 accounts, 2 labs, 8 equipment, 2 room resources.

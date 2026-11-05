@@ -226,5 +226,25 @@
     "repo": "campus-lab-equipment-manager",
     "visibility": "public",
     "after_local_acceptance": true
+  },
+  "implementation_channels": {
+    "date": "2026-11-05",
+    "business_baseline_version": "2.3",
+    "web": "完整管理流程及师生查询、申请、历史、通知、补充说明和异常报告；按原角色与对象范围授权。",
+    "miniprogram_use_cases": [
+      "UC-01",
+      "UC-02",
+      "UC-03",
+      "UC-04",
+      "UC-05",
+      "UC-06",
+      "UC-07",
+      "UC-13",
+      "UC-22",
+      "UC-26"
+    ],
+    "miniprogram": "师生查询、申请、取消、进度、通知、补充说明和文字异常报告；不提供管理员审批和受控附件接口。",
+    "scope": "新增客户端通道与只读体验层，不新增业务用例、制度、状态或物理实体。",
+    "verification": "界面、编译、API、原生容器、真机和正式发布分别验收；当前结果以一期改进记录为准。"
   }
 }

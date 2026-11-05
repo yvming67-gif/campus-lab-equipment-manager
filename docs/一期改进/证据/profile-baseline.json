@@ -1,0 +1,77 @@
+{
+  "source": "Django test client with actual local PostgreSQL; one warm-up + three serial samples; no browser/network time",
+  "fixture": "7 mock users, 10 resources, one added isolated pending example",
+  "version": "3963409 baseline",
+  "measurements": [
+    {
+      "role": "student",
+      "route": "/resources/",
+      "samples": 3,
+      "queries": [
+        10,
+        10,
+        10
+      ],
+      "milliseconds": [
+        11.56,
+        12.68,
+        11.43
+      ],
+      "median_ms": 11.56
+    },
+    {
+      "role": "student",
+      "route": "/resources/1/",
+      "samples": 3,
+      "queries": [
+        11,
+        11,
+        11
+      ],
+      "milliseconds": [
+        14.14,
+        12.05,
+        10.97
+      ],
+      "median_ms": 12.05
+    },
+    {
+      "role": "admin",
+      "route": "/bookings/",
+      "samples": 3,
+      "queries": [
+        12,
+        12,
+        12
+      ],
+      "milliseconds": [
+        18.75,
+        15.67,
+        18.17
+      ],
+      "median_ms": 18.17
+    },
+    {
+      "role": "admin",
+      "route": "/bookings/1/review/",
+      "samples": 3,
+      "queries": [
+        11,
+        11,
+        11
+      ],
+      "milliseconds": [
+        10.59,
+        10.23,
+        10.68
+      ],
+      "median_ms": 10.59
+    }
+  ],
+  "not_claimed": [
+    "production load",
+    "cold-start latency",
+    "P95",
+    "mobile GPU performance"
+  ]
+}

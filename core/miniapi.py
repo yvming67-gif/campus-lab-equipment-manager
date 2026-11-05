@@ -21,8 +21,9 @@ from . import services as s
 from .demo_identity import verify_demo_password
 from .schedules import resource_schedule
 from .domain_labels import event_label, notification_label
-from .forms import BookingForm, QueryForm, ActionForm
+from .forms import BookingForm, QueryForm, ActionForm, IncidentForm
 from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification
+from .experience import slot_options, next_step
 from .request_context import correlation_id
 
 SESSION_SECONDS = 7200
@@ -173,7 +174,8 @@ def booking_data(booking):
             "participants": booking.participants, "version": booking.version, "reason": booking.review_reason if booking.review_required else booking.reason,
             "review_required":booking.review_required,
             "created_at": date_text(booking.created_at),
-            "can_cancel": booking.status in s.FUTURE and booking.starts_at > timezone.now()}
+            "can_cancel": booking.status in s.FUTURE and booking.starts_at > timezone.now(),
+            "can_supplement": booking.status == "PENDING", "can_report": True}
 
 
 def my_bookings(user):
@@ -274,6 +276,12 @@ def resource_detail(request, pk):
     page=Paginator(schedule,30).get_page(int(raw_page))
     result["schedule"] = [{"starts_at": date_text(x.starts_at), "ends_at": date_text(x.ends_at), "status":x.status,"status_label":x.get_status_display()} for x in page.object_list]
     result.update(schedule_total=page.paginator.count,schedule_page=page.number,schedule_has_more=page.has_next(),schedule_day=day)
+    if "slot_day" in request.GET:
+        try:
+            result["slot_options"] = slot_options(resource,request.mini_user,
+                request.GET["slot_day"],request.GET.get("duration_minutes","60"))
+        except (ValueError,s.BusinessError) as error:
+            raise ApiError("VALIDATION_ERROR",str(error),fields={"slot_day":[str(error)]}) from None
     return result
 
 
@@ -305,9 +313,101 @@ def bookings(request):
 def booking_detail(request, pk):
     booking = get_object_or_404(my_bookings(request.mini_user), pk=pk)
     result = booking_data(booking)
-    events = list(AuditEvent.objects.filter(entity_type="reservation", entity_id=booking.pk).select_related("actor").order_by("-created_at", "-pk")[:100])
+    result["next_step"] = next_step(booking)
+    event_rows = AuditEvent.objects.filter(entity_type="reservation", entity_id=booking.pk)
+    events = list(event_rows.select_related("actor").order_by("-created_at", "-pk")[:100])
+    result["timeline_total"] = event_rows.count()
+    result["timeline_has_more"] = result["timeline_total"] > len(events)
     result["timeline"] = [{"id": e.pk, "action": e.action, "label": event_label(e.action), "at": date_text(e.created_at), "reason": e.reason, "actor": e.actor.display_name if e.actor_id else "系统"} for e in reversed(events)]
+    note_rows = booking.review_notes.select_related("actor")
+    notes = list(note_rows.order_by("-created_at","-pk")[:100])
+    result["supplements_total"] = note_rows.count()
+    result["supplements_has_more"] = result["supplements_total"] > len(notes)
+    result["supplements"] = [{"id": x.pk, "kind": x.kind, "content": x.content,
+        "created_at": date_text(x.created_at), "actor": x.actor.display_name}
+        for x in reversed(notes)]
     return result
+
+
+def _request_key(value):
+    try:
+        return str(forms.UUIDField().clean(value))
+    except forms.ValidationError:
+        raise ApiError("VALIDATION_ERROR","缺少有效的操作请求编号",fields={"request_key":["请重新打开操作表单"]}) from None
+
+
+@transaction.atomic
+def _mini_action(actor, request_key, action, data, execute):
+    """Atomic transport receipt using an existing immutable, unique audit key.
+
+    The actor gate serializes same-user retries, including cross-resource ones.
+    Only a hash and the minimal receipt are stored, never credentials or bodies.
+    Business validation/audits/notifications are still owned by the services.
+    """
+    current = User.objects.select_for_update(no_key=True).get(pk=actor.pk)
+    s.require(current.has_role("STUDENT","TEACHER"),"账号或预约身份已失效")
+    key = f"mini-action:{current.pk}:{request_key}"
+    fingerprint = hashlib.sha256(json.dumps([action,data],sort_keys=True,
+        ensure_ascii=False,separators=(",",":")).encode()).hexdigest()
+    receipt = AuditEvent.objects.filter(dedupe_key=key).first()
+    if receipt:
+        s.require(receipt.new_state.get("fingerprint")==fingerprint,"同一请求编号不能提交不同操作或内容")
+        return dict(receipt.new_state["result"],replayed=True)
+    result = execute()
+    s.audit(current,current,"MINI_ACTION_RECEIPT",
+        new={"fingerprint":fingerprint,"result":result},
+        reason="小程序操作已提交，重复请求返回原回执",dedupe_key=key)
+    return dict(result,replayed=False)
+
+
+@endpoint("POST")
+def supplement(request, pk):
+    booking = get_object_or_404(my_bookings(request.mini_user),pk=pk)
+    data = payload(request,{"reason","request_key"})
+    values = cleaned(ActionForm(data));key = _request_key(data.get("request_key"))
+    def execute():
+        note = s.review_note(request.mini_user,booking.pk,values["reason"])
+        return {"booking_id":booking.pk,"note_id":note.pk,"status":"PENDING"}
+    return _mini_action(request.mini_user,key,"supplement",
+        {"booking_id":booking.pk,"reason":values["reason"]},execute)
+
+
+@endpoint("POST")
+def incidents(request):
+    data = payload(request,{"resource_id","reservation","kind","description","occurred_at","request_key"})
+    key = _request_key(data.get("request_key"))
+    resource_id = s.positive_integer(data.get("resource_id"))
+    if resource_id is None:
+        raise ApiError("VALIDATION_ERROR","请选择有效资源",fields={"resource_id":["资源编号无效"]})
+    booking_id = data.get("reservation")
+    if booking_id not in (None,"") and s.positive_integer(booking_id) is None:
+        raise ApiError("VALIDATION_ERROR","关联预约编号无效",fields={"reservation":["请选择本人的预约"]})
+    form_data = dict(data,resource=resource_id)
+    form = IncidentForm(form_data)
+    form.fields["reservation"].queryset = my_bookings(request.mini_user)
+    values = cleaned(form)
+    normalized = {"resource_id":values["resource"].pk,
+        "reservation":values["reservation"].pk if values["reservation"] else None,
+        "kind":values["kind"],"description":values["description"],
+        "occurred_at":date_text(values["occurred_at"])}
+    def execute():
+        item = s.report_incident(request.mini_user,normalized["resource_id"],
+            normalized["kind"],normalized["description"],normalized["reservation"],
+            occurred_at=values["occurred_at"])
+        return {"id":item.pk,"code":item.code,"status":item.status,
+            "status_label":item.get_status_display(),"blocks_service":item.blocks_service,
+            "resource_id":item.resource_id,"reservation_id":item.reservation_id}
+    return _mini_action(request.mini_user,key,"incident",normalized,execute)
+
+
+@endpoint("GET")
+def receipt(request, request_key):
+    """Explicit result lookup after a client timeout; absent is not proof of failure."""
+    key = _request_key(request_key)
+    item = AuditEvent.objects.filter(dedupe_key=f"mini-action:{request.mini_user.pk}:{key}",
+        actor=request.mini_user,action="MINI_ACTION_RECEIPT").first()
+    return {"found":item is not None,"result":item.new_state["result"] if item else None,
+            "notice":"未找到回执不代表提交失败；仍可使用原请求编号与原内容核对重试。" if item is None else "已找到原操作回执"}
 
 
 @endpoint("POST")

@@ -1,4 +1,4 @@
-<view class="login-screen">
+<view class="login-screen {{reducedEffects ? 'reduced-effects' : ''}}">
   <view class="row login-brand-row"><view class="login-identity"><image class="login-brand-icon" src="/assets/brand-icon.png" mode="aspectFit" /><text class="login-brand-name">{{brandName}}</text></view><text class="chip">课程演示</text></view>
   <view class="eyebrow">CAMPUS LAB / RESERVATION</view>
   <view class="login-title"><view>把下一次实验</view><view>安排好。</view></view>

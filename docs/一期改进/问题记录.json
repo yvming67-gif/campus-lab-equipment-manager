@@ -1,0 +1,251 @@
+{
+  "date": "2026-11-05",
+  "baseline": "39634093b70a7fa0059c5c474e95105d20687e90",
+  "statistics": {
+    "total": 8,
+    "type": {
+      "已确认缺陷": 8
+    },
+    "severity": {
+      "一般": 6,
+      "轻微": 2
+    },
+    "status": {
+      "已复验关闭（本期本地覆盖范围）": 8
+    }
+  },
+  "issues": [
+    {
+      "id": "AUD-0119",
+      "title": "页面默认状态与可变data共用对象，切换账号后旧资料未清空",
+      "severity": "一般",
+      "reason": "后续读取失败时仍可能显示前一账号资料和草稿，影响身份隔离",
+      "module": "小程序页面状态；学生、教师",
+      "location": "miniprogram/controllers.js:395 create，403—411 defaults及onShow；tools/mini-check/phase1.test.cjs:79",
+      "trigger": "保留页面实例，切换账号，随后加载失败",
+      "steps": "登录A并载入资料；退出后登录B；复用页面并使新读取失败；检查旧字段",
+      "expected": "新会话读取前清空旧资料和表单；依据会话隔离要求",
+      "actual": "实施期首次测试确认defaults随setData嵌套修改；旧状态未按预期清空；不推定曾造成线上泄露",
+      "root": "闭包保存的defaults与页面data嵌套对象同引用",
+      "fix": "初始化时深拷贝独立快照，身份变化时再生成新副本并重置时效字段",
+      "accept": "运行page owner switch clears old profile before replacement request fails，检查B页不含A值",
+      "evidence": "证据/mini-client-final.txt；首次95项3失败说明保留于本期验证记录",
+      "related": [
+        "AUD-0121",
+        "AUD-0102"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "后续读取失败时仍可能显示前一账号资料和草稿，影响身份隔离",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0120",
+      "title": "补充说明截取最早100条且进度未披露截断范围",
+      "severity": "一般",
+      "reason": "最新管理员要求可能不可见，影响继续申请",
+      "module": "小程序预约详情；申请人",
+      "location": "core/miniapi.py:313 booking_detail，318—329；miniprogram/pages/booking/index.wxml:10—11；core/phase1_independent_tests.py:50、62",
+      "trigger": "同预约超过100条沟通或进度",
+      "steps": "生成101条审核沟通及事件；获取本人预约详情；核对最后记录、总量和页面提示",
+      "expected": "返回最近记录并说明范围，保留完整历史查阅入口；依据UC-06追踪职责",
+      "actual": "原补充列表按正序截前100条；两类返回没有总量和has_more；独立反例代码确认",
+      "root": "排序与最近记录目标不一致，缺范围元数据",
+      "fix": "取倒序最近100后正序展示，加total/has_more及网页完整历史提示",
+      "accept": "两项独立后端超100条测试通过，UI显示范围且最新记录存在",
+      "evidence": "证据/tests-13424.txt；独立复核.md REV-01",
+      "related": [
+        "AUD-0003"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "最新管理员要求可能不可见，影响继续申请",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0121",
+      "title": "确认弹窗回调跨账号后仍可提交旧内容或退出新账号",
+      "severity": "一般",
+      "reason": "弹窗期间身份变化可使操作意图与当前账号不一致；未证明真实用户受影响",
+      "module": "小程序报障、取消、退出；师生",
+      "location": "miniprogram/controllers.js:36 sessionStamp、264—266取消、326—328报障、385—389退出；tools/mini-check/phase1-independent.test.cjs:14、42、53",
+      "trigger": "打开确认弹窗后会话被替换，再确认旧弹窗",
+      "steps": "A打开报障/取消/退出弹窗；在测试框架切为B会话；确认A弹窗；检查请求与B页面",
+      "expected": "确认只能作用于原身份及对象版本，否则放弃；依据用户操作意图与会话隔离",
+      "actual": "原确认后未绑定发起会话；独立反例发现可使用替换会话继续操作",
+      "root": "异步确认只核验按钮结果，未保存并比对发起身份和对象",
+      "fix": "确认前保存会话戳及对象/版本，回调后比对；旧操作不得影响B反馈和导航",
+      "accept": "独立客户端确认、取消、退出三场景均不发旧请求、不清除新会话",
+      "evidence": "证据/independent-client.txt；独立复核.md REV-02",
+      "related": [
+        "AUD-0119",
+        "AUD-0102"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "弹窗期间身份变化可使操作意图与当前账号不一致；未证明真实用户受影响",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0122",
+      "title": "查询键items遮蔽QueryDict.items导致资源详情模板500",
+      "severity": "一般",
+      "reason": "普通额外查询参数即可破坏资源详情，但不改变已保存业务",
+      "module": "网页资源选时；所有可查看资源者",
+      "location": "core/views.py:183 catalog_filters；templates/resource.html:4；core/phase1_independent_tests.py:123",
+      "trigger": "资源详情URL附items=x等同名查询参数",
+      "steps": "以学生访问/resources/<id>/?items=x&q=示波器；读取候选时段页面",
+      "expected": "忽略不支持的查询键并正常显示；依据查询接口和表单过滤约定",
+      "actual": "独立后端首次测试产生Need 2 values to unpack模板错误，原始失败日志保留",
+      "root": "模板直接遍历request.GET.items，Django按字典键优先解析items值",
+      "fix": "视图构建白名单键值列表catalog_filters供模板遍历",
+      "accept": "test_rev03_query_key_named_items_cannot_break_slot_filter_template返回200并保留合法q",
+      "evidence": "证据/tests-25356.txt原失败；证据/tests-13424.txt修复后通过",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "普通额外查询参数即可破坏资源详情，但不改变已保存业务",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0123",
+      "title": "小程序globalData保留旧名称，未使用统一品牌配置",
+      "severity": "轻微",
+      "reason": "全局名称与当前页面品牌不一致，后续读取可能产生不同标题",
+      "module": "小程序全局配置；全部用户",
+      "location": "miniprogram/app.js:1—2；miniprogram/config.js appName",
+      "trigger": "读取getApp().globalData.name或复用全局名称",
+      "steps": "对照app全局名称与config.appName及登录页品牌",
+      "expected": "统一使用校园实验资源中心的配置值；依据已确认名称",
+      "actual": "代码审阅发现全局仍保留旧称；未宣称微信后台账号名称已通过",
+      "root": "改品牌时只更新页面和配置，遗漏全局常量",
+      "fix": "app.js从config.appName读取，不复制名称文本",
+      "accept": "静态比对globalData.name来源为config.appName，八页编译无错误",
+      "evidence": "miniprogram/app.js；证据/mini-compile-final.txt",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "全局名称与当前页面品牌不一致，后续读取可能产生不同标题",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0124",
+      "title": "审批核对dl继承通用双列网格使结果挤成单字竖排",
+      "severity": "一般",
+      "reason": "管理员难以阅读判断依据，手机端尤为明显；自动无溢出检查不能发现",
+      "module": "网页审批前核对；实验室管理员",
+      "location": "static/interface.css:266 .review-context dl.review-checks、.review-checks>div；templates/approval_context.html:1",
+      "trigger": "审批详情存在5项核对，桌面或窄屏显示",
+      "steps": "管理员打开待审详情及审核页；在1440/768/390/320宽度观察核对项",
+      "expected": "标题与完整结果按清晰行排列，不依靠单字列；依据可读性要求",
+      "actual": "独立视觉检查发现嵌套网格压缩，虽document无横向溢出仍难读",
+      "root": "dl通用grid规则与内层核对行grid叠加，未显式设置外层一列",
+      "fix": "外层明确minmax(0,1fr)单列，内层85px标题加可收缩结果列",
+      "accept": "四宽度核对结果不竖排；网页截图及元素宽度复核",
+      "evidence": "证据/web-verification.json；画面/web-approval.png；画面/web-mobile-approval.png",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "管理员难以阅读判断依据，手机端尤为明显；自动无溢出检查不能发现",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0125",
+      "title": "资源图标回退ID未对应现有SVG符号，示波器等显示空白",
+      "severity": "轻微",
+      "reason": "分类识别标识缺失但名称和操作仍可用",
+      "module": "网页目录和资源标题；所有资源查看者",
+      "location": "core/templatetags/domain_labels.py:15 resource_icon，17/24；templates/icons.html；core/phase1_independent_tests.py:130",
+      "trigger": "场地或不匹配专项分类的设备使用回退图标",
+      "steps": "浏览示波器和场地卡片；比对use href与SVG symbol id",
+      "expected": "所有返回ID在自有sprite存在，未知类别显示通用图标",
+      "actual": "独立截图发现空图标，代码确认回退ID与symbol不一致",
+      "root": "新分类映射返回不存在的回退ID",
+      "fix": "场地回退icon-room，通用设备回退icon-equipment；保留专项分类",
+      "accept": "逐资源检查所有返回ID存在，目录与详情可见回退图标",
+      "evidence": "证据/tests-13424.txt；画面/web-resources.png；独立复核.md REV-05",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "分类识别标识缺失但名称和操作仍可用",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0126",
+      "title": "候选链接QueryDict.update追加旧时间键，URL累积多组时段",
+      "severity": "一般",
+      "reason": "选时链接和返回上下文含重复日期时间，不利于确认实际选择；未据此认定后端重复预约",
+      "module": "网页候选时段及返回目录；申请人",
+      "location": "core/views.py:173—175 resource_detail候选链接；core/phase1_web_tests.py:37；static/product.js预约摘要",
+      "trigger": "从带已有时间和slot_day的详情再次选择候选",
+      "steps": "带旧起止时段打开资源；选择新候选；检查URL中同名键数量、表单及返回筛选",
+      "expected": "本次所选时间替换旧键，每键一值；依据选时带入约定",
+      "actual": "浏览器检查发现QueryDict.update累积同名值，URL保留旧时段；修正后slot_dayCount为1",
+      "root": "将多值QueryDict的追加语义误作普通字典覆盖",
+      "fix": "逐键赋值替换slot_day、duration_minutes、starts_at和ends_at",
+      "accept": "URL每时间键唯一，表单和摘要为新选时段，返回目录保留合法筛选",
+      "evidence": "证据/web-verification.json selected_slot_prefill；core/phase1_web_tests.py:37",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明的测试或网页运行验证",
+      "status": "已复验关闭（本期本地覆盖范围）",
+      "impact": "选时链接和返回上下文含重复日期时间，不利于确认实际选择；未据此认定后端重复预约",
+      "history": [
+        {
+          "date": "2026-11-05",
+          "status": "发现后修复并复核",
+          "note": "保留原表现与失败证据；不延伸为真机或云端完成"
+        }
+      ]
+    }
+  ]
+}

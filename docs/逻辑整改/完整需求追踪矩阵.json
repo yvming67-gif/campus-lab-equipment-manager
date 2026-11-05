@@ -38,7 +38,7 @@
       "UserQualification",
       "AuditEvent"
     ],
-    "implementation": "core/views.py: login_page、identity、callback",
+    "implementation": "core/views.py: login_page、identity、callback；core/miniapi.py: login、authenticate、logout",
     "acceptance": [
       "AC-01",
       "AC-02",
@@ -84,12 +84,12 @@
       "RoomDetail",
       "Accessory"
     ],
-    "implementation": "core/views.py: resources、resource_detail",
+    "implementation": "core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；miniprogram/controllers.js: resources、resource",
     "acceptance": [
       "AC-03",
       "AC-04"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-03",
@@ -141,7 +141,7 @@
       "RoomUse",
       "UserQualification"
     ],
-    "implementation": "core/services.py: availability；core/views.py: resources",
+    "implementation": "core/services.py: availability、validate；core/experience.py: slot_options；core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail",
     "acceptance": [
       "AC-05",
       "AC-06",
@@ -149,7 +149,7 @@
       "AC-57",
       "AC-61"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-04",
@@ -209,7 +209,7 @@
       "Notification",
       "Delivery"
     ],
-    "implementation": "core/services.py: create_reservation、validate",
+    "implementation": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
     "acceptance": [
       "AC-07",
       "AC-08",
@@ -273,7 +273,7 @@
       "Notification",
       "Delivery"
     ],
-    "implementation": "core/services.py: create_reservation、validate",
+    "implementation": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
     "acceptance": [
       "AC-09",
       "AC-10",
@@ -325,13 +325,13 @@
       "Coordination",
       "AuditEvent"
     ],
-    "implementation": "core/views.py: booking；core/services.py: review_note",
+    "implementation": "core/views.py: booking、booking_action；core/services.py: review_note；core/experience.py: next_step；core/miniapi.py: booking_detail、supplement、receipt；miniprogram/controllers.js: booking",
     "acceptance": [
       "AC-11",
       "AC-12",
       "AC-62"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-07",
@@ -374,7 +374,7 @@
       "Notification",
       "Delivery"
     ],
-    "implementation": "core/services.py: cancel",
+    "implementation": "core/services.py: cancel；core/miniapi.py: cancel；miniprogram/controllers.js: booking",
     "acceptance": [
       "AC-13",
       "AC-14"
@@ -440,7 +440,7 @@
       "Notification",
       "Delivery"
     ],
-    "implementation": "core/services.py: approve",
+    "implementation": "core/services.py: approve；core/experience.py: approval_context；core/views.py: bookings、booking_action",
     "acceptance": [
       "AC-15",
       "AC-16",
@@ -449,7 +449,7 @@
       "AC-57",
       "AC-58"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-09",
@@ -743,14 +743,14 @@
       "Notification",
       "Delivery"
     ],
-    "implementation": "core/services.py: report_incident",
+    "implementation": "core/services.py: report_incident；core/views.py: incident_new；core/miniapi.py: incidents、receipt；miniprogram/controllers.js: incident",
     "acceptance": [
       "AC-25",
       "AC-26",
       "AC-54",
       "AC-59"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-14",
@@ -1063,7 +1063,7 @@
       "Reservation",
       "AuditEvent"
     ],
-    "implementation": "core/services.py: grant_user",
+    "implementation": "core/services.py: grant_user；core/miniapi.py: me",
     "acceptance": [
       "AC-37",
       "AC-38",
@@ -1120,7 +1120,7 @@
       "Reservation",
       "AuditEvent"
     ],
-    "implementation": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception",
+    "implementation": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception；core/catalog.py: calendar_catalog",
     "acceptance": [
       "AC-39",
       "AC-40",
@@ -1214,13 +1214,13 @@
       "Delivery",
       "DeliveryAttempt"
     ],
-    "implementation": "core/views.py: notifications",
+    "implementation": "core/views.py: notifications；core/miniapi.py: notifications、read_notification、read_all；miniprogram/controllers.js: notifications",
     "acceptance": [
       "AC-43",
       "AC-44",
       "AC-63"
     ],
-    "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
+    "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../一期改进/需求与数据通道契约.md"
   },
   {
     "id": "TRACE-23",
@@ -1424,7 +1424,7 @@
       "ReservationReview",
       "AuditEvent"
     ],
-    "implementation": "core/views.py: bookings、booking",
+    "implementation": "core/views.py: bookings、booking；core/workbench.py: booking_queue、tasks_for；core/miniapi.py: bookings、booking_detail；miniprogram/controllers.js: bookings、booking",
     "acceptance": [
       "AC-51",
       "AC-52",

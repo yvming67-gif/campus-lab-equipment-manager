@@ -234,3 +234,48 @@ html[data-glass=off] .stat.accent,html[data-glass=off] .workspace-banner { backg
   .mobile-appearance { display:block; margin-top:12px; }
   .mobile-appearance .appearance-toggle { margin:0; }
 }
+
+/* Reading surfaces stay opaque. Material effects belong to navigation/toolbars. */
+.panel,.resource-card,.stat,.task-card,.login-card,.identity-card,
+html[data-glass=on] .panel,html[data-glass=on] .resource-card,
+html[data-glass=on] .stat,html[data-glass=on] .task-card,
+html[data-glass=on] .login-card,html[data-glass=on] .identity-card {
+  background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none;
+  border-color:#e4e8ef;box-shadow:0 3px 18px #23324a06;
+}
+.resource-facts {display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px 12px;margin:22px 0;color:#45454a;font-size:12px;}
+.card-top {display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px;}
+.resource-symbol {display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#eaf3ff;color:#0071e3;}
+.resource-symbol .nav-icon {width:24px;height:24px;}
+.resource-facts dt {color:#6e6e73;}.resource-facts dd {margin:0;overflow-wrap:anywhere;}
+.resource-card .resource-bottom {align-items:center;gap:10px;}.resource-card .resource-bottom small {font-size:11px;line-height:1.6;}
+.touch-link {display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:5px 8px;}
+.title-icon {width:30px;height:30px;margin-right:12px;vertical-align:-3px;fill:none;stroke:#0071e3;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.slot-panel {margin-bottom:24px;}.slot-panel h2 {margin:4px 0 0;}
+.slot-filter {display:flex;flex-wrap:wrap;align-items:end;gap:14px;padding:16px;border:1px solid #e4e8ef;border-radius:16px;background:#f7f9fc;}
+.slot-filter>div {flex:1;min-width:140px;}.slot-filter label {display:block;margin-bottom:7px;}
+.slot-filter .button {min-height:44px;}.slot-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;max-height:440px;overflow:auto;padding:4px;}
+.slot-choice {display:flex;flex-direction:column;justify-content:center;min-height:66px;gap:5px;padding:10px 12px;border:1px solid #bfd6f7;border-radius:13px;background:#f1f7ff;color:#0063bf;font-size:12px;}
+.slot-choice strong {font-size:13px;}.slot-choice span {line-height:1.5;overflow-wrap:anywhere;}
+.slot-choice:hover {background:#e1eeff;border-color:#0071e3;}.slot-choice.unavailable {background:#f6f6f8;color:#5f6068;border-color:#e5e5ea;}
+.slot-choice.unavailable strong {color:#4e5058;}.slot-choice.unavailable span {font-size:11px;}
+.next-step,.reservation-summary {padding:18px;border:1px solid #d4e4f9;border-radius:16px;background:#f1f7ff;margin:18px 0;}
+.next-step h3 {margin:7px 0 12px;}.next-step p,.reservation-summary p {color:#3c4c61;margin:8px 0;overflow-wrap:anywhere;}
+.review-context {border:1px solid #dce5ef;border-radius:16px;padding:18px;margin:18px 0;background:#fbfcfe;}
+.review-context h2 {font-size:18px;margin:0;}.review-context .section-heading {gap:12px;flex-wrap:wrap;margin:0;}
+.review-context dl.review-checks {margin:16px 0;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;}.review-checks>div {display:grid;grid-template-columns:85px minmax(0,1fr);gap:12px;border-bottom:1px solid #e7ebf0;padding-bottom:10px;}
+.review-checks dt {color:#4a4c53;font-size:12px;}.review-checks dd {margin:0;font-size:12px;overflow-wrap:anywhere;}.check-result {color:#225f43;line-height:1.6;}
+.application-purpose {max-width:280px;white-space:normal;overflow-wrap:anywhere;color:#45454a;}
+.filter-row>div {min-width:0;}.filter-row select {max-width:100%;}
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible {outline:3px solid #0071e3;outline-offset:3px;}
+#reservation-form {scroll-margin-top:90px;}
+@supports ((backdrop-filter:blur(12px)) or (-webkit-backdrop-filter:blur(12px))) {
+  html[data-glass=on] .slot-filter {background:#e9f1fcac;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+}
+@media(max-width:760px) {
+  .slot-filter {padding:12px;}.slot-filter .button {width:100%;}.slot-filter>div {min-width:100%;}
+  .slot-grid {grid-template-columns:repeat(2,minmax(0,1fr));}.slot-choice {padding:10px;}
+  .title-icon {width:25px;height:25px;margin-right:8px;}.review-context {padding:14px;}
+  .review-checks>div {grid-template-columns:70px minmax(0,1fr);gap:8px;}
+  .filter-row>div {flex-basis:100%;}.resource-bottom .touch-link {white-space:nowrap;}
+}

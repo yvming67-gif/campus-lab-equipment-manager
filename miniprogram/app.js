@@ -1,1 +1,2 @@
-App({ globalData: { name: '校园实验室' } });
+const config = require('./config');
+App({ globalData: { name: config.appName } });

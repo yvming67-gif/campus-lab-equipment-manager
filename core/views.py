@@ -24,6 +24,7 @@ from .demo_identity import verify_demo_password
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
 from .catalog import calendar_catalog
+from .experience import slot_options, approval_context, next_step
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
@@ -136,13 +137,21 @@ def resources(request):
         r.available_label="请选择目标时段查询"
         r.available=None
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
+        query=request.GET.copy();query.pop('page',None)
+        r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
     return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1)})
 
 @login_required
 def resource_detail(request,pk):
-    r=get_object_or_404(Resource.objects.select_related("lab","equipment__qualification","room"),pk=pk)
+    r=get_object_or_404(Resource.objects.select_related("lab","equipment__qualification","room").prefetch_related('accessories'),pk=pk)
     start=timezone.localtime()+timedelta(days=1);start=start.replace(hour=10,minute=0,second=0,microsecond=0)
-    form=BookingForm(request.POST or None,initial={"starts_at":start,"ends_at":start+timedelta(hours=1),"request_key":uuid.uuid4()})
+    end=start+timedelta(hours=1);selection_error=''
+    if request.method=='GET' and (request.GET.get('starts_at') or request.GET.get('ends_at')):
+        selection=QueryForm(request.GET)
+        if selection.is_valid() and selection.cleaned_data.get('starts_at'):
+            start,end=selection.cleaned_data['starts_at'],selection.cleaned_data['ends_at']
+        else:selection_error='所选时间无效，请重新选择完整起止时段。'
+    form=BookingForm(request.POST or None,initial={"starts_at":start,"ends_at":end,"request_key":uuid.uuid4()})
     if r.kind=="EQUIPMENT":form.fields["participants"].widget=forms.HiddenInput()
     if request.method=="POST" and form.is_valid():
         try:
@@ -154,7 +163,25 @@ def resource_detail(request,pk):
     try:schedule=resource_schedule(r,schedule_day)
     except ValueError as error:schedule=r.reservations.none();schedule_error=str(error)
     schedule_page,schedule_filters=paginate(request,schedule,15,page_param="schedule_page")
-    return render(request,"resource.html",{"title":r.name,"resource":r,"form":form,"can_apply":request.user.has_role("TEACHER") if r.kind=="ROOM" else request.user.has_role("STUDENT","TEACHER"),"manageable":s.manager(request.user,r),"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error})
+    policy=Policy.objects.get(pk=1);slot_day=request.GET.get('slot_day',timezone.localtime(start).date().isoformat())
+    duration=request.GET.get('duration_minutes','60');options=None;slot_error=''
+    can_apply=request.user.has_role('TEACHER') if r.kind=='ROOM' else request.user.has_role('STUDENT','TEACHER')
+    if can_apply:
+        try:
+            options=slot_options(r,request.user,slot_day,duration)
+            for item in options['items']:
+                query=request.GET.copy();query.pop('schedule_page',None)
+                for key,value in {'slot_day':slot_day,'duration_minutes':duration,'starts_at':item['starts_at'],'ends_at':item['ends_at']}.items():query[key]=value
+                item['url']=reverse('resource',args=[pk])+'?'+query.urlencode()+'#reservation-form'
+        except (ValueError,s.BusinessError) as error:slot_error=str(error)
+    back=request.GET.copy()
+    for key in list(back):
+        if key not in ['q','kind','lab','starts_at','ends_at']:back.pop(key,None)
+    context={"title":r.name,"resource":r,"form":form,"can_apply":can_apply,"manageable":s.manager(request.user,r),"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error,
+             'slots':options,'slot_day':slot_day,'slot_error':slot_error,'duration_minutes':str(duration),'selection_error':selection_error,'policy':policy,
+             'catalog_back':reverse('resources')+('?' + back.urlencode() if back else ''),
+             'catalog_filters':[(key,value) for key,value in request.GET.items() if key in ['q','kind','lab']]}
+    return render(request,"resource.html",context)
 
 @login_required
 def bookings(request):
@@ -174,13 +201,18 @@ def bookings(request):
     if day:
         try:qs=qs.filter(starts_at__date=datetime.strptime(day,"%Y-%m-%d").date())
         except ValueError:messages.error(request,"日期格式应为年-月-日")
-    page,filters=paginate(request,qs.order_by("-created_at","-pk"))
-    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":Lab.objects.all()})
+    sort=request.GET.get('sort','oldest' if queue=='review' else 'newest')
+    if sort not in ['oldest','newest','starts']:sort='oldest' if queue=='review' else 'newest'
+    order={'oldest':('created_at','pk'),'newest':('-created_at','-pk'),'starts':('starts_at','pk')}[sort]
+    page,filters=paginate(request,qs.order_by(*order))
+    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":Lab.objects.all(),'sort':sort})
 
 @login_required
 def booking(request,pk):
     b=get_object_or_404(scoped_bookings(request.user),pk=pk)
-    return render(request,"booking.html",{"title":"预约详情","b":b,"manageable":s.manager(request.user,b.resource),"owner":b.applicant_id==request.user.pk,"notes":b.review_notes.all(),"incidents":b.incident_set.all(),"events":AuditEvent.objects.filter(entity_type="reservation",entity_id=b.pk).select_related("actor").order_by("created_at")})
+    manageable=s.manager(request.user,b.resource)
+    checks=approval_context(b,request.user) if manageable and b.applicant_id!=request.user.pk and b.status=='PENDING' else None
+    return render(request,"booking.html",{"title":"预约详情","b":b,"manageable":manageable,"owner":b.applicant_id==request.user.pk,"notes":b.review_notes.all(),"incidents":b.incident_set.all(),"events":AuditEvent.objects.filter(entity_type="reservation",entity_id=b.pk).select_related("actor").order_by("created_at"),'next_step':next_step(b),'approval_checks':checks})
 
 @login_required
 def booking_action(request,pk,action):
@@ -214,7 +246,8 @@ def booking_action(request,pk,action):
             messages.success(request,"办理结果已保存，记录与状态已同步");return redirect("booking",pk=pk)
         except s.BusinessError as e:form.add_error(None,str(e))
         except IntegrityError:form.add_error(None,"记录已被其他操作更新，请刷新后重试")
-    return render(request,"form.html",{"title":titles[action],"form":form,"subtitle":f"{b.code} · {b.resource.name} · {b.applicant.display_name}","back":reverse("booking",args=[pk]),"booking":b,"action":action})
+    checks=approval_context(b,request.user) if action=='review' and b.status=='PENDING' and b.applicant_id!=request.user.pk else None
+    return render(request,"form.html",{"title":titles[action],"form":form,"subtitle":f"{b.code} · {b.resource.name} · {b.applicant.display_name}","back":reverse("booking",args=[pk]),"booking":b,"action":action,'approval_checks':checks})
 
 @login_required
 def incidents(request):

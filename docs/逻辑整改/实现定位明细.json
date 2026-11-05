@@ -5,8 +5,8 @@
     "symbol": "login_page",
     "lines": [
       {
-        "start": 52,
-        "end": 57
+        "start": 56,
+        "end": 61
       }
     ],
     "status": "源码定位"
@@ -17,8 +17,8 @@
     "symbol": "identity",
     "lines": [
       {
-        "start": 59,
-        "end": 81
+        "start": 63,
+        "end": 85
       }
     ],
     "status": "源码定位"
@@ -29,8 +29,44 @@
     "symbol": "callback",
     "lines": [
       {
-        "start": 83,
-        "end": 103
+        "start": 87,
+        "end": 107
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-01",
+    "file": "core/miniapi.py",
+    "symbol": "login",
+    "lines": [
+      {
+        "start": 185,
+        "end": 221
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-01",
+    "file": "core/miniapi.py",
+    "symbol": "authenticate",
+    "lines": [
+      {
+        "start": 50,
+        "end": 66
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-01",
+    "file": "core/miniapi.py",
+    "symbol": "logout",
+    "lines": [
+      {
+        "start": 224,
+        "end": 227
       }
     ],
     "status": "源码定位"
@@ -41,8 +77,8 @@
     "symbol": "resources",
     "lines": [
       {
-        "start": 117,
-        "end": 132
+        "start": 124,
+        "end": 142
       }
     ],
     "status": "源码定位"
@@ -53,11 +89,71 @@
     "symbol": "resource_detail",
     "lines": [
       {
-        "start": 135,
-        "end": 146
+        "start": 144,
+        "end": 184
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "core/product_views.py",
+    "symbol": "schedule",
+    "lines": [
+      {
+        "start": 26,
+        "end": 64
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "core/miniapi.py",
+    "symbol": "resources",
+    "lines": [
+      {
+        "start": 245,
+        "end": 258
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "core/miniapi.py",
+    "symbol": "resource_detail",
+    "lines": [
+      {
+        "start": 261,
+        "end": 285
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-02",
+    "file": "miniprogram/controllers.js",
+    "symbol": "resources",
+    "lines": [
+      {
+        "start": 54,
+        "end": 54
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
+  },
+  {
+    "uc": "UC-02",
+    "file": "miniprogram/controllers.js",
+    "symbol": "resource",
+    "lines": [
+      {
+        "start": 96,
+        "end": 96
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-03",
@@ -65,8 +161,32 @@
     "symbol": "availability",
     "lines": [
       {
-        "start": 142,
-        "end": 154
+        "start": 158,
+        "end": 170
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/services.py",
+    "symbol": "validate",
+    "lines": [
+      {
+        "start": 114,
+        "end": 156
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/experience.py",
+    "symbol": "slot_options",
+    "lines": [
+      {
+        "start": 110,
+        "end": 159
       }
     ],
     "status": "源码定位"
@@ -77,8 +197,56 @@
     "symbol": "resources",
     "lines": [
       {
-        "start": 117,
-        "end": 132
+        "start": 124,
+        "end": 142
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/views.py",
+    "symbol": "resource_detail",
+    "lines": [
+      {
+        "start": 144,
+        "end": 184
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/product_views.py",
+    "symbol": "schedule",
+    "lines": [
+      {
+        "start": 26,
+        "end": 64
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/miniapi.py",
+    "symbol": "resources",
+    "lines": [
+      {
+        "start": 245,
+        "end": 258
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-03",
+    "file": "core/miniapi.py",
+    "symbol": "resource_detail",
+    "lines": [
+      {
+        "start": 261,
+        "end": 285
       }
     ],
     "status": "源码定位"
@@ -89,8 +257,8 @@
     "symbol": "create_reservation",
     "lines": [
       {
-        "start": 162,
-        "end": 184
+        "start": 176,
+        "end": 200
       }
     ],
     "status": "源码定位"
@@ -101,11 +269,35 @@
     "symbol": "validate",
     "lines": [
       {
-        "start": 106,
-        "end": 140
+        "start": 114,
+        "end": 156
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-04",
+    "file": "core/miniapi.py",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 288,
+        "end": 309
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-04",
+    "file": "miniprogram/controllers.js",
+    "symbol": "resource",
+    "lines": [
+      {
+        "start": 96,
+        "end": 96
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-05",
@@ -113,8 +305,8 @@
     "symbol": "create_reservation",
     "lines": [
       {
-        "start": 162,
-        "end": 184
+        "start": 176,
+        "end": 200
       }
     ],
     "status": "源码定位"
@@ -125,11 +317,35 @@
     "symbol": "validate",
     "lines": [
       {
-        "start": 106,
-        "end": 140
+        "start": 114,
+        "end": 156
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-05",
+    "file": "core/miniapi.py",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 288,
+        "end": 309
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-05",
+    "file": "miniprogram/controllers.js",
+    "symbol": "resource",
+    "lines": [
+      {
+        "start": 96,
+        "end": 96
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-06",
@@ -137,8 +353,20 @@
     "symbol": "booking",
     "lines": [
       {
-        "start": 161,
-        "end": 163
+        "start": 210,
+        "end": 215
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/views.py",
+    "symbol": "booking_action",
+    "lines": [
+      {
+        "start": 217,
+        "end": 250
       }
     ],
     "status": "源码定位"
@@ -149,11 +377,71 @@
     "symbol": "review_note",
     "lines": [
       {
-        "start": 205,
-        "end": 215
+        "start": 219,
+        "end": 231
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/experience.py",
+    "symbol": "next_step",
+    "lines": [
+      {
+        "start": 162,
+        "end": 182
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/miniapi.py",
+    "symbol": "booking_detail",
+    "lines": [
+      {
+        "start": 312,
+        "end": 329
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/miniapi.py",
+    "symbol": "supplement",
+    "lines": [
+      {
+        "start": 363,
+        "end": 372
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "core/miniapi.py",
+    "symbol": "receipt",
+    "lines": [
+      {
+        "start": 403,
+        "end": 410
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-06",
+    "file": "miniprogram/controllers.js",
+    "symbol": "booking",
+    "lines": [
+      {
+        "start": 212,
+        "end": 212
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-07",
@@ -161,11 +449,35 @@
     "symbol": "cancel",
     "lines": [
       {
-        "start": 219,
-        "end": 227
+        "start": 233,
+        "end": 243
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-07",
+    "file": "core/miniapi.py",
+    "symbol": "cancel",
+    "lines": [
+      {
+        "start": 413,
+        "end": 423
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-07",
+    "file": "miniprogram/controllers.js",
+    "symbol": "booking",
+    "lines": [
+      {
+        "start": 212,
+        "end": 212
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-08",
@@ -173,8 +485,44 @@
     "symbol": "approve",
     "lines": [
       {
-        "start": 188,
-        "end": 201
+        "start": 202,
+        "end": 217
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-08",
+    "file": "core/experience.py",
+    "symbol": "approval_context",
+    "lines": [
+      {
+        "start": 185,
+        "end": 214
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-08",
+    "file": "core/views.py",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 186,
+        "end": 208
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-08",
+    "file": "core/views.py",
+    "symbol": "booking_action",
+    "lines": [
+      {
+        "start": 217,
+        "end": 250
       }
     ],
     "status": "源码定位"
@@ -185,8 +533,8 @@
     "symbol": "checkout",
     "lines": [
       {
-        "start": 255,
-        "end": 277
+        "start": 269,
+        "end": 293
       }
     ],
     "status": "源码定位"
@@ -198,7 +546,7 @@
     "lines": [
       {
         "start": 87,
-        "end": 108
+        "end": 110
       }
     ],
     "status": "源码定位"
@@ -210,7 +558,7 @@
     "lines": [
       {
         "start": 28,
-        "end": 50
+        "end": 52
       }
     ],
     "status": "源码定位"
@@ -221,8 +569,8 @@
     "symbol": "return_equipment",
     "lines": [
       {
-        "start": 281,
-        "end": 309
+        "start": 295,
+        "end": 325
       }
     ],
     "status": "源码定位"
@@ -233,8 +581,8 @@
     "symbol": "start_room",
     "lines": [
       {
-        "start": 313,
-        "end": 330
+        "start": 327,
+        "end": 346
       }
     ],
     "status": "源码定位"
@@ -246,7 +594,7 @@
     "lines": [
       {
         "start": 87,
-        "end": 108
+        "end": 110
       }
     ],
     "status": "源码定位"
@@ -258,7 +606,7 @@
     "lines": [
       {
         "start": 28,
-        "end": 50
+        "end": 52
       }
     ],
     "status": "源码定位"
@@ -269,8 +617,8 @@
     "symbol": "end_room",
     "lines": [
       {
-        "start": 334,
-        "end": 348
+        "start": 348,
+        "end": 364
       }
     ],
     "status": "源码定位"
@@ -281,11 +629,59 @@
     "symbol": "report_incident",
     "lines": [
       {
-        "start": 382,
-        "end": 392
+        "start": 396,
+        "end": 408
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-13",
+    "file": "core/views.py",
+    "symbol": "incident_new",
+    "lines": [
+      {
+        "start": 263,
+        "end": 275
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-13",
+    "file": "core/miniapi.py",
+    "symbol": "incidents",
+    "lines": [
+      {
+        "start": 375,
+        "end": 400
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-13",
+    "file": "core/miniapi.py",
+    "symbol": "receipt",
+    "lines": [
+      {
+        "start": 403,
+        "end": 410
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-13",
+    "file": "miniprogram/controllers.js",
+    "symbol": "incident",
+    "lines": [
+      {
+        "start": 278,
+        "end": 278
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-14",
@@ -293,8 +689,8 @@
     "symbol": "verify_incident",
     "lines": [
       {
-        "start": 396,
-        "end": 416
+        "start": 410,
+        "end": 432
       }
     ],
     "status": "源码定位"
@@ -306,7 +702,7 @@
     "lines": [
       {
         "start": 147,
-        "end": 159
+        "end": 161
       }
     ],
     "status": "源码定位"
@@ -317,8 +713,8 @@
     "symbol": "create_work_order",
     "lines": [
       {
-        "start": 420,
-        "end": 440
+        "start": 434,
+        "end": 456
       }
     ],
     "status": "源码定位"
@@ -330,7 +726,7 @@
     "lines": [
       {
         "start": 133,
-        "end": 142
+        "end": 144
       }
     ],
     "status": "源码定位"
@@ -341,8 +737,8 @@
     "symbol": "update_work",
     "lines": [
       {
-        "start": 444,
-        "end": 459
+        "start": 458,
+        "end": 475
       }
     ],
     "status": "源码定位"
@@ -353,8 +749,8 @@
     "symbol": "accept_work",
     "lines": [
       {
-        "start": 463,
-        "end": 483
+        "start": 477,
+        "end": 499
       }
     ],
     "status": "源码定位"
@@ -365,8 +761,8 @@
     "symbol": "save_resource",
     "lines": [
       {
-        "start": 599,
-        "end": 637
+        "start": 618,
+        "end": 660
       }
     ],
     "status": "源码定位"
@@ -377,8 +773,8 @@
     "symbol": "set_resource_hold",
     "lines": [
       {
-        "start": 577,
-        "end": 586
+        "start": 596,
+        "end": 607
       }
     ],
     "status": "源码定位"
@@ -389,8 +785,8 @@
     "symbol": "manage_form",
     "lines": [
       {
-        "start": 307,
-        "end": 336
+        "start": 394,
+        "end": 424
       }
     ],
     "status": "源码定位"
@@ -401,8 +797,20 @@
     "symbol": "grant_user",
     "lines": [
       {
-        "start": 641,
-        "end": 664
+        "start": 662,
+        "end": 687
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-19",
+    "file": "core/miniapi.py",
+    "symbol": "me",
+    "lines": [
+      {
+        "start": 230,
+        "end": 242
       }
     ],
     "status": "源码定位"
@@ -413,8 +821,8 @@
     "symbol": "save_policy",
     "lines": [
       {
-        "start": 563,
-        "end": 573
+        "start": 582,
+        "end": 594
       }
     ],
     "status": "源码定位"
@@ -425,8 +833,8 @@
     "symbol": "change_opening",
     "lines": [
       {
-        "start": 668,
-        "end": 683
+        "start": 689,
+        "end": 706
       }
     ],
     "status": "源码定位"
@@ -438,7 +846,19 @@
     "lines": [
       {
         "start": 113,
-        "end": 128
+        "end": 130
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-20",
+    "file": "core/catalog.py",
+    "symbol": "calendar_catalog",
+    "lines": [
+      {
+        "start": 21,
+        "end": 49
       }
     ],
     "status": "源码定位"
@@ -449,11 +869,18 @@
     "symbol": "audit_list",
     "lines": [
       {
-        "start": 280,
-        "end": 286
+        "start": 345,
+        "end": 352
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-21",
+    "file": "core/migrations/0002_audit_immutable.py",
+    "symbol": null,
+    "lines": [],
+    "status": "文件定位"
   },
   {
     "uc": "UC-22",
@@ -461,11 +888,59 @@
     "symbol": "notifications",
     "lines": [
       {
-        "start": 273,
-        "end": 277
+        "start": 338,
+        "end": 343
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-22",
+    "file": "core/miniapi.py",
+    "symbol": "notifications",
+    "lines": [
+      {
+        "start": 426,
+        "end": 436
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-22",
+    "file": "core/miniapi.py",
+    "symbol": "read_notification",
+    "lines": [
+      {
+        "start": 439,
+        "end": 443
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-22",
+    "file": "core/miniapi.py",
+    "symbol": "read_all",
+    "lines": [
+      {
+        "start": 446,
+        "end": 448
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-22",
+    "file": "miniprogram/controllers.js",
+    "symbol": "notifications",
+    "lines": [
+      {
+        "start": 338,
+        "end": 338
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-23",
@@ -473,8 +948,8 @@
     "symbol": "run_jobs",
     "lines": [
       {
-        "start": 546,
-        "end": 559
+        "start": 567,
+        "end": 580
       }
     ],
     "status": "源码定位"
@@ -485,8 +960,8 @@
     "symbol": "process_delivery",
     "lines": [
       {
-        "start": 512,
-        "end": 544
+        "start": 527,
+        "end": 565
       }
     ],
     "status": "源码定位"
@@ -497,8 +972,8 @@
     "symbol": "record_manual_contact",
     "lines": [
       {
-        "start": 709,
-        "end": 715
+        "start": 730,
+        "end": 738
       }
     ],
     "status": "源码定位"
@@ -509,8 +984,8 @@
     "symbol": "utilization",
     "lines": [
       {
-        "start": 8,
-        "end": 36
+        "start": 7,
+        "end": 48
       }
     ],
     "status": "源码定位"
@@ -521,8 +996,8 @@
     "symbol": "reports",
     "lines": [
       {
-        "start": 289,
-        "end": 299
+        "start": 354,
+        "end": 366
       }
     ],
     "status": "源码定位"
@@ -533,8 +1008,8 @@
     "symbol": "upload_evidence",
     "lines": [
       {
-        "start": 690,
-        "end": 705
+        "start": 711,
+        "end": 728
       }
     ],
     "status": "源码定位"
@@ -545,8 +1020,8 @@
     "symbol": "evidence_download",
     "lines": [
       {
-        "start": 242,
-        "end": 245
+        "start": 300,
+        "end": 304
       }
     ],
     "status": "源码定位"
@@ -557,8 +1032,8 @@
     "symbol": "bookings",
     "lines": [
       {
-        "start": 149,
-        "end": 158
+        "start": 186,
+        "end": 208
       }
     ],
     "status": "源码定位"
@@ -569,11 +1044,83 @@
     "symbol": "booking",
     "lines": [
       {
-        "start": 161,
-        "end": 163
+        "start": 210,
+        "end": 215
       }
     ],
     "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/workbench.py",
+    "symbol": "booking_queue",
+    "lines": [
+      {
+        "start": 13,
+        "end": 21
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/workbench.py",
+    "symbol": "tasks_for",
+    "lines": [
+      {
+        "start": 24,
+        "end": 46
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/miniapi.py",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 288,
+        "end": 309
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "core/miniapi.py",
+    "symbol": "booking_detail",
+    "lines": [
+      {
+        "start": 312,
+        "end": 329
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
+    "uc": "UC-26",
+    "file": "miniprogram/controllers.js",
+    "symbol": "bookings",
+    "lines": [
+      {
+        "start": 183,
+        "end": 183
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
+  },
+  {
+    "uc": "UC-26",
+    "file": "miniprogram/controllers.js",
+    "symbol": "booking",
+    "lines": [
+      {
+        "start": 212,
+        "end": 212
+      }
+    ],
+    "status": "控制器工厂入口定位；行号仅标入口"
   },
   {
     "uc": "UC-27",
@@ -582,7 +1129,7 @@
     "lines": [
       {
         "start": 65,
-        "end": 82
+        "end": 84
       }
     ],
     "status": "源码定位"
@@ -593,7 +1140,7 @@
     "symbol": "booking_operation",
     "lines": [
       {
-        "start": 13,
+        "start": 12,
         "end": 24
       }
     ],
