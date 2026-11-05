@@ -214,7 +214,11 @@
     "source": "user text",
     "quote": "能登录，两个入口都能看到",
     "scope": "initial phase-one preview login and candidate/incident entry visibility, before final CSS-only layout patch",
-    "final_layout_patch_phone_check": "not yet confirmed"
+    "final_layout_patch_phone_check": {
+      "source": "user text response to final layout preview QR",
+      "quote": "候选时段已按两列排列",
+      "scope": "final preview candidate layout only; no claim of full reservation/incident/notification workflow or all devices"
+    }
   },
   "physical_iphone": "deferred",
   "account_name_review": "not checked",
