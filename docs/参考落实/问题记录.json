@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-06",
+  "baseline": "12536f4942021e89143e86b3d5274fd26b9c04b4",
+  "statistics": {
+    "total": 4,
+    "type": {
+      "已确认缺陷": 4
+    },
+    "severity": {
+      "一般": 1,
+      "轻微": 3
+    },
+    "status": {
+      "已复验关闭（本轮限定范围）": 4
+    }
+  },
+  "issues": [
+    {
+      "id": "AUD-0128",
+      "title": "非法查询条件回退未筛选结果，使结果与筛选意图不符",
+      "severity": "一般",
+      "reason": "影响查询可靠性，不构成已确认权限越界",
+      "module": "网页资源目录、预约记录；师生与管理员",
+      "location": "core/views.py:126；core/views.py:195",
+      "trigger": "资源起止时间格式非法，或预约日期如2026-02-31",
+      "steps": "登录后访问 /resources/?starts_at=not-a-date；另访问 /bookings/?day=2026-02-31",
+      "expected": "明确指出字段错误，不将未筛选目录或记录冒充查询结果；依据UC-02非法筛选扩展、UC-26查询含义",
+      "actual": "修前源码无效资源表单未进入筛选分支、非法预约日期被忽略，继续显示未筛选结果；未在旧提交另行运行",
+      "root": "查询验证失败没有终止结果获取",
+      "fix": "非法条件返回空查询集和明确错误；保留有权范围，不能扩大数据权限",
+      "accept": "两入口非法条件均提示并零结果；正常条件、授权计数继续通过",
+      "evidence": "证据/backend-tests.txt；core/reference_ui_tests.py的两个invalid测试",
+      "related": [
+        "AUD-0129"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明范围的回归验证",
+      "status": "已复验关闭（本轮限定范围）",
+      "impact": "影响查询可靠性，不构成已确认权限越界",
+      "history": [
+        {
+          "date": "2026-11-06",
+          "event": "发现、修订并按所列证据复核；原判断和证据保留"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0129",
+      "title": "导航帮助函数丢弃超过2000字符的已接受查询",
+      "severity": "轻微",
+      "reason": "极长查询在切换或清除条件后意外消失，未确认泄露",
+      "module": "网页预约记录与公开日程往返；所有有权查询用户",
+      "location": "core/ui_navigation.py:15",
+      "trigger": "本轮中间实现接收长度2001的q参数后生成导航链接",
+      "steps": "用q为2001个字符加载记录页；进入公开日程再返回，或清除另一条件",
+      "expected": "在原入口已接受的查询完整保留；不能静默改义",
+      "actual": "独立代码审查发现中间实现len(value)<=2000截断条件；在首次运行独立反例前已删除该限制，未伪造修前失败日志",
+      "root": "导航层自设长度上限与原查询入口契约不一致",
+      "fix": "导航只白名单筛选键，不擅自丢弃已接受值；原入口仍负责验证",
+      "accept": "两条2001字符反例通过；公开日程不将私人记录搜索解释为公开资源搜索",
+      "evidence": "core/reference_independent_tests.py；证据/backend-tests.txt；独立复核.md",
+      "related": [
+        "AUD-0128"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明范围的回归验证",
+      "status": "已复验关闭（本轮限定范围）",
+      "impact": "极长查询在切换或清除条件后意外消失，未确认泄露",
+      "history": [
+        {
+          "date": "2026-11-06",
+          "event": "发现、修订并按所列证据复核；原判断和证据保留"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0130",
+      "title": "跨周浏览的读屏标签始终称本周",
+      "severity": "轻微",
+      "reason": "辅助说明与所看日期不一致，日期数据本身正确",
+      "module": "网页日期条；键盘及辅助技术用户",
+      "location": "templates/date_navigation.html:6",
+      "trigger": "浏览非当前周",
+      "steps": "预约记录或日程选择前一周，检查日期导航accessible name",
+      "expected": "名称描述所选周，而非固定本周",
+      "actual": "原标签固定为“本周日期，可横向滚动”；独立代码发现，非真实读屏实测",
+      "root": "静态无障碍文案未反映导航范围",
+      "fix": "改为“所选周日期，可横向滚动”",
+      "accept": "源码和浏览器可访问名称与所选周一致；真实读屏全流程仍未执行",
+      "evidence": "templates/date_navigation.html；独立复核.md",
+      "related": [],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；注明范围的回归验证",
+      "status": "已复验关闭（本轮限定范围）",
+      "impact": "辅助说明与所看日期不一致，日期数据本身正确",
+      "history": [
+        {
+          "date": "2026-11-06",
+          "event": "发现、修订并按所列证据复核；原判断和证据保留"
+        }
+      ]
+    },
+    {
+      "id": "AUD-0131",
+      "title": "微信原生日期按钮被默认样式拉宽为184像素",
+      "severity": "轻微",
+      "reason": "快捷条一屏可见日期减少，需要频繁滚动；仍能选择日期",
+      "module": "小程序资源查询与详情日期条；学生、教师",
+      "location": "miniprogram/app.wxss:185",
+      "trigger": "微信开发者工具SDK3.17.6、390逻辑像素原生容器",
+      "steps": "打开资源详情或时段查询，观察快捷日期；读取两个button.quick-date的实际size",
+      "expected": "58×66逻辑像素、横向局部滚动；至少44像素触控目标；依据本轮界面设计",
+      "actual": "真实原生测量宽184、高66，声明width58未限制微信默认按钮宽度；修前几何保留",
+      "root": "未用flex-basis和max-width约束原生button布局",
+      "fix": "增加flex:0 0 58px及max-width:58px，重新编译官方容器后测量",
+      "accept": "两个按钮实际宽58、高66且可选择；查询及清除时段、候选读取继续通过",
+      "evidence": "证据/native-date-geometry-before.json、native-date-geometry.json、native-result.json；画面/native-query.png",
+      "related": [
+        "AUD-0127"
+      ],
+      "type": "已确认缺陷",
+      "evidence_status": "代码确认；原生运行验证",
+      "status": "已复验关闭（本轮限定范围）",
+      "impact": "快捷条一屏可见日期减少，需要频繁滚动；仍能选择日期",
+      "history": [
+        {
+          "date": "2026-11-06",
+          "event": "发现、修订并按所列证据复核；原判断和证据保留"
+        }
+      ]
+    }
+  ]
+}

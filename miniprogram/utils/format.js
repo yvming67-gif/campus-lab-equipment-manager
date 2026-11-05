@@ -1,6 +1,11 @@
 const tones = { PENDING: 'amber', CONFIRMED: 'green', IN_USE: 'blue', COMPLETED: 'muted', CANCELLED: 'muted', REJECTED: 'red', EXPIRED: 'muted' };
 function day(value) { const d = new Date((value == null ? Date.now() : value) + 8 * 3600000); return d.toISOString().slice(0, 10); }
 function dateTime(value) { return value ? value.slice(0, 16).replace('T', ' ') : ''; }
+function quickDates(selected, windowDays, at) {
+  const today=day(at),start=Date.parse(today+'T00:00:00Z');
+  const limit=Number.isInteger(windowDays)&&windowDays>=0?Math.min(windowDays,6):6;
+  return Array.from({length:limit+1},(_,index)=>{const d=new Date(start+index*86400000),value=d.toISOString().slice(0,10);return {day:value,label:value.slice(5).replace('-','/'),weekday:index===0?'今天':'周'+'日一二三四五六'[d.getUTCDay()],selected:value===selected};});
+}
 function booking(item) { return Object.assign({}, item, { tone: tones[item.status] || 'muted', time_label: dateTime(item.starts_at) + ' — ' + String(item.ends_at || '').slice(11, 16), kind_label: item.kind === 'ROOM' ? '场地' : '设备',supplements:(item.supplements||[]).map(x=>Object.assign({},x,{time_label:dateTime(x.created_at)})) }); }
 function resourceMark(item) {
   if(item.kind==='ROOM')return {icon_mark:'场',icon_class:'room',icon_label:'实验室场地'};
@@ -23,4 +28,4 @@ function validateForm(form, policy) {
   if ([form.start, form.end].some(t => Number(t.slice(3)) % policy.slot_minutes !== 0)) return '起止时间须以' + policy.slot_minutes + '分钟为单位';
   return '';
 }
-module.exports = { day, dateTime, booking, resource, resourceMark, notify, defaultForm, validateForm };
+module.exports = { day, dateTime, quickDates, booking, resource, resourceMark, notify, defaultForm, validateForm };

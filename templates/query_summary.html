@@ -1,0 +1,4 @@
+<section class="query-summary" aria-label="当前查询范围" role="region">
+  <div><strong>{{ query_scope }}</strong><span class="muted">{% if query_invalid %}条件无效，请修正后查询。{% else %}匹配 {{ query_count }} 项{% if query_total != None %} / 当前范围 {{ query_total }} 项{% endif %}{% endif %}</span></div>
+  {% if query_chips %}<div class="query-chips">{% for chip in query_chips %}<a href="{{ chip.url }}" class="query-chip" aria-label="清除{{ chip.label }}筛选：{{ chip.value }}"><span>{{ chip.label }}：{{ chip.value }}</span><span aria-hidden="true">×</span></a>{% endfor %}</div>{% endif %}
+</section>

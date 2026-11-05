@@ -1,6 +1,7 @@
 {% extends 'base.html' %}{% load domain_labels %}{% block content %}
-<div class="page-top"><div><div class="eyebrow">RESOURCE CATALOG</div><h1>资源目录</h1><p>先看目标时段，再选择设备或场地。</p></div><span class="tag">设备与场地分别预约</span></div>
+<div class="page-top"><div><div class="eyebrow">RESOURCE CATALOG</div><h1>资源目录</h1><p>先看目标时段，再选择设备或场地。</p></div><div class="view-links" aria-label="资源展示方式"><span class="view-link is-selected" aria-current="page">资源目录</span><a class="view-link" href="{{ schedule_url }}">占用日程</a></div></div>
 <form class="filter-grid panel" method="get">{{ form.non_field_errors }}{% for field in form %}<div>{{ field.label_tag }}{{ field }}{{ field.errors }}</div>{% endfor %}<button class="button">查询资源</button><a class="filter-reset" href="{% url 'resources' %}">重置条件</a></form>
+{% include 'query_summary.html' %}
 <div class="section-heading"><h2>{{ page.paginator.count }} 项资源</h2><span class="muted">{{ policy.window_days }}天内 · {{ policy.slot_minutes }}分钟粒度 · 最长{{ policy.max_hours }}小时</span></div>
 <p class="fine">服务正常、设备在库与目标时段可预约分别判断。{% if times %}当前查询 {{ times.0|date:'m-d H:i' }}—{{ times.1|date:'H:i' }}，提交时仍会检查本人资格和配额。{% else %}尚未选择目标时段，卡片不代表预约承诺。{% endif %}</p>
 <div class="resource-grid">{% for r in resources %}<article class="resource-card">

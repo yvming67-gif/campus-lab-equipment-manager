@@ -56,17 +56,18 @@ const screens = {
     async onShow() {
       if (!api.requireLogin()) return;
       const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
-      this.setData({user:api.session().user,overviewLoading:true,overviewError:'',minDate:fmt.day()});
+      this.setData({user:api.session().user,overviewLoading:true,overviewError:'',minDate:fmt.day(),quickDates:fmt.quickDates(this.data.slot.date,this.data.policy?.window_days)});
       const overview=api.request('/me/').then(data=>{
         if(serial!==this._overviewSerial)return;
-        this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000)});
+        this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000),quickDates:fmt.quickDates(this.data.slot.date,data.policy?.window_days)});
       }).catch(e=>{if(serial===this._overviewSerial)this.setData({overviewError:api.errorText(e)});})
         .finally(()=>{if(serial===this._overviewSerial)this.setData({overviewLoading:false});});
       return Promise.all([overview,this.load(1)]);
     },
     input, openResource, openBooking, openBookings,
     toggleTime() {this.setData({timeSearch:!this.data.timeSearch});if(!this.data.timeSearch)return this.load(1);},
-    chooseQueryDate(e) {this.setData({'slot.date':e.detail.value});},
+    chooseQueryDate(e) {this.setData({'slot.date':e.detail.value,quickDates:fmt.quickDates(e.detail.value,this.data.policy?.window_days)});},
+    chooseQuickQueryDate(e) {this.chooseQueryDate({detail:{value:e.currentTarget.dataset.day}});},
     chooseQueryStart(e) {this.setData({'slot.start':e.detail.value});},
     chooseQueryEnd(e) {this.setData({'slot.end':e.detail.value});},
     resetSearch() {this.setData({form:{q:''},labIndex:0,timeSearch:false});return this.load(1);},
@@ -75,18 +76,33 @@ const screens = {
       page = page || 1;
       const slot = this.data.timeSearch ? Object.assign({},this.data.slot) : null;
       if(slot && slot.start>=slot.end){this.setData({error:'查询结束时间必须晚于开始时间'});return;}
-      const querySignature=JSON.stringify([this.data.kind,this.data.form.q,(this.data.labs[this.data.labIndex] || this.data.labs[0]).id,slot]);
+      const selectedLab=this.data.labs[this.data.labIndex] || this.data.labs[0];
+      const submitted={kind:this.data.kind,q:this.data.form.q,labId:selectedLab.id,slot};
+      const querySignature=JSON.stringify([submitted.kind,submitted.q,submitted.labId,slot]);
       if(page>1 && querySignature!==this._appliedQuery) page=1;
       const serial = (this._serial || 0) + 1; this._serial = serial;
       this.setData({ loading: true, error: '' });
       try {
-        const data = await api.request('/resources/', 'GET', Object.assign({ kind: this.data.kind, q: this.data.form.q, lab: (this.data.labs[this.data.labIndex] || this.data.labs[0]).id, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
+        const data = await api.request('/resources/', 'GET', Object.assign({ kind:submitted.kind, q:submitted.q, lab:submitted.labId, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
         if (serial !== this._serial) return;
         this._appliedSlot=slot;this._appliedQuery=querySignature;
-        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '', items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs: [{ id: '', name: '全部实验室' }].concat(data.labs), page: data.page, hasMore: data.has_more, total: data.total });
+        this._appliedFilterValues=submitted;this._appliedFilterOwner=api.session()?.draftScope;
+        const labs=[{id:'',name:'全部实验室'}].concat(data.labs);
+        const chips=[];
+        if(submitted.q)chips.push({key:'q',label:'搜索：'+submitted.q});
+        if(submitted.labId)chips.push({key:'lab',label:'实验室：'+selectedLab.name});
+        if(slot)chips.push({key:'time',label:'时段：'+slot.date+' '+slot.start+'—'+slot.end});
+        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '',appliedChips:chips,appliedKind:submitted.kind==='ROOM'?'整间场地':'设备',queryReady:true,items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs,labIndex:Math.max(0,labs.findIndex(l=>String(l.id)===String(submitted.labId))),page: data.page, hasMore: data.has_more, total: data.total });
       } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
     search() { return this.load(1); },
+    clearQueryFilter(e) {
+      const saved=api.session(),applied=this._appliedFilterValues,key=e.currentTarget.dataset.key;
+      if(!saved||saved.draftScope!==this._appliedFilterOwner||!applied||!['q','lab','time'].includes(key))return;
+      this.setData({kind:applied.kind,form:{q:key==='q'?'':applied.q},labIndex:key==='lab'?0:Math.max(0,this.data.labs.findIndex(l=>String(l.id)===String(applied.labId))),timeSearch:key!=='time'&&!!applied.slot});
+      if(applied.slot&&key!=='time')this.setData({slot:Object.assign({},applied.slot),quickDates:fmt.quickDates(applied.slot.date,this.data.policy?.window_days)});
+      return this.load(1);
+    },
     chooseKind(e) { this.setData({ kind: e.currentTarget.dataset.kind }); return this.load(1); },
     chooseLab(e) { this.setData({ labIndex: Number(e.detail.value) }); return this.load(1); },
     more() { if (this.data.hasMore && !this.data.loading) return this.load(this.data.page + 1); },
@@ -104,7 +120,7 @@ const screens = {
         this.setData({ form: { date: value.starts_at.slice(0, 10), start: value.starts_at.slice(11, 16), end: value.ends_at.slice(11, 16), purpose: value.purpose, participants: String(value.participants) } });
       }
     },
-    onShow() { if (api.requireLogin()) { if(ownerChanged(this))this.setData({item:null,form:fmt.defaultForm(),slotOptions:null,slotsError:'',availability:'',available:null});this.setData({minDate:fmt.day()}); return this.load(); } },
+    onShow() { if (api.requireLogin()) { if(ownerChanged(this))this.setData({item:null,form:fmt.defaultForm(),slotOptions:null,slotsError:'',availability:'',available:null});this.setData({minDate:fmt.day(),quickDates:fmt.quickDates(this.data.form.date,this.data.item?.policy?.window_days)}); return this.load(); } },
     async load() {
       const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
       invalidateAvailability(this);
@@ -114,7 +130,7 @@ const screens = {
         if(serial!==this._scheduleSerial)return;
         this.setData({ item: fmt.resource(item), maxDate: fmt.day(Date.now() + item.policy.window_days * 86400000), schedulePage:item.schedule_page, scheduleTotal:item.schedule_total, scheduleHasMore:item.schedule_has_more, scheduleError:'' });
         const durations=durationOptions(item.policy),selected=durations.findIndex(x=>x.minutes===60);
-        this.setData({durations,durationIndex:selected<0?0:selected});
+        this.setData({durations,durationIndex:selected<0?0:selected,quickDates:fmt.quickDates(this.data.form.date,item.policy.window_days)});
       } catch (e) { if(serial===this._scheduleSerial)error(this, e); } finally { if(serial===this._scheduleSerial)this.setData({ loading: false, scheduleBusy: false }); }
     },
     async loadSchedule(page) {
@@ -132,7 +148,8 @@ const screens = {
     clearScheduleDay() {this.setData({scheduleDay:'','item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
     moreSchedule() {if(this.data.scheduleHasMore&&!this.data.scheduleBusy&&!this.data.loading)return this.loadSchedule(this.data.schedulePage+1);},
     input,
-    chooseDate(e) { this._slotsSerial=(this._slotsSerial||0)+1;this.setData({ 'form.date': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this),slotOptions:null,slotsBusy:false,slotsError:'' }); },
+    chooseDate(e) { this._slotsSerial=(this._slotsSerial||0)+1;this.setData({ 'form.date': e.detail.value,quickDates:fmt.quickDates(e.detail.value,this.data.item?.policy?.window_days),availability: '', available: null, loading:invalidateAvailability(this),slotOptions:null,slotsBusy:false,slotsError:'' }); },
+    chooseQuickDate(e) {this.chooseDate({detail:{value:e.currentTarget.dataset.day}});},
     chooseStart(e) { this.setData({ 'form.start': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
     chooseEnd(e) { this.setData({ 'form.end': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
     chooseDuration(e) {this._slotsSerial=(this._slotsSerial||0)+1;this.setData({durationIndex:Number(e.detail.value),slotOptions:null,slotsError:'',slotsBusy:false});},
@@ -397,8 +414,10 @@ function create(name) {
   if (!definition) throw new Error('Unknown page: ' + name);
   const data = JSON.parse(JSON.stringify(definition.data));
   data.reducedEffects=false;
+  if(name==='resources')Object.assign(data,{appliedChips:[],appliedKind:'',queryReady:false});
   if (name === 'resources') Object.assign(data,{slot:fmt.defaultForm(),minDate:fmt.day(),maxDate:fmt.day(Date.now()+14*86400000)});
   if (name === 'resource') Object.assign(data, { form: fmt.defaultForm(), minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000) });
+  if(name==='resource'||name==='resources')data.quickDates=fmt.quickDates((name==='resource'?data.form:data.slot).date,14);
   const onShow=definition.onShow;
   const defaults=JSON.parse(JSON.stringify(data));
   return Object.assign({}, definition, { data,onShow(){
@@ -410,6 +429,7 @@ function create(name) {
       if(name==='resources')fresh.slot=fmt.defaultForm();
       if(name==='incident'){const now=nowFields();fresh.form={description:'',date:now.date,time:now.time};}
       this.setData(Object.assign(fresh,route));
+      this._appliedFilterValues=null;this._appliedFilterOwner=null;this._appliedSlot=null;this._appliedQuery=null;
       for(const key of ['_serial','_overviewSerial','_scheduleSerial','_detailSerial','_availabilitySerial','_slotsSerial'])this[key]=(this[key]||0)+1;
     }
     this._displayOwner=scope;

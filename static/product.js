@@ -1,5 +1,24 @@
 /* Keep the small-screen navigation compact; native details remains keyboard usable. */
 const appearanceKey = 'campus-interface-glass';
+// Device-local appearance only; non-staff pages always keep comfortable spacing.
+const densityControls = document.querySelectorAll('[data-density-toggle]');
+let densityChoice = 'comfortable';
+try { if (densityControls.length && localStorage.getItem('campus-table-density') === 'compact') densityChoice = 'compact'; } catch (_) {}
+function setDensity(choice) {
+  densityChoice = densityControls.length && choice === 'compact' ? 'compact' : 'comfortable';
+  document.documentElement.dataset.density = densityChoice;
+  densityControls.forEach(button => {
+    button.hidden = false;
+    button.setAttribute('aria-pressed', String(densityChoice === 'compact'));
+    button.textContent = densityChoice === 'compact' ? '舒适视图' : '紧凑视图';
+    button.title = '仅调整宽屏表格与筛选区的留白';
+  });
+}
+setDensity(densityChoice);
+densityControls.forEach(button => button.addEventListener('click', () => {
+  setDensity(densityChoice === 'compact' ? 'comfortable' : 'compact');
+  try { localStorage.setItem('campus-table-density', densityChoice); } catch (_) {}
+}));
 const transparencyPreference = window.matchMedia('(prefers-reduced-transparency: reduce)');
 let appearanceChoice;
 try { appearanceChoice = localStorage.getItem(appearanceKey); } catch (_) { /* Optional preference storage. */ }

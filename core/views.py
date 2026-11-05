@@ -25,6 +25,7 @@ from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
 from .catalog import calendar_catalog
 from .experience import slot_options, approval_context, next_step
+from . import ui_navigation as ui
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
@@ -124,14 +125,18 @@ def dashboard(request):
 @login_required
 def resources(request):
     form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","room").order_by("kind","code")
-    times=None
+    times=None;d={};catalog_total=None
     if form.is_bound and form.is_valid():
         d=form.cleaned_data
         if d["q"]:qs=qs.filter(Q(name__icontains=d["q"])|Q(code__icontains=d["q"]))
         if d["kind"]:qs=qs.filter(kind=d["kind"])
         if d["lab"]:qs=qs.filter(lab=d["lab"])
         if d["starts_at"]:times=(d["starts_at"],d["ends_at"])
+    elif form.is_bound:
+        qs=qs.none()
     page,filters=paginate(request,qs)
+    if not (form.is_bound and not form.is_valid()):
+        catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','starts_at')) else page.paginator.count
     items=list(page.object_list)
     for r in items:
         r.available_label="请选择目标时段查询"
@@ -139,7 +144,10 @@ def resources(request):
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
         query=request.GET.copy();query.pop('page',None)
         r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
-    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1)})
+    chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','实验室',d.get('lab'))])
+    if times:chips.append({'label':'目标时段','value':f'{timezone.localtime(times[0]):%m-%d %H:%M}—{timezone.localtime(times[1]):%m-%d %H:%M}', 'url':ui.link('resources',request.GET,ui.CATALOG_KEYS,drop=('starts_at','ends_at'))})
+    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),
+        'schedule_url':ui.catalog_schedule_link(request.GET,d),'query_scope':'当前可见资源目录','query_count':page.paginator.count,'query_total':catalog_total,'query_chips':chips,'query_invalid':form.is_bound and not form.is_valid()})
 
 @login_required
 def resource_detail(request,pk):
@@ -192,20 +200,28 @@ def bookings(request):
         protected(request.user.has_role('LAB_ADMIN'))
         qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
         if queue in ['review','recheck']:qs=qs.exclude(applicant=request.user)
+    scope_total=qs.count() if any((q,status,lab,day)) else None;selected_day=ui.parse_day(day);query_invalid=False
     if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
     if status:qs=qs.filter(status=status)
     if lab:
         lab_id=s.positive_integer(lab)
-        if lab_id is None:qs=qs.none();messages.error(request,"请选择有效的实验室")
+        if lab_id is None:qs=qs.none();query_invalid=True;messages.error(request,"请选择有效的实验室")
         else:qs=qs.filter(resource__lab_id=lab_id)
     if day:
-        try:qs=qs.filter(starts_at__date=datetime.strptime(day,"%Y-%m-%d").date())
-        except ValueError:messages.error(request,"日期格式应为年-月-日")
+        if selected_day:qs=qs.filter(starts_at__date=selected_day)
+        else:qs=qs.none();query_invalid=True;messages.error(request,"日期格式应为有效的年-月-日")
     sort=request.GET.get('sort','oldest' if queue=='review' else 'newest')
     if sort not in ['oldest','newest','starts']:sort='oldest' if queue=='review' else 'newest'
     order={'oldest':('created_at','pk'),'newest':('-created_at','-pk'),'starts':('starts_at','pk')}[sort]
     page,filters=paginate(request,qs.order_by(*order))
-    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":Lab.objects.all(),'sort':sort})
+    if scope_total is None:scope_total=page.paginator.count
+    labs=list(Lab.objects.order_by('code'));lab_labels={str(l.pk):l.name for l in labs}
+    scope_label='本人及获授权实验室的预约记录' if request.user.has_role('LAB_ADMIN') and request.GET.get('scope')!='mine' else '本人预约记录'
+    if queue:scope_label+=' · 当前工作台队列'
+    chips=ui.filter_chips('bookings',request.GET,ui.RECORD_KEYS,[('q','记录搜索',q),('status','状态',dict(Reservation.STATUS).get(status,'无效状态')),('lab','实验室',lab_labels.get(lab,'无效实验室')),('day','开始日期',day)])
+    return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":labs,'sort':sort,
+        'date_nav':ui.date_navigation('bookings',request.GET,ui.RECORD_KEYS,selected=selected_day,all_dates=True),'schedule_url':ui.records_schedule_link(request.GET,request.user),
+        'query_scope':scope_label,'query_total':scope_total,'query_count':page.paginator.count,'query_chips':chips,'query_invalid':query_invalid})
 
 @login_required
 def booking(request,pk):

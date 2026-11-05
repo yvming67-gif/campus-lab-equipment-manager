@@ -10763,5 +10763,17 @@
     "purpose": "一期体验与小程序通道完善；分析业务基线继续为2.3。",
     "contract": "docs/一期改进/需求与数据通道契约.md",
     "evidence_boundary": "源码定位及文档同步不构成运行或手机验收结论。"
+  },
+  "ui_reference_revision": {
+    "date": "2026-11-06",
+    "base_commit": "12536f4942021e89143e86b3d5274fd26b9c04b4",
+    "scope": [
+      "UC-02",
+      "UC-03",
+      "UC-26"
+    ],
+    "contract": "docs/参考落实/需求对应.md",
+    "business_rule_changes": false,
+    "data_model_changes": false
   }
 }

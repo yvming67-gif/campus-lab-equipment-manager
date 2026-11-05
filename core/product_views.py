@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from .models import Lab, Resource, Reservation, OpeningPeriod, CalendarException
 from .services import TZ, ACTIVE
+from . import ui_navigation as ui
 
 
 class ScheduleQuery(forms.Form):
@@ -26,17 +27,21 @@ class ScheduleQuery(forms.Form):
 @login_required
 def schedule(request):
     params = request.GET.copy()
+    if params.get('origin')=='records' and params.get('record_user')!=str(request.user.pk):
+        for key in ui.CONTEXT_KEYS:params.pop(key,None)
     if 'day' not in params: params['day'] = timezone.localdate().isoformat()
     form = ScheduleQuery(params)
     rows, page, previous, following = [], None, '', ''
+    selected=None;chips=[];total=None
     if form.is_valid():
-        data = form.cleaned_data; day = data['day']
+        data = form.cleaned_data; day = data['day'];selected=day
         a = datetime.combine(day, time(), TZ); z = a+timedelta(days=1)
         qs = Resource.objects.select_related('lab').order_by('lab__code','kind','code')
         if data['kind']: qs = qs.filter(kind=data['kind'])
         if data['lab']: qs = qs.filter(lab=data['lab'])
         if data['q']: qs = qs.filter(Q(code__icontains=data['q'])|Q(name__icontains=data['q']))
         page = Paginator(qs, 20).get_page(request.GET.get('page',1))
+        total=Resource.objects.count() if any(data.get(key) for key in ('kind','lab','q')) else page.paginator.count
         items = list(page.object_list); ids = [r.pk for r in items]; labs = {r.lab_id for r in items}
         slots = Reservation.objects.filter(resource_id__in=ids,status__in=ACTIVE,starts_at__lt=z).filter(Q(ends_at__gt=a)|Q(status='IN_USE')).order_by('starts_at','pk')
         grouped = {pk: [] for pk in ids}
@@ -57,8 +62,12 @@ def schedule(request):
         for key, delta in [('previous',-1),('following',1)]:
             target = day+timedelta(days=delta)
             if 1900<=target.year<=2100:
-                query=params.copy();query['day']=target.isoformat();query.pop('page',None)
+                query=ui.pick_query(params,ui.SCHEDULE_KEYS);query['day']=target.isoformat();query.pop('page',None)
                 if key=='previous':previous=query.urlencode()
                 else:following=query.urlencode()
-    query=request.GET.copy();query.pop('page',None)
-    return render(request,'schedule.html',{'title':'资源日程','form':form,'rows':rows,'page':page,'filters':query.urlencode(),'previous':previous,'following':following})
+        chips=ui.filter_chips('schedule',params,ui.SCHEDULE_KEYS,[('q','资源搜索',data.get('q')),('kind','类型',dict(Resource.KIND).get(data.get('kind'))),('lab','实验室',data.get('lab'))])
+    query=ui.pick_query(params,ui.SCHEDULE_KEYS)
+    context=ui.schedule_context(params,request.user)
+    return render(request,'schedule.html',{'title':'资源日程','form':form,'rows':rows,'page':page,'filters':query.urlencode(),'previous':previous,'following':following,
+        'view_context':context,'date_nav':ui.date_navigation('schedule',query,ui.SCHEDULE_KEYS,selected=selected),
+        'query_scope':'公开资源占用 · 不含他人身份和用途','query_total':total,'query_count':page.paginator.count if page else 0,'query_chips':chips,'query_invalid':not form.is_valid()})

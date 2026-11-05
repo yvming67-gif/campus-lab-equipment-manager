@@ -180,6 +180,14 @@ page { min-height: 100vh; background-repeat: no-repeat; }
 .resource-identity .detail-title { font-size: 42rpx; margin: 0; }
 .next-step { border-left: 6rpx solid #0071e3; }.next-step .section-label { margin-top: 0; }
 .slot-toolbar { margin-top: 22rpx; padding-top: 14rpx; border-top: 1rpx solid #e5e5ea; }
+.quick-date-scroll { width: 100%; height: 80px; margin: 8px 0; white-space: nowrap; }
+.quick-date-strip { display: inline-flex; padding: 4px 2px; }
+.quick-date { display: inline-flex; flex: 0 0 58px; flex-direction: column; justify-content: center; align-items: center; width: 58px; min-width: 58px; max-width: 58px; height: 66px; min-height: 66px; margin: 0 6px 0 0; padding: 6px; border: 1px solid #dce5f2; border-radius: 12px; background: #fff; color: #4b5d76; }
+.quick-date.selected { color: #fff; background: #0071e3; border-color: #0071e3; }
+.quick-weekday { display: block; font-size: 11px; }.quick-day { display: block; font-size: 16px; font-weight: 600; }
+.query-result-summary { background: #f8faff; border: 1px solid #dce5f2; border-radius: 16px; padding: 14px; margin-top: 14px; }
+.query-mini-chips { display: flex; flex-wrap: wrap; margin-top: 8px; }
+.query-chip-btn { display: inline-flex; align-items: center; justify-content: space-between; max-width: 100%; min-height: 44px; margin: 0 6px 6px 0; padding: 8px 10px; border-radius: 10px; background: #edf4ff; color: #075eb7; font-size: 12px; white-space: normal; text-align: left; overflow-wrap: anywhere; }
 .slot-grid { display: flex; flex-wrap: wrap; justify-content: space-between; margin-top: 18rpx; }
 .slot-option { flex: 0 0 48%; width: 48%; max-width: 48%; min-width: 0; margin: 0 0 14rpx; border-radius: 20rpx; padding: 17rpx 12rpx; text-align: left; background: #eef4ff; border: 1rpx solid #cbdcf3; color: #075eb7; }
 .slot-unavailable { background: #f5f5f7; border-color: #e1e1e6; color: #636366; }

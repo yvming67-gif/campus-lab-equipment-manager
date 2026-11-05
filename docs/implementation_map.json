@@ -1,7 +1,7 @@
 {
   "UC-01": "core/views.py: login_page、identity、callback；core/miniapi.py: login、authenticate、logout",
-  "UC-02": "core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；miniprogram/controllers.js: resources、resource",
-  "UC-03": "core/services.py: availability、validate；core/experience.py: slot_options；core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail",
+  "UC-02": "core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；miniprogram/controllers.js: resources、resource；core/ui_navigation.py: date_navigation、filter_chips、schedule_context",
+  "UC-03": "core/services.py: availability、validate；core/experience.py: slot_options；core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；core/ui_navigation.py: date_navigation、filter_chips、schedule_context",
   "UC-04": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
   "UC-05": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
   "UC-06": "core/views.py: booking、booking_action；core/services.py: review_note；core/experience.py: next_step；core/miniapi.py: booking_detail、supplement、receipt；miniprogram/controllers.js: booking",
@@ -24,6 +24,6 @@
   "UC-23": "core/services.py: run_jobs、process_delivery、record_manual_contact",
   "UC-24": "core/reports.py: utilization；core/views.py: reports",
   "UC-25": "core/services.py: upload_evidence；core/views.py: evidence_download",
-  "UC-26": "core/views.py: bookings、booking；core/workbench.py: booking_queue、tasks_for；core/miniapi.py: bookings、booking_detail；miniprogram/controllers.js: bookings、booking",
+  "UC-26": "core/views.py: bookings、booking；core/workbench.py: booking_queue、tasks_for；core/miniapi.py: bookings、booking_detail；miniprogram/controllers.js: bookings、booking；core/ui_navigation.py: date_navigation、filter_chips、schedule_context",
   "UC-27": "core/coordination.py: recheck；core/coordination_views.py: booking_operation"
 }

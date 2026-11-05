@@ -1,0 +1,7 @@
+<section class="date-navigation panel" aria-label="{{ date_label|default:'日期快捷选择' }}">
+  <div class="date-navigation-head"><span class="muted">{{ date_label|default:'按日期查看' }} · 北京时间</span><div class="date-actions">
+    {% if date_nav.previous %}<a href="{{ date_nav.previous }}" class="date-step">前一周</a>{% endif %}<a href="{{ date_nav.today_url }}" class="date-step">今天</a>{% if date_nav.following %}<a href="{{ date_nav.following }}" class="date-step">后一周</a>{% endif %}
+    {% if date_nav.all_url %}<a href="{{ date_nav.all_url }}" class="date-step {% if date_nav.all_selected %}is-selected{% endif %}">全部日期</a>{% endif %}
+  </div></div>
+  <nav class="date-strip" aria-label="所选周日期，可横向滚动">{% for day in date_nav.days %}<a class="date-chip {% if day.selected %}is-selected{% endif %}" href="{{ day.url }}" {% if day.selected %}aria-current="date"{% endif %} aria-label="{{ day.date|date:'Y年n月j日' }} 周{{ day.weekday }}{% if day.today %} 今天{% endif %}"><span>周{{ day.weekday }}</span><strong>{{ day.date|date:'m/d' }}</strong><small>{% if day.today %}今天{% else %}&nbsp;{% endif %}</small></a>{% endfor %}</nav>
+</section>

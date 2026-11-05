@@ -1,6 +1,9 @@
 {% extends 'base.html' %}{% block content %}
-<div class="page-top"><div><div class="eyebrow">RESOURCE SCHEDULE</div><h1>资源日程</h1><p>把开放安排、预约承诺与实际使用放在同一天查看。</p></div><a class="button secondary" href="{% url 'resources' %}">按时段查可用资源</a></div>
-<form method="get" class="panel filter-grid schedule-filter">{{ form.non_field_errors }}{% for field in form %}<div>{{ field.label_tag }}{{ field }}{{ field.errors }}</div>{% endfor %}<button class="button">更新日程</button><a href="{% url 'schedule' %}">回到今天</a></form>
+<div class="page-top"><div><div class="eyebrow">RESOURCE SCHEDULE</div><h1>资源日程</h1><p>把开放安排、预约承诺与实际使用放在同一天查看。</p></div><div class="view-links" aria-label="资源展示方式"><a class="view-link" href="{{ view_context.url }}">{{ view_context.label }}</a><span class="view-link is-selected" aria-current="page">占用日程</span></div></div>
+<p class="fine">{{ view_context.notice }}</p>
+{% include 'date_navigation.html' with date_label="资源占用日期" %}
+<form method="get" class="panel filter-grid schedule-filter">{% for key,value in view_context.hidden %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}{{ form.non_field_errors }}{% for field in form %}<div>{{ field.label_tag }}{{ field }}{{ field.errors }}</div>{% endfor %}<button class="button">更新日程</button><a href="{% url 'schedule' %}">回到今天</a></form>
+{% include 'query_summary.html' %}
 {% if form.is_valid %}
 <div class="schedule-toolbar"><div class="actions">{% if previous %}<a class="button secondary" href="?{{ previous }}">← 前一天</a>{% endif %}<h2>{{ form.cleaned_data.day|date:'Y年m月d日' }}</h2>{% if following %}<a class="button secondary" href="?{{ following }}">后一天 →</a>{% endif %}</div><div class="legend"><span class="badge confirmed">已确认</span><span class="badge in_use">使用中</span><span class="badge pending">待复核</span></div></div>
 <p class="fine">时间均为北京时间。浅绿带为开放时段，色条为计划时段；实际使用未结束会另外标明。空白不代表一定可约，资格、配额、固定设备依赖与最终冲突以提交检查为准。待审核申请不占时段，不公开他人身份与用途。</p>
