@@ -1,0 +1,21 @@
+{
+  "source": "official WeChat DevTools automation; current phase-one private cloud preview",
+  "runtime_commit": "e03ae75dd74799c396f966f1fd36b3816e872157",
+  "backend": "https://campus-lab-equipment-manager.onrender.com",
+  "native_container": true,
+  "physical_device": false,
+  "business_writes": 0,
+  "steps": [
+    {
+      "step": "screenshot login",
+      "status": "saved"
+    }
+  ],
+  "system": {
+    "platform": "devtools",
+    "model": "iPhone 12/13 (Pro)",
+    "SDKVersion": "3.17.6"
+  },
+  "completed": false,
+  "failure": "page not ready: pages/resources/index"
+}

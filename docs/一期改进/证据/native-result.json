@@ -1,0 +1,55 @@
+{
+  "source": "official WeChat DevTools automation; current phase-one private cloud preview",
+  "runtime_commit": "e03ae75dd74799c396f966f1fd36b3816e872157",
+  "backend": "https://campus-lab-equipment-manager.onrender.com",
+  "native_container": true,
+  "physical_device": false,
+  "business_writes": 0,
+  "steps": [
+    {
+      "step": "login follow-up",
+      "status": "actual resources readback after prior native login button; previous short harness wait expired, not product failure"
+    },
+    {
+      "step": "cloud login and resource query",
+      "status": "pass",
+      "items": 8
+    },
+    {
+      "step": "screenshot resources",
+      "status": "saved"
+    },
+    {
+      "step": "candidate query",
+      "status": "pass",
+      "resource": "全画幅摄影套装"
+    },
+    {
+      "step": "screenshot resource",
+      "status": "saved"
+    },
+    {
+      "step": "incident form resource ownership context",
+      "status": "pass",
+      "submitted": false
+    },
+    {
+      "step": "screenshot incident",
+      "status": "saved"
+    },
+    {
+      "step": "profile and effect preference page",
+      "status": "pass"
+    },
+    {
+      "step": "screenshot profile",
+      "status": "saved"
+    }
+  ],
+  "system": {
+    "platform": "devtools",
+    "model": "iPhone 12/13 (Pro)",
+    "SDKVersion": "3.17.6"
+  },
+  "completed": true
+}

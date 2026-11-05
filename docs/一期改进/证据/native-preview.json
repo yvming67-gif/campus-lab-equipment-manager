@@ -1,0 +1,223 @@
+{
+  "date": "2026-11-05",
+  "source": "official WeChat DevTools CLI preview success and native automation",
+  "business_runtime_commit": "e03ae75dd74799c396f966f1fd36b3816e872157",
+  "layout_patch_sha256": "5fdd992eb4dfe12736f7635153784892c3930a1123f7e761167b45ae91530bfb",
+  "source_files_identical_except_private_project_binding_and_documentation": [
+    {
+      "file": "app.js",
+      "sha256": "eda19fdf17fb438e046144c1a1ebff2a9fc494969ef80fa8c9bd8f0ca7e918c3"
+    },
+    {
+      "file": "app.json",
+      "sha256": "ad88e00f27ac8b45b32b81a5b3cea4d1bf3d216d7a5d91ed0933b1789adc5835"
+    },
+    {
+      "file": "app.wxss",
+      "sha256": "5fdd992eb4dfe12736f7635153784892c3930a1123f7e761167b45ae91530bfb"
+    },
+    {
+      "file": "config.js",
+      "sha256": "81160534a05cd9086be1525917088f165ef92f4a630696c6f4860aacd9b066ca"
+    },
+    {
+      "file": "controllers.js",
+      "sha256": "67cbbeea4ce7fbecd7b4a7a9de5ccbfbf53907efbbc3a680fde749ce193d06ae"
+    },
+    {
+      "file": "sitemap.json",
+      "sha256": "2460622a335f47da1fea056f0147903d341cea2794b4c2d464b412e32f445350"
+    },
+    {
+      "file": "assets/brand-icon.png",
+      "sha256": "be0a1a7e0a0cfe396db933fd51946506e7c291e23d633e032f03cb656c4e8048"
+    },
+    {
+      "file": "assets/brand-icon.svg",
+      "sha256": "b52252a9307522fbb8d056986f7cf66a11c17fd2e493663be035b43648cddba9"
+    },
+    {
+      "file": "utils/api.js",
+      "sha256": "a8377c3e9f06bc88a0938107b238b28d738250a0ab1a7dccabaa2b49f3cf99a7"
+    },
+    {
+      "file": "utils/format.js",
+      "sha256": "01b362806729f7d984ab649b24e05214393b4902f9bdad3aa0002b8a1e329148"
+    },
+    {
+      "file": "assets/tabs/bookings-selected.png",
+      "sha256": "1d16080e64ca97a404e7bff8948ac9d2076dc134423e7d4c5a3381a8cc937ee4"
+    },
+    {
+      "file": "assets/tabs/bookings.png",
+      "sha256": "f543836c51860fd4b9a2decd8ada937b56487937a429ec83a920366118b5aa78"
+    },
+    {
+      "file": "assets/tabs/notifications-selected.png",
+      "sha256": "ee38bfb6081b80f7130abe75f94e1a8d8469d46d6c3eda1d44ddbc2d82905e68"
+    },
+    {
+      "file": "assets/tabs/notifications.png",
+      "sha256": "4682c76c0785557d0622717a3d64d11edd6a9cfebc1142e9eddeafeb6a8b0396"
+    },
+    {
+      "file": "assets/tabs/profile-selected.png",
+      "sha256": "bde9026fa6c5bb5676d901ebced8efac71234949bfd2cc4ec5f6b84daa9a576d"
+    },
+    {
+      "file": "assets/tabs/profile.png",
+      "sha256": "d6a4677ba4b23ce47aac7463999bc13232d99f6ca3090e2a6054dc60d556f322"
+    },
+    {
+      "file": "assets/tabs/resources-selected.png",
+      "sha256": "9bb99e1685bb808c91879fb75389c6efc38c1dfa366ce632777ffbbce8ea548b"
+    },
+    {
+      "file": "assets/tabs/resources.png",
+      "sha256": "ee27bc85fac331db9a6738563c67b316652825b7b453ce8b8a1f6523d6be283e"
+    },
+    {
+      "file": "pages/booking/index.js",
+      "sha256": "509c721240c4c472df6160079807872cd88641511f8143cc73e3139efab2418b"
+    },
+    {
+      "file": "pages/booking/index.json",
+      "sha256": "369a52b1009e5c16f94984243b9cfe72df5921e54b6c62850760059d2966f2f7"
+    },
+    {
+      "file": "pages/booking/index.wxml",
+      "sha256": "b5f6fb0cc63dcac0c20f658cc83696cd2fc24ffc8b27fbf13b5efdfc9416d6b0"
+    },
+    {
+      "file": "pages/booking/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/bookings/index.js",
+      "sha256": "7c36731a0147aba2a6b6d811720c92bba02e05730714b7f9245106f3400bc195"
+    },
+    {
+      "file": "pages/bookings/index.json",
+      "sha256": "f581ef173120085d537a998a28d07a76f70dfc3294db53d8207aea5d8ced8987"
+    },
+    {
+      "file": "pages/bookings/index.wxml",
+      "sha256": "df14602eef4a8b398e39729a861890267012d039e719a65c60c21a9460af63f4"
+    },
+    {
+      "file": "pages/bookings/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/incident/index.js",
+      "sha256": "d69055f87d2ac954ef11416e685ff3bcbf7403b7bc75aaac8175663cc9c26d32"
+    },
+    {
+      "file": "pages/incident/index.json",
+      "sha256": "ed93c483eacb6242cea37fb85a5d63690ae35559ab48516c235f8c73f5d44cf0"
+    },
+    {
+      "file": "pages/incident/index.wxml",
+      "sha256": "ad34071f76ff956473b46697924dc6079e259beff1be1ad7317f6f815f6d4d40"
+    },
+    {
+      "file": "pages/incident/index.wxss",
+      "sha256": "4281b51384700aafcc48df930004c9c60fc14949c8d1ccb87aeaf52783554826"
+    },
+    {
+      "file": "pages/login/index.js",
+      "sha256": "a0b7f8048237e27a1f8bd363e2134c4e429c96c62e0c0b3cc92404e454a6f4b8"
+    },
+    {
+      "file": "pages/login/index.json",
+      "sha256": "36118c08f361df3c4bc4babd0115f7990d419085704f8bc59e71188efdfaf447"
+    },
+    {
+      "file": "pages/login/index.wxml",
+      "sha256": "a8f367f9aab42dd5b13a85c2239c20d98d3998d727b7b3556917ab64094ec45b"
+    },
+    {
+      "file": "pages/login/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/notifications/index.js",
+      "sha256": "abf25e47a1ece50a7ea5094f10850e76692d807b85be9d739d5ac3db33e115bb"
+    },
+    {
+      "file": "pages/notifications/index.json",
+      "sha256": "bdc2ea7b2a4510ca4aa9779239099c2311848d3a4f94ec71212729958e90594a"
+    },
+    {
+      "file": "pages/notifications/index.wxml",
+      "sha256": "04878decfc4e79aaffe0de819b719d0f26e2cda6ca2d79f366b0e8f0ff02aa4e"
+    },
+    {
+      "file": "pages/notifications/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/profile/index.js",
+      "sha256": "404abfa180a54a6e65d35a410c916bcdad97127551a03bff2726d6f1c27b6e33"
+    },
+    {
+      "file": "pages/profile/index.json",
+      "sha256": "847006a1dfdbd14dc8215f273f49b4786a0c67d38617586ac4093698d0a37d6a"
+    },
+    {
+      "file": "pages/profile/index.wxml",
+      "sha256": "611d07006c124d41502fc3a25aeae9968c0a0d8273323a65a13c1a6b9b565a8f"
+    },
+    {
+      "file": "pages/profile/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/resource/index.js",
+      "sha256": "394cedd2ec29cdf5777db12a9d8e5a4eff779cef3ac5577445154e427b393603"
+    },
+    {
+      "file": "pages/resource/index.json",
+      "sha256": "c8623082f75a89d41eaf8c0b16eb077bb98a627884b9c8421dcae62b76d2e0b9"
+    },
+    {
+      "file": "pages/resource/index.wxml",
+      "sha256": "5668b951ce8202d6b805706a7e8f440f9a97794a7f02f8101f4d1f0ac7c74ddd"
+    },
+    {
+      "file": "pages/resource/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    },
+    {
+      "file": "pages/resources/index.js",
+      "sha256": "fcd9c2417bcd6f87c8ec4ed1bb1c39ed743ac7361d6b21255a323eb4b10f632f"
+    },
+    {
+      "file": "pages/resources/index.json",
+      "sha256": "039d336a9861d8c57b491008d4c23780d7902085bcf67ee97e3a84e1dc130eb1"
+    },
+    {
+      "file": "pages/resources/index.wxml",
+      "sha256": "5ac8d4c35ef0841f357783b1d5d916ed891ff0d3bd157e84058ba90938e7354b"
+    },
+    {
+      "file": "pages/resources/index.wxss",
+      "sha256": "4085a9009a09868e6231fae73d99e75045ed3db8e84ace1ea8f47c932e240bda"
+    }
+  ],
+  "preview_package_bytes": 158188,
+  "official_preview_generated": true,
+  "code_transferred_to_preview_service": true,
+  "development_version_upload_command_executed": false,
+  "experience_release_or_formal_publication": false,
+  "physical_android_confirmation": {
+    "source": "user text",
+    "quote": "能登录，两个入口都能看到",
+    "scope": "initial phase-one preview login and candidate/incident entry visibility, before final CSS-only layout patch",
+    "final_layout_patch_phone_check": "not yet confirmed"
+  },
+  "physical_iphone": "deferred",
+  "account_name_review": "not checked",
+  "historical_compile_hints": "CLI preview success did not expose the earlier two hints; their resolution is not claimed",
+  "native_read_scope": "8 resources,23 candidates, selection08-09 matches; incident/profile display; blank incident rejected; no reservation,approval or incident created"
+}

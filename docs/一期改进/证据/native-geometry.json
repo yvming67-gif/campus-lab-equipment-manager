@@ -1,0 +1,61 @@
+{
+  "source": "actual WeChat DevTools geometry check",
+  "physical_device": false,
+  "checks": [
+    {
+      "name": "grid_display",
+      "value": "flex"
+    },
+    {
+      "name": "grid_width",
+      "value": "322.667px"
+    },
+    {
+      "name": "first_width",
+      "value": "154.875px"
+    },
+    {
+      "name": "first_box_sizing",
+      "value": "border-box"
+    },
+    {
+      "name": "first_offset",
+      "value": {
+        "left": 36.895835876464844,
+        "top": 740.625
+      }
+    },
+    {
+      "name": "second_offset",
+      "value": {
+        "left": 198.2291717529297,
+        "top": 740.625
+      }
+    },
+    {
+      "name": "first_size",
+      "value": {
+        "width": 154.875,
+        "height": 54.333335876464844
+      }
+    }
+  ],
+  "window": {
+    "width": 390,
+    "height": 753,
+    "screenHeight": 844,
+    "safeArea": {
+      "top": 47,
+      "left": 0,
+      "right": 390,
+      "bottom": 810,
+      "width": 390,
+      "height": 763
+    }
+  },
+  "incident_scrolled_to_bottom": true,
+  "blank_incident_validation": {
+    "error": "请填写1至2000字的具体情况",
+    "saved": false
+  }
+}

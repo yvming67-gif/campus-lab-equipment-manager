@@ -103,5 +103,40 @@
     "file": "release-status.json",
     "origin": "本期发布后的实际HTTP/浏览器核验",
     "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "native-geometry-before-fix.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-geometry.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-method-attempt.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-preview.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-result.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-short-wait-attempt.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
+  },
+  {
+    "file": "native-slot-result.json",
+    "origin": "微信官方工具原生运行与预览；注明首轮及后续证据",
+    "redaction": "移除私有绑定、访问令牌和临时预览码；保留模拟数据及测量"
   }
 ]
