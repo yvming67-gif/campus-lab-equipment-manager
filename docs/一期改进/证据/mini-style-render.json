@@ -1,0 +1,17 @@
+{
+  "source": "published WXML/WXSS via official compiler; HTML layout mapping",
+  "data": "actual controllers and isolated loopback demo API; no request result mocking",
+  "device_runtime": false,
+  "physical_device": false,
+  "reservations_created": 0,
+  "pages": [
+    "booking.html",
+    "bookings.html",
+    "incident.html",
+    "login.html",
+    "notifications.html",
+    "profile.html",
+    "resource.html",
+    "resources.html"
+  ]
+}

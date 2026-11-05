@@ -68,5 +68,40 @@
     "file": "tests-13424.txt",
     "origin": "本期隔离环境实际执行记录",
     "redaction": "本机目录替换为占位；结果、测试名、代码相对位置与时间保留"
+  },
+  {
+    "file": "ci-business.json",
+    "origin": "GitHub实际任务日志摘要",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "ci-cloud.json",
+    "origin": "GitHub实际任务日志摘要",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "ci-windows.json",
+    "origin": "GitHub实际任务日志摘要",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "cloud-verification.json",
+    "origin": "本期发布后的实际HTTP/浏览器核验",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "mini-style-capture.json",
+    "origin": "本期发布后的实际HTTP/浏览器核验",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "mini-style-render.json",
+    "origin": "本期发布后的实际HTTP/浏览器核验",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
+  },
+  {
+    "file": "release-status.json",
+    "origin": "本期发布后的实际HTTP/浏览器核验",
+    "redaction": "不含私有配置、令牌或AppID；本机路径不发布"
   }
 ]
