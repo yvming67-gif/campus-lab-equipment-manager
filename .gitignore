@@ -21,11 +21,17 @@ __pycache__/
 *.docx
 !docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx
 !docs/ERD与数据设计说明.pdf
-!docs/整改/证据/*.log
 
 # Optional authoring tools and private WeChat developer settings
 node_modules/
 miniprogram/project.private.config.json
 miniprogram/.debugger/
 
-!docs/逻辑整改/证据/*.log
+
+# Private publication archives, development QR codes and raw sessions
+*.bundle
+*.har
+*.trace.zip
+work/
+**/preview-qr*.png
+**/wechat-login*.png

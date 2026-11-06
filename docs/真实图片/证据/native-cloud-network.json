@@ -1,9 +1,0 @@
-{
-  "source": "official native wx.request, cloud public-demo authentication only",
-  "business_writes": 0,
-  "elapsed_ms": 5608,
-  "status": 200,
-  "ok": true,
-  "logout_status": 200,
-  "verified": true
-}

@@ -8496,7 +8496,7 @@
     {
       "id": "SRC-E02",
       "type": "E 历史验证证据",
-      "name": "docs/整改/独立复验报告.md、需求行为追踪.md及证据目录",
+      "name": "历史复验与需求行为追踪记录（固定提交a1cfd3f，原docs/整改，完整归档）",
       "date": "2026-10-20",
       "facts": "记录已执行反例、历史失败与修复、模拟负载和本机恢复范围。",
       "supports": "AC-01至AC-64的历史证据线索",
@@ -10761,7 +10761,7 @@
     "date": "2026-11-05",
     "base_commit": "39634093b70a7fa0059c5c474e95105d20687e90",
     "purpose": "一期体验与小程序通道完善；分析业务基线继续为2.3。",
-    "contract": "docs/一期改进/需求与数据通道契约.md",
+    "contract": "docs/接口与通道.md",
     "evidence_boundary": "源码定位及文档同步不构成运行或手机验收结论。"
   },
   "ui_reference_revision": {
@@ -10772,7 +10772,7 @@
       "UC-03",
       "UC-26"
     ],
-    "contract": "docs/参考落实/需求对应.md",
+    "contract": "docs/界面与交互.md",
     "business_rule_changes": false,
     "data_model_changes": false
   }
