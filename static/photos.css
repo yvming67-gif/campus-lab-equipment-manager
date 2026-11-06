@@ -1,0 +1,36 @@
+/* Real source photographs stay distinct from simulated inventory facts. */
+.reference-photo { margin:0; min-width:0; background:#eef2f7; border:1px solid #dce5f0; border-radius:18px; overflow:hidden; }
+.reference-photo-image { display:block; position:relative; aspect-ratio:4/3; background:#e9eff7; color:#57657c; }
+.reference-photo-image img { display:block; width:100%; height:100%; object-fit:cover; }
+.reference-photo-image img[hidden] { display:none; }
+.reference-photo--panorama .reference-photo-image { aspect-ratio:3/1; }
+.reference-photo--panorama .reference-photo-image img { object-fit:contain; background:#fff; }
+.reference-photo figcaption { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0 8px; min-height:44px; padding:0 12px; background:#f8faff; font-size:10px; line-height:1.65; color:#54647c; }
+.reference-photo figcaption a { display:inline-flex; align-items:center; min-height:44px; color:#075eb7; white-space:nowrap; }
+.photo-fallback:not([hidden]) { display:flex; height:100%; min-height:90px; align-items:center; justify-content:center; font-size:13px; }
+.reference-photo.is-unavailable .reference-photo-image { cursor:default; }
+.reference-photo a:focus-visible { outline:3px solid #0071e3; outline-offset:-4px; }
+.login-real-scene { max-width:560px; margin:28px 0 18px; }
+.login-real-scene .reference-photo-image { aspect-ratio:16/9; }
+.lab-context-banner { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:32px; align-items:center; padding:24px; margin:0 0 24px; background:#edf3fc; border:1px solid #dce6f5; border-radius:24px; }
+.lab-context-banner h2 { font-size:25px; letter-spacing:-.035em; margin:9px 0; }
+.lab-context-banner p { color:#53627b; margin:8px 0; }
+.lab-context-banner .fine { display:block; line-height:1.7; }
+.lab-context-banner .touch-link { display:inline-flex; align-items:center; min-height:44px; margin-top:8px; }
+.lab-context-banner .reference-photo-image { aspect-ratio:2/1; }
+.resource-card .reference-photo { margin-bottom:20px; }
+.resource-card .reference-photo--panorama .reference-photo-image { aspect-ratio:16/8; }
+.resource-card .reference-photo figcaption { padding:4px 10px; }
+.reference-section-title { font-size:15px; margin-top:0; }
+.two-column .reference-photo { margin-bottom:24px; }
+.lab-photo-gallery { margin:36px 0 18px; scroll-margin-top:24px; }
+.lab-gallery-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.lab-gallery-grid .reference-photo-image { aspect-ratio:16/9; }
+@media(max-width:760px) {
+ .lab-context-banner { gap:14px; padding:16px; border-radius:20px; grid-template-columns:1fr; }
+ .lab-context-banner h2 { font-size:22px; }
+ .lab-context-banner .reference-photo-image { aspect-ratio:2.2/1; }
+ .lab-gallery-grid { grid-template-columns:1fr; gap:16px; }
+ .login-real-scene { margin:20px 0; }
+ .reference-photo figcaption { font-size:10px; }
+}

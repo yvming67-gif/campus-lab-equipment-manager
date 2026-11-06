@@ -137,8 +137,8 @@
     "symbol": "resources",
     "lines": [
       {
-        "start": 54,
-        "end": 54
+        "start": 57,
+        "end": 57
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -149,8 +149,8 @@
     "symbol": "resource",
     "lines": [
       {
-        "start": 112,
-        "end": 112
+        "start": 115,
+        "end": 115
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -365,8 +365,8 @@
     "symbol": "resource",
     "lines": [
       {
-        "start": 112,
-        "end": 112
+        "start": 115,
+        "end": 115
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -413,8 +413,8 @@
     "symbol": "resource",
     "lines": [
       {
-        "start": 112,
-        "end": 112
+        "start": 115,
+        "end": 115
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -509,8 +509,8 @@
     "symbol": "booking",
     "lines": [
       {
-        "start": 229,
-        "end": 229
+        "start": 232,
+        "end": 232
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -545,8 +545,8 @@
     "symbol": "booking",
     "lines": [
       {
-        "start": 229,
-        "end": 229
+        "start": 232,
+        "end": 232
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -749,8 +749,8 @@
     "symbol": "incident",
     "lines": [
       {
-        "start": 295,
-        "end": 295
+        "start": 298,
+        "end": 298
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -1008,8 +1008,8 @@
     "symbol": "notifications",
     "lines": [
       {
-        "start": 355,
-        "end": 355
+        "start": 358,
+        "end": 358
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -1176,8 +1176,8 @@
     "symbol": "bookings",
     "lines": [
       {
-        "start": 200,
-        "end": 200
+        "start": 203,
+        "end": 203
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"
@@ -1188,8 +1188,8 @@
     "symbol": "booking",
     "lines": [
       {
-        "start": 229,
-        "end": 229
+        "start": 232,
+        "end": 232
       }
     ],
     "status": "控制器工厂入口定位；行号仅标入口"

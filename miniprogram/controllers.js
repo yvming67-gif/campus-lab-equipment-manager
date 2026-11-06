@@ -1,6 +1,9 @@
 const api = require('./utils/api');
 const config = require('./config');
 const fmt = require('./utils/format');
+const photos = require('./utils/photos');
+function photoError(e) {const key=e.currentTarget.dataset.photo;if(photos.get(key))this.setData({['photoErrors.'+key]:true});}
+function copyPhotoSource(e) {const p=photos.get(e.currentTarget.dataset.photo);if(p)wx.setClipboardData({data:p.source_page});}
 const statuses = [{ code: '', name: '全部' }, { code: 'PENDING', name: '待审核' }, { code: 'CONFIRMED', name: '已确认' }, { code: 'IN_USE', name: '使用中' }, { code: 'COMPLETED', name: '已完成' }, { code: 'CANCELLED', name: '已取消' }, { code: 'REJECTED', name: '已驳回' }, { code: 'EXPIRED', name: '已失效' }];
 function error(page, e) { page.setData({ error: api.errorText(e) }); }
 function input(event) { this.setData({ ['form.' + event.currentTarget.dataset.field]: event.detail.value, error: '' }); }
@@ -414,13 +417,14 @@ function create(name) {
   if (!definition) throw new Error('Unknown page: ' + name);
   const data = JSON.parse(JSON.stringify(definition.data));
   data.reducedEffects=false;
+  if(['resources','resource'].includes(name))Object.assign(data,{scenePhoto:photos.get('scene'),photoErrors:{}});
   if(name==='resources')Object.assign(data,{appliedChips:[],appliedKind:'',queryReady:false});
   if (name === 'resources') Object.assign(data,{slot:fmt.defaultForm(),minDate:fmt.day(),maxDate:fmt.day(Date.now()+14*86400000)});
   if (name === 'resource') Object.assign(data, { form: fmt.defaultForm(), minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000) });
   if(name==='resource'||name==='resources')data.quickDates=fmt.quickDates((name==='resource'?data.form:data.slot).date,14);
   const onShow=definition.onShow;
   const defaults=JSON.parse(JSON.stringify(data));
-  return Object.assign({}, definition, { data,onShow(){
+  return Object.assign({}, definition, { data,photoError,copyPhotoSource,onShow(){
     const saved=api.session(),scope=saved && saved.draftScope;
     if(this._displayOwner && this._displayOwner!==scope){
       const route={};for(const key of ['id','resourceId','reservationId'])if(Object.prototype.hasOwnProperty.call(this.data,key))route[key]=this.data[key];

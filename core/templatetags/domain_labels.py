@@ -1,8 +1,11 @@
 from django import template
+from core import presentation_media
 from core.domain_labels import (NOTIFICATION_LABELS, channel_label, event_label,
                                 notification_label, work_state_label)
 
 register = template.Library()
+register.simple_tag(presentation_media.photo, name='reference_photo')
+register.filter('resource_reference_photo', presentation_media.resource_photo)
 LABELS = NOTIFICATION_LABELS
 register.filter("business_label", notification_label)
 register.filter("event_label", event_label)

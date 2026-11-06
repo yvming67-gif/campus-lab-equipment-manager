@@ -1,5 +1,20 @@
 /* Keep the small-screen navigation compact; native details remains keyboard usable. */
 const appearanceKey = 'campus-interface-glass';
+// Asset failure is local to the photograph, never a reservation error.
+document.querySelectorAll('[data-reference-photo] img').forEach(image => {
+  const unavailable = () => {
+    image.hidden = true;
+    const frame=image.closest('[data-reference-photo]');
+    frame.classList.add('is-unavailable');
+    frame.querySelector('.photo-fallback').hidden=false;
+    const imageLink=frame.querySelector('.reference-photo-image');
+    imageLink.removeAttribute('href');
+    imageLink.setAttribute('aria-disabled','true');
+    imageLink.setAttribute('aria-label','实景图片暂不可用');
+  };
+  image.addEventListener('error',unavailable,{once:true});
+  if(image.complete && !image.naturalWidth)unavailable();
+});
 // Device-local appearance only; non-staff pages always keep comfortable spacing.
 const densityControls = document.querySelectorAll('[data-density-toggle]');
 let densityChoice = 'comfortable';

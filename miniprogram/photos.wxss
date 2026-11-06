@@ -1,0 +1,16 @@
+.hero.photo-hero { position:relative; overflow:hidden; padding:0; background:#173454; border:0; }
+.hero-real-photo { position:absolute; left:0; top:0; width:100%; height:100%; }
+.photo-hero-content { position:relative; min-height:210px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(90deg,rgba(8,23,44,.88),rgba(8,23,44,.3)); }
+.hero.photo-hero .eyebrow,.hero.photo-hero .stat-label,.hero.photo-hero .stat-number { color:#fff; }
+.hero.photo-hero .hero-title { color:#fff; font-size:23px; line-height:1.4; margin:20px 0 10px; }
+.hero.photo-hero .white-tag { color:#fff; background:rgba(0,0,0,.3); }
+.hero.photo-hero .hero-stats { border-color:rgba(255,255,255,.3); margin-top:16px; padding-top:12px; }
+.real-photo-credit { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:0 8px; color:#5b687c; font-size:10px; line-height:1.65; margin:0 0 10px; }
+.real-photo-credit text { flex:1; min-width:145px; }
+.real-photo-credit .text-button { min-height:44px; margin:0; padding:8px 4px; font-size:11px; flex:0 0 auto; }
+.mini-reference-photo { margin:14px 0 0; border:1px solid #dce5f0; border-radius:14px; overflow:hidden; background:#f8faff; }
+.mini-reference-photo image { display:block; width:100%; height:145px; background:#fff; }
+.mini-reference-photo .hint { margin:0; padding:8px 10px; font-size:10px; }
+.mini-reference-photo.detail-reference { margin:16px 0 22px; }
+.detail-reference .real-photo-credit { margin:0; padding:0 10px; }
+.photo-unavailable { display:flex; min-height:100px; align-items:center; justify-content:center; color:#607087; font-size:12px; }

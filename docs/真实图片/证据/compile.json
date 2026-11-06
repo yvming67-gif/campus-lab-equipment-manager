@@ -1,0 +1,7 @@
+{
+  "native_pages": 8,
+  "wxml": "pass",
+  "wxss": "pass",
+  "compiler": "miniprogram-compiler@0.2.3",
+  "scope": "本轮实际执行；不能代替原生或真机"
+}

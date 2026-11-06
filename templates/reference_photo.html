@@ -1,0 +1,4 @@
+{% load static %}{% if photo %}<figure class="reference-photo {% if panoramic %}reference-photo--panorama{% endif %}" data-reference-photo>
+  <a class="reference-photo-image" href="{% static photo.asset %}" target="_blank" rel="noopener" aria-label="查看{{ photo.title }}原图（新窗口）"><img src="{% static photo.asset %}" alt="{{ photo.alt }}" width="{{ photo.width }}" height="{{ photo.height }}" loading="{{ photo_loading|default:'lazy' }}" decoding="async"><span class="photo-fallback" hidden>实景图片暂不可用</span></a>
+  <figcaption><span>{{ photo.caption }}</span><a href="{{ photo.source_page }}" target="_blank" rel="noopener noreferrer">图片来源 ↗</a></figcaption>
+</figure>{% endif %}

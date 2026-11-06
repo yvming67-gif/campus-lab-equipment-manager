@@ -1,0 +1,18 @@
+{
+  "source": "official WeChat DevTools, bundled real photographs and real cloud reads",
+  "physical_device": false,
+  "business_writes": 0,
+  "steps": [],
+  "system": {
+    "width": 390,
+    "SDKVersion": "3.17.6",
+    "platform": "devtools"
+  },
+  "completed": false,
+  "failure": "Page timeout pages/resources/index",
+  "stack": [
+    "Error: Page timeout pages/resources/index",
+    "    at ready (C:\\Users\\admin\\Documents\\Codex\\2026-10-09\\1602240221-1402-1-2-3-4\\work\\photos20261106\\native.cjs:3:217)",
+    "    at async C:\\Users\\admin\\Documents\\Codex\\2026-10-09\\1602240221-1402-1-2-3-4\\work\\photos20261106\\native.cjs:7:8"
+  ]
+}

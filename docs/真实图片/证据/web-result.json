@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-06",
+  "source": "actual isolated Django/PostgreSQL browser, simulated data",
+  "observations": 20,
+  "widths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "asset_failure": {
+    "fallback": true,
+    "brokenImageHidden": true,
+    "queryEnabled": true,
+    "resourceLinks": 8,
+    "error": false
+  },
+  "business_writes": 0,
+  "physical_device": false,
+  "final_asset_failure": {
+    "fallback": true,
+    "hrefRemoved": true,
+    "ariaDisabled": "true",
+    "sourceLinkRetained": true,
+    "queryEnabled": true,
+    "resourceLinks": 8
+  }
+}
