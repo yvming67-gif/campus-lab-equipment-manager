@@ -7,7 +7,7 @@
 1. 安装并打开[微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)，按工具提示登录。
 2. 导入本目录`miniprogram`，选择“小程序”。仓库`project.config.json`中的`touristappid`是占位值。导入时使用自己的测试号或可用AppID；个人工具设置保存在不提交的`project.private.config.json`中。
 3. 本版本由开发者在`config.js`中固定连接`https://campus-lab-equipment-manager.onrender.com`。登录页不提供地址输入，旧版地址缓存不再生效。
-4. 本地调试可在“详情→本地设置”启用“不校验合法域名、TLS版本及HTTPS证书”；`urlCheck:false`仅用于开发调试。正式发布应配置平台要求的合法域名并重新验收。
+4. 本地调试可在“详情→本地设置”启用“不校验合法域名、TLS版本及HTTPS证书”；公开配置默认开启`urlCheck:true`，连接已配置的云端域名。仅在自己的本机开发副本临时关闭检查，发布前恢复开启并重新验收。
 5. 选择学生或教师，填写公开演示密码`Demo@2026`后登录。管理角色不在小程序办理业务。
 
 Render免费实例闲置后可能休眠，首次唤醒时连接可能超时；稍候重试，勿更改服务地址。已发出的预约若结果未确认，应保持原内容重试或先查看本人记录。

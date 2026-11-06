@@ -1,0 +1,60 @@
+{
+  "checked_date": "2026-11-06",
+  "runtime_commit": "c42216464ad0c26df055c31f72fe089c0c5570a6",
+  "web": {
+    "url": "https://campus-lab-equipment-manager.onrender.com/",
+    "access_url": "https://campus-lab-equipment-manager.onrender.com/access/",
+    "access_http_status": 200,
+    "available_to_public": true,
+    "availability_limit": "Free instance sleep and provider quotas"
+  },
+  "wechat": {
+    "development_version": "1.4.1",
+    "uploaded": true,
+    "upload_bytes": 387607,
+    "domain_validation_enabled": true,
+    "request_domain_configured": true,
+    "category": "工具 / 预约 / 报名",
+    "category_approved": true,
+    "primary_category_set": true,
+    "experience_version": "1.4.0",
+    "formal_version_published": false,
+    "basic_information": "Name rejected for individual subject; replacement pending owner decision",
+    "filing": "Not completed",
+    "phone_acceptance": "Normal-validation release package not verified on phone",
+    "iphone": "Deferred"
+  },
+  "ci": {
+    "runtime_commit": "c42216464ad0c26df055c31f72fe089c0c5570a6",
+    "jobs_passed": [
+      "test",
+      "windows-first-install",
+      "cloud-profile"
+    ],
+    "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42174853184"
+  },
+  "local": {
+    "existing_backend": {
+      "executed": 290,
+      "passed": 287,
+      "skipped": 3
+    },
+    "public_access_backend": {
+      "executed": 2,
+      "passed": 2
+    },
+    "client_tests_passed": 111,
+    "native_template_pages_compiled": 8,
+    "entry_widths": [
+      320,
+      390,
+      768,
+      1440
+    ]
+  },
+  "publication": {
+    "history_rewritten": false,
+    "process_material_archived_locally": true,
+    "formal_word_changed": false
+  }
+}
