@@ -27,3 +27,5 @@
 |最终云端原生首页|最终云端原生详情|
 |---|---|
 |![云端原生首页](画面/native-cloud-catalog.png)|![云端原生详情](画面/native-cloud-robot.png)|
+
+[在线演示](https://campus-lab-equipment-manager.onrender.com/)已实际核对三张原图和新版登录页，三项CI成功。实际云端画面、功能提交及初次旧版观察见[发布记录](发布记录.md)。
