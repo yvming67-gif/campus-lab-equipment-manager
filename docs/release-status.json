@@ -1,14 +1,23 @@
 {
-  "checked_date": "2026-11-06",
-  "runtime_commit": "c42216464ad0c26df055c31f72fe089c0c5570a6",
+  "checked_date": "2026-11-10",
+  "runtime_commit": null,
+  "runtime_commit_status": "线上应用没有公开部署提交号；本次只记录可直接观察的运行行为。",
   "web": {
     "url": "https://campus-lab-equipment-manager.onrender.com/",
     "access_url": "https://campus-lab-equipment-manager.onrender.com/access/",
     "access_http_status": 200,
+    "health_url": "https://campus-lab-equipment-manager.onrender.com/health/",
+    "health_http_status": 200,
+    "health_status": "ready",
+    "public_identity_accounts": ["student", "student2", "teacher"],
+    "management_accounts_listed": false,
+    "last_live_check": "2026-11-10; GET /health/ and /access/ returned 200; a CSRF-valid login-entry request opened the identity selector; no password or business write was submitted.",
+    "runtime_commit_verified": false,
     "available_to_public": true,
     "availability_limit": "Free instance sleep and provider quotas"
   },
   "wechat": {
+    "status_as_of": "2026-11-06; not rechecked on 2026-11-10",
     "development_version": "1.4.1",
     "uploaded": true,
     "upload_bytes": 387607,
@@ -19,19 +28,19 @@
     "primary_category_set": true,
     "experience_version": "1.4.0",
     "formal_version_published": false,
-    "basic_information": "Name rejected for individual subject; replacement pending owner decision",
+    "basic_information": "A replacement name was selected later by the owner; current review result was not rechecked.",
     "filing": "Not completed",
     "phone_acceptance": "Normal-validation release package not verified on phone",
     "iphone": "Deferred"
   },
   "ci": {
-    "runtime_commit": "c42216464ad0c26df055c31f72fe089c0c5570a6",
+    "runtime_commit": "4d834d0c84829200b051813da55df9b52982eb21",
     "jobs_passed": [
       "test",
       "windows-first-install",
       "cloud-profile"
     ],
-    "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42174853184"
+    "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42738732700"
   },
   "local": {
     "existing_backend": {
