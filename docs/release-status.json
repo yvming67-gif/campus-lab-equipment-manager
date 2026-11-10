@@ -43,23 +43,28 @@
     "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42738732700"
   },
   "local": {
-    "existing_backend": {
-      "executed": 290,
-      "passed": 287,
-      "skipped": 3
+    "checked_date": "2026-11-10",
+    "code_commit": "4d834d0c84829200b051813da55df9b52982eb21",
+    "local_docs_commit_pending_push": true,
+    "backend_full_suite": {
+      "modules": 21,
+      "executed": 343,
+      "passed": 343,
+      "failed": 0,
+      "skipped": 0,
+      "isolated_postgresql": true
     },
-    "public_access_backend": {
-      "executed": 2,
-      "passed": 2
-    },
-    "client_tests_passed": 111,
+    "client_tests_passed": 127,
     "native_template_pages_compiled": 8,
-    "entry_widths": [
-      320,
-      390,
-      768,
-      1440
-    ]
+    "responsive_visual_qa": "Not completed for the current source; do not infer from historical width checks.",
+    "analysis_report": {
+      "formal_docx_sha256": "0394A82C8CB399FB525F2DD5F742D425057CC8F1C98199518770E8A609FBC361",
+      "current_preview_pages": 169,
+      "current_preview_toc_and_figure_list_checked": true,
+      "current_preview_in_public_repo": false,
+      "historical_preview_pages": 174,
+      "pagination_difference_cause": "Not confirmed; LibreOffice versions/bitness/configuration differ; Microsoft Word native pagination not verified."
+    }
   },
   "publication": {
     "history_rewritten": false,
