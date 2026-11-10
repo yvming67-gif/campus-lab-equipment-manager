@@ -1,3 +1,4 @@
+from datetime import time
 from django import forms
 from django.utils import timezone
 from .models import *
@@ -9,6 +10,7 @@ class BookingForm(forms.Form):
     purpose=forms.CharField(label="使用目的",max_length=1000,widget=forms.Textarea(attrs={"rows":3}))
     participants=forms.IntegerField(label="参与人数",min_value=1,initial=1)
     request_key=forms.UUIDField(widget=forms.HiddenInput)
+    expected_approval_mode=forms.ChoiceField(choices=[("AUTO","规则通过后自动确认"),("MANUAL","提交后人工审核")],required=False,widget=forms.HiddenInput)
     def clean(self):
         data=super().clean();a,b=data.get("starts_at"),data.get("ends_at")
         if a and b and a>=b:self.add_error("ends_at","结束时间必须晚于开始时间")
@@ -17,10 +19,17 @@ class QueryForm(forms.Form):
     q=forms.CharField(label="资源名称或编号",required=False)
     kind=forms.ChoiceField(label="资源类型",required=False,choices=[("","全部" )]+Resource.KIND)
     lab=forms.ModelChoiceField(label="所属实验室",queryset=Lab.objects.all(),required=False,empty_label="全部实验室")
+    category=forms.CharField(label="场地类别或设备类别",required=False,max_length=80)
+    facility=forms.CharField(label="设施或配件",required=False,max_length=80)
+    capacity_min=forms.IntegerField(label="最小容量（人，仅场地）",required=False,min_value=1,max_value=10000)
+    capacity_max=forms.IntegerField(label="最大容量（人，仅场地）",required=False,min_value=1,max_value=10000)
+    service_status=forms.ChoiceField(label="服务状态",required=False,choices=[("","全部状态")]+Resource.STATUS)
     starts_at=LocalDateTime(label="查询开始时间",required=False)
     ends_at=LocalDateTime(label="查询结束时间",required=False)
     def clean(self):
         d=super().clean();a,b=d.get("starts_at"),d.get("ends_at")
+        low,high=d.get("capacity_min"),d.get("capacity_max")
+        if low and high and low>high:self.add_error("capacity_max","最大容量不得小于最小容量")
         if bool(a)!=bool(b):raise forms.ValidationError("查询时段须同时填写开始与结束时间")
         if a and b and a>=b:raise forms.ValidationError("查询开始时间必须早于结束时间")
         return d
@@ -84,7 +93,10 @@ class ResourceForm(forms.Form):
     portable=forms.BooleanField(label="可独立外借（固定设备取消勾选）",required=False,initial=True)
     access_room=forms.ModelChoiceField(label="固定设备关联场地",queryset=Resource.objects.filter(kind='ROOM'),required=False)
     handover_location=forms.CharField(label="设备交接地点",max_length=120,required=False)
+    room_location=forms.CharField(label="场地具体位置（楼栋、楼层或房间）",max_length=160,required=False)
     capacity=forms.IntegerField(label="场地容量",required=False,min_value=1)
+    space_category=forms.CharField(label="场地类别（演示分类，可按真实目录调整）",required=False,max_length=80)
+    facilities=forms.CharField(label="场地设施（逐项填写）",required=False,widget=forms.Textarea(attrs={"rows":3}))
     accessories=forms.CharField(label="配件（每行：编码,名称,数量；保留历史交接快照）",required=False,widget=forms.Textarea(attrs={"rows":3}))
     reason=forms.CharField(label="变更依据",max_length=1000)
 class GrantForm(forms.Form):
@@ -114,11 +126,57 @@ class LabForm(forms.Form):
     reason=forms.CharField(label="创建依据",max_length=1000)
 class OpeningForm(forms.Form):
     lab=forms.ModelChoiceField(label="实验室",queryset=Lab.objects.all())
+    resource=forms.ModelChoiceField(label="单间场地（留空表示管理单元默认时段）",queryset=Resource.objects.none(),required=False)
     weekday=forms.IntegerField(label="星期（1至7）",min_value=1,max_value=7)
-    starts_at=forms.TimeField(label="开放时间",widget=forms.TimeInput(attrs={"type":"time"}))
-    ends_at=forms.TimeField(label="关闭时间",widget=forms.TimeInput(attrs={"type":"time"}))
+    starts_at=forms.TimeField(label="开放时间",required=False,widget=forms.TimeInput(attrs={"type":"time"}))
+    ends_at=forms.TimeField(label="关闭时间",required=False,widget=forms.TimeInput(attrs={"type":"time"}))
+    closed_all_day=forms.BooleanField(label="该星期全天关闭",required=False)
     effective=forms.DateField(label="生效日期（至少为明天）",widget=forms.DateInput(attrs={"type":"date"}))
     reason=forms.CharField(label="变更原因",max_length=1000)
+
+    def clean(self):
+        data=super().clean()
+        resource,lab=data.get("resource"),data.get("lab")
+        if resource and lab and resource.lab_id!=lab.pk:
+            self.add_error("resource","场地必须属于所选实验室")
+        if data.get("closed_all_day"):
+            data["starts_at"]=time.min
+            data["ends_at"]=time.min
+        elif data.get("starts_at") is None or data.get("ends_at") is None:
+            if "starts_at" in self.fields and not data.get("starts_at"):
+                self.add_error("starts_at","开放日必须填写开放时间")
+            if not data.get("ends_at"):
+                self.add_error("ends_at","开放日必须填写关闭时间")
+        elif data["starts_at"]>=data["ends_at"]:
+            self.add_error("ends_at","关闭时间必须晚于开放时间；如全天不开放，请勾选全天关闭")
+        return data
+
+class SafetyProcedureForm(forms.Form):
+    title=forms.CharField(label="规程标题",max_length=160)
+    risk_categories=forms.CharField(label="风险类别",widget=forms.Textarea(attrs={"rows":2}),help_text="只填写经责任岗位核定的内容；无数据时注明待核实。")
+    applicable_users=forms.CharField(label="适用对象",widget=forms.Textarea(attrs={"rows":2}))
+    prerequisites=forms.CharField(label="预约或进入前置条件",widget=forms.Textarea(attrs={"rows":2}))
+    required_ppe=forms.CharField(label="个人防护用品",widget=forms.Textarea(attrs={"rows":2}))
+    pre_use_checks=forms.CharField(label="使用前检查",widget=forms.Textarea(attrs={"rows":2}))
+    operating_cautions=forms.CharField(label="操作注意事项",widget=forms.Textarea(attrs={"rows":2}))
+    prohibited_actions=forms.CharField(label="禁止事项",widget=forms.Textarea(attrs={"rows":2}))
+    incident_route=forms.CharField(label="异常处置路径",widget=forms.Textarea(attrs={"rows":2}))
+    source_title=forms.CharField(label="批准来源文件标题",max_length=200,required=False)
+    source_reference=forms.CharField(label="来源链接或文件编号",max_length=500,required=False)
+    source_version=forms.CharField(label="来源版本",max_length=80,required=False)
+    source_effective_date=forms.DateField(label="来源生效日期",required=False,widget=forms.DateInput(attrs={"type":"date"}))
+    effective_from=forms.DateField(label="本版本生效日期",required=False,widget=forms.DateInput(attrs={"type":"date"}))
+    review_due_date=forms.DateField(label="复核期限",required=False,widget=forms.DateInput(attrs={"type":"date"}))
+    requires_acknowledgement=forms.BooleanField(label="预约前要求阅读确认（不等于培训或许可）",required=False)
+    change_reason=forms.CharField(label="编制或修订原因",max_length=1000,widget=forms.Textarea(attrs={"rows":2}))
+
+    def clean_source_reference(self):
+        from urllib.parse import urlsplit
+        value=self.cleaned_data.get("source_reference", "").strip()
+        parts=urlsplit(value)
+        if parts.scheme and (parts.scheme != "https" or not parts.netloc):
+            raise forms.ValidationError("在线来源只接受有效的 HTTPS 地址；本地材料请填写制度编号或文件名称。")
+        return value
 
 
 class CoordinationForm(ActionForm):

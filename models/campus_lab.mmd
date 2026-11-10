@@ -80,8 +80,48 @@ erDiagram
     core_roomdetail {
         bigint id PK
         bigint resource_id FK
+        varchar location_label
         integer capacity
+        varchar space_category
+        text facilities
         text safety_note
+    }
+    core_safetyprocedure {
+        bigint id PK
+        bigint resource_id FK
+        integer version
+        varchar title
+        text risk_categories
+        text applicable_users
+        text prerequisites
+        text required_ppe
+        text pre_use_checks
+        text operating_cautions
+        text prohibited_actions
+        text incident_route
+        varchar source_title
+        varchar source_reference
+        varchar source_version
+        date source_effective_date
+        date effective_from
+        date review_due_date
+        boolean requires_acknowledgement
+        varchar status
+        bigint created_by_id FK
+        timestamp_with_time_zone submitted_at
+        bigint reviewed_by_id FK
+        timestamp_with_time_zone reviewed_at
+        text review_note
+        bigint published_by_id FK
+        timestamp_with_time_zone published_at
+        text change_reason
+        timestamp_with_time_zone created_at
+    }
+    core_safetyacknowledgement {
+        bigint id PK
+        bigint procedure_id FK
+        bigint user_id FK
+        timestamp_with_time_zone acknowledged_at
     }
     core_accessory {
         bigint id PK
@@ -94,9 +134,11 @@ erDiagram
     core_openingperiod {
         bigint id PK
         bigint lab_id FK
+        bigint resource_id FK
         smallint weekday
         time starts_at
         time ends_at
+        boolean closed_all_day
         date valid_from
         date valid_to
     }
@@ -373,8 +415,15 @@ erDiagram
     core_qualificationtype |o--o{ core_equipmentdetail : "qualification"
     core_resource |o--o{ core_equipmentdetail : "access_room"
     core_resource ||--o| core_roomdetail : "resource"
+    core_resource ||--o{ core_safetyprocedure : "resource"
+    core_user ||--o{ core_safetyprocedure : "created_by"
+    core_user |o--o{ core_safetyprocedure : "reviewed_by"
+    core_user |o--o{ core_safetyprocedure : "published_by"
+    core_safetyprocedure ||--o{ core_safetyacknowledgement : "procedure"
+    core_user ||--o{ core_safetyacknowledgement : "user"
     core_resource ||--o{ core_accessory : "resource"
     core_lab ||--o{ core_openingperiod : "lab"
+    core_resource |o--o{ core_openingperiod : "resource"
     core_policy ||--o{ core_policyrevision : "policy"
     core_user |o--o{ core_policyrevision : "actor"
     core_user ||--o{ core_reservation : "applicant"

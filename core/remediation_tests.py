@@ -66,6 +66,16 @@ class RemediationTests(TestCase):
         call_command('seed_demo',verbosity=0)
         self.assertFalse(self.admin.has_role('LAB_ADMIN'));self.assertFalse(LabGrant.objects.filter(user=self.admin).exists())
 
+    def test_seed_grants_new_demo_lab_to_existing_admin_without_restoring_revoked_lab(self):
+        from .management.commands.seed_demo import grant_new_demo_lab_scopes
+        first=Lab.objects.get(code='LAB-101');revoked=Lab.objects.get(code='LAB-202')
+        LabGrant.objects.filter(user=self.admin,lab=revoked).delete()
+        new_lab=Lab.objects.create(code='LAB-404',name='演示·新增管理单元',location='演示地点',description='测试数据')
+        grant_new_demo_lab_scopes(self.admin,[first,revoked,new_lab],{new_lab.pk},admin_created=False)
+        self.assertTrue(LabGrant.objects.filter(user=self.admin,lab=first).exists())
+        self.assertFalse(LabGrant.objects.filter(user=self.admin,lab=revoked).exists())
+        self.assertTrue(LabGrant.objects.filter(user=self.admin,lab=new_lab).exists())
+
     def test_aud0028_resource_audit_contains_old_details(self):
         data=dict(code=self.eq.code,name=self.eq.name,kind='EQUIPMENT',lab=self.eq.lab,description='',category='示波器',risk='HIGH_VALUE',qualification=None,accessories='POWER,电源,2',reason='安全分级调整')
         s.save_resource(self.admin,data,self.eq.pk)

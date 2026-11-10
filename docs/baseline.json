@@ -1,5 +1,5 @@
 {
-  "version": "2.3",
+  "version": "2.4",
   "project": "校园实验室设备预约与借用管理系统",
   "confirmed": {
     "objects": [
@@ -205,6 +205,18 @@
       "spec": "SPEC-27",
       "name": "复核受影响预约",
       "actors": "实验室管理员"
+    },
+    {
+      "id": "UC-28",
+      "spec": "SPEC-28",
+      "name": "编制并提交场地安全信息",
+      "actors": "实验室管理员（编制人）"
+    },
+    {
+      "id": "UC-29",
+      "spec": "SPEC-29",
+      "name": "复核场地安全信息并发布或退回",
+      "actors": "具有该场地管理范围的实验室管理员（复核人）"
     }
   ],
   "references": [

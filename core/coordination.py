@@ -6,6 +6,7 @@ from django.utils import timezone
 from .models import *
 from . import services as s
 from .request_context import correlated
+from .opening_calendar import exception_for, weekly_allows
 
 
 def resource_profile(resource):
@@ -17,12 +18,15 @@ def resource_profile(resource):
 
 def check_calendar(resource,start,end,snapshot=None):
     a,b=start.astimezone(s.TZ),end.astimezone(s.TZ)
-    exception=snapshot.exception(resource,a.date()) if snapshot is not None else CalendarException.objects.filter(lab_id=resource.lab_id,day=a.date(),active=True).first()
+    exception=snapshot.exception(resource,a.date()) if snapshot is not None else exception_for(resource,a.date())
     if exception:
         s.require(not exception.closed,'该日实验室关闭')
         s.require(exception.starts_at<=a.time().replace(tzinfo=None) and b.time().replace(tzinfo=None)<=exception.ends_at,'超出该日例外开放时段')
         return True
-    return False
+    openings=snapshot.openings if snapshot is not None else None
+    s.require(weekly_allows(resource,a.date(),a.time().replace(tzinfo=None),b.time().replace(tzinfo=None),openings),
+              '目标时段超出当前实验室或场地开放时间')
+    return True
 
 
 def check_dependency(resource,start,end,applicant=None,at=None,check_actual=False,snapshot=None):

@@ -106,12 +106,14 @@ test('AUD-0103 latest detail wins when older GET completes last',async()=>{
   assert.equal(p.data.item.status,'CANCELLED');assert.equal(p.data.loading,false);
 });
 
-test('AUD-0103 cancellation invalidates earlier detail and preserves committed state if refresh fails',async()=>{
+test('AUD-0103 cancellation waits for fresh detail and preserves committed state if refresh fails',async()=>{
   signedIn();const p=page('booking');p.setData({id:1,item:booking(),'form.reason':'验收结束'});
-  const old=p.load(),cancel=p.cancel();await tick();assert.equal(requests.length,2);
-  const suppressed=p.load();await suppressed;assert.equal(requests.length,2);
+  const old=p.load();await tick();assert.equal(requests.length,1);assert.equal(p.data.stale,true);
+  await p.cancel();assert.equal(requests.length,1);assert.equal(p.data.busy,false);
+  ok(requests[0],booking());await old;assert.equal(p.data.stale,false);
+  const cancel=p.cancel();await tick();assert.equal(requests.length,2);
   ok(requests[1],booking('CANCELLED'));await tick();assert.equal(requests.length,3);
-  fail(requests[2]);await cancel;ok(requests[0],booking());await old;
+  fail(requests[2]);await cancel;
   assert.equal(p.data.item.status,'CANCELLED');assert.equal(p.data.item.can_cancel,false);assert.equal(p.data.loading,false);assert.equal(p.data.busy,false);assert.ok(p.data.error);
 });
 
@@ -140,9 +142,10 @@ test('AUD-0104 failed mark-all releases invalidated list loading and ignores its
   ok(requests[0],list([{id:2,read_at:null}]));await old;assert.equal(p.data.items.length,0);assert.ok(p.data.error);
 });
 
-test('AUD-0104 failed single read releases invalidated list loading',async()=>{
-  signedIn();const p=page('notifications');p.setData({items:[{id:2,unread:true}],unread:1});const old=p.load(1),opening=p.open({currentTarget:{dataset:{id:2}}});
-  fail(requests[1]);await opening;ok(requests[0],list([]));await old;
+test('AUD-0104 a list refresh removes stale rows before they can be marked read',async()=>{
+  signedIn();const p=page('notifications');p.setData({items:[{id:2,unread:true}],unread:1});const old=p.load(1);
+  assert.equal(p.data.items.length,0);await p.open({currentTarget:{dataset:{id:2}}});assert.equal(requests.length,1);
+  fail(requests[0]);await old;
   assert.equal(p.data.loading,false);assert.equal(p.data.busy,false);assert.equal(p.data.unread,1);assert.ok(p.data.error);
 });
 
@@ -201,4 +204,97 @@ test('AUD-0111 occupancy date load failure cannot also claim that selected range
   assert.ok(p.data.scheduleError);assert.equal(p.data.scheduleBusy,false);assert.equal(p.data.item.schedule.length,0);
   const text=fs.readFileSync(path.join(root,'pages/resource/index.wxml'),'utf8');
   assert.match(text,/!loading && !error && !scheduleBusy && !scheduleError && !item\.schedule\.length/);
+});
+
+test('AUD-0112 reservation confirmation refreshes approval mode before asking the user',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,stale:false,
+    item:{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}},
+    form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程演示',participants:'1'}});
+  let modalContent='';wx.showModal=options=>{modalContent=options.content;options.success({confirm:true});};
+  const submitting=p.submit();await tick();assert.equal(requests.length,1);assert.match(requests[0].url,/\/resources\/1\/$/);
+  ok(requests[0],{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,
+    requires_approval:true,policy:{window_days:14,slot_minutes:30,max_hours:8}});
+  await tick();assert.match(modalContent,/处理方式：提交后由管理员人工审核/);assert.equal(requests.length,2);
+  assert.match(requests[1].url,/\/bookings\/$/);ok(requests[1],booking('PENDING'));await submitting;
+  assert.equal(p.data.item.requires_approval,true);
+});
+
+test('AUD-0112 approval mode can change from manual to automatic before confirmation',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,stale:false,
+    item:{id:1,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:true,policy:{window_days:14,slot_minutes:30,max_hours:8}},
+    form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'模式反向变化测试',participants:'1'}});
+  let modalContent='';wx.showModal=options=>{modalContent=options.content;options.success({confirm:true});};
+  const submitting=p.submit();await tick();
+  ok(requests[0],{id:1,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,
+    requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}});
+  await tick();assert.match(modalContent,/处理方式：规则通过后自动确认/);
+  assert.equal(requests[1].data.expected_approval_mode,'AUTO');
+  ok(requests[1],booking('CONFIRMED'));await submitting;
+});
+
+test('AUD-0112 a newly restricted resource cannot proceed from a stale detail page',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,stale:false,
+    item:{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}},
+    form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程演示',participants:'1'}});
+  const submitting=p.submit();await tick();
+  ok(requests[0],{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:false,
+    reservation_block_reason:'资源维护中',requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}});
+  await submitting;assert.equal(requests.length,1);assert.equal(p.data.error,'资源维护中');
+});
+
+test('AUD-0113 reservation form stays immutable during the fresh confirmation request',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,stale:false,
+    item:{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}},
+    form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程演示',participants:'1'}});
+  const submitting=p.submit();await tick();assert.equal(p.data.busy,true);assert.equal(requests.length,1);
+  p.input({currentTarget:{dataset:{field:'purpose'}},detail:{value:'篡改中的用途'}});
+  p.chooseDate({detail:{value:'2027-01-02'}});p.chooseStart({detail:{value:'12:00'}});
+  p.reportIncident();p.acknowledgeSafety();
+  assert.deepEqual(p.data.form,{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程演示',participants:'1'});
+  assert.equal(navigations.length,0);
+  ok(requests[0],{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}});
+  await tick();assert.equal(requests.length,2);assert.equal(requests[1].data.starts_at,'2027-01-01T10:00:00');assert.equal(requests[1].data.purpose,'课程演示');
+  ok(requests[1],booking('CONFIRMED',1));await submitting;assert.equal(p.data.busy,false);
+});
+
+test('AUD-0114 stale resource page can recover a committed booking receipt before checking current availability',async()=>{
+  signedIn();const original=api.submitBooking(values());const rejected=assert.rejects(original);fail(requests[0]);await rejected;
+  const pending=api.draft(1),p=page('resource');p.setData({id:1,stale:true,hasPendingDraft:true,
+    form:{date:pending.values.starts_at.slice(0,10),start:pending.values.starts_at.slice(11,16),end:pending.values.ends_at.slice(11,16),purpose:pending.values.purpose,participants:'1'}});
+  const retry=p.submit();await tick();assert.equal(requests.length,2,JSON.stringify({error:p.data.error,form:p.data.form,pending:api.draft(1)}));assert.match(requests[1].url,/\/receipts\//);
+  ok(requests[1],{found:true,kind:'booking',result:{id:77,status:'CONFIRMED'}});await retry;
+  assert.equal(requests.length,2);assert.equal(api.draft(1),null);assert.ok(navigations.includes('/pages/booking/index?id=77'));
+});
+
+test('AUD-0114 missing receipt replays only the original request after the resource becomes unavailable',async()=>{
+  signedIn();const original=api.submitBooking(values());const rejected=assert.rejects(original);fail(requests[0]);await rejected;
+  const pending=api.draft(1),key=pending.key,p=page('resource');p.setData({id:1,stale:true,hasPendingDraft:true,
+    item:{id:1,kind:'EQUIPMENT',can_apply:true,can_reserve:false},
+    form:{date:pending.values.starts_at.slice(0,10),start:pending.values.starts_at.slice(11,16),end:pending.values.ends_at.slice(11,16),purpose:pending.values.purpose,participants:'1'}});
+  const retry=p.submit();await tick();assert.match(requests[1].url,/\/receipts\//);ok(requests[1],{found:false,kind:null,result:null});await tick();
+  assert.equal(requests.length,3);assert.match(requests[2].url,/\/bookings\/$/);assert.equal(requests[2].data.request_key,key);assert.equal(requests[2].data.purpose,pending.values.purpose);
+  requests[2].success({statusCode:409,data:{ok:false,error:{code:'RULE_REJECTED',message:'资源维护中'}}});await retry;
+  assert.equal(api.draft(1),null);assert.equal(p.data.hasPendingDraft,false);assert.match(p.data.error,/资源维护中/);
+});
+
+test('AUD-0115 booking confirmation cannot cross into a replacement account',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,stale:false,
+    item:{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}},
+    form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'旧账号申请',participants:'1'}});
+  let modal;wx.showModal=options=>{modal=options;};
+  const submitting=p.submit();await tick();ok(requests[0],{id:1,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{window_days:14,slot_minutes:30,max_hours:8}});await tick();
+  assert.ok(modal);signedIn(2,'b'.repeat(32));modal.success({confirm:true});await submitting;
+  assert.equal(requests.length,1);assert.match(p.data.error,/登录身份已变化/);assert.equal(api.session().user.id,2);
+});
+
+test('AUD-0115 safety acknowledgement and reservation cannot overlap',async()=>{
+  signedIn();const p=page('resource');p.setData({id:1,safetyBusy:true,item:{id:1,kind:'ROOM',can_apply:true,can_reserve:true},form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程实验',participants:'2'}});
+  await p.submit();p.reportIncident();assert.equal(requests.length,0);assert.equal(navigations.length,0);assert.equal(p.data.busy,false);
+  const text=fs.readFileSync(path.join(root,'pages/resource/index.wxml'),'utf8');
+  assert.match(text,/disabled="\{\{busy \|\| safetyBusy/);assert.match(text,/disabled="\{\{busy \|\| safetyBusy\}\}" bindtap="reportIncident"/);
+});
+
+test('AUD-0114 WXML leaves stale-result reconciliation enabled while ordinary stale booking remains disabled',()=>{
+  const text=fs.readFileSync(path.join(root,'pages/resource/index.wxml'),'utf8');
+  assert.match(text,/\(stale && !hasPendingDraft\)/);assert.match(text,/核对上次预约结果/);
 });

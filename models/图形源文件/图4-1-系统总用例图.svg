@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="507" height="720" viewBox="0 0 507 720"><rect width="100%" height="100%" fill="white"/>
-<rect x="85" y="4" width="338" height="715" fill="none" stroke="#24384b"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="507" height="840" viewBox="0 0 507 840"><rect width="100%" height="100%" fill="white"/>
+<rect x="85" y="4" width="338" height="835" fill="none" stroke="#24384b"/>
 <rect x="89" y="38" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
 <text x="254.0" y="50.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">预约服务</text>
 <rect x="89" y="213" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/>
@@ -185,4 +185,8 @@
 <ellipse cx="173.0" cy="330.0" rx="69.0" ry="16.0" fill="#eef3ef" stroke="#356f69"/>
 <text x="173.0" y="327.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">UC-27</text>
 <text x="173.0" y="339.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9" fill="#2a3436">复核受影响预约</text>
-</svg>
+<rect x="89" y="710" width="330" height="18" fill="#eef3ef" stroke="#b7c3c0"/><text x="254" y="722.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#24384b">安全信息</text>
+<ellipse cx="173" cy="754" rx="69" ry="16" fill="#eef3ef" stroke="#356f69"/><text x="173" y="751.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.2" fill="#2a3436">UC-28</text><text x="173" y="763.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="8.2" fill="#2a3436">编制并提交场地安全信息</text>
+<ellipse cx="173" cy="794" rx="69" ry="16" fill="#eef3ef" stroke="#356f69"/><text x="173" y="791.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="7.8" fill="#2a3436">UC-29</text><text x="173" y="803.15" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="7.8" fill="#2a3436">复核并发布场地安全信息</text>
+<g stroke="#536872" stroke-width="1" fill="none"><circle cx="28" cy="748" r="3"/><path d="M28 751v8m-6-4h12m-6 4-5 6m5-6 5 6"/></g><text x="28" y="779" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="7.6" fill="#2a3436">实验室管理员</text>
+<path d="M44 756H104M44 762H58V794H104" fill="none" stroke="#4b716b" stroke-width="0.8"/></svg>

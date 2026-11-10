@@ -15,7 +15,23 @@ function resourceMark(item) {
   for(const [pattern,mark,code,label] of groups)if(pattern.test(text))return {icon_mark:mark,icon_class:code,icon_label:label};
   return {icon_mark:'器',icon_class:'equipment',icon_label:'实验设备'};
 }
-function resource(item) { return Object.assign({}, item, resourceMark(item), { reference_photo:photos.forResource(item), schedule: (item.schedule || []).map(x => Object.assign({}, x, { time_label: dateTime(x.starts_at) + " — " + x.ends_at.slice(11, 16) })), mode_label: item.requires_approval ? '人工审核' : '自动确认', category_label: item.kind === 'ROOM' ? '整间场地 · ' + item.capacity + '人' : item.category, availability_tone: item.available === true ? 'green' : (item.available === false ? 'red' : 'muted'), tone: item.service_status === 'NORMAL' ? 'green' : 'red' }); }
+function resource(item) {
+  const accessories=Array.isArray(item.accessories)?item.accessories:[];
+  const risk=item.kind==='EQUIPMENT'?(item.risk||'待核实'):'';
+  return Object.assign({}, item, resourceMark(item), {
+    reference_photo:photos.forResource(item),
+    schedule:(item.schedule||[]).map(x=>Object.assign({},x,{time_label:dateTime(x.starts_at)+' — '+x.ends_at.slice(11,16)})),
+    mode_label:item.requires_approval?'人工审核':'规则通过后自动确认',
+    risk_label:risk,
+    risk_tone:risk==='危险'?'red':(risk==='高价值'?'amber':'muted'),
+    handover_label:String(item.handover_location||'').trim()||'未登记，请向实验室管理员确认',
+    accessories,
+    accessories_empty_label:'暂无配件记录，请向实验室管理员确认。',
+    category_label:item.kind==='ROOM'?'整间场地 · '+item.capacity+'人 · '+(item.space_category||'类别待登记'):item.category,
+    availability_tone:item.available===true?'green':(item.available===false?'red':'muted'),
+    tone:item.service_status==='NORMAL'?'green':'red'
+  });
+}
 function notify(item) { return Object.assign({}, item, { time_label: dateTime(item.created_at), unread: !item.read_at }); }
 function defaultForm() { return { date: day(Date.now() + 86400000), start: '10:00', end: '11:00', purpose: '', participants: '1' }; }
 function validateForm(form, policy) {

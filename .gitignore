@@ -33,5 +33,7 @@ miniprogram/.debugger/
 *.har
 *.trace.zip
 work/
+/tmp/
+docs/整改/
 **/preview-qr*.png
 **/wechat-login*.png

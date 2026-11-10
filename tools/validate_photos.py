@@ -1,24 +1,20 @@
-"""Verify bundled real-photo provenance and equal files across the two clients."""
+"""Ensure public clients don't bundle unlicensed third-party lab photographs."""
 from pathlib import Path
-from urllib.parse import urlsplit
-import hashlib,json
+import json
 
-root=Path(__file__).resolve().parents[1]
-web=root/'static/photos';mini=root/'miniprogram/assets/photos'
-catalog=json.loads((web/'catalog.json').read_text('utf8'))
-assert catalog==json.loads((mini/'catalog.json').read_text('utf8')),'Photo metadata differs across clients'
-module=(mini/'catalog.js').read_text('utf8').split('module.exports = ',1)[1].strip().removesuffix(';')
-assert catalog==json.loads(module),'Native JS photo module differs from the provenance manifest'
-assert {p['id'] for p in catalog}=={'scene','robot-platforms','robot-controls'}
-total=0
-for p in catalog:
-    name=p['file'];assert Path(name).name==name and name.endswith('.jpg')
-    for key in ('source_page','source_image'):
-        url=urlsplit(p[key]);assert url.scheme=='https' and url.hostname.endswith('.csu.edu.cn')
-    raw=(web/name).read_bytes();assert raw==(mini/name).read_bytes()
-    assert raw.startswith(b'\xff\xd8') and len(raw)==p['bytes']
-    assert hashlib.sha256(raw).hexdigest()==p['sha256'],'Source image bytes changed'
-    assert p['kind']=='真实公开照片' and p['caption']=='中南大学实景参考 · 非本资源实拍'
-    total+=len(raw)
-assert total<300000,'Keep this bundled photo set small'
-print(f'PASS: {len(catalog)} original real photographs, {total} bytes per client, matching sources and SHA-256; no external image dependency')
+root = Path(__file__).resolve().parents[1]
+web = root / "static" / "photos"
+mini = root / "miniprogram" / "assets" / "photos"
+web_catalog = json.loads((web / "catalog.json").read_text("utf-8"))
+mini_catalog = json.loads((mini / "catalog.json").read_text("utf-8"))
+module = (mini / "catalog.js").read_text("utf-8").split("module.exports = ", 1)[1].strip().removesuffix(";")
+
+assert web_catalog == [] and mini_catalog == [] and json.loads(module) == [], "Both clients must use the no-photo placeholder until rights are verified"
+for directory in (web, mini):
+    bundled = [p.name for p in directory.iterdir() if p.is_file() and p.suffix.lower() in {".jpg", ".jpeg", ".webp"}]
+    assert not bundled, f"Unapproved photographs remain bundled: {directory}: {bundled}"
+
+for required in ("static/photos.css", "templates/resources.html", "templates/login.html", "miniprogram/pages/resources/index.wxml", "docs/图片来源.md"):
+    assert (root / required).exists(), f"Missing no-photo policy surface: {required}"
+
+print("PASS: web and mini-program catalogs are empty; no third-party lab photographs are bundled")

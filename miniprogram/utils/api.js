@@ -113,6 +113,15 @@ function draft(resourceId) {
   for (let i = items.length - 1; i >= 0; i--) if (resourceId === undefined || items[i].values.resource_id === resourceId) return items[i];
   return null;
 }
+async function checkBooking(resourceId) {
+  const saved=session(),pending=draft(resourceId);
+  if(!saved || !pending)throw new Error('没有待核对的原预约，请刷新预约记录');
+  const outcome=await request('/receipts/'+pending.key+'/');
+  if(outcome.found && outcome.kind==='booking' && sameSession(saved)){
+    saveDrafts(saved,pendingDrafts(saved).filter(item=>item.key!==pending.key));
+  }
+  return outcome;
+}
 async function submitBooking(values) {
   const saved = session();
   if (!saved) { goLogin(); throw new Error("请先登录"); }
@@ -131,6 +140,12 @@ async function submitBooking(values) {
       if (legacy && legacy.key === pending.key) wx.removeStorageSync(DRAFT_KEY);
     }
     return result;
+  }).catch(error=>{
+    // A definite client/business rejection is transactional and can be corrected.
+    // Timeouts and server failures remain unresolved for receipt lookup and replay.
+    if(error.status>=400 && error.status<500 && sameSession(saved))
+      saveDrafts(saved,pendingDrafts(saved).filter(item=>item.key!==pending.key));
+    throw error;
   });
   submissions.set(flight, sending);
   try { return await sending; } finally { if (submissions.get(flight) === sending) submissions.delete(flight); }
@@ -184,4 +199,4 @@ async function checkAction(context) {
   if(outcome.found)saveActions(saved,actionItems(saved).filter(item=>item.key!==pending.key));
   return outcome;
 }
-module.exports = { baseUrl, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, actionDraft, submitAction, checkAction, errorText, uuid };
+module.exports = { baseUrl, normalizeBase, session, clearSession, requireLogin, request, login, logout, submitBooking, draft, checkBooking, actionDraft, submitAction, checkAction, errorText, uuid };

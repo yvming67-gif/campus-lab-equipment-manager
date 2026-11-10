@@ -1,4 +1,5 @@
 import uuid
+from urllib.parse import urlsplit
 from django.db import models
 from django.db.models import Q, F
 from django.contrib.auth.models import AbstractUser
@@ -102,11 +103,154 @@ class EquipmentDetail(models.Model):
 
 class RoomDetail(models.Model):
     resource = models.OneToOneField(Resource, on_delete=models.PROTECT, related_name="room")
+    location_label = models.CharField("场地具体位置", max_length=160, blank=True)
     capacity = models.PositiveIntegerField("容纳人数", default=30)
-    safety_note = models.TextField("安全说明", blank=True)
+    space_category = models.CharField("场地类别（本项目目录分类）", max_length=80, blank=True)
+    facilities = models.TextField("设施清单（逐项说明）", blank=True)
+    safety_note = models.TextField("兼容说明（不作为正式规程）", blank=True)
     class Meta:
         verbose_name = "场地属性"
         constraints = [models.CheckConstraint(condition=Q(capacity__gt=0), name="room_capacity_positive")]
+
+class SafetyProcedure(models.Model):
+    """Versioned safety information; published content is immutable."""
+    STATUS = [("DRAFT", "草稿"), ("PENDING_REVIEW", "待审核"),
+              ("RETURNED", "退回修订"), ("PUBLISHED", "已发布"), ("SUPERSEDED", "已被新版本替代")]
+    resource = models.ForeignKey(Resource, on_delete=models.PROTECT, related_name="safety_procedures")
+    version = models.PositiveIntegerField("版本号")
+    title = models.CharField("规程标题", max_length=160)
+    risk_categories = models.TextField("风险类别", blank=True)
+    applicable_users = models.TextField("适用对象", blank=True)
+    prerequisites = models.TextField("预约或进入前置条件", blank=True)
+    required_ppe = models.TextField("个人防护用品", blank=True)
+    pre_use_checks = models.TextField("使用前检查", blank=True)
+    operating_cautions = models.TextField("操作注意事项", blank=True)
+    prohibited_actions = models.TextField("禁止事项", blank=True)
+    incident_route = models.TextField("异常处置路径", blank=True)
+    source_title = models.CharField("来源文件或制度标题", max_length=200, blank=True)
+    source_reference = models.CharField("来源链接或文件编号", max_length=500, blank=True)
+    source_version = models.CharField("来源版本", max_length=80, blank=True)
+    source_effective_date = models.DateField("来源生效日期", null=True, blank=True)
+    effective_from = models.DateField("本版本生效日期", null=True, blank=True)
+    review_due_date = models.DateField("复核期限", null=True, blank=True)
+    requires_acknowledgement = models.BooleanField("要求阅读确认", default=False)
+    status = models.CharField("审核状态", max_length=20, choices=STATUS, default="DRAFT")
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name="safety_drafts")
+    submitted_at = models.DateTimeField(null=True, blank=True)
+    reviewed_by = models.ForeignKey(User, null=True, on_delete=models.PROTECT, related_name="safety_reviews")
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    review_note = models.TextField("复核意见", blank=True)
+    published_by = models.ForeignKey(User, null=True, on_delete=models.PROTECT, related_name="safety_publications")
+    published_at = models.DateTimeField(null=True, blank=True)
+    change_reason = models.TextField("编制或修订原因")
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "场地安全规程版本"
+        ordering = ["resource_id", "-version"]
+        constraints = [
+            models.UniqueConstraint(fields=["resource", "version"], name="safety_resource_version_unique"),
+            models.UniqueConstraint(fields=["resource"], condition=Q(status="PUBLISHED"), name="one_published_safety_per_resource"),
+        ]
+
+    @property
+    def lab_id(self):
+        return self.resource.lab_id
+
+    @property
+    def source_url(self):
+        parts = urlsplit(self.source_reference or "")
+        return self.source_reference if parts.scheme == "https" and parts.netloc else ""
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.status != "DRAFT":
+                raise ValidationError("安全规程必须从草稿状态创建")
+            return super().save(*args, **kwargs)
+
+        previous = type(self).objects.get(pk=self.pk)
+        identity = ["resource_id", "version", "created_by_id", "created_at"]
+        if any(getattr(previous, field) != getattr(self, field) for field in identity):
+            raise ValidationError("安全规程的资源、版本和创建记录不可变更")
+        content = ["title", "risk_categories", "applicable_users", "prerequisites", "required_ppe",
+                   "pre_use_checks", "operating_cautions", "prohibited_actions", "incident_route",
+                   "source_title", "source_reference", "source_version", "source_effective_date",
+                   "effective_from", "review_due_date", "requires_acknowledgement", "change_reason"]
+        if previous.status != "DRAFT" and any(getattr(previous, field) != getattr(self, field) for field in content):
+            raise ValidationError("已提交审核或已发布规程内容不可覆盖；请另建版本并保留历史记录")
+        attribution = ["reviewed_by_id", "reviewed_at", "published_by_id", "published_at"]
+        submission_time_changed = previous.status != "DRAFT" and previous.submitted_at != self.submitted_at
+        if submission_time_changed:
+            raise ValidationError("安全规程提交时间不可变更")
+        attribution_changed = any(getattr(previous, field) != getattr(self, field) for field in attribution)
+        if attribution_changed:
+            is_first_review_decision = previous.status == "PENDING_REVIEW" and self.status in {"PUBLISHED", "RETURNED"}
+            rewrites_existing_attribution = any(
+                getattr(previous, field) is not None and getattr(previous, field) != getattr(self, field)
+                for field in attribution
+            )
+            if not is_first_review_decision or rewrites_existing_attribution:
+                raise ValidationError("安全规程复核和发布归属记录不可覆盖")
+        if previous.review_note != self.review_note:
+            if previous.status != "PENDING_REVIEW" or self.status not in {"PUBLISHED", "RETURNED"}:
+                raise ValidationError("安全规程复核意见只可在首次审核决定时记录，之后不可覆盖")
+            if not self.review_note.strip():
+                raise ValidationError("复核发布或退回修订时必须记录复核意见")
+        allowed_transitions = {
+            "DRAFT": {"DRAFT", "PENDING_REVIEW"},
+            "PENDING_REVIEW": {"PENDING_REVIEW", "PUBLISHED", "RETURNED"},
+            "RETURNED": {"RETURNED"},
+            "PUBLISHED": {"PUBLISHED", "SUPERSEDED"},
+            "SUPERSEDED": {"SUPERSEDED"},
+        }
+        if self.status not in allowed_transitions.get(previous.status, set()):
+            raise ValidationError("安全规程状态不能回退或跳级")
+        if self.status in {"PENDING_REVIEW", "PUBLISHED"}:
+            required = ["title", "risk_categories", "applicable_users", "prerequisites", "required_ppe",
+                        "pre_use_checks", "operating_cautions", "prohibited_actions", "incident_route",
+                        "source_title", "source_reference", "source_version", "source_effective_date",
+                        "effective_from", "review_due_date", "change_reason"]
+            if any(not str(getattr(self, field) or "").strip() for field in required):
+                raise ValidationError("提交复核前须填写完整的安全信息正文与来源版本")
+            if self.effective_from > timezone.localdate() or self.source_effective_date > self.effective_from:
+                raise ValidationError("来源和生效日期不符合版本发布顺序")
+            if self.review_due_date < max(self.effective_from, timezone.localdate()):
+                raise ValidationError("复核期限不得早于本版本生效日或当前日期")
+        if previous.status == "DRAFT" and self.status == "PENDING_REVIEW" and not self.submitted_at:
+            raise ValidationError("提交复核时必须记录提交时间")
+        if previous.status == "PENDING_REVIEW" and self.status in {"PUBLISHED", "RETURNED"}:
+            if not self.reviewed_by_id or not self.reviewed_at or self.reviewed_by_id == self.created_by_id:
+                raise ValidationError("提交人不能复核本人版本；审核决定须记录其他复核人和时间")
+            if not self.review_note.strip():
+                raise ValidationError("复核发布或退回修订时必须记录复核意见")
+            if self.status == "PUBLISHED":
+                if not self.published_by_id or self.reviewed_by_id != self.published_by_id or not self.published_at:
+                    raise ValidationError("发布时必须记录同一复核发布人及发布时间")
+            elif self.published_by_id or self.published_at:
+                raise ValidationError("退回修订不能生成发布时间或发布人")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("安全规程版本不可删除")
+
+class SafetyAcknowledgement(models.Model):
+    procedure = models.ForeignKey(SafetyProcedure, on_delete=models.PROTECT, related_name="acknowledgements")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="safety_acknowledgements")
+    acknowledged_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "安全信息阅读确认"
+        constraints = [models.UniqueConstraint(fields=["procedure", "user"], name="safety_ack_user_version_unique")]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("阅读确认只能追加，不可覆盖")
+        if self.procedure.status != "PUBLISHED":
+            raise ValidationError("只能确认已发布的安全信息")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("阅读确认只能追加，不可删除")
 
 class Accessory(models.Model):
     resource = models.ForeignKey(Resource, on_delete=models.PROTECT, related_name="accessories")
@@ -120,14 +264,36 @@ class Accessory(models.Model):
 
 class OpeningPeriod(models.Model):
     lab = models.ForeignKey(Lab, on_delete=models.PROTECT, related_name="opening_periods")
+    # Optional room scope. A room-specific weekly schedule overrides its lab's
+    # weekly schedule; lab-wide calendar exceptions still apply to all rooms.
+    resource = models.ForeignKey(Resource, null=True, blank=True, on_delete=models.PROTECT,
+                                 related_name="opening_periods")
     weekday = models.PositiveSmallIntegerField("星期1至7")
     starts_at = models.TimeField("开放时间")
     ends_at = models.TimeField("关闭时间")
+    closed_all_day = models.BooleanField("该星期全天关闭", default=False)
     valid_from = models.DateField(default=timezone.localdate)
     valid_to = models.DateField(null=True, blank=True)
     class Meta:
         verbose_name = "日间开放时段"
-        constraints = [models.CheckConstraint(condition=Q(weekday__gte=1, weekday__lte=7), name="opening_weekday_valid"), models.CheckConstraint(condition=Q(starts_at__lt=F("ends_at")), name="opening_time_order"), models.UniqueConstraint(fields=["lab", "weekday", "starts_at", "valid_from"], name="opening_start_unique")]
+        constraints = [
+            models.CheckConstraint(condition=Q(weekday__gte=1, weekday__lte=7), name="opening_weekday_valid"),
+            models.CheckConstraint(condition=(Q(closed_all_day=True, starts_at=F("ends_at")) | Q(closed_all_day=False, starts_at__lt=F("ends_at"))), name="opening_time_order"),
+            models.UniqueConstraint(fields=["lab", "weekday", "starts_at", "valid_from"], condition=Q(resource__isnull=True), name="opening_lab_start_unique"),
+            models.UniqueConstraint(fields=["resource", "weekday", "starts_at", "valid_from"], condition=Q(resource__isnull=False), name="opening_room_start_unique"),
+        ]
+    def clean(self):
+        if self.closed_all_day and self.starts_at != self.ends_at:
+            raise ValidationError("全天关闭日历不应包含开放时段")
+        if not self.closed_all_day and self.starts_at >= self.ends_at:
+            raise ValidationError("关闭时间必须晚于开放时间")
+        if self.resource_id:
+            resource=Resource.objects.only("kind","lab_id").get(pk=self.resource_id)
+            if resource.kind!="ROOM" or resource.lab_id!=self.lab_id:
+                raise ValidationError("场地开放日历必须指向同一管理单元内的实体场地")
+    def save(self,*args,**kwargs):
+        self.clean()
+        return super().save(*args,**kwargs)
 
 class Policy(models.Model):
     version = models.PositiveIntegerField(default=1)

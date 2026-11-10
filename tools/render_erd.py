@@ -19,7 +19,8 @@ DOMAINS=[
  ("C","预约与规则","申请、最终决定和规则版本",["Reservation","ApprovalDecision","ReviewNote","Policy","PolicyRevision","ReservationReview"],"#f3eedc","#8d7948",[["Reservation","ApprovalDecision","ReservationReview"],["Policy","PolicyRevision","ReviewNote"]]),
  ("D","现场使用","设备交接与场地实际使用",["Loan","ReturnRecord","HandoverItem","RoomUse","Coordination"],"#e6eef5","#50778c",[["Loan","ReturnRecord"],["RoomUse","HandoverItem","Coordination"]]),
  ("E","异常与维修","证据、工单和独立验收",["Incident","Evidence","WorkOrder","WorkOrderEvent","IncidentResponse"],"#f3e8e1","#936c56",[["Incident","Evidence","IncidentResponse"],["WorkOrder","WorkOrderEvent"]]),
- ("F","审计与通知","状态区间和可追踪投递",["AuditEvent","ServicePeriod","Notification","Delivery","DeliveryAttempt","MockReceipt","JobHeartbeat"],"#ece9f2","#776785",[["AuditEvent","ServicePeriod","MockReceipt"],["Notification","Delivery","DeliveryAttempt","JobHeartbeat"]])]
+ ("F","审计与通知","状态区间和可追踪投递",["AuditEvent","ServicePeriod","Notification","Delivery","DeliveryAttempt","MockReceipt","JobHeartbeat"],"#ece9f2","#776785",[["AuditEvent","ServicePeriod","MockReceipt"],["Notification","Delivery","DeliveryAttempt","JobHeartbeat"]]),
+ ("G","场地安全信息","来源、复核和版本明确的房间安全信息",["SafetyProcedure","SafetyAcknowledgement"],"#f1e9df","#8a674d",[["SafetyProcedure"],["SafetyAcknowledgement"]])]
 BY_DOMAIN={d[0]:d for d in DOMAINS}
 SCHEMA=json.loads((MODEL/"schema.json").read_text("utf-8"));BY={m["model"]:m for m in SCHEMA["models"]};TABLE={m["table"]:m for m in SCHEMA["models"]}
 CODES={n:d[0]+str(i+1).zfill(2) for d in DOMAINS for i,n in enumerate(d[3])}
@@ -282,7 +283,7 @@ def paint(scene,p,shared=False):
         p.line([(65,143),(2735,143)],"#aeb9bd",1)
         p.text(65,scene.height-65,"阅读顺序：资源 → 预约 → 现场使用 → 异常维修；身份、规则与审计为共用支撑。",12,INK,"ERDCJK")
         p.text(65,scene.height-40,f"实体代码用于跨域定位；R01-R{FK_COUNT:02d}对应完整关系索引。实体、字段及外键由实际模型导出。",10.8,MUTED,"ERDCJK")
-        p.text(2735,scene.height-40,"2026-10-20  /  ERD 2.1",10.5,MUTED,"ERDSans","right")
+        p.text(2735,scene.height-40,"2026-11-09  /  ERD 2.4",10.5,MUTED,"ERDSans","right")
         p.text(1790,scene.height-100,"关键约束",12,INK,"ERDCJK")
         p.text(1790,scene.height-80,"待审核不占资源；确认与使用中的重叠区间互斥。",10.5,MUTED,"ERDCJK")
         p.text(1790,scene.height-62,"设备与场地分别记录实际使用；审计逻辑引用不伪装为外键。",10.5,MUTED,"ERDCJK")
@@ -297,6 +298,8 @@ def make_scenes():
     for index,key in enumerate(['A','B','C']):master.group(key,70+index*920,170,820,BY_DOMAIN[key][6])
     second=max(g['y']+g['h'] for g in master.groups)+90
     for index,key in enumerate(['F','E','D']):master.group(key,70+index*920,second,820,BY_DOMAIN[key][6])
+    third=max(g['y']+g['h'] for g in master.groups)+90
+    master.group('G',70,third,820,BY_DOMAIN['G'][6])
     master.height=max(g['y']+g['h'] for g in master.groups)+150
     master.route()
     domains=[]
@@ -339,7 +342,7 @@ def drawio(scene,path):
         for xx,yy in r["points"][1:-1]:SubElement(pts,"mxPoint",x=str(xx),y=str(yy))
     if not scene.small:
         vertex("title",scene.title+f"<br/><font style='font-size:13px'>{ENTITY_COUNT} entities / {FIELD_COUNT} fields / {FK_COUNT} physical foreign keys</font>",65,30,1400,100,"text;html=1;align=left;fontSize=30;fontFamily=Microsoft YaHei;","notes")
-        vertex("legend","金色PK / 蓝色FK目标 / ?可空 / UQ单列唯一<br/>共享责任引用在字段行完整标注，可切换共享引用图层。<br/>R01-R61见关系索引；审计entity_type+entity_id为逻辑引用。",1640,30,1080,100,"text;html=1;align=left;fontSize=16;fontFamily=Microsoft YaHei;","notes")
+        vertex("legend",f"金色PK / 蓝色FK目标 / ?可空 / UQ单列唯一<br/>共享责任引用在字段行完整标注，可切换共享引用图层。<br/>R01-R{FK_COUNT:02d}见关系索引；审计entity_type+entity_id为逻辑引用。",1640,30,1080,100,"text;html=1;align=left;fontSize=16;fontFamily=Microsoft YaHei;","notes")
     path.parent.mkdir(parents=True,exist_ok=True);ElementTree(root).write(path,encoding="utf-8",xml_declaration=True)
 
 def export_scene(scene,stem):
@@ -355,7 +358,8 @@ DOMAIN_NOTES={
  "C":["待审核不占用时段；自动确认与人工批准均在事务中重新检查冲突。","最终决定最多一条，补充过程可多条；PolicyRevision保留参数变更版本。"],
  "D":["预约记录计划承诺；Loan、ReturnRecord、RoomUse分别记录实际使用事实。","配件交接保存名称、数量及状态快照，避免主档变化改写既有历史。"],
  "E":["异常与维修分开建模；同一异常最多一张开放工单，不合并不同故障。","维修提交结果与管理员独立验收分开记录，全部阻断解除后方可恢复。"],
- "F":["通知、渠道投递与每次尝试分层；失败重试不能回滚已保存业务。","AuditEvent的对象编号为逻辑引用；MockReceipt仅属于模拟消息适配器。"]}
+ "F":["通知、渠道投递与每次尝试分层；失败重试不能回滚已保存业务。","AuditEvent的对象编号为逻辑引用；MockReceipt仅属于模拟消息适配器。"],
+ "G":["场地安全信息按版本记录来源、生效日期和复核期限；无核实材料时不发布。","阅读确认关联用户和具体版本，不代表培训、考核、准入或现场检查。"]}
 
 def export_pdfs(master,domains):
     path=DEST/"完整ERD总图.pdf";size=landscape(A0);c=canvas.Canvas(str(path),pagesize=size,pageCompression=1)
@@ -379,7 +383,7 @@ def export_index(master,domains):
     with (DEST/"关系索引.csv").open("w",encoding="utf-8-sig",newline="") as f:
         writer=csv.writer(f);writer.writerow(["关系编号","子实体代码","引用表","引用字段","父实体代码","目标表","目标字段","子记录对应父","父记录对应子","删除策略"])
         for r in REL:writer.writerow([r["id"],CODES[r["child"]],r["from_table"],r["from_field"],CODES[r["parent"]],r["to_table"],r["to_field"],"0..1" if r["null"] else "1","0..1" if r["unique"] else "0..N","PROTECT (ORM) / NO ACTION (SQL)"])
-    info={"schema_hash_format":"canonical-json-sorted-compact-utf8","schema_sha256":hashlib.sha256(json.dumps(SCHEMA,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest(),"entity_count":len(master.cards),"field_count":sum(len(c.rows) for c in master.cards.values()),"relationship_count":len(master.edges),"format":"complete-field-vector-v1","shared_reference_default":"hidden; all targets and IDs remain inline","entities":[{"model":c.name,"code":CODES[c.name],"table":c.model["table"],"fields":[r["field"]["column"] for r in c.rows],"rect":c.rect} for c in master.cards.values()],"relationships":[{"id":r["id"],"child":r["child"],"from_field":r["from_field"],"parent":r["parent"],"to_field":r["to_field"],"null":r["null"],"unique":r["unique"],"shared":r["shared"],"points":r["points"]} for r in master.edges],"domains":[{"code":s.groups[0]["key"],"entities":list(s.cards)} for s in domains]}
+    info={"schema_hash_format":"canonical-json-sorted-compact-utf8","schema_sha256":hashlib.sha256(json.dumps(SCHEMA,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest(),"entity_count":len(master.cards),"field_count":sum(len(c.rows) for c in master.cards.values()),"relationship_count":len(master.edges),"format":"complete-field-vector-v1","model_version":"2.4","generated_on":"2026-11-09","shared_reference_default":"hidden; all targets and IDs remain inline","entities":[{"model":c.name,"code":CODES[c.name],"table":c.model["table"],"fields":[r["field"]["column"] for r in c.rows],"rect":c.rect} for c in master.cards.values()],"relationships":[{"id":r["id"],"child":r["child"],"from_field":r["from_field"],"parent":r["parent"],"to_field":r["to_field"],"null":r["null"],"unique":r["unique"],"shared":r["shared"],"points":r["points"]} for r in master.edges],"domains":[{"code":s.groups[0]["key"],"entities":list(s.cards)} for s in domains]}
     (DEST/"manifest.json").write_text(json.dumps(info,ensure_ascii=False,indent=2),"utf-8")
 
 def export_viewer():
@@ -392,18 +396,18 @@ const stage=document.querySelector('#stage'),viewport=document.querySelector('#v
     (DEST/"交互图谱.html").write_text(page.replace("31实体 · 245字段 · 52物理外键",f"{ENTITY_COUNT}实体 · {FIELD_COUNT}字段 · {FK_COUNT}物理外键"),"utf-8")
 
 def navigation_paint(p):
-    p.rect(0,0,507,470,PAPER)
+    p.rect(0,0,507,620,PAPER)
     for i,d in enumerate(DOMAINS):
         x=9+(i%2)*253;y=12+(i//2)*149;w=236;hh=136
         p.rect(x,y,w,hh,d[4],"#b8c3c6",9,.6)
         p.text(x+12,y+22,d[0]+"  "+d[1],11,d[5],"ERDCJK")
         for j,name in enumerate(d[3]):p.text(x+12,y+43+j*13,CODES[name]+"  "+name,8.4,INK,"ERDMono")
-    p.text(10,465,"A—F为定位代码；本图是领域目录，实体关系及完整字段见后续分域图与大幅总图。",7,MUTED,"ERDCJK")
+    p.text(10,615,"A—G为定位代码；本图是领域目录，实体关系及完整字段见后续分域图与大幅总图。",7,MUTED,"ERDCJK")
 
 def navigation_export():
-    scene=Scene(507,470,"业务数据域导航",True);p=SVGPaint(scene);navigation_paint(p)
+    scene=Scene(507,620,"业务数据域导航",True);p=SVGPaint(scene);navigation_paint(p)
     ElementTree(p.root).write(SOURCE/"图D-1-业务数据域导航.svg",encoding="utf-8",xml_declaration=True)
-    root=Element("mxfile",host="app.diagrams.net",type="device");dia=SubElement(root,"diagram",name="业务数据域导航");model=SubElement(dia,"mxGraphModel",page="1",pageWidth="507",pageHeight="470");cells=SubElement(model,"root");SubElement(cells,"mxCell",id="0");SubElement(cells,"mxCell",id="1",parent="0")
+    root=Element("mxfile",host="app.diagrams.net",type="device");dia=SubElement(root,"diagram",name="业务数据域导航");model=SubElement(dia,"mxGraphModel",page="1",pageWidth="507",pageHeight="620");cells=SubElement(model,"root");SubElement(cells,"mxCell",id="0");SubElement(cells,"mxCell",id="1",parent="0")
     for i,d in enumerate(DOMAINS):
         value="<b>"+d[0]+" "+d[1]+"</b><br/>"+"<br/>".join(CODES[n]+" "+n for n in d[3]);c=SubElement(cells,"mxCell",id=d[0],value=value,vertex="1",parent="1",style="rounded=1;html=1;align=left;spacing=12;fontFamily=Microsoft YaHei;fontSize=9;fillColor="+d[4]+";strokeColor=#b8c3c6;");SubElement(c,"mxGeometry",x=str(9+(i%2)*253),y=str(12+(i//2)*149),width="236",height="136",**{"as":"geometry"})
     ElementTree(root).write(SOURCE/"图D-1-业务数据域导航.drawio",encoding="utf-8",xml_declaration=True)

@@ -73,6 +73,25 @@ test('editing time or search before loading more replaces results instead of mix
   assert.equal(requests[1].data.page,1);assert.equal(p.data.items.length,1);assert.equal(p.data.items[0].id,2);assert.match(p.data.appliedTime,/12:00/);
 });
 
+test('a failed changed resource query clears results from the previous filters and can be retried',async()=>{
+  signedIn();const p=page('resources');
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:1,kind:'EQUIPMENT',service_status:'NORMAL'}],labs:[],page:1,has_more:false,total:1}}});
+  await p.load(1);assert.equal(p.data.items.length,1);
+  p.setData({'form.q':'示波器'});reply=r=>r.fail({errMsg:'request:fail timeout'});
+  await p.search();assert.equal(p.data.items.length,0);assert.equal(p.data.total,0);assert.equal(p.data.queryReady,false);assert.equal(p.data.stale,false);assert.match(p.data.error,/连接超时/);
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:2,kind:'EQUIPMENT',service_status:'NORMAL'}],labs:[],page:1,has_more:false,total:1}}});
+  await p.retry();assert.equal(p.data.items.length,1);assert.equal(p.data.items[0].id,2);assert.equal(p.data.stale,false);assert.equal(p.data.error,'');
+});
+
+test('a failed same-query resource refresh keeps prior results marked stale and exposes retry',async()=>{
+  signedIn();const p=page('resources');
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:1,kind:'EQUIPMENT',service_status:'NORMAL'}],labs:[],page:1,has_more:false,total:1}}});
+  await p.load(1);reply=r=>r.fail({errMsg:'request:fail timeout'});await p.load(1);
+  assert.equal(p.data.items.length,1);assert.equal(p.data.stale,true);assert.ok(p.data.error);
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{items:[{id:1,kind:'EQUIPMENT',service_status:'NORMAL'}],labs:[],page:1,has_more:false,total:1}}});
+  await p.retry();assert.equal(p.data.stale,false);assert.equal(p.data.error,'');
+});
+
 test('native absent storage value does not reset a manually selected booking filter',async()=>{
   signedIn();global.wx.getStorageSync=k=>storage.has(k)?storage.get(k):'';
   const p=page('bookings');p.setData({statusIndex:2});
@@ -206,7 +225,14 @@ test('double tap does not duplicate an in-flight login', async () => {
   reply = () => {};const p = page('login');p.submit();p.submit();assert.equal(requests.length, 1);assert.equal(p.data.busy, true);
 });
 test('student cannot trigger a room reservation from the page controller', async () => {
-  signedIn();const p = page('resource');p.setData({ item: { id: 1, kind: 'ROOM', can_apply: false } });await p.submit();assert.match(p.data.error, /仅教师/);assert.equal(requests.length, 0);
+  signedIn();const p = page('resource');p.setData({ id:1,item: { id: 1, kind: 'ROOM', can_apply: false } });
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{id:1,kind:'ROOM',name:'实验室场地',can_apply:false,can_reserve:true,policy:{window_days:14,slot_minutes:30,max_hours:8}}}});
+  await p.submit();assert.match(p.data.error, /仅教师/);assert.equal(requests.length,1);
+});
+test('resource closed by its lab cannot be reserved from the mini program', async () => {
+  signedIn();const p=page('resource');p.setData({id:1,item:{id:1,kind:'EQUIPMENT',can_apply:true,can_reserve:true}});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{id:1,kind:'EQUIPMENT',name:'数字示波器',can_apply:true,can_reserve:false,reservation_block_reason:'\u6240\u5c5e\u5b9e\u9a8c\u5ba4\u7ba1\u7406\u5355\u5143\u5df2\u505c\u7528\uff0c\u6682\u4e0d\u53ef\u9884\u7ea6'}}});
+  await p.submit();assert.match(p.data.error, /\u6240\u5c5e\u5b9e\u9a8c\u5ba4\u7ba1\u7406\u5355\u5143\u5df2\u505c\u7528/);assert.equal(requests.length, 1);
 });
 test('cancellation transmits the displayed optimistic version', async () => {
   signedIn();const p = page('booking');p.setData({ id: 31, item: { version: 7 }, 'form.reason': '课程调整' });p.load = async () => {};
@@ -221,6 +247,54 @@ test('failed remote logout still clears the local session', async () => {
 });
 test('China date formatting is independent of the computer timezone', () => {
   const fmt = require(path.join(root, 'utils/format'));assert.equal(fmt.day(Date.parse('2026-10-19T20:00:00Z')), '2026-10-20');
+});
+
+test('equipment detail presentation avoids claiming accessory inventory verification', () => {
+  const fmt=require(path.join(root,'utils/format'));
+  const resource=fmt.resource({kind:'EQUIPMENT',risk:'危险',handover_location:'实验楼 A101 管理柜',accessories:[{code:'PWR',name:'电源线',quantity:1}]});
+  assert.equal(resource.risk_label,'危险');assert.equal(resource.risk_tone,'red');
+  assert.equal(resource.handover_label,'实验楼 A101 管理柜');assert.equal(resource.accessories.length,1);
+  const empty=fmt.resource({kind:'EQUIPMENT',risk:'高价值',handover_location:'',accessories:[]});
+  assert.equal(empty.handover_label,'未登记，请向实验室管理员确认');
+  assert.equal(empty.risk_tone,'amber');assert.equal(empty.accessories_empty_label,'暂无配件记录，请向实验室管理员确认。');
+  const text=fs.readFileSync(path.join(root,'pages/resource/index.wxml'),'utf8');
+  assert.match(text,/item\.risk_label/);assert.match(text,/item\.handover_label/);assert.match(text,/item\.accessories_empty_label/);
+});
+
+test('reservation asks for a complete summary confirmation before sending',async()=>{
+  signedIn();const p=page('resource');let modal;
+  global.wx.showModal=options=>{modal=options;options.success({confirm:true});};
+  p.setData({id:9,item:{id:9,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:true,policy:{max_hours:8,slot_minutes:30}},form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程实验拍摄',participants:'1'}});
+  reply=r=>r.url.includes('/resources/')
+    ? r.success({statusCode:200,data:{ok:true,data:{id:9,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:true,policy:{max_hours:8,slot_minutes:30,window_days:14}}}})
+    : r.success({statusCode:200,data:{ok:true,data:{id:91,status:'PENDING'}}});
+  await p.submit();
+  assert.equal(modal.title,'请核对预约信息');assert.equal(modal.confirmText,'提交申请');
+  assert.match(modal.content,/资源：全画幅摄影套装/);assert.match(modal.content,/时段：2027-01-01 10:00—11:00（北京时间）/);
+  assert.match(modal.content,/用途：课程实验拍摄/);assert.match(modal.content,/处理方式：提交后由管理员人工审核/);
+  assert.equal(requests.length,2);assert.match(requests[0].url,/\/resources\/9\/$/);assert.equal(requests[1].data.purpose,'课程实验拍摄');assert.equal(requests[1].data.resource_id,9);
+});
+
+test('canceling reservation summary creates no request',async()=>{
+  signedIn();const p=page('resource');global.wx.showModal=options=>options.success({confirm:false});
+  p.setData({id:9,item:{id:9,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{max_hours:8,slot_minutes:30}},form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'示例实验',participants:'1'}});
+  reply=r=>r.success({statusCode:200,data:{ok:true,data:{id:9,name:'数字示波器',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:false,policy:{max_hours:8,slot_minutes:30,window_days:14}}}});
+  await p.submit();assert.equal(requests.length,1);assert.equal(p.data.busy,false);assert.equal(p._submitPending,false);
+});
+
+test('reservation timeout keeps the same idempotency key through summary confirmation retry',async()=>{
+  signedIn();const p=page('resource');
+  p.setData({id:9,item:{id:9,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:true,policy:{max_hours:8,slot_minutes:30}},form:{date:'2027-01-01',start:'10:00',end:'11:00',purpose:'课程实验拍摄',participants:'1'}});
+  let submits=0;reply=r=>{
+    if(r.url.includes('/resources/'))return r.success({statusCode:200,data:{ok:true,data:{id:9,name:'全画幅摄影套装',kind:'EQUIPMENT',can_apply:true,can_reserve:true,requires_approval:true,policy:{max_hours:8,slot_minutes:30,window_days:14}}}});
+    submits+=1;
+    if(submits===1)return r.fail({errMsg:'request:fail timeout'});
+    return r.success({statusCode:200,data:{ok:true,data:{id:91,status:'PENDING'}}});
+  };
+  await p.submit();
+  const key=requests[1].data.request_key;assert.ok(key);assert.match(p.data.error,/未能确认操作结果/);
+  await p.submit();
+  assert.equal(requests.length,4);assert.equal(requests[3].data.request_key,key);assert.equal(requests[3].data.purpose,'课程实验拍摄');
 });
 
 test('occupancy next page appends without changing the reservation form', async () => {

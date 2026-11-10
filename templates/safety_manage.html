@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-top">
+  <div>
+    <a class="back-link" href="{% url 'resource' resource.pk %}">← 返回{{ resource.name }}</a>
+    <div class="eyebrow">CONTROLLED SAFETY INFORMATION</div>
+    <h1>场地安全信息版本</h1>
+    <p>{{ resource.lab.name }} / {{ resource.name }} · 仅维护本人有管理授权的场地</p>
+  </div>
+</div>
+
+<div class="info-strip safety-disclaimer">
+  <b>安全信息必须有可核验的批准来源</b>
+  <p>请依据本单位现行制度、经批准的操作规程或责任岗位确认材料填写。不得用课程假设补写风险、个人防护用品、操作步骤或应急联系人。阅读确认不替代培训、考核、准入或现场判断。</p>
+  <p>复核人发布时须检查来源文件及适用范围并记录复核意见；系统只保存该责任记录，不会自动证明来源真实、有效或已获学校批准。</p>
+</div>
+
+<section class="panel">
+  <div class="section-heading">
+    <h2>{% if draft %}继续编辑草稿 v{{ draft.version }}{% else %}建立新版本{% endif %}</h2>
+    <span class="badge pending">尚未发布</span>
+  </div>
+  {% if form.non_field_errors %}<div class="message error" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+  <form method="post" class="business-form safety-form">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="field {% if field.errors %}invalid{% endif %}">
+        {{ field.label_tag }}{{ field }}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        {{ field.errors }}
+      </div>
+    {% endfor %}
+    <div class="actions">
+      <button class="button secondary" name="action" value="save" type="submit">保存草稿</button>
+      <button class="button" name="action" value="submit" type="submit">保存并提交复核</button>
+    </div>
+  </form>
+</section>
+
+<section class="panel">
+  <div class="section-heading">
+    <h2>版本与复核记录</h2>
+    <span class="muted">历史版本保留；发布、退回和修订均产生独立记录</span>
+  </div>
+  {% for item in versions %}
+    <article class="safety-version">
+      <div>
+        <strong>v{{ item.version }} · {{ item.title }}</strong>
+        <span class="badge {% if item.status == 'PUBLISHED' %}confirmed{% elif item.status == 'PENDING_REVIEW' %}pending{% elif item.status == 'RETURNED' %}warning{% else %}muted{% endif %}">{{ item.get_status_display }}</span>
+        <p class="fine">来源：{{ item.source_title|default:'未登记' }}（{{ item.source_version|default:'未登记版本' }}）· 创建：{{ item.created_at|date:'Y-m-d H:i' }}{% if item.reviewed_by %} · 复核：{{ item.reviewed_by.display_name }} · {{ item.reviewed_at|date:'Y-m-d H:i' }}{% endif %}</p>
+        {% if item.source_reference %}<p class="fine">来源编号或链接：{{ item.source_reference }}</p>{% endif %}
+        {% if item.review_note %}<div class="info-strip"><b>复核意见</b><p>{{ item.review_note|linebreaksbr }}</p></div>{% endif %}
+      </div>
+      {% if item.status == 'DRAFT' and item.created_by_id == user.id %}
+        <form method="post" action="{% url 'safety-review' item.pk 'submit' %}">{% csrf_token %}<button class="button secondary" type="submit">提交复核</button></form>
+      {% elif item.status == 'PENDING_REVIEW' and item.created_by_id != user.id %}
+        <form method="post" action="{% url 'safety-review' item.pk 'publish' %}" class="safety-review-form">
+          {% csrf_token %}
+          <label for="review-note-{{ item.pk }}">复核意见（必填；请说明来源核验及适用性结论）</label>
+          <textarea id="review-note-{{ item.pk }}" name="review_note" rows="3" maxlength="2000" required></textarea>
+          <div class="actions">
+            <button class="button" type="submit">确认来源并发布</button>
+            <button class="button secondary" formaction="{% url 'safety-review' item.pk 'return' %}" type="submit">退回修订</button>
+          </div>
+        </form>
+      {% elif item.status == 'RETURNED' and item.created_by_id == user.id %}
+        <form method="post" action="{% url 'safety-review' item.pk 'revise' %}">{% csrf_token %}<button class="button secondary" type="submit">基于此版本创建修订草稿</button></form>
+      {% endif %}
+    </article>
+  {% empty %}
+    <p class="empty-state">此场地尚无版本记录。没有经批准材料时，申请人只会看到“待责任岗位确认”。</p>
+  {% endfor %}
+</section>
+{% endblock %}

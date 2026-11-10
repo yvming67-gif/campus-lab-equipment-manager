@@ -9,6 +9,7 @@ if os.environ.get("DEMO_MODE") != "1":
     raise ValueError("This cloud profile is for simulated demonstrations; set DEMO_MODE=1")
 DEMO_MODE = True
 DEBUG = False
+PUBLIC_DEMO_MODE = os.environ.get("CAMPUS_PUBLIC_DEMO", "1") == "1"
 cloud_hosts = [h.strip() for h in os.environ.get("ALLOWED_HOSTS", "").split(",") if h.strip()]
 if os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
     cloud_hosts.append(os.environ["RENDER_EXTERNAL_HOSTNAME"])

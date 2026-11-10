@@ -6,8 +6,8 @@ ROOT=Path(__file__).resolve().parents[1]
 d=json.loads((ROOT/"docs/specification.json").read_text("utf-8"));schema=json.loads((ROOT/"models/schema.json").read_text("utf-8"));mapping=json.loads((ROOT/"docs/implementation_map.json").read_text("utf-8"))
 ids=lambda key:{x["id"] for x in d[key]}
 uc=ids("cases");br=ids("rules");qr=ids("quality");ac=ids("acceptance");fr={c["fr"] for c in d["cases"]};spec={c["spec"] for c in d["cases"]};problems=ids("problems")
-assert uc=={f'UC-{n:02d}' for n in range(1,28)}
-assert len(fr)==len(spec)==27 and len(br)==46 and len(qr)==11 and len(ac)==66
+assert uc=={f'UC-{n:02d}' for n in range(1,30)}
+assert len(fr)==len(spec)==29 and len(br)==48 and len(qr)==11 and len(ac)==72
 assert {c['id'] for c in d['constraints']}=={'DC-01'} and d['constraints'][0]['legacy_id']=='BR-47'
 assert set(mapping)==uc
 baseline=json.loads((ROOT/'docs/baseline.json').read_text('utf-8'))
@@ -41,7 +41,7 @@ assert (ROOT/"models/campus_lab.dbml").read_text("utf-8").count("Ref: ")==len(sc
 assert (ROOT/"models/campus_lab.mmd").read_text("utf-8").count("--")==len(schema["relationships"])
 fig=ROOT/"models/图形源文件/图4-1-系统总用例图.drawio";tree=ET.parse(fig);cells={c.attrib["id"]:c for c in tree.iter("mxCell")};assert uc<=set(cells)
 for uid in uc:
-    c=cells[uid];assert "ellipse" in c.attrib["style"];g=c.find("mxGeometry");x,y,w,h=[float(g.attrib[k]) for k in ["x","y","width","height"]];assert 85<=x and x+w<=423 and 4<=y and y+h<=700
+    c=cells[uid];assert "ellipse" in c.attrib["style"];g=c.find("mxGeometry");x,y,w,h=[float(g.attrib[k]) for k in ["x","y","width","height"]];assert 85<=x and x+w<=423 and 4<=y and y+h<=830
 for f in (ROOT/"core").rglob("*.py"):ast.parse(f.read_text("utf-8"))
 for f in (ROOT/"models/图形源文件").glob("*.drawio"):ET.parse(f)
 # 源码定位确实存在，不仅是编号匹配。
@@ -67,7 +67,7 @@ for a in d['acceptance']:
     if a['id']=='AC-64':
         assert not a['uc'] and not a['fr'] and a['constraints']==['DC-01'] and 'QR-07' in a['quality']
     else:assert a['uc'] and set(a['uc'])<=uc and set(a['rules'])<=br
-print("PASS: 27 FR/UC/SPEC, 46 BR + DC-01, 11 QR, 66 AC; source/business/message/field/model references and explicit operational trace")
+print("PASS: 29 FR/UC/SPEC, 48 BR + DC-01, 11 QR, 72 AC; source/business/message/field/model references and explicit operational trace")
 
 # Full-field ERD is verified against the exported application model, not a manual table list.
 import hashlib
@@ -112,4 +112,4 @@ for d in manifest["domains"]:
     domain_svg=ET.parse(matches[0]);groups={n.attrib.get("id") for n in domain_svg.iter()}
     for name in d["entities"]:
         for field in actual[name]["fields"]:assert "field-"+actual[name]["table"]+"-"+field["column"] in groups
-print("PASS: vector ERD has all exported entities / fields / field-attached FK; six complete domains; no card-crossing connectors")
+print("PASS: vector ERD has all exported entities / fields / field-attached FK; all declared domains are complete; no card-crossing connectors")

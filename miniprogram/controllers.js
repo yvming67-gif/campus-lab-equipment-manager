@@ -55,7 +55,7 @@ const screens = {
     }
   },
   resources: {
-    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '' }, loading: false, error: '', hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, overviewReady: false, overviewLoading: false, overviewError: '', timeSearch: false, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
+    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '', category:'', facility:'', capacity_min:'', capacity_max:'' }, loading: false, error: '', stale: false, hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, overviewReady: false, overviewLoading: false, overviewError: '', timeSearch: false, advancedFilters:false, serviceStatuses:[{code:'',name:'全部状态'},{code:'NORMAL',name:'正常'},{code:'ISOLATED',name:'异常隔离'},{code:'MAINTENANCE',name:'维护中'},{code:'DISABLED',name:'停用'},{code:'SCRAPPED',name:'报废'}], serviceStatusIndex:0, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
     async onShow() {
       if (!api.requireLogin()) return;
       const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
@@ -73,20 +73,25 @@ const screens = {
     chooseQuickQueryDate(e) {this.chooseQueryDate({detail:{value:e.currentTarget.dataset.day}});},
     chooseQueryStart(e) {this.setData({'slot.start':e.detail.value});},
     chooseQueryEnd(e) {this.setData({'slot.end':e.detail.value});},
-    resetSearch() {this.setData({form:{q:''},labIndex:0,timeSearch:false});return this.load(1);},
+    resetSearch() {this.setData({form:{q:'',category:'',facility:'',capacity_min:'',capacity_max:''},labIndex:0,timeSearch:false,advancedFilters:false,serviceStatusIndex:0});return this.load(1);},
     async load(page) {
       if (!api.requireLogin()) return;
       page = page || 1;
       const slot = this.data.timeSearch ? Object.assign({},this.data.slot) : null;
       if(slot && slot.start>=slot.end){this.setData({error:'查询结束时间必须晚于开始时间'});return;}
       const selectedLab=this.data.labs[this.data.labIndex] || this.data.labs[0];
-      const submitted={kind:this.data.kind,q:this.data.form.q,labId:selectedLab.id,slot};
-      const querySignature=JSON.stringify([submitted.kind,submitted.q,submitted.labId,slot]);
+      const serviceStatus=(this.data.serviceStatuses[this.data.serviceStatusIndex]||{}).code||'';
+      const submitted={kind:this.data.kind,q:this.data.form.q,category:this.data.form.category,facility:this.data.form.facility,capacity_min:this.data.form.capacity_min,capacity_max:this.data.form.capacity_max,serviceStatus,labId:selectedLab.id,slot};
+      const querySignature=JSON.stringify([submitted,slot]);
       if(page>1 && querySignature!==this._appliedQuery) page=1;
+      const queryChanged=querySignature!==this._appliedQuery;
       const serial = (this._serial || 0) + 1; this._serial = serial;
-      this.setData({ loading: true, error: '' });
+      this._failedPage=page;
+      this.setData(queryChanged && page===1
+        ? { loading: true, error: '', stale: false, items: [], total: 0, hasMore: false, queryReady: false }
+        : { loading: true, error: '', stale: false });
       try {
-        const data = await api.request('/resources/', 'GET', Object.assign({ kind:submitted.kind, q:submitted.q, lab:submitted.labId, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
+        const data = await api.request('/resources/', 'GET', Object.assign({ kind:submitted.kind, q:submitted.q, category:submitted.category, facility:submitted.facility, capacity_min:submitted.capacity_min, capacity_max:submitted.capacity_max, service_status:submitted.serviceStatus, lab:submitted.labId, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
         if (serial !== this._serial) return;
         this._appliedSlot=slot;this._appliedQuery=querySignature;
         this._appliedFilterValues=submitted;this._appliedFilterOwner=api.session()?.draftScope;
@@ -94,48 +99,61 @@ const screens = {
         const chips=[];
         if(submitted.q)chips.push({key:'q',label:'搜索：'+submitted.q});
         if(submitted.labId)chips.push({key:'lab',label:'实验室：'+selectedLab.name});
+        if(submitted.category)chips.push({key:'category',label:'类别：'+submitted.category});
+        if(submitted.facility)chips.push({key:'facility',label:'设施：'+submitted.facility});
+        if(submitted.capacity_min)chips.push({key:'capacity_min',label:'容量≥'+submitted.capacity_min});
+        if(submitted.capacity_max)chips.push({key:'capacity_max',label:'容量≤'+submitted.capacity_max});
+        if(submitted.serviceStatus)chips.push({key:'status',label:'状态：'+(this.data.serviceStatuses[this.data.serviceStatusIndex]||{}).name});
         if(slot)chips.push({key:'time',label:'时段：'+slot.date+' '+slot.start+'—'+slot.end});
-        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '',appliedChips:chips,appliedKind:submitted.kind==='ROOM'?'整间场地':'设备',queryReady:true,items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs,labIndex:Math.max(0,labs.findIndex(l=>String(l.id)===String(submitted.labId))),page: data.page, hasMore: data.has_more, total: data.total });
-      } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
+        this._failedPage=page;
+        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '',appliedChips:chips,appliedKind:submitted.kind==='ROOM'?'整间场地':'设备',queryReady:true,stale:false,items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs,labIndex:Math.max(0,labs.findIndex(l=>String(l.id)===String(submitted.labId))),page: data.page, hasMore: data.has_more, total: data.total });
+      } catch (e) { if (serial === this._serial) this.setData({error:api.errorText(e),stale:!queryChanged&&this.data.items.length>0}); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
+    retry() { return this.load(this._failedPage || 1); },
     search() { return this.load(1); },
     clearQueryFilter(e) {
       const saved=api.session(),applied=this._appliedFilterValues,key=e.currentTarget.dataset.key;
-      if(!saved||saved.draftScope!==this._appliedFilterOwner||!applied||!['q','lab','time'].includes(key))return;
-      this.setData({kind:applied.kind,form:{q:key==='q'?'':applied.q},labIndex:key==='lab'?0:Math.max(0,this.data.labs.findIndex(l=>String(l.id)===String(applied.labId))),timeSearch:key!=='time'&&!!applied.slot});
+      if(!saved||saved.draftScope!==this._appliedFilterOwner||!applied||!['q','lab','time','category','facility','capacity_min','capacity_max','status'].includes(key))return;
+      const form={q:applied.q,category:applied.category,facility:applied.facility,capacity_min:applied.capacity_min,capacity_max:applied.capacity_max};
+      if(key in form)form[key]='';
+      this.setData({kind:applied.kind,form,labIndex:key==='lab'?0:Math.max(0,this.data.labs.findIndex(l=>String(l.id)===String(applied.labId))),timeSearch:key!=='time'&&!!applied.slot,serviceStatusIndex:key==='status'?0:Math.max(0,this.data.serviceStatuses.findIndex(x=>x.code===applied.serviceStatus))});
       if(applied.slot&&key!=='time')this.setData({slot:Object.assign({},applied.slot),quickDates:fmt.quickDates(applied.slot.date,this.data.policy?.window_days)});
       return this.load(1);
     },
     chooseKind(e) { this.setData({ kind: e.currentTarget.dataset.kind }); return this.load(1); },
     chooseLab(e) { this.setData({ labIndex: Number(e.detail.value) }); return this.load(1); },
+    toggleFilters() { this.setData({advancedFilters:!this.data.advancedFilters}); },
+    chooseServiceStatus(e) { this.setData({serviceStatusIndex:Number(e.detail.value)}); },
     more() { if (this.data.hasMore && !this.data.loading) return this.load(this.data.page + 1); },
     onPullDownRefresh() { return this.onShow().finally(endRefresh); },
     onReachBottom() { return this.more(); }
   },
   resource: {
-    data: { id: null, item: null, form: fmt.defaultForm(), loading: false, busy: false, error: '', availability: '', available: null, minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000), scheduleDay: '', schedulePage: 1, scheduleTotal: 0, scheduleHasMore: false, scheduleBusy: false, scheduleError: '', slotOptions:null,slotsBusy:false,slotsError:'',durations:[{minutes:60,label:'60分钟'}],durationIndex:0 },
+    data: { id: null, item: null, form: fmt.defaultForm(), loading: false, busy: false, error: '', stale:false, hasPendingDraft:false, availability: '', available: null, minDate: fmt.day(), maxDate: fmt.day(Date.now() + 14 * 86400000), scheduleDay: '', schedulePage: 1, scheduleTotal: 0, scheduleHasMore: false, scheduleBusy: false, scheduleError: '', slotOptions:null,slotsBusy:false,slotsError:'',durations:[{minutes:60,label:'60分钟'}],durationIndex:0,safetyBusy:false },
     onLoad(options) {
       this.setData({ id: Number(options.id) });
       if (/^\d{4}-\d{2}-\d{2}$/.test(options.date || '') && [options.start,options.end].every(t => /^\d{2}:\d{2}$/.test(t || ''))) this.setData({'form.date':options.date,'form.start':options.start,'form.end':options.end,scheduleDay:options.date});
       const pending = api.draft(this.data.id);
       if (pending && pending.values.resource_id === this.data.id) {
         const value = pending.values;
-        this.setData({ form: { date: value.starts_at.slice(0, 10), start: value.starts_at.slice(11, 16), end: value.ends_at.slice(11, 16), purpose: value.purpose, participants: String(value.participants) } });
+        this.setData({ form: { date: value.starts_at.slice(0, 10), start: value.starts_at.slice(11, 16), end: value.ends_at.slice(11, 16), purpose: value.purpose, participants: String(value.participants) },hasPendingDraft:true });
       }
     },
-    onShow() { if (api.requireLogin()) { if(ownerChanged(this))this.setData({item:null,form:fmt.defaultForm(),slotOptions:null,slotsError:'',availability:'',available:null});this.setData({minDate:fmt.day(),quickDates:fmt.quickDates(this.data.form.date,this.data.item?.policy?.window_days)}); return this.load(); } },
+    onShow() { if (api.requireLogin()) { if(ownerChanged(this))this.setData({item:null,form:fmt.defaultForm(),slotOptions:null,slotsError:'',availability:'',available:null,hasPendingDraft:false});const pending=api.draft(this.data.id);if(pending)this.setData({hasPendingDraft:true,form:{date:pending.values.starts_at.slice(0,10),start:pending.values.starts_at.slice(11,16),end:pending.values.ends_at.slice(11,16),purpose:pending.values.purpose,participants:String(pending.values.participants)}});else this.setData({hasPendingDraft:false});this.setData({minDate:fmt.day(),quickDates:fmt.quickDates(this.data.form.date,this.data.item?.policy?.window_days)}); return this.load(); } },
     async load() {
       const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
       invalidateAvailability(this);
-      this.setData({ loading: true, scheduleBusy: false, error: '' });
+      this.setData({ loading: true, scheduleBusy: false, error: '', stale:!!this.data.item });
       try {
         const item = await api.request('/resources/' + this.data.id + '/', 'GET', {schedule_day:this.data.scheduleDay,schedule_page:1});
         if(serial!==this._scheduleSerial)return;
-        this.setData({ item: fmt.resource(item), maxDate: fmt.day(Date.now() + item.policy.window_days * 86400000), schedulePage:item.schedule_page, scheduleTotal:item.schedule_total, scheduleHasMore:item.schedule_has_more, scheduleError:'' });
+        this.setData({ item: fmt.resource(item), maxDate: fmt.day(Date.now() + item.policy.window_days * 86400000), schedulePage:item.schedule_page, scheduleTotal:item.schedule_total, scheduleHasMore:item.schedule_has_more, scheduleError:'', stale:false });
         const durations=durationOptions(item.policy),selected=durations.findIndex(x=>x.minutes===60);
         this.setData({durations,durationIndex:selected<0?0:selected,quickDates:fmt.quickDates(this.data.form.date,item.policy.window_days)});
-      } catch (e) { if(serial===this._scheduleSerial)error(this, e); } finally { if(serial===this._scheduleSerial)this.setData({ loading: false, scheduleBusy: false }); }
+      } catch (e) { if(serial===this._scheduleSerial)this.setData({error:api.errorText(e),stale:!!this.data.item}); } finally { if(serial===this._scheduleSerial)this.setData({ loading: false, scheduleBusy: false }); }
     },
+    retry() { return this.load(); },
+    onPullDownRefresh() { return this.load().finally(endRefresh); },
     async loadSchedule(page) {
       const serial=(this._scheduleSerial||0)+1;this._scheduleSerial=serial;
       this.setData({scheduleBusy:true,scheduleError:''});
@@ -150,14 +168,14 @@ const screens = {
     chooseScheduleDay(e) {this.setData({scheduleDay:e.detail.value,'item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
     clearScheduleDay() {this.setData({scheduleDay:'','item.schedule':[],scheduleTotal:0,scheduleHasMore:false});return this.loadSchedule(1);},
     moreSchedule() {if(this.data.scheduleHasMore&&!this.data.scheduleBusy&&!this.data.loading)return this.loadSchedule(this.data.schedulePage+1);},
-    input,
-    chooseDate(e) { this._slotsSerial=(this._slotsSerial||0)+1;this.setData({ 'form.date': e.detail.value,quickDates:fmt.quickDates(e.detail.value,this.data.item?.policy?.window_days),availability: '', available: null, loading:invalidateAvailability(this),slotOptions:null,slotsBusy:false,slotsError:'' }); },
+    input(event) { if(!this.data.busy)input.call(this,event); },
+    chooseDate(e) { if(this.data.busy)return;this._slotsSerial=(this._slotsSerial||0)+1;this.setData({ 'form.date': e.detail.value,quickDates:fmt.quickDates(e.detail.value,this.data.item?.policy?.window_days),availability: '', available: null, loading:invalidateAvailability(this),slotOptions:null,slotsBusy:false,slotsError:'' }); },
     chooseQuickDate(e) {this.chooseDate({detail:{value:e.currentTarget.dataset.day}});},
-    chooseStart(e) { this.setData({ 'form.start': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
-    chooseEnd(e) { this.setData({ 'form.end': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
-    chooseDuration(e) {this._slotsSerial=(this._slotsSerial||0)+1;this.setData({durationIndex:Number(e.detail.value),slotOptions:null,slotsError:'',slotsBusy:false});},
+    chooseStart(e) { if(this.data.busy)return;this.setData({ 'form.start': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
+    chooseEnd(e) { if(this.data.busy)return;this.setData({ 'form.end': e.detail.value, availability: '', available: null, loading:invalidateAvailability(this) }); },
+    chooseDuration(e) {if(this.data.busy)return;this._slotsSerial=(this._slotsSerial||0)+1;this.setData({durationIndex:Number(e.detail.value),slotOptions:null,slotsError:'',slotsBusy:false});},
     async loadSlots() {
-      if(!api.requireLogin() || this.data.slotsBusy || !this.data.item)return;
+      if(!api.requireLogin() || this.data.busy || this.data.slotsBusy || !this.data.item || this.data.stale)return;
       const serial=(this._slotsSerial||0)+1;this._slotsSerial=serial;
       const duration=this.data.durations[this.data.durationIndex];if(!duration)return;
       this.setData({slotsBusy:true,slotsError:'',slotOptions:null});
@@ -174,8 +192,21 @@ const screens = {
       if(!item || !item.available || this.data.busy)return;
       this.setData({'form.date':item.starts_at.slice(0,10),'form.start':item.starts_at.slice(11,16),'form.end':item.ends_at.slice(11,16),availability:'已带入所选时段，提交时将重新检查资格、配额与冲突',available:null,loading:invalidateAvailability(this)});
     },
-    reportIncident() {if(api.requireLogin() && this.data.item)wx.navigateTo({url:'/pages/incident/index?resource='+this.data.id});},
+    reportIncident() {if(!this.data.busy && !this.data.safetyBusy && api.requireLogin() && this.data.item)wx.navigateTo({url:'/pages/incident/index?resource='+this.data.id});},
+    async acknowledgeSafety() {
+      const procedure=this.data.item && this.data.item.safety_procedure;
+      if(!procedure || !procedure.requires_acknowledgement || this.data.safetyBusy || this.data.busy || this.data.stale || !api.requireLogin())return;
+      this.setData({safetyBusy:true,error:''});
+      try {
+        await api.request('/resources/'+this.data.id+'/safety/'+procedure.id+'/ack/','POST',{});
+        wx.showToast({title:'已记录本版本阅读确认',icon:'success'});
+        await this.load();
+      } catch(e) {error(this,e);}
+      finally {this.setData({safetyBusy:false});}
+    },
     async checkAvailability() {
+      if(this.data.busy)return;
+      if(this.data.stale){this.setData({error:'资源信息可能已过期，请先重新加载'});return;}
       const f = Object.assign({},this.data.form);
       const serial=(this._availabilitySerial||0)+1;this._availabilitySerial=serial;
       this._availabilityPending=true;
@@ -186,18 +217,72 @@ const screens = {
       } catch (e) { if(serial===this._availabilitySerial)error(this, e); } finally { if(serial===this._availabilitySerial){this._availabilityPending=false;this.setData({ loading: false });} }
     },
     async submit() {
-      if (this.data.busy || !this.data.item || !api.requireLogin()) return;
-      const f = this.data.form, item = this.data.item;
-      if (!item.can_apply) { this.setData({ error: '仅教师可预约整间实验室，学生可以预约设备' }); return; }
-      const message = fmt.validateForm(f, item.policy);
-      if (message) { this.setData({ error: message }); return; }
-      if (item.kind === 'ROOM' && (!/^\d+$/.test(f.participants) || Number(f.participants) < 1 || Number(f.participants) > item.capacity)) { this.setData({ error: '参与人数须为1至' + item.capacity + '之间的整数' }); return; }
-      this.setData({ busy: true, error: '' });
+      if (this.data.busy || this.data.safetyBusy || this._submitPending || !api.requireLogin()) return;
+      const submitOwner=sessionStamp();
+      const f = Object.assign({}, this.data.form),initialItem=this.data.item,resourceId=Number(this.data.id || (initialItem && initialItem.id));
+      if(!Number.isInteger(resourceId) || resourceId < 1)return;
+      this._submitPending=true;
+      this.setData({busy:true,error:''});
       try {
-        const booking = await api.submitBooking({ resource_id: item.id, starts_at: f.date + 'T' + f.start + ':00', ends_at: f.date + 'T' + f.end + ':00', purpose: f.purpose.trim(), participants: item.kind === 'ROOM' ? Number(f.participants) : 1 });
+        const pending=api.draft(resourceId);
+        if(pending){
+          const requested={resource_id:resourceId,starts_at:f.date+'T'+f.start+':00',ends_at:f.date+'T'+f.end+':00',purpose:String(f.purpose||'').trim(),participants:initialItem && initialItem.kind==='ROOM'?Number(f.participants):Number(f.participants||1)};
+          const keys=['resource_id','starts_at','ends_at','purpose','participants'];
+          if(!keys.every(key=>requested[key]===pending.values[key])){
+            const original=pending.values;
+            this.setData({form:{date:original.starts_at.slice(0,10),start:original.starts_at.slice(11,16),end:original.ends_at.slice(11,16),purpose:original.purpose,participants:String(original.participants)},error:'上一项预约结果尚未确认，已恢复原申请内容。请重新核对原操作结果。'});
+            return;
+          }
+          const receipt=await api.checkBooking(resourceId);
+          let booking;
+          if(receipt.found && receipt.kind==='booking' && receipt.result && receipt.result.id){
+            booking=receipt.result;
+            this.setData({hasPendingDraft:false});
+            wx.showToast({title:'已找到此前预约结果',icon:'success'});
+          }else if(receipt.found){
+            this.setData({error:'请求编号已有其他操作回执，请联系管理员核对；系统未重复提交预约'});return;
+          }else{
+            // A missing receipt is not proof of failure. Replay only the exact
+            // saved payload and idempotency key; server rules still apply.
+            booking=await api.submitBooking(pending.values);
+            this.setData({hasPendingDraft:false});
+            wx.showToast({title:booking.status==='CONFIRMED'?'预约已确认':'申请已提交',icon:'success'});
+          }
+          wx.redirectTo({url:'/pages/booking/index?id='+booking.id});
+          return;
+        }
+        if(!initialItem)return;
+        if (this.data.stale) { this.setData({ error: '资源信息可能已过期，请先重新加载后再预约' }); return; }
+        // Approval mode, eligibility and resource restrictions can change after
+        // the detail page was opened. Present the confirmation using a fresh
+        // server snapshot; the booking endpoint still performs final validation.
+        const latestData=await api.request('/resources/'+this.data.id+'/', 'GET');
+        if(['date','start','end','purpose','participants'].some(key=>String(this.data.form[key]||'')!==String(f[key]||''))){
+          this.setData({error:'预约表单在刷新期间发生变化，请核对当前信息后重新提交'});return;
+        }
+        const item=fmt.resource(latestData);
+        this.setData({item,stale:false});
+        if (!item.can_apply) { this.setData({ error: '仅教师可预约整间实验室，学生可以预约设备' }); return; }
+        if (!item.can_reserve) { this.setData({ error: item.reservation_block_reason || '所属管理单元或资源当前不可预约' }); return; }
+        const message = fmt.validateForm(f, item.policy);
+        if (message) { this.setData({ error: message }); return; }
+        if (item.kind === 'ROOM' && (!/^\d+$/.test(f.participants) || Number(f.participants) < 1 || Number(f.participants) > item.capacity)) { this.setData({ error: '参与人数须为1至' + item.capacity + '之间的整数' }); return; }
+        const purpose=f.purpose.trim();
+        const confirmationText=[
+          '资源：'+item.name,
+          '时段：'+f.date+' '+f.start+'—'+f.end+'（北京时间）',
+          '用途：'+purpose,
+          '处理方式：'+(item.requires_approval?'提交后由管理员人工审核':'规则通过后自动确认')
+        ];
+        if(item.kind==='ROOM')confirmationText.push('参与人数：'+Number(f.participants));
+        const accepted=await confirm({title:'请核对预约信息',content:confirmationText.join('\n'),confirmText:item.requires_approval?'提交申请':'确认预约',cancelText:'返回修改'});
+        if(!accepted)return;
+        if(!submitOwner || sessionStamp()!==submitOwner){this.setData({error:'登录身份已变化，本次没有提交预约。请核对当前账号后重新操作'});return;}
+        const booking = await api.submitBooking({ resource_id: item.id, starts_at: f.date + 'T' + f.start + ':00', ends_at: f.date + 'T' + f.end + ':00', purpose, participants: item.kind === 'ROOM' ? Number(f.participants) : 1, expected_approval_mode:item.requires_approval?'MANUAL':'AUTO' });
+        this.setData({hasPendingDraft:false});
         wx.redirectTo({ url: '/pages/booking/index?id=' + booking.id });
         wx.showToast({ title: booking.status === 'CONFIRMED' ? '预约已确认' : '申请已提交', icon: 'success' });
-      } catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
+      } catch (e) { this.setData({hasPendingDraft:!!api.draft(this.data.id)});error(this, e); } finally { this._submitPending=false;this.setData({ busy: false }); }
     }
   },
   bookings: {
@@ -215,7 +300,8 @@ const screens = {
       const signature=JSON.stringify(query);
       if(page>1 && signature!==this._appliedQuery)page=1;
       const serial = (this._serial || 0) + 1; this._serial = serial;
-      this.setData({ loading: true, error: '' });
+      this._failedPage=page;
+      this.setData({ loading: true, error: '', ...(page===1?{items:[],hasMore:false,total:0}: {}) });
       try {
         const result = await api.request('/bookings/', 'GET', Object.assign({},query,{page}));
         if (serial !== this._serial) return;
@@ -223,6 +309,7 @@ const screens = {
         this.setData({ items: (page === 1 ? [] : this.data.items).concat(result.items.map(fmt.booking)), page: result.page, hasMore: result.has_more, total: result.total, appliedFilter:!!(query.status || query.q.trim()) });
       } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
+    retry() { return this.load(this._failedPage || 1); },
     chooseStatus(e) { this.setData({ statusIndex: Number(e.currentTarget.dataset.index) }); return this.load(1); },
     search() { return this.load(1); },
     more() { if (this.data.hasMore && !this.data.loading) return this.load(this.data.page + 1); },
@@ -230,28 +317,29 @@ const screens = {
     onReachBottom() { return this.more(); }
   },
   booking: {
-    data: { id: null, item: null, loading: false, busy: false, error: '', success:'',supplementUnknown:false, form: { reason: '',supplement:'' } },
+    data: { id: null, item: null, loading: false, busy: false, error: '', stale:false, success:'',supplementUnknown:false, form: { reason: '',supplement:'' } },
     onLoad(options) { this.setData({ id: Number(options.id) }); },
     onShow() { if (api.requireLogin()) {if(ownerChanged(this))this.setData({item:null,form:{reason:'',supplement:''},success:'',supplementUnknown:false});this.restoreSupplement();return this.load();} },
     input,
     async load() {
       if(this._cancelPending || this._supplementPending)return;
       const serial=(this._detailSerial||0)+1;this._detailSerial=serial;
-      this.setData({ loading: true, error: '' });
+      this.setData({ loading: true, error: '', stale:!!this.data.item });
       try {
         const item = await api.request('/bookings/' + this.data.id + '/');
         if(serial!==this._detailSerial)return;
         item.timeline = item.timeline.map(t => Object.assign({}, t, { time_label: fmt.dateTime(t.at) }));
-        this.setData({ item: fmt.booking(item) });
-      } catch (e) { if(serial===this._detailSerial)error(this, e); } finally { if(serial===this._detailSerial)this.setData({ loading: false }); }
+        this.setData({ item: fmt.booking(item), stale:false });
+      } catch (e) { if(serial===this._detailSerial)this.setData({error:api.errorText(e),stale:!!this.data.item}); } finally { if(serial===this._detailSerial)this.setData({ loading: false }); }
     },
+    retry() { return this.load(); },
     restoreSupplement() {
       const pending=api.actionDraft('supplement:'+this.data.id);
       this.setData({supplementUnknown:!!pending});
       if(pending)this.setData({'form.supplement':pending.values.reason});
     },
     async checkSupplement() {
-      if(this.data.busy)return;
+      if(this.data.busy || this.data.stale)return;
       this.setData({busy:true,error:'',success:''});
       try {
         const result=await api.checkAction('supplement:'+this.data.id);
@@ -260,7 +348,7 @@ const screens = {
       }catch(e){error(this,e);}finally{this.setData({busy:false});}
     },
     async supplement() {
-      if(this.data.busy || !this.data.item || !api.requireLogin())return;
+      if(this.data.busy || !this.data.item || this.data.stale || !api.requireLogin())return;
       if(!this.data.item.can_supplement && !api.actionDraft('supplement:'+this.data.id)){this.setData({error:'当前预约不能补充申请说明，请刷新查看状态'});return;}
       const reason=this.data.form.supplement.trim();
       if(!reason || reason.length>1500){this.setData({error:'请填写1至1500字的补充说明'});return;}
@@ -275,10 +363,10 @@ const screens = {
       finally{this._supplementPending=false;this.setData({busy:false});}
     },
     reportIncident() {
-      if(api.requireLogin() && this.data.item && this.data.item.can_report)wx.navigateTo({url:'/pages/incident/index?resource='+this.data.item.resource_id+'&reservation='+this.data.id});
+      if(api.requireLogin() && !this.data.stale && this.data.item && this.data.item.can_report)wx.navigateTo({url:'/pages/incident/index?resource='+this.data.item.resource_id+'&reservation='+this.data.id});
     },
     async cancel() {
-      if (this.data.busy || !this.data.item) return;
+      if (this.data.busy || !this.data.item || this.data.stale) return;
       const reason = this.data.form.reason.trim();
       if (!reason) { this.setData({ error: '请填写取消原因' }); return; }
       const originalSession=sessionStamp(),bookingId=this.data.id,version=this.data.item.version;
@@ -356,17 +444,19 @@ const screens = {
     returnToResource(){wx.redirectTo({url:'/pages/resource/index?id='+this.data.resourceId});}
   },
   notifications: {
-    data: { items: [], loading: false, busy: false, error: '', unread: 0, unreadOnly: false, page: 1, hasMore: false },
+    data: { items: [], loading: false, busy: false, error: '', unread: 0, unreadOnly: false, page: 1, hasMore: false, staleCount:false },
     onShow() { if (api.requireLogin()) return this.load(1); },
     async load(page) {
       const serial=(this._serial||0)+1;this._serial=serial;
-      this.setData({ loading: true, error: '' });
+      this._failedPage=page||1;
+      this.setData({ loading: true, error: '', ...((!page||page===1)?{items:[],hasMore:false,staleCount:true}: {}) });
       try {
-        const result = await api.request('/notifications/', 'GET', { page: page || 1, unread: this.data.unreadOnly ? '1' : '' });
+        const result = await api.request('/notifications/', 'GET', { page: this._failedPage, unread: this.data.unreadOnly ? '1' : '' });
         if(serial!==this._serial)return;
-        this.setData({ items: (page && page > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread });
+        this.setData({ items: (this._failedPage > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread, staleCount:false });
       } catch (e) { if(serial===this._serial)error(this, e); } finally { if(serial===this._serial)this.setData({ loading: false }); }
     },
+    retry() { return this.load(this._failedPage || 1); },
     chooseUnread(e) {this.setData({unreadOnly:e.currentTarget.dataset.mode==='unread'});return this.load(1);},
     async open(e) {
       const id = Number(e.currentTarget.dataset.id);const item = this.data.items.find(x => x.id === id);

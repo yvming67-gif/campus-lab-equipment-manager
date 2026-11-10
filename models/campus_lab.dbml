@@ -89,9 +89,51 @@ Table core_equipmentdetail {
 Table core_roomdetail {
   id "bigint" [pk, not null, note: 'ID']
   resource_id "bigint" [not null, unique, note: 'resource']
+  location_label "varchar(160)" [not null, note: '场地具体位置']
   capacity "integer" [not null, note: '容纳人数']
-  safety_note "text" [not null, note: '安全说明']
+  space_category "varchar(80)" [not null, note: '场地类别（本项目目录分类）']
+  facilities "text" [not null, note: '设施清单（逐项说明）']
+  safety_note "text" [not null, note: '兼容说明（不作为正式规程）']
   Note: '场地属性；约束及条件唯一项以迁移文件为准。'
+}
+Table core_safetyprocedure {
+  id "bigint" [pk, not null, note: 'ID']
+  resource_id "bigint" [not null, note: 'resource']
+  version "integer" [not null, note: '版本号']
+  title "varchar(160)" [not null, note: '规程标题']
+  risk_categories "text" [not null, note: '风险类别']
+  applicable_users "text" [not null, note: '适用对象']
+  prerequisites "text" [not null, note: '预约或进入前置条件']
+  required_ppe "text" [not null, note: '个人防护用品']
+  pre_use_checks "text" [not null, note: '使用前检查']
+  operating_cautions "text" [not null, note: '操作注意事项']
+  prohibited_actions "text" [not null, note: '禁止事项']
+  incident_route "text" [not null, note: '异常处置路径']
+  source_title "varchar(200)" [not null, note: '来源文件或制度标题']
+  source_reference "varchar(500)" [not null, note: '来源链接或文件编号']
+  source_version "varchar(80)" [not null, note: '来源版本']
+  source_effective_date "date" [note: '来源生效日期']
+  effective_from "date" [note: '本版本生效日期']
+  review_due_date "date" [note: '复核期限']
+  requires_acknowledgement "boolean" [not null, note: '要求阅读确认']
+  status "varchar(20)" [not null, note: '审核状态；枚举：[('DRAFT', '草稿'), ('PENDING_REVIEW', '待审核'), ('RETURNED', '退回修订'), ('PUBLISHED', '已发布'), ('SUPERSEDED', '已被新版本替代')]']
+  created_by_id "bigint" [not null, note: 'created by']
+  submitted_at "timestamp with time zone" [note: 'submitted at']
+  reviewed_by_id "bigint" [note: 'reviewed by']
+  reviewed_at "timestamp with time zone" [note: 'reviewed at']
+  review_note "text" [not null, note: '复核意见']
+  published_by_id "bigint" [note: 'published by']
+  published_at "timestamp with time zone" [note: 'published at']
+  change_reason "text" [not null, note: '编制或修订原因']
+  created_at "timestamp with time zone" [not null, note: 'created at']
+  Note: '场地安全规程版本；约束及条件唯一项以迁移文件为准。'
+}
+Table core_safetyacknowledgement {
+  id "bigint" [pk, not null, note: 'ID']
+  procedure_id "bigint" [not null, note: 'procedure']
+  user_id "bigint" [not null, note: 'user']
+  acknowledged_at "timestamp with time zone" [not null, note: 'acknowledged at']
+  Note: '安全信息阅读确认；约束及条件唯一项以迁移文件为准。'
 }
 Table core_accessory {
   id "bigint" [pk, not null, note: 'ID']
@@ -105,9 +147,11 @@ Table core_accessory {
 Table core_openingperiod {
   id "bigint" [pk, not null, note: 'ID']
   lab_id "bigint" [not null, note: 'lab']
+  resource_id "bigint" [note: 'resource']
   weekday "smallint" [not null, note: '星期1至7']
   starts_at "time" [not null, note: '开放时间']
   ends_at "time" [not null, note: '关闭时间']
+  closed_all_day "boolean" [not null, note: '该星期全天关闭']
   valid_from "date" [not null, note: 'valid from']
   valid_to "date" [note: 'valid to']
   Note: '日间开放时段；约束及条件唯一项以迁移文件为准。'
@@ -409,8 +453,15 @@ Ref: core_equipmentdetail.resource_id - core_resource.id
 Ref: core_equipmentdetail.qualification_id > core_qualificationtype.id
 Ref: core_equipmentdetail.access_room_id > core_resource.id
 Ref: core_roomdetail.resource_id - core_resource.id
+Ref: core_safetyprocedure.resource_id > core_resource.id
+Ref: core_safetyprocedure.created_by_id > core_user.id
+Ref: core_safetyprocedure.reviewed_by_id > core_user.id
+Ref: core_safetyprocedure.published_by_id > core_user.id
+Ref: core_safetyacknowledgement.procedure_id > core_safetyprocedure.id
+Ref: core_safetyacknowledgement.user_id > core_user.id
 Ref: core_accessory.resource_id > core_resource.id
 Ref: core_openingperiod.lab_id > core_lab.id
+Ref: core_openingperiod.resource_id > core_resource.id
 Ref: core_policyrevision.policy_id > core_policy.id
 Ref: core_policyrevision.actor_id > core_user.id
 Ref: core_reservation.applicant_id > core_user.id

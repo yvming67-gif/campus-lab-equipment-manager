@@ -6,6 +6,30 @@ from django.utils import timezone
 from .models import Lab, OpeningPeriod, CalendarException
 
 
+def filter_resources(queryset, values):
+    """Apply the shared web/mini catalog filters without changing availability rules."""
+    if values.get("q"):
+        term=values["q"]
+        queryset=queryset.filter(Q(name__icontains=term)|Q(code__icontains=term))
+    if values.get("kind"):
+        queryset=queryset.filter(kind=values["kind"])
+    if values.get("lab"):
+        queryset=queryset.filter(lab=values["lab"])
+    if values.get("category"):
+        term=values["category"]
+        queryset=queryset.filter(Q(equipment__category__icontains=term)|Q(room__space_category__icontains=term))
+    if values.get("facility"):
+        term=values["facility"]
+        queryset=queryset.filter(Q(room__facilities__icontains=term)|Q(accessories__name__icontains=term)|Q(description__icontains=term))
+    if values.get("capacity_min"):
+        queryset=queryset.filter(kind="ROOM",room__capacity__gte=values["capacity_min"])
+    if values.get("capacity_max"):
+        queryset=queryset.filter(kind="ROOM",room__capacity__lte=values["capacity_max"])
+    if values.get("service_status"):
+        queryset=queryset.filter(service_status=values["service_status"])
+    return queryset.distinct().order_by("kind","code")
+
+
 class CalendarCatalogFilter(forms.Form):
     directory_q = forms.CharField(label='实验室名称、编号或地点',required=False,max_length=100)
     directory_lab = forms.ModelChoiceField(label='实验室',required=False,queryset=Lab.objects.none(),empty_label='全部有权实验室')
@@ -29,7 +53,7 @@ def calendar_catalog(request,visible_labs):
         if data['directory_q']:
             q=data['directory_q'];labs=labs.filter(Q(code__icontains=q)|Q(name__icontains=q)|Q(location__icontains=q))
         if data['directory_lab']:labs=labs.filter(pk=data['directory_lab'].pk)
-        openings=OpeningPeriod.objects.filter(lab__in=labs).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=data['calendar_from']))
+        openings=OpeningPeriod.objects.filter(lab__in=labs).select_related('lab','resource').filter(Q(valid_to__isnull=True)|Q(valid_to__gte=data['calendar_from']))
         exceptions=CalendarException.objects.filter(lab__in=labs,active=True,day__gte=data['calendar_from'])
         if data['calendar_to']:
             openings=openings.filter(valid_from__lte=data['calendar_to'])
@@ -38,7 +62,7 @@ def calendar_catalog(request,visible_labs):
     result={'catalog_form':form}
     for key,qs,size,parameter in [
         ('lab',labs.order_by('code','pk'),12,'labs_page'),
-        ('opening',openings.select_related('lab').order_by('lab__code','weekday','valid_from','pk'),30,'openings_page'),
+        ('opening',openings.order_by('lab__code','resource__code','weekday','valid_from','pk'),30,'openings_page'),
         ('exception',exceptions.select_related('lab').order_by('day','lab__code','pk'),20,'exceptions_page')]:
         page=Paginator(qs,size).get_page(request.GET.get(parameter,1))
         query=params.copy();query['section']='calendars';query.pop(parameter,None)

@@ -20,14 +20,20 @@ from .models import *
 from .forms import *
 from . import services as s
 from .reports import utilization
-from .demo_identity import verify_demo_password
+from .demo_identity import public_demo_accounts, verify_demo_password
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
-from .catalog import calendar_catalog
+from .catalog import calendar_catalog, filter_resources
 from .experience import slot_options, approval_context, next_step
 from . import ui_navigation as ui
+from . import safety as safety_service
+from .opening_calendar import weekly_schedule
 
 def paginate(request,queryset,size=30,*,page_param='page'):
+    # A stable primary-key order prevents rows moving between pages when a
+    # query has no explicit business ordering.
+    if not queryset.ordered:
+        queryset=queryset.order_by("pk")
     page=Paginator(queryset,size).get_page(request.GET.get(page_param,1))
     query=request.GET.copy();query.pop(page_param,None)
     return page,query.urlencode()
@@ -74,7 +80,7 @@ def identity(request):
         except (ImproperlyConfigured,ValueError):
             return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员"},status=503)
     if not request.session.get("idp_nonce"):return redirect("login")
-    accounts=User.objects.filter(is_active=True).order_by("pk")
+    accounts=public_demo_accounts()
     error=""
     if request.method=="POST":
         username=request.POST.get("username","")
@@ -114,8 +120,15 @@ def signout(request):
 @login_required
 def dashboard(request):
     now=timezone.now();mine=Reservation.objects.filter(applicant=request.user)
-    context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"resource_count":Resource.objects.count(),"lab_count":Lab.objects.count(),"policy":Policy.objects.get(pk=1),"overdue":s.overdue_for(request.user,now)}
+    context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"resource_count":Resource.objects.count(),"lab_count":Lab.objects.count(),"policy":Policy.objects.get(pk=1),"overdue":s.overdue_for(request.user,now),
+             "is_student":request.user.has_role("STUDENT"),"is_teacher":request.user.has_role("TEACHER"),"is_lab_admin":request.user.has_role("LAB_ADMIN"),"is_technician":request.user.has_role("TECHNICIAN"),"is_director":request.user.has_role("DIRECTOR"),"is_sys_admin":request.user.has_role("SYS_ADMIN")}
     if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
+    if request.user.has_role("DIRECTOR"):
+        context.update({"director_pending":Reservation.objects.filter(status="PENDING").count(),"director_incidents":Incident.objects.filter(status="PENDING").count(),"director_acceptance":WorkOrder.objects.filter(status="AWAITING_ACCEPTANCE").count()})
+    if request.user.has_role("TECHNICIAN"):
+        context["technician_open"]=WorkOrder.objects.filter(assigned_to=request.user,status__in=["OPEN","IN_PROGRESS"]).count()
+    if request.user.has_role("TEACHER"):
+        context["teacher_room_upcoming"]=mine.filter(resource__kind="ROOM",status__in=["CONFIRMED","IN_USE"],ends_at__gt=now).count()
     scoped=scoped_bookings(request.user)
     context['tasks']=tasks_for(request.user,scoped,scoped_incidents(request.user),scoped_work(request.user),now)
     context['upcoming']=mine.filter(Q(status='IN_USE')|Q(status='CONFIRMED',ends_at__gt=now)).select_related('resource__lab').order_by('starts_at')[:4]
@@ -124,13 +137,13 @@ def dashboard(request):
 
 @login_required
 def resources(request):
-    form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","room").order_by("kind","code")
+    # The directory renders resource metadata, not accessory rows. Keep accessory
+    # loading on the detail page so ordinary catalog visits do not fetch unused data.
+    form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","room")
     times=None;d={};catalog_total=None
     if form.is_bound and form.is_valid():
         d=form.cleaned_data
-        if d["q"]:qs=qs.filter(Q(name__icontains=d["q"])|Q(code__icontains=d["q"]))
-        if d["kind"]:qs=qs.filter(kind=d["kind"])
-        if d["lab"]:qs=qs.filter(lab=d["lab"])
+        qs=filter_resources(qs,d)
         if d["starts_at"]:times=(d["starts_at"],d["ends_at"])
     elif form.is_bound:
         qs=qs.none()
@@ -139,12 +152,14 @@ def resources(request):
         catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','starts_at')) else page.paginator.count
     items=list(page.object_list)
     for r in items:
+        r.service_label=s.resource_service_label(r)
+        r.reservation_open,r.reservation_block_reason=s.resource_reservation_state(r)
         r.available_label="请选择目标时段查询"
         r.available=None
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
         query=request.GET.copy();query.pop('page',None)
         r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
-    chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','实验室',d.get('lab'))])
+    chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','实验室',d.get('lab')),('category','类别',d.get('category')),('facility','设施或配件',d.get('facility')),('capacity_min','最小容量',d.get('capacity_min')),('capacity_max','最大容量',d.get('capacity_max')),('service_status','服务状态',dict(Resource.STATUS).get(d.get('service_status')))])
     if times:chips.append({'label':'目标时段','value':f'{timezone.localtime(times[0]):%m-%d %H:%M}—{timezone.localtime(times[1]):%m-%d %H:%M}', 'url':ui.link('resources',request.GET,ui.CATALOG_KEYS,drop=('starts_at','ends_at'))})
     return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),
         'schedule_url':ui.catalog_schedule_link(request.GET,d),'query_scope':'当前可见资源目录','query_count':page.paginator.count,'query_total':catalog_total,'query_chips':chips,'query_invalid':form.is_bound and not form.is_valid()})
@@ -159,11 +174,13 @@ def resource_detail(request,pk):
         if selection.is_valid() and selection.cleaned_data.get('starts_at'):
             start,end=selection.cleaned_data['starts_at'],selection.cleaned_data['ends_at']
         else:selection_error='所选时间无效，请重新选择完整起止时段。'
-    form=BookingForm(request.POST or None,initial={"starts_at":start,"ends_at":end,"request_key":uuid.uuid4()})
+    form=BookingForm(request.POST or None,initial={"starts_at":start,"ends_at":end,"request_key":uuid.uuid4(),"expected_approval_mode":"MANUAL" if r.requires_approval else "AUTO"})
     if r.kind=="EQUIPMENT":form.fields["participants"].widget=forms.HiddenInput()
     if request.method=="POST" and form.is_valid():
         try:
-            b=s.create_reservation(request.user,r.pk,**form.cleaned_data)
+            values=dict(form.cleaned_data)
+            values["expected_approval_mode"]=values.get("expected_approval_mode") or None
+            b=s.create_reservation(request.user,r.pk,**values)
             messages.success(request,"预约已保存："+b.get_status_display());return redirect("booking",pk=b.pk)
         except s.BusinessError as e:form.add_error(None,str(e))
         except IntegrityError:form.add_error(None,"时段或请求已被其他操作占用，请刷新后重试")
@@ -174,7 +191,9 @@ def resource_detail(request,pk):
     policy=Policy.objects.get(pk=1);slot_day=request.GET.get('slot_day',timezone.localtime(start).date().isoformat())
     duration=request.GET.get('duration_minutes','60');options=None;slot_error=''
     can_apply=request.user.has_role('TEACHER') if r.kind=='ROOM' else request.user.has_role('STUDENT','TEACHER')
-    if can_apply:
+    reservation_open,reservation_block_reason=s.resource_reservation_state(r)
+    service_label=s.resource_service_label(r)
+    if can_apply and reservation_open:
         try:
             options=slot_options(r,request.user,slot_day,duration)
             for item in options['items']:
@@ -184,23 +203,76 @@ def resource_detail(request,pk):
         except (ValueError,s.BusinessError) as error:slot_error=str(error)
     back=request.GET.copy()
     for key in list(back):
-        if key not in ['q','kind','lab','starts_at','ends_at']:back.pop(key,None)
-    context={"title":r.name,"resource":r,"form":form,"can_apply":can_apply,"manageable":s.manager(request.user,r),"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error,
+        if key not in ui.CATALOG_KEYS:back.pop(key,None)
+    procedure=safety_service.latest_published_procedure(r) if r.kind=="ROOM" else None
+    current_procedure=safety_service.current_procedure(r) if r.kind=="ROOM" else None
+    safety_current=bool(procedure and current_procedure and procedure.pk==current_procedure.pk)
+    context={"title":r.name,"resource":r,"form":form,"can_apply":can_apply,"reservation_open":reservation_open,"reservation_block_reason":reservation_block_reason,"service_label":service_label,"manageable":s.manager(request.user,r),"safety_procedure":procedure,"safety_current":safety_current,"safety_acknowledged":safety_service.acknowledged(request.user,current_procedure),"safety_review_overdue":bool(procedure and not safety_current),"opening_schedule":weekly_schedule(r) if r.kind=="ROOM" else [],"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error,
              'slots':options,'slot_day':slot_day,'slot_error':slot_error,'duration_minutes':str(duration),'selection_error':selection_error,'policy':policy,
              'catalog_back':reverse('resources')+('?' + back.urlencode() if back else ''),
-             'catalog_filters':[(key,value) for key,value in request.GET.items() if key in ['q','kind','lab']]}
+             'catalog_filters':[(key,value) for key,value in request.GET.items() if key in ui.CATALOG_KEYS and key not in ['starts_at','ends_at']]}
     return render(request,"resource.html",context)
 
 @login_required
+def safety_manage(request,pk):
+    resource=get_object_or_404(Resource.objects.select_related("lab"),pk=pk,kind="ROOM")
+    protected(s.manager(request.user,resource))
+    draft=resource.safety_procedures.filter(status="DRAFT",created_by=request.user).order_by("-version").first()
+    initial={}
+    if draft:
+        initial={name:getattr(draft,name) for name in ["title","risk_categories","applicable_users","prerequisites","required_ppe","pre_use_checks","operating_cautions","prohibited_actions","incident_route","source_title","source_reference","source_version","source_effective_date","effective_from","review_due_date","requires_acknowledgement","change_reason"]}
+    form=SafetyProcedureForm(request.POST or None,initial=initial)
+    if request.method=="POST" and form.is_valid():
+        try:
+            procedure,_=safety_service.save_draft(request.user,resource.pk,form.cleaned_data,draft.pk if draft else None)
+            if request.POST.get("action")=="submit":
+                safety_service.submit_for_review(request.user,procedure.pk)
+                messages.success(request,"安全信息已提交审核；正式内容须由另一位授权管理员复核后发布")
+            else:messages.success(request,"安全信息草稿已保存，尚未对申请人展示")
+            return redirect("safety-manage",pk=resource.pk)
+        except (s.BusinessError,IntegrityError) as error:form.add_error(None,str(error) if isinstance(error,s.BusinessError) else "版本状态已变化，请刷新后重试")
+    versions=resource.safety_procedures.select_related("created_by","reviewed_by").order_by("-version")[:10]
+    return render(request,"safety_manage.html",{"title":"维护场地安全信息","resource":resource,"form":form,"draft":draft,"versions":versions})
+
+@login_required
+@require_POST
+def safety_review(request,pk,action):
+    procedure=get_object_or_404(SafetyProcedure.objects.select_related("resource"),pk=pk)
+    protected(s.manager(request.user,procedure.resource))
+    try:
+        if action=="submit":safety_service.submit_for_review(request.user,procedure.pk)
+        elif action=="publish":safety_service.publish(request.user,procedure.pk,request.POST.get("review_note"))
+        elif action=="return":safety_service.return_for_revision(request.user,procedure.pk,request.POST.get("review_note"))
+        elif action=="revise":
+            revision=safety_service.start_revision(request.user,procedure.pk)
+            messages.success(request,f"已创建安全信息修订草稿 v{revision.version}；原退回版本保持不变")
+            return redirect("safety-manage",pk=procedure.resource_id)
+        else:raise Http404
+        messages.success(request,"安全信息状态及复核记录已保存")
+    except s.BusinessError as error:messages.error(request,str(error))
+    return redirect("safety-manage",pk=procedure.resource_id)
+
+@login_required
+@require_POST
+def safety_ack(request,pk,procedure_id):
+    resource=get_object_or_404(Resource,pk=pk,kind="ROOM")
+    try:
+        procedure=get_object_or_404(SafetyProcedure,pk=procedure_id,resource=resource)
+        safety_service.acknowledge(request.user,procedure.pk)
+        messages.success(request,"已记录你确认阅读的安全信息版本；这不代表培训、考核或准入许可")
+    except s.BusinessError as error:messages.error(request,str(error))
+    return redirect("resource",pk=resource.pk)
+
+@login_required
 def bookings(request):
-    qs=scoped_bookings(request.user);q=request.GET.get("q","");status=request.GET.get("status","");lab=request.GET.get("lab","");day=request.GET.get("day","")
+    qs=scoped_bookings(request.user);q=request.GET.get("q","");status=request.GET.get("status","");lab=request.GET.get("lab","");day=request.GET.get("day","");kind=request.GET.get("kind","")
     if request.GET.get('scope')=='mine':qs=qs.filter(applicant=request.user)
     queue=request.GET.get('queue','')
     if queue:
         protected(request.user.has_role('LAB_ADMIN'))
         qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
         if queue in ['review','recheck']:qs=qs.exclude(applicant=request.user)
-    scope_total=qs.count() if any((q,status,lab,day)) else None;selected_day=ui.parse_day(day);query_invalid=False
+    scope_total=qs.count() if any((q,status,lab,day,kind)) else None;selected_day=ui.parse_day(day);query_invalid=False
     if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
     if status:qs=qs.filter(status=status)
     if lab:
@@ -210,6 +282,9 @@ def bookings(request):
     if day:
         if selected_day:qs=qs.filter(starts_at__date=selected_day)
         else:qs=qs.none();query_invalid=True;messages.error(request,"日期格式应为有效的年-月-日")
+    if kind:
+        if kind in ["ROOM","EQUIPMENT"]:qs=qs.filter(resource__kind=kind)
+        else:qs=qs.none();query_invalid=True;messages.error(request,"资源类型参数无效")
     sort=request.GET.get('sort','oldest' if queue=='review' else 'newest')
     if sort not in ['oldest','newest','starts']:sort='oldest' if queue=='review' else 'newest'
     order={'oldest':('created_at','pk'),'newest':('-created_at','-pk'),'starts':('starts_at','pk')}[sort]
@@ -218,7 +293,7 @@ def bookings(request):
     labs=list(Lab.objects.order_by('code'));lab_labels={str(l.pk):l.name for l in labs}
     scope_label='本人及获授权实验室的预约记录' if request.user.has_role('LAB_ADMIN') and request.GET.get('scope')!='mine' else '本人预约记录'
     if queue:scope_label+=' · 当前工作台队列'
-    chips=ui.filter_chips('bookings',request.GET,ui.RECORD_KEYS,[('q','记录搜索',q),('status','状态',dict(Reservation.STATUS).get(status,'无效状态')),('lab','实验室',lab_labels.get(lab,'无效实验室')),('day','开始日期',day)])
+    chips=ui.filter_chips('bookings',request.GET,ui.RECORD_KEYS,[('q','记录搜索',q),('status','状态',dict(Reservation.STATUS).get(status,'无效状态')),('lab','实验室',lab_labels.get(lab,'无效实验室')),('day','开始日期',day),('kind','资源类型',dict(Resource.KIND).get(kind,'无效类型'))])
     return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":labs,'sort':sort,
         'date_nav':ui.date_navigation('bookings',request.GET,ui.RECORD_KEYS,selected=selected_day,all_dates=True),'schedule_url':ui.records_schedule_link(request.GET,request.user),
         'query_scope':scope_label,'query_total':scope_total,'query_count':page.paginator.count,'query_chips':chips,'query_invalid':query_invalid})
@@ -409,13 +484,13 @@ def manage(request):
 
 @login_required
 def manage_form(request,action,pk=None):
-    protected(request.user.has_role("LAB_ADMIN") if action in ["resource","hold"] else request.user.has_role("SYS_ADMIN"))
+    protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN") if action in ["resource","hold","opening"] else request.user.has_role("SYS_ADMIN"))
     if action not in ["resource","hold","grant","policy","opening","lab"]:raise Http404
     initial={};r=None
     if action in ["resource","hold"] and pk:
         r=get_object_or_404(Resource,pk=pk);protected(s.manager(request.user,r))
         initial={"code":r.code,"name":r.name,"kind":r.kind,"lab":r.lab,"description":r.description}
-        if r.kind=="ROOM":initial["capacity"]=r.room.capacity
+        if r.kind=="ROOM":initial.update({"room_location":r.room.location_label,"capacity":r.room.capacity,"space_category":r.room.space_category,"facilities":r.room.facilities})
         else:initial.update({"category":r.equipment.category,"risk":r.equipment.risk,"qualification":r.equipment.qualification,"portable":r.equipment.portable,"access_room":r.equipment.access_room,"handover_location":r.equipment.handover_location,"accessories":"\n".join(f"{a.code},{a.name},{a.quantity}" for a in r.accessories.filter(is_active=True))})
     if action=="grant" and pk:
         u=get_object_or_404(User,pk=pk);initial={"user":u,"roles":u.roles.all(),"labs":Lab.objects.filter(labgrant__user=u),"active":u.is_active}
@@ -424,6 +499,18 @@ def manage_form(request,action,pk=None):
     form=cls(request.POST or None,initial=initial)
     if action=="hold":form.fields["hold"]=forms.ChoiceField(label="手工服务限制",choices=[("","解除手工限制（仍检查异常与工单）"),("DISABLED","停用"),("SCRAPPED","报废")])
     if action=="resource":form.fields["lab"].queryset=Lab.objects.filter(labgrant__user=request.user)
+    if action=="opening":
+        scoped_labs=Lab.objects.all() if request.user.has_role("SYS_ADMIN") else Lab.objects.filter(labgrant__user=request.user).distinct()
+        form.fields["lab"].queryset=scoped_labs
+        selected_lab_id=(request.POST.get("lab") if request.method=="POST" else None)
+        if selected_lab_id:
+            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab_id=selected_lab_id,lab__in=scoped_labs).order_by("code")
+        elif request.user.has_role("LAB_ADMIN") and not request.user.has_role("SYS_ADMIN"):
+            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab__in=scoped_labs).order_by("lab__code","code")
+        else:
+            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab__in=scoped_labs).order_by("lab__code","code")
+        if request.user.has_role("LAB_ADMIN") and not request.user.has_role("SYS_ADMIN"):
+            form.fields["resource"].required=True
     if request.method=="POST" and form.is_valid():
         d=form.cleaned_data
         try:

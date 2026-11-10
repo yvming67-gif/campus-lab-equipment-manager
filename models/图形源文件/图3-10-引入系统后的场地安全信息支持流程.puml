@@ -1,0 +1,34 @@
+@startuml
+title 图3-10 引入系统后的场地安全信息支持流程
+skinparam defaultFontName Microsoft YaHei
+skinparam sequenceArrowColor #315b55
+skinparam participantBackgroundColor #edf4f1
+participant "实验室管理员\n编制人" as Author
+participant "场地安全信息系统" as System
+participant "实验室管理员\n复核人" as Reviewer
+actor "场地使用人" as User
+database "安全规程版本／阅读回执／\n逻辑审计记录" as Record
+Author -> System: TO-SF01 选择授权场地并登记来源材料
+System -> Record: TO-SF02 保存草稿并返回版本号
+Author -> System: TO-SF02a 请求提交复核
+System -> Record: TO-SF02b 重新校验并追加待审核状态与审计
+System -> Reviewer: TO-SF03 向同范围且非创建者管理员提供待审核项
+Reviewer -> System: TO-SF04 人工核对来源、范围并填写意见
+alt 复核通过
+System -> Record: TO-SF05 发布版本并保留旧版本和确认历史
+else 退回修订
+System -> Record: TO-SF06 记录具体退回意见，现行版本不变
+System -> Record: TO-SF07 追加退回状态、责任与历史
+end
+System -> Author: TO-SF07a 通知编制人处理结果；失败不回滚决定
+opt 已发布、要求阅读确认且有未来已确认预约
+System -> User: TO-SF07b 通知相关申请人阅读当前版本；原预约不自动取消
+end
+opt 复核退回
+Author -> System: TO-SF08 复制退回版本形成新草稿并递增版本
+end
+User -> System: TO-SF09 查看当前发布版本与核实状态；按版本阅读后提交确认（如要求）
+System -> Record: TO-SF09a 重新校验版本仍有效且要求确认；记录用户、版本、时间与审计；重复确认返回原回执
+System --> User: TO-SF09b 返回确认结果、规程版本和确认时间
+note over Author,Reviewer: 编制人与复核人为同一业务角色下的不同账号；学校岗位、正式规程与是否阻断预约待组织确认
+@enduml

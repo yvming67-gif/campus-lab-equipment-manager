@@ -106,9 +106,7 @@ def validate_time(resource, start, end, policy, at, snapshot=None):
     require(a.date() == b.date(), "日间预约不能跨日")
     require(all(x.minute % policy.slot_minutes == 0 and x.second == 0 and x.microsecond == 0 for x in [a,b]), f"起止时间必须符合{policy.slot_minutes}分钟粒度")
     from .coordination import check_calendar
-    if not check_calendar(resource,start,end,snapshot=snapshot):
-        opened = snapshot.opening_allows(resource,start,end) if snapshot is not None else OpeningPeriod.objects.filter(lab=resource.lab, weekday=a.isoweekday(), valid_from__lte=a.date(), starts_at__lte=a.time().replace(tzinfo=None), ends_at__gte=b.time().replace(tzinfo=None)).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists()
-        require(opened, "目标时段超出实验室开放时间")
+    check_calendar(resource,start,end,snapshot=snapshot)
 
 
 def validate(booking, policy, at, exclude=None, time_at=None, snapshot=None):
@@ -116,10 +114,14 @@ def validate(booking, policy, at, exclude=None, time_at=None, snapshot=None):
     require(user.is_active, "账号已停用")
     has_role = snapshot.has_role if snapshot is not None else user.has_role
     require(has_role("TEACHER") if resource.kind == "ROOM" else has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
+    if resource.kind == "ROOM":
+        from .safety import needs_ack
+        require(not needs_ack(user, resource), "请先阅读并确认该场地当前版本的安全信息；阅读确认不代替培训或准入许可")
     start, end = booking.starts_at, booking.ends_at
     if snapshot is not None:snapshot.ensure(user,resource,at,start,end)
     validate_time(resource, start, end, policy, time_at if time_at is not None else at, snapshot=snapshot)
-    require(resource.lab.is_active and resource.service_status == "NORMAL", "资源停用、维护或异常隔离，不可预约")
+    require(resource.lab.is_active, "所属实验室管理单元已停用，暂不可预约")
+    require(resource.service_status == "NORMAL", "资源停用、维护或异常隔离，不可预约")
     from .coordination import check_dependency
     check_dependency(resource,start,end,user,snapshot=snapshot)
     require(not (snapshot.user_overdue if snapshot is not None else overdue_for(user, at)), "存在逾期未结束使用，不能新预约或获得确认")
@@ -155,13 +157,31 @@ def validate(booking, policy, at, exclude=None, time_at=None, snapshot=None):
         intervals = snapshot.personal_intervals(start,end,exclude) if snapshot is not None else personal.values_list("starts_at", "ends_at")
         require(maximum_overlap(start, end, intervals) <= policy.simultaneous_equipment, f"同一时段最多使用{policy.simultaneous_equipment}台或套设备")
 
+def resource_reservation_state(resource):
+    if not resource.lab.is_active:
+        return False, "所属实验室管理单元已停用，暂不可预约"
+    if resource.service_status != "NORMAL":
+        return False, resource.get_service_status_display()
+    return True, ""
+
+
+def resource_service_label(resource):
+    if not resource.lab.is_active:
+        return "所属管理单元已停用"
+    return resource.get_service_status_display()
+
+
 def availability(resource, start, end, at=None, applicant=None):
     at = at or timezone.now()
     try:
         validate_time(resource, start, end, Policy.objects.get(pk=1), at)
     except BusinessError as error:
         return False, str(error)
-    if not resource.lab.is_active or resource.service_status != "NORMAL": return False, resource.get_service_status_display()
+    accepting, reason = resource_reservation_state(resource)
+    if not accepting: return False, reason
+    if applicant and resource.kind == "ROOM":
+        from .safety import needs_ack
+        if needs_ack(applicant, resource): return False, "需先阅读确认该场地当前版本的安全信息"
     if overdue_resource(resource, at): return False, "超期使用待处理"
     from .coordination import check_dependency
     try:check_dependency(resource,start,end,applicant)
@@ -175,7 +195,7 @@ def _fingerprint(resource, start, end, purpose, participants):
 
 @correlated
 @transaction.atomic
-def create_reservation(actor, resource_id, starts_at, ends_at, purpose, participants=1, request_key=None, at=None):
+def create_reservation(actor, resource_id, starts_at, ends_at, purpose, participants=1, request_key=None, at=None, expected_approval_mode=None):
     at = at or timezone.now();key = request_key or uuid.uuid4()
     try: key = uuid.UUID(str(key))
     except (ValueError, TypeError): raise BusinessError("请求识别号无效")
@@ -189,7 +209,11 @@ def create_reservation(actor, resource_id, starts_at, ends_at, purpose, particip
     from .coordination import resource_profile
     policy = Policy.objects.get(pk=1)
     manual = resource.requires_approval
-    booking = Reservation(applicant=user, resource=resource, starts_at=starts_at, ends_at=ends_at, purpose=purpose.strip(), participants=participants, request_key=key, request_fingerprint=fp, approval_mode="MANUAL" if manual else "AUTO", status="PENDING" if manual else "CONFIRMED", policy_snapshot=dict(policy.snapshot(), resource_profile=resource_profile(resource)), created_at=at)
+    approval_mode = "MANUAL" if manual else "AUTO"
+    if expected_approval_mode is not None:
+        require(expected_approval_mode in {"AUTO", "MANUAL"}, "预约确认信息无效，请刷新后重新提交")
+        require(expected_approval_mode == approval_mode, "预约审核方式已变化，请刷新资源信息并重新确认")
+    booking = Reservation(applicant=user, resource=resource, starts_at=starts_at, ends_at=ends_at, purpose=purpose.strip(), participants=participants, request_key=key, request_fingerprint=fp, approval_mode=approval_mode, status="PENDING" if manual else "CONFIRMED", policy_snapshot=dict(policy.snapshot(), resource_profile=resource_profile(resource)), created_at=at)
     validate(booking, policy, at)
     booking.save()
     event = audit(actor, booking, "SUBMIT", new={"status":booking.status, "mode":booking.approval_mode}, reason="提交资源预约", at=at)
@@ -255,9 +279,13 @@ def _check_start(booking, resource, at):
     from .coordination import check_calendar,check_dependency
     check_calendar(resource,booking.starts_at,booking.ends_at)
     check_dependency(resource,booking.starts_at,booking.ends_at,booking.applicant,at=at,check_actual=True)
+    if resource.kind=="ROOM":
+        from .safety import needs_ack
+        require(not needs_ack(booking.applicant,resource),"场地安全信息已有新版本；请先在场地详情阅读并确认当前版本，再重新办理入场")
     deadline=booking.late_start_until or booking.starts_at+timedelta(minutes=policy.grace_minutes)
     require(booking.starts_at<=at<booking.ends_at and at<=deadline, f"未到使用时间或已超过{policy.grace_minutes}分钟领取/入场宽限")
-    require(resource.service_status=="NORMAL" and resource.lab.is_active,"资源异常、维护或停用，不能开始使用")
+    require(resource.lab.is_active,"所属实验室管理单元已停用，不能开始使用")
+    require(resource.service_status=="NORMAL","资源异常、维护或停用，不能开始使用")
     require(not overdue_for(booking.applicant,at),"存在逾期未结束使用，不能再次领取或入场")
     if resource.kind=="EQUIPMENT" and resource.equipment.qualification_id:
         require(UserQualification.objects.filter(user=booking.applicant,qualification_id=resource.equipment.qualification_id,revoked=False,issued_at__lte=at).filter(Q(expires_at__isnull=True)|Q(expires_at__gte=booking.ends_at)).exists(),"培训资格已失效")
@@ -612,7 +640,7 @@ def resource_snapshot(resource):
         state["equipment"]={"category":resource.equipment.category,"risk":resource.equipment.risk,"qualification_id":resource.equipment.qualification_id,"portable":resource.equipment.portable,"access_room_id":resource.equipment.access_room_id,"handover_location":resource.equipment.handover_location}
         state["accessories"]=list(resource.accessories.order_by("code").values("code","name","quantity","is_active"))
     else:
-        state["room"]={"capacity":resource.room.capacity,"safety_note":resource.room.safety_note}
+        state["room"]={"location_label":resource.room.location_label,"capacity":resource.room.capacity,"space_category":resource.room.space_category,"facilities":resource.room.facilities,"safety_note":resource.room.safety_note}
     return state
 
 @correlated
@@ -648,7 +676,7 @@ def save_resource(actor, data, resource_id=None, at=None):
         r.accessories.update(is_active=False)
         for code,name,quantity in parsed:Accessory.objects.update_or_create(resource=r,code=code,defaults={"name":name,"quantity":int(quantity),"is_active":True})
     else:
-        require(bool(data.get("capacity")),"场地容量必填");RoomDetail.objects.update_or_create(resource=r,defaults={"capacity":data["capacity"]})
+        require(bool(data.get("capacity")),"场地容量必填");RoomDetail.objects.update_or_create(resource=r,defaults={"location_label":data.get("room_location","").strip(),"capacity":data["capacity"],"space_category":data.get("space_category","").strip(),"facilities":data.get("facilities","").strip()})
     ev=audit(actor,r,"RESOURCE_EDIT" if resource_id else "RESOURCE_CREATE",old,resource_snapshot(Resource.objects.get(pk=r.pk)),data["reason"],at)
     if not resource_id:ServicePeriod.objects.create(resource=r,audit=ev,status="NORMAL",starts_at=at)
     elif r.kind=="EQUIPMENT":
@@ -689,19 +717,51 @@ def grant_user(actor,data,at=None):
 @correlated
 @transaction.atomic
 def change_opening(actor,data,at=None):
-    require(actor.has_role("SYS_ADMIN"),"仅系统管理员维护开放时间");at=at or timezone.now()
-    lab=Lab.objects.select_for_update().get(pk=data["lab"].pk);day=data["weekday"];effective=data["effective"]
+    at=at or timezone.now();room=data.get("resource")
+    if room:
+        room=Resource.objects.select_for_update().select_related("lab").get(pk=room.pk)
+        require(room.kind=="ROOM" and room.lab_id==data["lab"].pk,"开放时段仅可关联所选实验室内的场地")
+        check_manager(actor,room)
+        lab=room.lab
+        scope={"resource":room}
+    else:
+        require(actor.has_role("SYS_ADMIN"),"实验室管理员须选择具体场地；管理单元默认开放日历仅系统管理员维护")
+        lab=Lab.objects.select_for_update().get(pk=data["lab"].pk)
+        scope={"resource__isnull":True}
+    day=data["weekday"];effective=data["effective"]
     require(effective>at.astimezone(TZ).date(),"开放时间变更须从明天或以后生效，保留历史统计口径")
-    require(data["starts_at"]<data["ends_at"],"关闭时间必须晚于开放时间")
-    require(not OpeningPeriod.objects.filter(lab=lab,weekday=day,valid_from__gte=effective).exists(),"该日或之后已有开放日历版本，请选择更晚日期")
+    closed=bool(data.get("closed_all_day"))
+    if closed:
+        require(data["starts_at"]==data["ends_at"],"全天关闭日历不应包含开放时段")
+    else:
+        require(data["starts_at"]<data["ends_at"],"关闭时间必须晚于开放时间")
+    scoped=OpeningPeriod.objects.filter(lab=lab,weekday=day,**scope)
+    require(not scoped.filter(valid_from__gte=effective).exists(),"该日或之后已有开放日历版本，请选择更晚日期")
     # 不隐式取消已承诺的预约；变更前要求人工协调冲突。
-    for b in Reservation.objects.filter(resource__lab=lab,status__in=ACTIVE,ends_at__date__gte=effective):
+    affected_resources=Resource.objects.filter(lab=lab)
+    if room:
+        affected_resources=Resource.objects.filter(Q(pk=room.pk)|Q(equipment__access_room=room,equipment__portable=False))
+    for b in Reservation.objects.filter(resource__in=affected_resources,status__in=ACTIVE,ends_at__date__gte=effective).select_related("resource__equipment"):
         a,z=b.starts_at.astimezone(TZ),b.ends_at.astimezone(TZ)
-        if a.isoweekday()==day:require(data["starts_at"]<=a.time().replace(tzinfo=None) and z.time().replace(tzinfo=None)<=data["ends_at"],"变更会影响已确认预约，请先协调处理")
-    old=list(OpeningPeriod.objects.filter(lab=lab,weekday=day,valid_to__isnull=True).values("starts_at","ends_at","valid_from"))
-    OpeningPeriod.objects.filter(lab=lab,weekday=day,valid_to__isnull=True).update(valid_to=effective-timedelta(days=1))
-    obj=OpeningPeriod.objects.create(lab=lab,weekday=day,starts_at=data["starts_at"],ends_at=data["ends_at"],valid_from=effective)
-    ev=audit(actor,lab,"OPENING_CHANGE",{"periods":old},{"weekday":day,"from":effective,"starts_at":data["starts_at"],"ends_at":data["ends_at"]},data["reason"],at)
+        if a.date()<effective or a.isoweekday()!=day:continue
+        if not room and b.resource.kind=="ROOM":
+            # A room-specific schedule continues to take precedence over a
+            # change to its lab-wide default calendar.
+            has_override=OpeningPeriod.objects.filter(resource=b.resource,weekday=day,valid_from__lte=a.date()).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists()
+            if has_override:continue
+        if not room and b.resource.kind=="EQUIPMENT" and not b.resource.equipment.portable and b.resource.equipment.access_room_id:
+            has_override=OpeningPeriod.objects.filter(resource_id=b.resource.equipment.access_room_id,weekday=day,valid_from__lte=a.date()).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists()
+            if has_override:continue
+        require(data["starts_at"]<=a.time().replace(tzinfo=None) and z.time().replace(tzinfo=None)<=data["ends_at"],"变更会影响已确认预约，请先协调处理")
+    # Close every prior period that still covers the effective date. A period
+    # with an explicit valid_to can also cross the new effective date; leaving
+    # it intact would make both versions apply on the same day.
+    prior_active=scoped.filter(valid_from__lt=effective).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=effective))
+    old=list(prior_active.values("starts_at","ends_at","valid_from","valid_to"))
+    prior_active.update(valid_to=effective-timedelta(days=1))
+    obj=OpeningPeriod.objects.create(lab=lab,resource=room,weekday=day,starts_at=data["starts_at"],ends_at=data["ends_at"],closed_all_day=closed,valid_from=effective)
+    subject=room or lab
+    ev=audit(actor,subject,"OPENING_CHANGE",{"periods":old},{"weekday":day,"from":effective,"starts_at":data["starts_at"],"ends_at":data["ends_at"],"closed_all_day":closed,"scope":"ROOM" if room else "LAB"},data["reason"],at)
     for uid in Reservation.objects.filter(resource__lab=lab,status="PENDING",starts_at__date__gte=effective).values_list("applicant_id",flat=True).distinct():notify(ev,[User.objects.get(pk=uid)],"POLICY_IMPACT","开放时间将调整，待审核预约会按新日历复核",at)
     return obj
 

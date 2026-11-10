@@ -2,6 +2,7 @@ from datetime import datetime,timedelta
 from django.utils import timezone
 from .models import *
 from .services import TZ, BusinessError
+from .opening_calendar import effective_weekly_rows
 
 def intersection(a,b,c,d):return max(0,(min(b,d)-max(a,c)).total_seconds())
 def utilization(resources,start,end,at=None):
@@ -25,7 +26,7 @@ def utilization(resources,start,end,at=None):
             if exception:
                 slots=[] if exception.closed else [(exception.starts_at,exception.ends_at)]
             else:
-                slots=[(op.starts_at,op.ends_at) for op in openings if op.weekday==day.isoweekday() and op.valid_from<=day and (not op.valid_to or day<=op.valid_to)]
+                slots=[(op.starts_at,op.ends_at) for op in effective_weekly_rows(r,day,openings)]
             for opens,closes in slots:
                 a=max(start,datetime.combine(day,opens,TZ),r.created_at);b=min(end,datetime.combine(day,closes,TZ))
                 if a<b:

@@ -75,19 +75,24 @@
     "rules": [
       "BR-01",
       "BR-29",
-      "BR-31"
+      "BR-31",
+      "BR-49"
     ],
     "data": [
       "Lab",
       "Resource",
       "EquipmentDetail",
       "RoomDetail",
-      "Accessory"
+      "Accessory",
+      "SafetyProcedure",
+      "SafetyAcknowledgement"
     ],
-    "implementation": "core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；miniprogram/controllers.js: resources、resource",
+    "implementation": "core/views.py: resources、resource_detail、safety_ack；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail、safety_ack；core/safety.py: acknowledged、acknowledge；miniprogram/controllers.js: resources、resource；miniprogram/utils/api.js: request",
     "acceptance": [
       "AC-03",
-      "AC-04"
+      "AC-04",
+      "AC-71",
+      "AC-72"
     ],
     "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../接口与通道.md"
   },
@@ -1537,5 +1542,132 @@
       "AC-64"
     ],
     "evidence": "历史offline-recovery-result.json；本轮核对，不宣称跨主机灾难恢复"
+  },
+  {
+    "id": "TRACE-28",
+    "sources": [
+      "SRC-A06",
+      "SRC-C07"
+    ],
+    "problems": [
+      "P-11"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "目标校安全规程编制、审批与载体缺少实地材料；现状流程不建模"
+    ],
+    "improved": [
+      "TO-SF01",
+      "TO-SF02",
+      "TO-SF02a",
+      "TO-SF02b",
+      "TO-SF03",
+      "TO-SF08"
+    ],
+    "fr": "FR-28",
+    "uc": "UC-28",
+    "spec": "SPEC-28",
+    "rules": [
+      "BR-29",
+      "BR-48",
+      "BR-49"
+    ],
+    "data": [
+      "Resource",
+      "SafetyProcedure",
+      "AuditEvent"
+    ],
+    "implementation": "core/safety.py: save_draft, submit_for_review, start_revision；core/views.py: safety_manage",
+    "evidence": "静态追踪；课程方案与学校现状区分，运行证据另列。"
+  },
+  {
+    "id": "TRACE-29",
+    "sources": [
+      "SRC-A06",
+      "SRC-C07"
+    ],
+    "problems": [
+      "P-11"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "目标校安全规程编制、审批与载体缺少实地材料；现状流程不建模"
+    ],
+    "improved": [
+      "TO-SF03",
+      "TO-SF04",
+      "TO-SF05",
+      "TO-SF06",
+      "TO-SF07",
+      "TO-SF07a",
+      "TO-SF07b"
+    ],
+    "fr": "FR-29",
+    "uc": "UC-29",
+    "spec": "SPEC-29",
+    "rules": [
+      "BR-29",
+      "BR-48",
+      "BR-49"
+    ],
+    "data": [
+      "Resource",
+      "SafetyProcedure",
+      "SafetyAcknowledgement",
+      "AuditEvent",
+      "Notification"
+    ],
+    "implementation": "core/safety.py: publish, return_for_revision；core/views.py: safety_review",
+    "acceptance": [
+      "AC-69",
+      "AC-70"
+    ],
+    "evidence": "静态追踪；课程方案与学校现状区分，运行证据另列。"
+  },
+  {
+    "id": "TRACE-30",
+    "sources": [
+      "SRC-A06",
+      "SRC-C07"
+    ],
+    "problems": [
+      "P-11"
+    ],
+    "business_cases": [
+      "BUC-04"
+    ],
+    "as_is": [
+      "目标校场地安全资料阅读确认现状待实地核实；不将课程方案写成既有事实"
+    ],
+    "improved": [
+      "TO-SF09",
+      "TO-SF09a",
+      "TO-SF09b"
+    ],
+    "fr": "FR-02",
+    "uc": "UC-02",
+    "spec": "SPEC-02",
+    "rules": [
+      "BR-01",
+      "BR-29",
+      "BR-31",
+      "BR-49"
+    ],
+    "data": [
+      "Resource",
+      "SafetyProcedure",
+      "SafetyAcknowledgement",
+      "AuditEvent"
+    ],
+    "implementation": "core/safety.py: current_procedure, acknowledge；core/views.py: resource_detail, safety_ack；core/miniapi.py: resource_detail, safety_ack",
+    "acceptance": [
+      "AC-71",
+      "AC-72"
+    ],
+    "evidence": "课程需求与官方安全资料组织原则；未证明目标校现状，运行证据以针对性测试记录为准。"
   }
 ]

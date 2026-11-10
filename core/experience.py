@@ -75,10 +75,8 @@ class SlotSnapshot:
 
     def opening_allows(self, resource, start, end):
         a, b = start.astimezone(s.TZ), end.astimezone(s.TZ)
-        return any(x.lab_id == resource.lab_id and x.weekday == a.isoweekday()
-                   and x.valid_from <= a.date() and (x.valid_to is None or x.valid_to >= a.date())
-                   and x.starts_at <= a.time().replace(tzinfo=None)
-                   and x.ends_at >= b.time().replace(tzinfo=None) for x in self.openings)
+        from .opening_calendar import weekly_allows
+        return weekly_allows(resource,a.date(),a.time().replace(tzinfo=None),b.time().replace(tzinfo=None),self.openings)
 
     @staticmethod
     def overlaps(rows, start, end, exclude=None):
@@ -128,9 +126,14 @@ def slot_options(resource, user, day, duration_minutes=60, at=None):
     snapshot = SlotSnapshot(resource, user, day, at)
     duration = timedelta(minutes=duration_minutes)
     opening = snapshot.exceptions.get(resource.lab_id)
-    windows = [] if opening and opening.closed else (
-        [(opening.starts_at, opening.ends_at)] if opening else
-        [(x.starts_at, x.ends_at) for x in snapshot.openings if x.lab_id == resource.lab_id])
+    if opening:
+        windows = [] if opening.closed else [(opening.starts_at, opening.ends_at)]
+    else:
+        from .opening_calendar import effective_weekly_rows
+        effective = effective_weekly_rows(resource, day, snapshot.openings)
+        windows = [] if any(row.closed_all_day for row in effective) else [
+            (row.starts_at, row.ends_at) for row in effective
+        ]
     candidates = set()
     for opens, closes in windows:
         a = datetime.combine(day, opens, s.TZ); z = datetime.combine(day, closes, s.TZ)

@@ -1168,6 +1168,22 @@
           "on_delete": "PROTECT"
         },
         {
+          "name": "location_label",
+          "column": "location_label",
+          "label": "场地具体位置",
+          "type": "varchar(160)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 160,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
           "name": "capacity",
           "column": "capacity",
           "label": "容纳人数",
@@ -1184,9 +1200,41 @@
           "on_delete": null
         },
         {
+          "name": "space_category",
+          "column": "space_category",
+          "label": "场地类别（本项目目录分类）",
+          "type": "varchar(80)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 80,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "facilities",
+          "column": "facilities",
+          "label": "设施清单（逐项说明）",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
           "name": "safety_note",
           "column": "safety_note",
-          "label": "安全说明",
+          "label": "兼容说明（不作为正式规程）",
           "type": "text",
           "null": false,
           "blank": true,
@@ -1204,6 +1252,587 @@
         {
           "name": "room_capacity_positive",
           "definition": "<CheckConstraint: condition=(AND: ('capacity__gt', 0)) name='room_capacity_positive'>"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "model": "SafetyProcedure",
+      "table": "core_safetyprocedure",
+      "label": "场地安全规程版本",
+      "fields": [
+        {
+          "name": "id",
+          "column": "id",
+          "label": "ID",
+          "type": "bigint",
+          "null": false,
+          "blank": true,
+          "pk": true,
+          "unique": true,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "resource",
+          "column": "resource_id",
+          "label": "resource",
+          "type": "bigint",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_resource",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "version",
+          "column": "version",
+          "label": "版本号",
+          "type": "integer",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "title",
+          "column": "title",
+          "label": "规程标题",
+          "type": "varchar(160)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 160,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "risk_categories",
+          "column": "risk_categories",
+          "label": "风险类别",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "applicable_users",
+          "column": "applicable_users",
+          "label": "适用对象",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "prerequisites",
+          "column": "prerequisites",
+          "label": "预约或进入前置条件",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "required_ppe",
+          "column": "required_ppe",
+          "label": "个人防护用品",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "pre_use_checks",
+          "column": "pre_use_checks",
+          "label": "使用前检查",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "operating_cautions",
+          "column": "operating_cautions",
+          "label": "操作注意事项",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "prohibited_actions",
+          "column": "prohibited_actions",
+          "label": "禁止事项",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "incident_route",
+          "column": "incident_route",
+          "label": "异常处置路径",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "source_title",
+          "column": "source_title",
+          "label": "来源文件或制度标题",
+          "type": "varchar(200)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 200,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "source_reference",
+          "column": "source_reference",
+          "label": "来源链接或文件编号",
+          "type": "varchar(500)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 500,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "source_version",
+          "column": "source_version",
+          "label": "来源版本",
+          "type": "varchar(80)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 80,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "source_effective_date",
+          "column": "source_effective_date",
+          "label": "来源生效日期",
+          "type": "date",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "effective_from",
+          "column": "effective_from",
+          "label": "本版本生效日期",
+          "type": "date",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "review_due_date",
+          "column": "review_due_date",
+          "label": "复核期限",
+          "type": "date",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "requires_acknowledgement",
+          "column": "requires_acknowledgement",
+          "label": "要求阅读确认",
+          "type": "boolean",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": false,
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "status",
+          "column": "status",
+          "label": "审核状态",
+          "type": "varchar(20)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "DRAFT",
+          "choices": [
+            [
+              "DRAFT",
+              "草稿"
+            ],
+            [
+              "PENDING_REVIEW",
+              "待审核"
+            ],
+            [
+              "RETURNED",
+              "退回修订"
+            ],
+            [
+              "PUBLISHED",
+              "已发布"
+            ],
+            [
+              "SUPERSEDED",
+              "已被新版本替代"
+            ]
+          ],
+          "max_length": 20,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "created_by",
+          "column": "created_by_id",
+          "label": "created by",
+          "type": "bigint",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_user",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "submitted_at",
+          "column": "submitted_at",
+          "label": "submitted at",
+          "type": "timestamp with time zone",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "reviewed_by",
+          "column": "reviewed_by_id",
+          "label": "reviewed by",
+          "type": "bigint",
+          "null": true,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_user",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "reviewed_at",
+          "column": "reviewed_at",
+          "label": "reviewed at",
+          "type": "timestamp with time zone",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "review_note",
+          "column": "review_note",
+          "label": "复核意见",
+          "type": "text",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "published_by",
+          "column": "published_by_id",
+          "label": "published by",
+          "type": "bigint",
+          "null": true,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_user",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "published_at",
+          "column": "published_at",
+          "label": "published at",
+          "type": "timestamp with time zone",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "change_reason",
+          "column": "change_reason",
+          "label": "编制或修订原因",
+          "type": "text",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "created_at",
+          "column": "created_at",
+          "label": "created at",
+          "type": "timestamp with time zone",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "now()",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        }
+      ],
+      "constraints": [
+        {
+          "name": "safety_resource_version_unique",
+          "definition": "<UniqueConstraint: fields=('resource', 'version') name='safety_resource_version_unique'>"
+        },
+        {
+          "name": "one_published_safety_per_resource",
+          "definition": "<UniqueConstraint: fields=('resource',) name='one_published_safety_per_resource' condition=(AND: ('status', 'PUBLISHED'))>"
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "model": "SafetyAcknowledgement",
+      "table": "core_safetyacknowledgement",
+      "label": "安全信息阅读确认",
+      "fields": [
+        {
+          "name": "id",
+          "column": "id",
+          "label": "ID",
+          "type": "bigint",
+          "null": false,
+          "blank": true,
+          "pk": true,
+          "unique": true,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "procedure",
+          "column": "procedure_id",
+          "label": "procedure",
+          "type": "bigint",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_safetyprocedure",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "user",
+          "column": "user_id",
+          "label": "user",
+          "type": "bigint",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_user",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "acknowledged_at",
+          "column": "acknowledged_at",
+          "label": "acknowledged at",
+          "type": "timestamp with time zone",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "now()",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        }
+      ],
+      "constraints": [
+        {
+          "name": "safety_ack_user_version_unique",
+          "definition": "<UniqueConstraint: fields=('procedure', 'user') name='safety_ack_user_version_unique'>"
         }
       ],
       "indexes": []
@@ -1360,6 +1989,22 @@
           "on_delete": "PROTECT"
         },
         {
+          "name": "resource",
+          "column": "resource_id",
+          "label": "resource",
+          "type": "bigint",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_resource",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
           "name": "weekday",
           "column": "weekday",
           "label": "星期1至7",
@@ -1408,6 +2053,22 @@
           "on_delete": null
         },
         {
+          "name": "closed_all_day",
+          "column": "closed_all_day",
+          "label": "该星期全天关闭",
+          "type": "boolean",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": false,
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
           "name": "valid_from",
           "column": "valid_from",
           "label": "valid from",
@@ -1447,11 +2108,15 @@
         },
         {
           "name": "opening_time_order",
-          "definition": "<CheckConstraint: condition=(AND: ('starts_at__lt', F(ends_at))) name='opening_time_order'>"
+          "definition": "<CheckConstraint: condition=(OR: (AND: ('closed_all_day', True), ('starts_at', F(ends_at))), (AND: ('closed_all_day', False), ('starts_at__lt', F(ends_at)))) name='opening_time_order'>"
         },
         {
-          "name": "opening_start_unique",
-          "definition": "<UniqueConstraint: fields=('lab', 'weekday', 'starts_at', 'valid_from') name='opening_start_unique'>"
+          "name": "opening_lab_start_unique",
+          "definition": "<UniqueConstraint: fields=('lab', 'weekday', 'starts_at', 'valid_from') name='opening_lab_start_unique' condition=(AND: ('resource__isnull', True))>"
+        },
+        {
+          "name": "opening_room_start_unique",
+          "definition": "<UniqueConstraint: fields=('resource', 'weekday', 'starts_at', 'valid_from') name='opening_room_start_unique' condition=(AND: ('resource__isnull', False))>"
         }
       ],
       "indexes": []
@@ -2142,7 +2807,7 @@
         },
         {
           "name": "resource_confirmed_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001A0090AA270>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001CF79ECECF0>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
         }
       ],
       "indexes": [
@@ -4162,7 +4827,7 @@
         },
         {
           "name": "service_period_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001A00914F9D0>), '&&')] name='service_period_no_overlap'>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001CF79FA3250>), '&&')] name='service_period_no_overlap'>"
         }
       ],
       "indexes": []
@@ -5402,6 +6067,60 @@
       "name": "resource"
     },
     {
+      "from_table": "core_safetyprocedure",
+      "from_field": "resource_id",
+      "to_table": "core_resource",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "name": "resource"
+    },
+    {
+      "from_table": "core_safetyprocedure",
+      "from_field": "created_by_id",
+      "to_table": "core_user",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "name": "created_by"
+    },
+    {
+      "from_table": "core_safetyprocedure",
+      "from_field": "reviewed_by_id",
+      "to_table": "core_user",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "name": "reviewed_by"
+    },
+    {
+      "from_table": "core_safetyprocedure",
+      "from_field": "published_by_id",
+      "to_table": "core_user",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "name": "published_by"
+    },
+    {
+      "from_table": "core_safetyacknowledgement",
+      "from_field": "procedure_id",
+      "to_table": "core_safetyprocedure",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "name": "procedure"
+    },
+    {
+      "from_table": "core_safetyacknowledgement",
+      "from_field": "user_id",
+      "to_table": "core_user",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "name": "user"
+    },
+    {
       "from_table": "core_accessory",
       "from_field": "resource_id",
       "to_table": "core_resource",
@@ -5418,6 +6137,15 @@
       "null": false,
       "unique": false,
       "name": "lab"
+    },
+    {
+      "from_table": "core_openingperiod",
+      "from_field": "resource_id",
+      "to_table": "core_resource",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "name": "resource"
     },
     {
       "from_table": "core_policyrevision",

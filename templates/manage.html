@@ -24,6 +24,9 @@
 {% include 'pagination.html' with page=user_page filters=user_filters page_param='users_page' pagination_label='用户授权分页' %}
 {% endif %}
 {% if can_manage and section == 'overview' or can_manage and section == 'resources' %}
+<div class="info-strip"><b>场地开放时段</b><p>授权实验室管理员可以维护本人范围内单间场地的每周时段；管理单元默认时段和单日例外仍由系统管理员维护。实验室关闭例外适用于其下全部场地。</p><a href="{% url 'manage-form' 'opening' %}">维护开放时段 →</a></div>
+{% endif %}
+{% if can_manage and section == 'overview' or can_manage and section == 'resources' %}
 <div class="section-heading"><h2>资源档案</h2><a class="button" href="{% url 'manage-form' 'resource' %}">新增资源 ↗</a></div>
 <form method="get" class="filter-row panel" aria-label="资源档案筛选">
   <input type="hidden" name="section" value="{{ section }}"><input type="hidden" name="user_q" value="{{ user_q }}"><input type="hidden" name="user_role" value="{{ user_role }}">

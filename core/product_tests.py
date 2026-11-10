@@ -1,10 +1,13 @@
 """Product navigation, day schedule and native discovery contract; mock data only."""
-from datetime import timedelta
+from datetime import date, time, timedelta
+import re
+import uuid
+from unittest.mock import patch
 from django.contrib.sessions.backends.db import SessionStore
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
-from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, OpeningPeriod, Lab
+from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, Notification, OpeningPeriod, Lab, RoomDetail, Accessory
 from . import services as s
 
 
@@ -58,6 +61,95 @@ class ProductTests(TestCase):
             with self.subTest(params=params):
                 page=self.client.get('/schedule/',params);self.assertEqual(page.status_code,200);self.assertFalse(page.context['form'].is_valid());self.assertEqual(page.context['rows'],[])
 
+    def test_room_specific_location_is_editable_and_shown_on_web_and_mini(self):
+        room=Resource.objects.select_related('lab','room').get(code='ROOM-101')
+        self.assertIn('演示楼A·1层·101室',room.room.location_label)
+        self.client.force_login(self.student)
+        web=self.client.get(f'/resources/{room.pk}/')
+        self.assertContains(web,room.room.location_label)
+        mini=self.mini(f'resources/{room.pk}/')
+        self.assertEqual(mini.status_code,200)
+        self.assertEqual(mini.json()['data']['location'],room.room.location_label)
+
+        updated=s.save_resource(self.admin,{
+            'lab':room.lab,'kind':'ROOM','code':room.code,'name':room.name,'description':room.description,
+            'capacity':room.room.capacity,'room_location':'演示楼A·1层·101室（位置字段更新测试）',
+            'space_category':room.room.space_category,'facilities':room.room.facilities,'reason':'自动化测试位置更新',
+            'accessories':'',
+        },room.pk)
+        updated.refresh_from_db()
+        self.assertEqual(updated.room.location_label,'演示楼A·1层·101室（位置字段更新测试）')
+
+    def test_inactive_lab_blocks_web_booking_and_shows_the_actual_service_state(self):
+        Lab.objects.filter(pk=self.eq.lab_id).update(is_active=False)
+        self.eq=Resource.objects.select_related('lab').get(pk=self.eq.pk)
+        self.assertEqual(s.resource_service_label(self.eq),'所属管理单元已停用')
+        allowed,reason=s.resource_reservation_state(self.eq)
+        self.assertFalse(allowed);self.assertEqual(reason,'所属实验室管理单元已停用，暂不可预约')
+        available,label=s.availability(self.eq,self.start,self.start+timedelta(hours=1),applicant=self.student)
+        self.assertFalse(available);self.assertEqual(label,reason)
+
+        self.client.force_login(self.student)
+        catalog=self.client.get('/resources/',{'q':self.eq.code})
+        self.assertContains(catalog,'服务所属管理单元已停用')
+        detail=self.client.get(f'/resources/{self.eq.pk}/')
+        self.assertTrue(detail.context['can_apply']);self.assertFalse(detail.context['reservation_open'])
+        self.assertContains(detail,reason);self.assertNotContains(detail,'保存前核对')
+        response=self.client.post(f'/resources/{self.eq.pk}/',{
+            'starts_at':timezone.localtime(self.start).strftime('%Y-%m-%dT%H:%M:%S'),
+            'ends_at':timezone.localtime(self.start+timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S'),
+            'purpose':'停用边界回归','participants':'1','request_key':str(uuid.uuid4()),
+        })
+        self.assertEqual(response.status_code,200);self.assertContains(response,reason)
+        self.assertFalse(Reservation.objects.filter(resource=self.eq).exists())
+
+    def test_web_booking_carries_the_review_mode_shown_on_the_resource_page(self):
+        self.client.force_login(self.student)
+        ordinary=self.client.get(f'/resources/{self.eq.pk}/')
+        self.assertEqual(ordinary.context['form']['expected_approval_mode'].value(),'AUTO')
+        restricted=Resource.objects.get(code='EQ-CAM-01')
+        page=self.client.get(f'/resources/{restricted.pk}/')
+        self.assertEqual(page.context['form']['expected_approval_mode'].value(),'MANUAL')
+
+    def test_web_booking_rejects_a_review_mode_change_since_confirmation_page(self):
+        self.client.force_login(self.student)
+        page=self.client.get(f'/resources/{self.eq.pk}/')
+        self.assertEqual(page.context['form']['expected_approval_mode'].value(),'AUTO')
+        audit_count=AuditEvent.objects.count();notification_count=Notification.objects.count()
+        self.eq.equipment.risk='HIGH_VALUE'
+        self.eq.equipment.save(update_fields=['risk'])
+        response=self.client.post(f'/resources/{self.eq.pk}/',{
+            'starts_at':timezone.localtime(self.start).strftime('%Y-%m-%dT%H:%M:%S'),
+            'ends_at':timezone.localtime(self.start+timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S'),
+            'purpose':'审批方式变化边界回归','participants':'1','request_key':str(uuid.uuid4()),
+            'expected_approval_mode':'AUTO',
+        })
+        self.assertEqual(response.status_code,200)
+        self.assertContains(response,'预约审核方式已变化')
+        self.assertFalse(Reservation.objects.filter(resource=self.eq).exists())
+        self.assertEqual(AuditEvent.objects.count(),audit_count)
+        self.assertEqual(Notification.objects.count(),notification_count)
+
+    def test_web_booking_without_an_approval_mode_snapshot_remains_backward_compatible(self):
+        self.client.force_login(self.student)
+        response=self.client.post(f'/resources/{self.eq.pk}/',{
+            'starts_at':timezone.localtime(self.start).strftime('%Y-%m-%dT%H:%M:%S'),
+            'ends_at':timezone.localtime(self.start+timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S'),
+            'purpose':'旧表单兼容回归','participants':'1','request_key':str(uuid.uuid4()),
+        })
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(Reservation.objects.filter(resource=self.eq,applicant=self.student).count(),1)
+
+    def test_resource_directory_does_not_fetch_unused_accessory_rows(self):
+        from django.db import connection
+        from django.test.utils import CaptureQueriesContext
+        self.client.force_login(self.student)
+        with CaptureQueriesContext(connection) as queries:
+            response=self.client.get('/resources/')
+        self.assertEqual(response.status_code,200)
+        accessory_table=Accessory._meta.db_table.lower()
+        self.assertFalse(any(accessory_table in query['sql'].lower() for query in queries))
+
     def test_management_role_and_lab_scope(self):
         self.client.force_login(self.student)
         self.assertEqual(self.client.get('/manage/',{'section':'access'}).status_code,403)
@@ -85,6 +177,77 @@ class ProductTests(TestCase):
         data=self.mini('me/').json()['data'];self.assertEqual([x['id'] for x in data['upcoming']],[b.pk])
         self.assertIn('qualifications',data);self.assertEqual(data['stats']['future_equipment'],1)
         self.client.force_login(self.other);self.assertNotContains(self.client.get('/'),b.code)
+
+    def test_role_homepages_prioritize_different_authorized_work(self):
+        cases=[
+            ('student','STUDENT / 个人实验安排','查找教学设备','LAB ADMIN / 今日管理'),
+            ('teacher','TEACHER / 课程安排','查找可预约场地','SYSTEM ADMIN / 身份与配置'),
+            ('admin','LAB ADMIN / 今日管理','处理待审核申请','SYSTEM ADMIN / 身份与配置'),
+            ('tech','TECHNICIAN / 指派任务','打开我的维修任务','处理待审核申请'),
+            ('director','CENTER OVERVIEW / 管理摘要','查看资源利用报表','管理用户与授权'),
+            ('sysadmin','SYSTEM ADMIN / 身份与配置','管理用户与授权','处理待审核申请'),
+        ]
+        for username,heading,action,forbidden in cases:
+            with self.subTest(role=username):
+                self.client.force_login(User.objects.get(username=username))
+                page=self.client.get('/')
+                self.assertEqual(page.status_code,200)
+                self.assertContains(page,heading)
+                role_banner=re.search(r'<section class="workspace-banner role-banner[^\"]*">(.*?)</section>',page.content.decode(),re.S)
+                self.assertIsNotNone(role_banner)
+                self.assertIn(action,role_banner.group(1))
+                self.assertNotIn(forbidden,role_banner.group(1))
+
+    def test_seed_demo_has_varied_rooms_and_only_adds_missing_records(self):
+        self.assertEqual(Lab.objects.count(),3)
+        self.assertEqual(Resource.objects.filter(kind='ROOM').count(),6)
+        self.assertEqual(Resource.objects.filter(kind='EQUIPMENT').count(),9)
+        fixed=Resource.objects.get(code='EQ-ROB-FIX-01')
+        self.assertFalse(fixed.equipment.portable)
+        self.assertEqual(fixed.equipment.access_room.code,'ROOM-201')
+        closed=Resource.objects.get(code='ROOM-302')
+        self.assertEqual(closed.service_status,'MAINTENANCE')
+        self.assertIn('演示状态示例',closed.description)
+
+        reservation=self.book()
+        room=Resource.objects.get(code='ROOM-101')
+        room.name='本地自定义场地名称';room.save(update_fields=['name'])
+        closed.service_status='NORMAL';closed.save(update_fields=['service_status'])
+        counts=(Reservation.objects.count(),AuditEvent.objects.count())
+        call_command('seed_demo',verbosity=0)
+        self.assertEqual((Reservation.objects.count(),AuditEvent.objects.count()),counts)
+        self.assertEqual(Resource.objects.get(code='ROOM-101').name,'本地自定义场地名称')
+        self.assertEqual(Resource.objects.get(code='ROOM-302').service_status,'NORMAL')
+        self.assertTrue(Reservation.objects.filter(pk=reservation.pk).exists())
+
+    def test_seed_demo_does_not_duplicate_or_overwrite_opening_periods(self):
+        default=OpeningPeriod.objects.get(lab=Lab.objects.get(code='LAB-101'),resource__isnull=True,weekday=1)
+        default.ends_at=time(19)
+        default.save(update_fields=['ends_at'])
+        room=Resource.objects.get(code='ROOM-101')
+        OpeningPeriod.objects.get(resource=room,weekday=7).delete()
+        before=OpeningPeriod.objects.count()
+
+        # Simulate deployments rerunning on different calendar days.
+        for run_date in (date(2026,11,8),date(2026,11,9)):
+            with patch('core.management.commands.seed_demo.timezone.localdate',return_value=run_date):
+                call_command('seed_demo',verbosity=0)
+
+        self.assertEqual(OpeningPeriod.objects.count(),before)
+        default.refresh_from_db()
+        self.assertEqual(default.ends_at,time(19))
+        self.assertFalse(OpeningPeriod.objects.filter(resource=room,weekday=7).exists())
+
+    def test_seed_demo_preserves_an_existing_unknown_room_location(self):
+        room=Resource.objects.get(code='ROOM-101')
+        detail=RoomDetail.objects.get(resource=room)
+        detail.location_label=''
+        detail.save(update_fields=['location_label'])
+
+        call_command('seed_demo',verbosity=0)
+
+        detail.refresh_from_db()
+        self.assertEqual(detail.location_label,'')
 
     def test_personal_cards_filter_to_self_for_multi_role_manager(self):
         self.book();self.client.force_login(self.admin)

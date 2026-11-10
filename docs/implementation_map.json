@@ -25,5 +25,7 @@
   "UC-24": "core/reports.py: utilization；core/views.py: reports",
   "UC-25": "core/services.py: upload_evidence；core/views.py: evidence_download",
   "UC-26": "core/views.py: bookings、booking；core/workbench.py: booking_queue、tasks_for；core/miniapi.py: bookings、booking_detail；miniprogram/controllers.js: bookings、booking；core/ui_navigation.py: date_navigation、filter_chips、schedule_context",
-  "UC-27": "core/coordination.py: recheck；core/coordination_views.py: booking_operation"
+  "UC-27": "core/coordination.py: recheck；core/coordination_views.py: booking_operation",
+  "UC-28": "core/safety.py: save_draft, submit_for_review, start_revision；core/views.py: safety_manage",
+  "UC-29": "core/safety.py: publish, return_for_revision；core/views.py: safety_review"
 }

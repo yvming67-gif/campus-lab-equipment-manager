@@ -18,12 +18,15 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from . import services as s
-from .demo_identity import verify_demo_password
+from .demo_identity import public_demo_user_allowed, verify_demo_password
 from .schedules import resource_schedule
 from .domain_labels import event_label, notification_label
 from .forms import BookingForm, QueryForm, ActionForm, IncidentForm
 from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification
 from .experience import slot_options, next_step
+from . import safety as safety_service
+from .opening_calendar import weekly_schedule
+from .catalog import filter_resources
 from .request_context import correlation_id
 
 SESSION_SECONDS = 7200
@@ -60,6 +63,9 @@ def authenticate(request):
     if not user:
         session.delete()
         raise ApiError("SESSION_EXPIRED", "账号已停用，请重新登录", 401)
+    if not public_demo_user_allowed(user):
+        session.delete()
+        raise ApiError("PUBLIC_DEMO_ACCESS_REVOKED", "当前账号不再具备公开演示访问权限，请重新登录", 401)
     if not user.has_role("STUDENT", "TEACHER"):
         session.delete()
         raise ApiError("ROLE_NOT_SUPPORTED", "当前身份请使用网页管理端", 403)
@@ -146,13 +152,33 @@ def policy_data():
 
 def resource_data(resource, times=None, user=None):
     available, label = s.availability(resource, *times, applicant=user) if times else (None, "请选择目标时段")
+    reservation_open, reservation_block_reason = s.resource_reservation_state(resource)
     data = {"id": resource.pk, "code": resource.code, "name": resource.name, "kind": resource.kind,
             "kind_label": resource.get_kind_display(), "description": resource.description,
-            "lab": {"id": resource.lab_id, "name": resource.lab.name, "location": resource.lab.location},
-            "service_status": resource.service_status, "service_label": resource.get_service_status_display(),
+            "lab": {"id": resource.lab_id, "name": resource.lab.name, "location": resource.lab.location, "active": resource.lab.is_active},
+            "location": (resource.room.location_label or resource.lab.location) if resource.kind == "ROOM" else resource.lab.location,
+            "service_status": resource.service_status, "service_label": s.resource_service_label(resource),
+            "can_reserve": reservation_open, "reservation_block_reason": reservation_block_reason,
             "requires_approval": resource.requires_approval, "available": available, "available_label": label}
     if resource.kind == "ROOM":
-        data.update(capacity=resource.room.capacity, safety_note=resource.room.safety_note)
+        procedure = safety_service.latest_published_procedure(resource)
+        current = safety_service.current_procedure(resource)
+        data.update(capacity=resource.room.capacity, space_category=resource.room.space_category,
+                    facilities=resource.room.facilities, opening_schedule=weekly_schedule(resource),
+                    safety_procedure=None, safety_acknowledged=False, safety_current=bool(procedure and current and procedure.pk == current.pk))
+        if procedure:
+            data["safety_procedure"] = {
+                "id": procedure.pk, "version": procedure.version, "title": procedure.title,
+                "risk_categories": procedure.risk_categories, "applicable_users": procedure.applicable_users,
+                "prerequisites": procedure.prerequisites, "required_ppe": procedure.required_ppe,
+                "pre_use_checks": procedure.pre_use_checks, "operating_cautions": procedure.operating_cautions,
+                "prohibited_actions": procedure.prohibited_actions, "incident_route": procedure.incident_route,
+                "source_title": procedure.source_title, "source_reference": procedure.source_reference,
+                "source_version": procedure.source_version, "effective_from": procedure.effective_from.isoformat() if procedure.effective_from else None,
+                "review_due_date": procedure.review_due_date.isoformat() if procedure.review_due_date else None,
+                "requires_acknowledgement": procedure.requires_acknowledgement,
+            }
+            data["safety_acknowledged"] = safety_service.acknowledged(user, procedure)
     else:
         data.update(category=resource.equipment.category, risk=resource.equipment.get_risk_display(),
                     qualification=resource.equipment.qualification.name if resource.equipment.qualification_id else "无额外培训要求",
@@ -245,13 +271,7 @@ def me(request):
 @endpoint("GET")
 def resources(request):
     values = cleaned(QueryForm(request.GET))
-    qs = resources_qs()
-    if values["q"]:
-        qs = qs.filter(Q(name__icontains=values["q"]) | Q(code__icontains=values["q"]))
-    if values["kind"]:
-        qs = qs.filter(kind=values["kind"])
-    if values["lab"]:
-        qs = qs.filter(lab=values["lab"])
+    qs = filter_resources(resources_qs(), values)
     times = (values["starts_at"], values["ends_at"]) if values["starts_at"] else None
     result = page_data(request, qs, lambda item: resource_data(item, times, request.mini_user))
     result["labs"] = list(Lab.objects.order_by("code").values("id", "name", "location"))
@@ -266,7 +286,15 @@ def resource_detail(request, pk):
     result = resource_data(resource, times, request.mini_user)
     result["policy"] = policy_data()
     result["can_apply"] = request.mini_user.has_role("TEACHER") if resource.kind == "ROOM" else True
-    result["accessories"] = list(resource.accessories.filter(is_active=True).order_by("code").values("code", "name", "quantity"))
+    if resource.kind == "EQUIPMENT":
+        accessory_rows = list(resource.accessories.order_by("code").values("code", "name", "quantity", "is_active"))
+        result["handover_location"] = resource.equipment.handover_location
+        result["accessories"] = [
+            {"code": item["code"], "name": item["name"], "quantity": item["quantity"]}
+            for item in accessory_rows if item["is_active"]
+        ]
+    else:
+        result["accessories"] = []
     raw_page=request.GET.get("schedule_page","1")
     if not re.fullmatch(r"[1-9][0-9]{0,5}",raw_page):
         raise ApiError("VALIDATION_ERROR","占用列表页码必须为正整数",fields={"schedule_page":["页码无效"]})
@@ -285,16 +313,32 @@ def resource_detail(request, pk):
     return result
 
 
+@endpoint("POST")
+def safety_ack(request, pk, procedure_id):
+    resource = get_object_or_404(Resource, pk=pk, kind="ROOM")
+    procedure = get_object_or_404(resource.safety_procedures, pk=procedure_id, status="PUBLISHED")
+    item = safety_service.acknowledge(request.mini_user, procedure.pk)
+    return {"acknowledged": True, "version": procedure.version,
+            "acknowledged_at": date_text(item.acknowledged_at),
+            "notice": "此阅读确认不代表培训、考核或进入许可"}
+
+
 @endpoint("GET", "POST")
 def bookings(request):
     if request.method == "POST":
-        data = payload(request, {"resource_id", "starts_at", "ends_at", "purpose", "participants", "request_key"})
+        data = payload(request, {"resource_id", "starts_at", "ends_at", "purpose", "participants", "request_key", "expected_approval_mode"})
         try:
             resource_id = forms.IntegerField(min_value=1).clean(data.get("resource_id"))
         except forms.ValidationError:
             raise ApiError("VALIDATION_ERROR", "请选择有效资源", fields={"resource_id": ["资源编号无效"]})
         get_object_or_404(Resource, pk=resource_id)
-        values = cleaned(BookingForm(data))
+        try:
+            expected_mode=forms.ChoiceField(choices=[("AUTO","规则通过后自动确认"),("MANUAL","提交后人工审核")],required=False).clean(data.get("expected_approval_mode"))
+        except forms.ValidationError as error:
+            raise ApiError("VALIDATION_ERROR", "预约确认信息无效，请刷新后重新提交", fields={"expected_approval_mode": error.messages})
+        form_data={key:value for key,value in data.items() if key!="expected_approval_mode"}
+        values = cleaned(BookingForm(form_data))
+        values["expected_approval_mode"]=expected_mode or None
         result = s.create_reservation(request.mini_user, resource_id, **values)
         return booking_data(my_bookings(request.mini_user).get(pk=result.pk))
     qs = my_bookings(request.mini_user)
@@ -404,9 +448,12 @@ def incidents(request):
 def receipt(request, request_key):
     """Explicit result lookup after a client timeout; absent is not proof of failure."""
     key = _request_key(request_key)
+    booking=Reservation.objects.filter(applicant=request.mini_user,request_key=key).select_related("resource__lab").first()
+    if booking:
+        return {"found":True,"kind":"booking","result":booking_data(booking),"notice":"已找到原预约回执"}
     item = AuditEvent.objects.filter(dedupe_key=f"mini-action:{request.mini_user.pk}:{key}",
         actor=request.mini_user,action="MINI_ACTION_RECEIPT").first()
-    return {"found":item is not None,"result":item.new_state["result"] if item else None,
+    return {"found":item is not None,"kind":"action" if item else None,"result":item.new_state["result"] if item else None,
             "notice":"未找到回执不代表提交失败；仍可使用原请求编号与原内容核对重试。" if item is None else "已找到原操作回执"}
 
 

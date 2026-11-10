@@ -1,6 +1,6 @@
-.hero.photo-hero { position:relative; overflow:hidden; padding:0; background:#173454; border:0; }
+.hero.photo-hero { position:relative; overflow:hidden; padding:0; background:radial-gradient(circle at 85% 10%,#90b6a844,transparent 35%),linear-gradient(135deg,#173b34,#253a48); border:0; }
 .hero-real-photo { position:absolute; left:0; top:0; width:100%; height:100%; }
-.photo-hero-content { position:relative; min-height:210px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(90deg,rgba(8,23,44,.88),rgba(8,23,44,.3)); }
+.photo-hero-content { position:relative; min-height:210px; padding:20px; display:flex; flex-direction:column; justify-content:space-between; background:linear-gradient(90deg,rgba(13,36,33,.5),rgba(13,36,33,.04)); }
 .hero.photo-hero .eyebrow,.hero.photo-hero .stat-label,.hero.photo-hero .stat-number { color:#fff; }
 .hero.photo-hero .hero-title { color:#fff; font-size:23px; line-height:1.4; margin:20px 0 10px; }
 .hero.photo-hero .white-tag { color:#fff; background:rgba(0,0,0,.3); }

@@ -8,7 +8,7 @@ from django.core.cache import cache
 from django.core.management import call_command
 from django.contrib.sessions.models import Session
 from django.utils import timezone
-from .models import User, Resource, Reservation, Notification, AuditEvent, UserRole, Policy
+from .models import User, Resource, Reservation, Notification, AuditEvent, UserRole, Policy, Lab, Accessory
 from . import services as s
 
 BASE = '/api/mini/v1'
@@ -124,10 +124,70 @@ class MiniApiTests(TestCase):
         data=r.json()['data'];self.assertFalse(data['available']);self.assertEqual(len(data['schedule']),1)
         self.assertNotIn('applicant',json.dumps(data));self.assertNotIn('其他人的用途',json.dumps(data,ensure_ascii=False))
 
+    def test_equipment_detail_does_not_claim_accessory_inventory_is_verified(self):
+        path='/resources/'+str(self.eq.pk)+'/'
+        data=self.get(path).json()['data']
+        self.assertEqual(len(data['accessories']),2)
+        self.assertNotIn('accessories_registered',data)
+        Accessory.objects.filter(resource=self.eq).update(is_active=False)
+        data=self.get(path).json()['data']
+        self.assertEqual(data['accessories'],[])
+        self.assertNotIn('accessories_registered',data)
+
+    def test_inactive_lab_is_reported_and_mini_booking_is_rejected(self):
+        Lab.objects.filter(pk=self.eq.lab_id).update(is_active=False)
+        token=self.login()
+        detail=self.get(f'/resources/{self.eq.pk}/',token,{'starts_at':self.start.strftime('%Y-%m-%dT%H:%M'),'ends_at':self.end.strftime('%Y-%m-%dT%H:%M')}).json()['data']
+        self.assertFalse(detail['can_reserve']);self.assertTrue(detail['can_apply'])
+        self.assertEqual(detail['service_label'],'所属管理单元已停用')
+        self.assertEqual(detail['available_label'],'所属实验室管理单元已停用，暂不可预约')
+        response=self.post('/bookings/',self.values(),token)
+        self.assertEqual(response.status_code,409)
+        self.assertEqual(response.json()['error']['message'],'所属实验室管理单元已停用，暂不可预约')
+        self.assertFalse(Reservation.objects.filter(resource=self.eq).exists())
+
     def test_ordinary_booking_and_duplicate_share_one_record(self):
         token=self.login();values=self.values();a=self.post('/bookings/',values,token);b=self.post('/bookings/',values,token)
         self.assertEqual(a.status_code,200,a.content);self.assertEqual(a.json()['data']['status'],'CONFIRMED')
         self.assertEqual(a.json()['data']['id'],b.json()['data']['id']);self.assertEqual(Reservation.objects.count(),1)
+
+    def test_booking_receipt_lookup_recovers_owned_result_without_exposing_other_users(self):
+        token=self.login();values=self.values();created=self.post('/bookings/',values,token).json()['data']
+        receipt=self.get('/receipts/'+values['request_key']+'/',token).json()['data']
+        self.assertTrue(receipt['found']);self.assertEqual(receipt['kind'],'booking');self.assertEqual(receipt['result']['id'],created['id'])
+        other=self.login('student2')
+        missing=self.get('/receipts/'+values['request_key']+'/',other).json()['data']
+        self.assertFalse(missing['found']);self.assertIsNone(missing['result'])
+
+    def test_booking_confirmation_rejects_changed_approval_mode_before_creating_record(self):
+        token=self.login();values=self.values(expected_approval_mode='AUTO')
+        self.eq.equipment.risk='HIGH_VALUE';self.eq.equipment.save(update_fields=['risk'])
+        audit_count=AuditEvent.objects.count();notification_count=Notification.objects.count()
+        response=self.post('/bookings/',values,token)
+        self.assertEqual(response.status_code,409)
+        self.assertIn('预约审核方式已变化',response.json()['error']['message'])
+        self.assertFalse(Reservation.objects.exists())
+        self.assertEqual(AuditEvent.objects.count(),audit_count)
+        self.assertEqual(Notification.objects.count(),notification_count)
+
+    def test_booking_rejects_invalid_approval_mode_as_structured_validation_error(self):
+        token=self.login();values=self.values(expected_approval_mode='SURPRISE')
+        response=self.post('/bookings/',values,token)
+        self.assertEqual(response.status_code,400)
+        self.assertEqual(response.json()['error']['code'],'VALIDATION_ERROR')
+        self.assertIn('expected_approval_mode',response.json()['error']['fields'])
+        self.assertFalse(Reservation.objects.exists())
+
+    def test_booking_replay_returns_original_result_before_current_approval_mode_check(self):
+        token=self.login();values=self.values(expected_approval_mode='AUTO')
+        created=self.post('/bookings/',values,token)
+        self.assertEqual(created.status_code,200,created.content)
+        original_id=created.json()['data']['id']
+        self.eq.equipment.risk='HIGH_VALUE';self.eq.equipment.save(update_fields=['risk'])
+        replay=self.post('/bookings/',values,token)
+        self.assertEqual(replay.status_code,200,replay.content)
+        self.assertEqual(replay.json()['data']['id'],original_id)
+        self.assertEqual(Reservation.objects.count(),1)
 
     def test_reusing_key_with_different_payload_rejected(self):
         token=self.login();values=self.values();self.post('/bookings/',values,token);values['purpose']='不同用途'

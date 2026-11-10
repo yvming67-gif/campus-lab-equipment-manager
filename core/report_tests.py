@@ -146,7 +146,7 @@ class CalendarReportTests(TestCase):
 
     def test_weekly_history_versions_are_preserved_without_exception(self):
         weekday = self.day.isoweekday()
-        opening = OpeningPeriod.objects.get(lab=self.resource.lab, weekday=weekday)
+        opening = OpeningPeriod.objects.get(lab=self.resource.lab, resource__isnull=True, weekday=weekday)
         opening.valid_to = self.day - timedelta(days=1)
         opening.save(update_fields=["valid_to"])
         OpeningPeriod.objects.create(lab=self.resource.lab, weekday=weekday, starts_at=time(10), ends_at=time(14), valid_from=self.day)

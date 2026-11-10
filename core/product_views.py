@@ -9,6 +9,7 @@ from django.utils import timezone
 from .models import Lab, Resource, Reservation, OpeningPeriod, CalendarException
 from .services import TZ, ACTIVE
 from . import ui_navigation as ui
+from .opening_calendar import effective_weekly_rows
 
 
 class ScheduleQuery(forms.Form):
@@ -56,9 +57,12 @@ def schedule(request):
         exceptions = {e.lab_id:e for e in CalendarException.objects.filter(lab_id__in=labs,day=day,active=True)}
         for r in items:
             exception = exceptions.get(r.lab_id)
-            times = ([] if exception.closed else [(exception.starts_at,exception.ends_at)]) if exception else [(o.starts_at,o.ends_at) for o in openings if o.lab_id==r.lab_id]
+            effective=effective_weekly_rows(r,day,openings)
+            weekly_closed=any(o.closed_all_day for o in effective)
+            times = ([] if exception.closed else [(exception.starts_at,exception.ends_at)]) if exception else ([] if weekly_closed else [(o.starts_at,o.ends_at) for o in effective])
             windows = [{'start':x,'end':y,'left':(x.hour*60+x.minute)/14.4,'width':((y.hour-x.hour)*60+y.minute-x.minute)/14.4} for x,y in times]
-            rows.append({'resource':r,'events':grouped[r.pk],'windows':windows,'exception':bool(exception)})
+            rows.append({'resource':r,'events':grouped[r.pk],'windows':windows,'exception':bool(exception),
+                         'opening_note':('单日关闭例外' if exception.closed else '单日开放例外') if exception else ('每周全天关闭' if weekly_closed else '当日未开放')})
         for key, delta in [('previous',-1),('following',1)]:
             target = day+timedelta(days=delta)
             if 1900<=target.year<=2100:
