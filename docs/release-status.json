@@ -54,17 +54,17 @@
   },
   "local": {
     "checked_date": "2026-11-11",
-    "code_commit": "410e04b1c59d19c11aa201b9e124ccf1cd92fcfb",
+    "code_commit": "3291801663c7cad71714397049b15dc39a1d34ea",
     "local_docs_commit_pending_push": true,
     "backend_full_suite": {
       "modules": 21,
-      "executed": 359,
-      "passed": 356,
+      "executed": 373,
+      "passed": 373,
       "failed": 0,
-      "skipped": 3,
-      "duration_seconds": 87.078,
+      "skipped": 0,
+      "duration_seconds": 111.442,
       "isolated_postgresql": true,
-      "note": "修复相邻开放区间的候选列表遗漏后，定向80项及本次完整回归通过；完整回归3项跳过。23个候选时段测得12次数据库查询。"
+      "note": "覆盖已有公开演示库位置补齐、两次初始化、人工位置保留，以及预约和审计记录保留。"
     },
     "client_tests_passed": 127,
     "native_template_pages_compiled": 8,
@@ -91,19 +91,19 @@
       "content_sync_status": "正式DOCX已同步模型2.6、UC-20、AC-39/40、AC-67至AC-76及图4-1和图4-5；完成LibreOffice分页复核。",
       "pagination_difference_cause": "Not confirmed; LibreOffice versions/bitness/configuration differ; Microsoft Word native pagination not verified."
     },
-    "worktree_dirty": true,
-    "modified_tracked_files": 89,
-    "untracked_files": 2,
-    "local_commits_ahead_of_cached_origin_main": 6,
+    "worktree_dirty": false,
+    "modified_tracked_files": 0,
+    "untracked_files": 0,
+    "local_commits_ahead_of_cached_origin_main": 8,
     "data_model": {
       "entities": 40,
       "fields": 341,
       "physical_foreign_keys": 71,
       "static_validators_passed": true
     },
-    "latest_uncommitted_verification": {
+    "latest_verification": {
       "date": "2026-11-11",
-      "base_commit": "410e04b1c59d19c11aa201b9e124ccf1cd92fcfb",
+      "code_commit": "3291801663c7cad71714397049b15dc39a1d34ea",
       "cached_origin_main": "4d834d0c84829200b051813da55df9b52982eb21",
       "migration": "core/migrations/0012_building_campus_roomdetail_floor_label_and_more.py",
       "django_system_check": "pass",
@@ -115,6 +115,16 @@
         "failed": 0
       },
       "cloud_configuration_local_tests": {"executed": 8, "passed": 8, "failed": 0},
+      "windows_clean_archive_verification": {
+        "python_version": "3.13.12",
+        "first_start_passed": true,
+        "restart_passed": true,
+        "double_click_launcher_verified": false,
+        "startup_tests_passed": 11,
+        "restored_tables_compared": 47,
+        "portable_backup_tests_passed": 4,
+        "cloud_restore_verified": false
+      },
       "mini_program_tests": {
         "passed": 127,
         "failed": 0
