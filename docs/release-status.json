@@ -1,5 +1,5 @@
 {
-  "checked_date": "2026-11-11",
+  "checked_date": "2026-11-12",
   "runtime_commit": null,
   "runtime_commit_status": "线上应用没有公开部署提交号；本次只记录可直接观察的运行行为。",
   "web": {
@@ -68,7 +68,21 @@
     },
     "client_tests_passed": 127,
     "native_template_pages_compiled": 8,
-    "responsive_visual_qa": "Not completed for the current source; do not infer from historical width checks.",
+    "responsive_visual_qa": "Chrome本机实测完成；微信原生容器和线上新版未验证。",
+    "web_browser_verification": {
+      "date": "2026-11-12",
+      "css_viewport_widths": [320, 390, 768, 1440],
+      "role_count": 6,
+      "page_viewport_checks": 60,
+      "page_wide_horizontal_overflow_found": false,
+      "mobile_keyboard_navigation_passed": true,
+      "glass_toggle_passed": true,
+      "reduced_motion_passed": true,
+      "room_detail_after_photo_notice_checks": 4,
+      "product_tests_after_photo_notice_passed": 37,
+      "mini_program_tests_after_photo_notice_passed": 127,
+      "native_template_pages_compiled_after_photo_notice": 8
+    },
     "analysis_report": {
       "formal_docx_sha256": "757FE4699E462CDCACC1CD877FA8FE6A03413B13F92D6AABB51B9CB9AA33C6E8",
       "current_preview_pages": 178,

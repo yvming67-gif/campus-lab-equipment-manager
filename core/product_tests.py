@@ -70,6 +70,7 @@ class ProductTests(TestCase):
         self.client.force_login(self.student)
         web=self.client.get(f'/resources/{room.pk}/')
         self.assertContains(web,initial_location)
+        self.assertContains(web,'暂无已核验的场地实拍图。')
         mini=self.mini(f'resources/{room.pk}/')
         self.assertEqual(mini.status_code,200)
         self.assertEqual(mini.json()['data']['location'],initial_location)

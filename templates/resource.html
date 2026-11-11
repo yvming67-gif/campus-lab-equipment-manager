@@ -1,5 +1,11 @@
 {% extends 'base.html' %}{% load domain_labels %}{% block content %}
 <div class="page-top"><div><a class="back-link" href="{{ catalog_back }}">← 返回资源目录与筛选</a><h1><svg class="title-icon" aria-hidden="true"><use href="#{{ resource|resource_icon }}"/></svg>{{ resource.name }}</h1><p>{{ resource.code }} / 管理单元：{{ resource.lab.name }} / {{ resource.location_label }}：{{ resource.location_display }}</p></div><span class="badge {% if not resource.lab.is_active %}warning{% else %}{{ resource.service_status|lower }}{% endif %}">服务{{ service_label }}</span></div>
+{% if resource.kind == 'ROOM' %}
+  {% with photo=resource|resource_reference_photo %}
+    {% if photo %}{% include 'reference_photo.html' %}
+    {% else %}<p class="fine">暂无已核验的场地实拍图。</p>{% endif %}
+  {% endwith %}
+{% endif %}
 {% if can_apply and reservation_open %}<section class="panel slot-panel" aria-labelledby="slot-heading"><div class="section-heading"><div><div class="eyebrow">CHOOSE A TIME</div><h2 id="slot-heading">选择目标时段</h2></div><a class="touch-link" href="#reservation-form">手动填写时间 ↓</a></div>
 <form method="get" class="slot-filter"><div><label for="slot-day">预约日期（北京时间）</label><input id="slot-day" name="slot_day" type="date" value="{{ slot_day }}" required></div><div><label for="slot-duration">使用时长（分钟）</label><input id="slot-duration" name="duration_minutes" type="number" min="{{ policy.slot_minutes }}" step="{{ policy.slot_minutes }}" max="{% widthratio policy.max_hours 1 60 %}" value="{{ duration_minutes }}" required></div>{% for k,v in catalog_filters %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}<button class="button secondary">查看可选时段</button></form>
 {% if slot_error %}<p class="message error" role="alert">{{ slot_error }}</p>{% endif %}

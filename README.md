@@ -2,7 +2,7 @@
   <img src="miniprogram/assets/brand-icon.png" width="72" height="72" alt="校园实验资源中心标识">
   <h1>校园实验室设备预约与借用管理系统</h1>
   <p>设备借用 · 场地预约 · 现场交接 · 异常与维修追踪</p>
-  <p><a href="https://campus-lab-equipment-manager.onrender.com/">打开网站</a> · <a href="docs/项目入口.md">网站与微信入口</a> · <a href="#快速开始">本机运行</a> · <a href="docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx">分析报告</a> · <a href="models/ERD/分域ERD图册.pdf">数据模型</a></p>
+  <p><a href="https://campus-lab-equipment-manager.onrender.com/access/">打开网站</a> · <a href="docs/项目入口.md">网站与微信入口</a> · <a href="#快速开始">本机运行</a> · <a href="docs/分析报告/校园实验室设备预约与借用管理系统分析报告-宋明俞-1602240221-终稿.docx">分析报告</a> · <a href="models/ERD/分域ERD图册.pdf">数据模型</a></p>
 </div>
 
 [![自动检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml)
@@ -45,6 +45,15 @@ flowchart LR
 | 实验教学中心主任 | 中心统计与只读审计 |
 
 管理操作在网页办理。小程序是师生渠道，不提供管理员审批入口。申请、审批与实物交接分别留存，计划结束不等于实际归还。
+
+<details>
+<summary>查看本机网页演示截图</summary>
+
+![中心主任工作台，显示汇总指标和报表、审计入口](docs/演示界面/中心主任工作台.png)
+
+查看[场地详情完整截图](docs/演示界面/场地详情.png)，其中展示模拟场地的位置、开放时段和安全信息发布状态。两张截图均使用本机模拟数据。
+
+</details>
 
 ## 快速开始
 
