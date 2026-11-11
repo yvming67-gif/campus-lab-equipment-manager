@@ -16,7 +16,7 @@
       "teacher"
     ],
     "management_accounts_listed": false,
-    "last_live_check": "2026-11-10; GET /health/ and /access/ returned 200; a CSRF-valid login-entry request opened the identity selector; no password or business write was submitted. A 2026-11-11 follow-up from the current review environment failed during TLS connection setup and is inconclusive, not evidence of an application outage.",
+    "last_live_check": "2026-11-11; unauthenticated GET /health/ returned 200 with status ready, and GET / and /access/ returned 200 HTML. The access page states that the mini-program's formal entry is not open yet. No login or business write was submitted. An earlier TLS failure from another client in the same review environment was inconclusive.",
     "runtime_commit_verified": false,
     "available_to_public": true,
     "availability_limit": "Free instance sleep and provider quotas"
@@ -54,7 +54,7 @@
   },
   "local": {
     "checked_date": "2026-11-11",
-    "code_commit": "dfb87c3c2226fa57ac550fd2efd94203612839e2",
+    "code_commit": "d74135bca99e0e078e11e4e778fafe70686fc3ef",
     "local_docs_commit_pending_push": true,
     "backend_full_suite": {
       "modules": 21,
@@ -82,8 +82,8 @@
       "historical_preview_pages": 174,
       "pagination_difference_cause": "Not confirmed; LibreOffice versions/bitness/configuration differ; Microsoft Word native pagination not verified."
     },
-    "worktree_dirty": true,
-    "local_commits_ahead_of_cached_origin_main": 3,
+    "worktree_dirty": false,
+    "local_commits_ahead_of_cached_origin_main": 5,
     "data_model": {
       "entities": 38,
       "fields": 328,
