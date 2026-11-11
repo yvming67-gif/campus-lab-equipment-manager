@@ -1,4 +1,5 @@
 from datetime import time
+import re
 from django import forms
 from django.utils import timezone
 from .models import *
@@ -18,7 +19,9 @@ class BookingForm(forms.Form):
 class QueryForm(forms.Form):
     q=forms.CharField(label="资源名称或编号",required=False)
     kind=forms.ChoiceField(label="资源类型",required=False,choices=[("","全部" )]+Resource.KIND)
-    lab=forms.ModelChoiceField(label="所属实验室",queryset=Lab.objects.all(),required=False,empty_label="全部实验室")
+    campus=forms.ModelChoiceField(label="校区",queryset=Campus.objects.none(),required=False,empty_label="全部校区")
+    building=forms.ModelChoiceField(label="楼宇",queryset=Building.objects.none(),required=False,empty_label="全部楼宇")
+    lab=forms.ModelChoiceField(label="所属管理单元",queryset=Lab.objects.all(),required=False,empty_label="全部管理单元")
     category=forms.CharField(label="场地类别或设备类别",required=False,max_length=80)
     facility=forms.CharField(label="设施或配件",required=False,max_length=80)
     capacity_min=forms.IntegerField(label="最小容量（人，仅场地）",required=False,min_value=1,max_value=10000)
@@ -26,12 +29,21 @@ class QueryForm(forms.Form):
     service_status=forms.ChoiceField(label="服务状态",required=False,choices=[("","全部状态")]+Resource.STATUS)
     starts_at=LocalDateTime(label="查询开始时间",required=False)
     ends_at=LocalDateTime(label="查询结束时间",required=False)
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["campus"].queryset=Campus.objects.filter(is_active=True).order_by("code")
+        buildings=Building.objects.filter(is_active=True,campus__is_active=True)
+        raw_campus=self.data.get("campus") if self.is_bound else None
+        if raw_campus:
+            self.fields["building"].queryset=buildings.filter(campus_id=raw_campus).order_by("code") if str(raw_campus).isascii() and str(raw_campus).isdecimal() else buildings.none()
+        else:self.fields["building"].queryset=buildings.select_related("campus").order_by("campus__code","code")
     def clean(self):
         d=super().clean();a,b=d.get("starts_at"),d.get("ends_at")
         low,high=d.get("capacity_min"),d.get("capacity_max")
         if low and high and low>high:self.add_error("capacity_max","最大容量不得小于最小容量")
         if bool(a)!=bool(b):raise forms.ValidationError("查询时段须同时填写开始与结束时间")
         if a and b and a>=b:raise forms.ValidationError("查询开始时间必须早于结束时间")
+        if d.get("building") and d.get("campus") and d["building"].campus_id!=d["campus"].pk:self.add_error("building","所选楼宇不属于所选校区")
         return d
 class ActionForm(forms.Form):
     reason=forms.CharField(label="操作原因或说明",max_length=1500,widget=forms.Textarea(attrs={"rows":3}))
@@ -85,7 +97,7 @@ class ResourceForm(forms.Form):
     code=forms.CharField(label="唯一设备标签或场地编号",max_length=40)
     name=forms.CharField(label="资源名称",max_length=100)
     kind=forms.ChoiceField(label="类型",choices=Resource.KIND)
-    lab=forms.ModelChoiceField(label="所属实验室",queryset=Lab.objects.all())
+    lab=forms.ModelChoiceField(label="所属管理单元",queryset=Lab.objects.all())
     description=forms.CharField(label="资源说明",required=False,widget=forms.Textarea(attrs={"rows":2}))
     category=forms.CharField(label="设备类别（设备必填）",required=False,max_length=60)
     risk=forms.ChoiceField(label="设备分级",choices=EquipmentDetail._meta.get_field("risk").choices)
@@ -93,16 +105,36 @@ class ResourceForm(forms.Form):
     portable=forms.BooleanField(label="可独立外借（固定设备取消勾选）",required=False,initial=True)
     access_room=forms.ModelChoiceField(label="固定设备关联场地",queryset=Resource.objects.filter(kind='ROOM'),required=False)
     handover_location=forms.CharField(label="设备交接地点",max_length=120,required=False)
-    room_location=forms.CharField(label="场地具体位置（楼栋、楼层或房间）",max_length=160,required=False)
+    building=forms.ModelChoiceField(label="场地所属楼宇（未核实可留空）",queryset=Building.objects.none(),required=False)
+    floor_label=forms.CharField(label="楼层标识",max_length=40,required=False)
+    room_number=forms.CharField(label="房间编号",max_length=40,required=False)
+    room_location=forms.CharField(label="旧位置说明（兼容字段，不作为结构化位置）",max_length=160,required=False)
     capacity=forms.IntegerField(label="场地容量",required=False,min_value=1)
     space_category=forms.CharField(label="场地类别（演示分类，可按真实目录调整）",required=False,max_length=80)
     facilities=forms.CharField(label="场地设施（逐项填写）",required=False,widget=forms.Textarea(attrs={"rows":3}))
     accessories=forms.CharField(label="配件（每行：编码,名称,数量；保留历史交接快照）",required=False,widget=forms.Textarea(attrs={"rows":3}))
     reason=forms.CharField(label="变更依据",max_length=1000)
+
+    def clean(self):
+        data=super().clean()
+        if data.get("kind")!="EQUIPMENT":
+            return data
+        portable=data.get("portable",True)
+        room=data.get("access_room")
+        lab=data.get("lab")
+        if portable and room:
+            self.add_error("access_room","可独立外借设备不填写固定关联场地；请清空该项，或将设备改为固定设备后再关联场地。")
+        elif not portable:
+            if not room:
+                self.add_error("access_room","固定设备须关联同一管理单元内的场地。")
+            elif lab and room.lab_id!=lab.pk:
+                self.add_error("access_room","固定设备关联场地必须属于同一管理单元。")
+        return data
+
 class GrantForm(forms.Form):
     user=forms.ModelChoiceField(label="用户",queryset=User.objects.all())
     roles=forms.ModelMultipleChoiceField(label="角色",queryset=Role.objects.all(),required=False,widget=forms.CheckboxSelectMultiple)
-    labs=forms.ModelMultipleChoiceField(label="管理员负责实验室",queryset=Lab.objects.all(),required=False,widget=forms.CheckboxSelectMultiple)
+    labs=forms.ModelMultipleChoiceField(label="管理员负责的管理单元",queryset=Lab.objects.all(),required=False,widget=forms.CheckboxSelectMultiple)
     qualification=forms.ModelChoiceField(label="调整的培训资格（可选）",queryset=QualificationType.objects.all(),required=False)
     expires_at=LocalDateTime(label="资格有效期（有资格时必填）",required=False)
     revoke=forms.BooleanField(label="撤销该培训资格",required=False)
@@ -119,17 +151,30 @@ class PolicyForm(forms.Form):
     mock_delivery_failure=forms.BooleanField(label="模拟外部消息服务不可用（仅演示）",required=False)
     reason=forms.CharField(label="修改依据",max_length=1000)
 class LabForm(forms.Form):
-    code=forms.CharField(label="实验室编号",max_length=32)
-    name=forms.CharField(label="实验室名称",max_length=80)
-    location=forms.CharField(label="地点",max_length=120)
+    code=forms.CharField(label="管理单元编号",max_length=32)
+    name=forms.CharField(label="管理单元名称",max_length=80)
+    location=forms.CharField(label="管理单元地点备注（非单间场地地址）",max_length=120)
     description=forms.CharField(label="说明",required=False,widget=forms.Textarea(attrs={"rows":2}))
     reason=forms.CharField(label="创建依据",max_length=1000)
+class CampusForm(forms.Form):
+    code=forms.CharField(label="校区编号",max_length=32)
+    name=forms.CharField(label="校区名称",max_length=80)
+    active=forms.BooleanField(label="启用该校区",required=False,initial=True)
+    reason=forms.CharField(label="资料来源或维护依据",max_length=1000)
+class BuildingForm(forms.Form):
+    campus=forms.ModelChoiceField(label="所属校区",queryset=Campus.objects.none())
+    code=forms.CharField(label="楼宇编号",max_length=32)
+    name=forms.CharField(label="楼宇名称",max_length=100)
+    address_label=forms.CharField(label="地址补充说明",max_length=180,required=False)
+    active=forms.BooleanField(label="启用该楼宇",required=False,initial=True)
+    reason=forms.CharField(label="资料来源或维护依据",max_length=1000)
 class OpeningForm(forms.Form):
-    lab=forms.ModelChoiceField(label="实验室",queryset=Lab.objects.all())
+    lab=forms.ModelChoiceField(label="管理单元",queryset=Lab.objects.all())
     resource=forms.ModelChoiceField(label="单间场地（留空表示管理单元默认时段）",queryset=Resource.objects.none(),required=False)
     weekday=forms.IntegerField(label="星期（1至7）",min_value=1,max_value=7)
-    starts_at=forms.TimeField(label="开放时间",required=False,widget=forms.TimeInput(attrs={"type":"time"}))
-    ends_at=forms.TimeField(label="关闭时间",required=False,widget=forms.TimeInput(attrs={"type":"time"}))
+    windows=forms.CharField(label="开放时段（每行一段）",required=False,max_length=2000,
+        widget=forms.Textarea(attrs={"rows":4,"placeholder":"08:00-12:00\n13:30-17:00"}),
+        help_text="使用24小时制，每行填写“开始-结束”；时段不得重叠且不能跨日。")
     closed_all_day=forms.BooleanField(label="该星期全天关闭",required=False)
     effective=forms.DateField(label="生效日期（至少为明天）",widget=forms.DateInput(attrs={"type":"date"}))
     reason=forms.CharField(label="变更原因",max_length=1000)
@@ -140,15 +185,42 @@ class OpeningForm(forms.Form):
         if resource and lab and resource.lab_id!=lab.pk:
             self.add_error("resource","场地必须属于所选实验室")
         if data.get("closed_all_day"):
+            if data.get("windows", "").strip():
+                self.add_error("windows","全天关闭时不能填写开放时段")
+            data["windows"]=[]
             data["starts_at"]=time.min
             data["ends_at"]=time.min
-        elif data.get("starts_at") is None or data.get("ends_at") is None:
-            if "starts_at" in self.fields and not data.get("starts_at"):
-                self.add_error("starts_at","开放日必须填写开放时间")
-            if not data.get("ends_at"):
-                self.add_error("ends_at","开放日必须填写关闭时间")
-        elif data["starts_at"]>=data["ends_at"]:
-            self.add_error("ends_at","关闭时间必须晚于开放时间；如全天不开放，请勾选全天关闭")
+        else:
+            parsed=[]
+            raw=data.get("windows", "")
+            for line_no,line in enumerate(raw.splitlines(),1):
+                line=line.strip()
+                if not line:
+                    continue
+                match=re.fullmatch(r"(\d{2}):(\d{2})\s*[-–—~～]\s*(\d{2}):(\d{2})",line)
+                if not match:
+                    self.add_error("windows",f"第{line_no}行格式错误，请使用HH:MM-HH:MM，例如08:00-12:00")
+                    continue
+                try:
+                    start=time(int(match.group(1)),int(match.group(2)))
+                    end=time(int(match.group(3)),int(match.group(4)))
+                except ValueError:
+                    self.add_error("windows",f"第{line_no}行时间无效，请填写有效的24小时制时间")
+                    continue
+                if start>=end:
+                    self.add_error("windows",f"第{line_no}行结束时间必须晚于开始时间，且不能跨日")
+                    continue
+                parsed.append((start,end))
+            parsed.sort(key=lambda pair:pair[0])
+            for previous,current in zip(parsed,parsed[1:]):
+                if current[0]<previous[1]:
+                    self.add_error("windows","开放时段不得重叠，请调整对应时间")
+                    break
+            if not parsed and not self.errors.get("windows"):
+                self.add_error("windows","开放日必须至少填写一段时段；全天不开放请勾选全天关闭")
+            data["windows"]=parsed
+            if parsed:
+                data["starts_at"],data["ends_at"]=parsed[0]
         return data
 
 class SafetyProcedureForm(forms.Form):
@@ -190,7 +262,7 @@ class RecheckForm(ActionForm):
 
 
 class CalendarExceptionForm(ActionForm):
-    lab=forms.ModelChoiceField(label="实验室",queryset=Lab.objects.all())
+    lab=forms.ModelChoiceField(label="管理单元",queryset=Lab.objects.all())
     day=forms.DateField(label="生效日期",widget=forms.DateInput(attrs={'type':'date'}))
     closed=forms.BooleanField(label="全天关闭（取消勾选时填写例外开放时段）",required=False,initial=True)
     starts_at=forms.TimeField(label="例外开放时间",required=False,widget=forms.TimeInput(attrs={'type':'time'}))

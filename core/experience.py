@@ -11,6 +11,7 @@ from django.utils import timezone
 
 from .models import (CalendarException, OpeningPeriod, Policy, Reservation,
                      SafetyAcknowledgement, SafetyProcedure, UserQualification)
+from .opening_calendar import effective_weekly_rows, merge_time_windows
 from . import services as s
 
 
@@ -143,11 +144,11 @@ def slot_options(resource, user, day, duration_minutes=60, at=None):
     if opening:
         windows = [] if opening.closed else [(opening.starts_at, opening.ends_at)]
     else:
-        from .opening_calendar import effective_weekly_rows
         effective = effective_weekly_rows(resource, day, snapshot.openings)
         windows = [] if any(row.closed_all_day for row in effective) else [
             (row.starts_at, row.ends_at) for row in effective
         ]
+        windows = merge_time_windows(windows)
     candidates = set()
     for opens, closes in windows:
         a = datetime.combine(day, opens, s.TZ); z = datetime.combine(day, closes, s.TZ)
@@ -178,7 +179,7 @@ def slot_options(resource, user, day, duration_minutes=60, at=None):
 
 def next_step(booking, at=None):
     at = at or timezone.now(); resource = booking.resource
-    location = (resource.equipment.handover_location if resource.kind == "EQUIPMENT" else "") or resource.lab.location or "交接地点尚未登记，请联系实验室管理员"
+    location = resource.location_display or "交接地点尚未登记，请联系实验室管理员"
     if booking.status == "PENDING":
         title, role, action = "等待审核", "对应实验室管理员", "查看审核通知；待审核期间可补充说明。时段尚未保留。"
     elif booking.status == "CONFIRMED" and booking.review_required:

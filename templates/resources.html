@@ -7,7 +7,7 @@
 <p class="fine">服务正常、设备在库与目标时段可预约分别判断。{% if times %}当前查询 {{ times.0|date:'m-d H:i' }}—{{ times.1|date:'H:i' }}，提交时仍会检查本人资格和配额。{% else %}尚未选择目标时段，卡片不代表预约承诺。{% endif %}</p>
 <div class="resource-grid">{% for r in resources %}<article class="resource-card">
 <div class="card-top"><span class="resource-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#{{ r|resource_icon }}"/></svg></span><span class="badge {% if not r.lab.is_active %}warning{% else %}{{ r.service_status|lower }}{% endif %}">服务{{ r.service_label }}</span></div>
-<span class="code">{{ r.code }}</span><h2>{{ r.name }}</h2><p>{{ r.lab.name }} · {% if r.kind == 'ROOM' %}{{ r.room.location_label|default:r.lab.location }}{% else %}{{ r.lab.location }}{% endif %}</p>
+<span class="code">{{ r.code }}</span><h2>{{ r.name }}</h2><p>管理单元：{{ r.lab.name }} · {{ r.location_label }}：{{ r.location_display }}</p>
 <dl class="resource-facts"><dt>资源类型</dt><dd>{% if r.kind == 'ROOM' %}整间场地 · {{ r.room.capacity }}人 · {{ r.room.space_category|default:'类别待登记' }}{% else %}{{ r.equipment.category }}{% endif %}</dd>{% if r.kind == 'ROOM' and r.room.facilities %}<dt>设施</dt><dd>{{ r.room.facilities }}</dd>{% endif %}{% if r.kind == 'EQUIPMENT' %}<dt>当前实物</dt><dd>{{ r.equipment.get_physical_status_display }}</dd>{% endif %}<dt>确认方式</dt><dd>{% if r.requires_approval %}人工审核{% else %}规则通过后自动确认{% endif %}</dd></dl>
 <div class="resource-bottom"><small class="{% if r.available == False %}warning{% endif %}"><b>目标时段</b><br>{{ r.available_label }}</small><a class="touch-link" href="{{ r.detail_url }}">选择时段 ↗</a></div>
 </article>{% empty %}<div class="empty-state panel">未找到匹配资源，请调整条件。</div>{% endfor %}</div>{% include 'pagination.html' %}{% endblock %}

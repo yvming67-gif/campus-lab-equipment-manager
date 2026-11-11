@@ -6,7 +6,7 @@ from django.http import QueryDict
 from django.urls import reverse
 from django.utils import timezone
 
-CATALOG_KEYS = ('q', 'kind', 'lab', 'category', 'facility', 'capacity_min', 'capacity_max', 'service_status', 'starts_at', 'ends_at')
+CATALOG_KEYS = ('q', 'kind', 'lab', 'campus', 'building', 'category', 'facility', 'capacity_min', 'capacity_max', 'service_status', 'starts_at', 'ends_at')
 RECORD_KEYS = ('q', 'status', 'lab', 'day', 'kind', 'scope', 'queue', 'sort', 'page')
 CONTEXT_KEYS = ('origin', 'record_user', 'catalog_starts_at', 'catalog_ends_at') + tuple('record_' + k for k in RECORD_KEYS)
 SCHEDULE_KEYS = ('day', 'q', 'kind', 'lab') + CONTEXT_KEYS

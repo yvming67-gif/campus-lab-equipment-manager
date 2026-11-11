@@ -207,7 +207,7 @@ def build_story(schema: dict, manifest: dict, relation_rows: list[dict]) -> list
         Spacer(1, 27 * mm),
         para("姓名：宋明俞　　学号：1602240221", cover_subtitle),
         para("班级：信管1402　　课程：系统分析与设计", cover_subtitle),
-        para("模型版本 2.5　　2026年11月11日", cover_kicker),
+        para("模型版本 2.6　　2026年11月11日", cover_kicker),
         PageBreak(),
     ]
 
@@ -378,7 +378,7 @@ def main():
             topMargin=TOP, bottomMargin=BOTTOM,
             title="Campus Lab Equipment Reservation and Loan Management System - ERD and Data Design",
             author="Song Mingyu",
-            subject="Model 2.5; 38 entities; 328 fields; 69 physical foreign keys",
+            subject="Model 2.6; 40 entities; 341 fields; 71 physical foreign keys",
         )
         document.build(build_story(schema, manifest, manifest["relationships"]), onFirstPage=on_page, onLaterPages=on_page)
         from pypdf import PdfReader
@@ -386,7 +386,7 @@ def main():
         if len(result.pages) < 35:
             raise ValueError(f"输出页数异常：{len(result.pages)}")
         text_content = "\n".join((page.extract_text() or "") for page in result.pages)
-        for required in ("SafetyProcedure", "SafetyAcknowledgement", "R69", "模型版本 2.5"):
+        for required in ("Campus", "Building", "SafetyProcedure", "SafetyAcknowledgement", "R71", "模型版本 2.6"):
             if required not in text_content:
                 raise ValueError(f"最终PDF缺少必需内容：{required}")
         os.replace(temp_path, DESTINATION)

@@ -62,6 +62,13 @@ class Command(BaseCommand):
         lab1,lab1_created=Lab.objects.get_or_create(code="LAB-101",defaults={"name":"演示·电子与传感实验室","location":"演示楼 A · 1层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
         lab2,lab2_created=Lab.objects.get_or_create(code="LAB-202",defaults={"name":"演示·机器人与数字影像实验室","location":"演示楼 B · 2层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
         lab3,lab3_created=Lab.objects.get_or_create(code="LAB-303",defaults={"name":"演示·计算与物联网实验室","location":"演示楼 C · 3层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
+        # These physical locations are explicitly fictional demo rows. Never
+        # import or infer real campus/building data from the management units.
+        demo_campus,_=Campus.objects.get_or_create(code="CAMPUS-DEMO",defaults={"name":"演示校区"})
+        demo_buildings={}
+        for suffix,name in (("A","演示楼A"),("B","演示楼B"),("C","演示楼C")):
+            demo_buildings[suffix],_=Building.objects.get_or_create(
+                campus=demo_campus,code=f"BLD-DEMO-{suffix}",defaults={"name":name})
         # Convert only the exact labels created by earlier versions of this seed.
         # Any locally edited values are left untouched.
         legacy_labels={
@@ -118,6 +125,15 @@ class Command(BaseCommand):
             if r.description=="场地与室内设备分别预约。":r.description="演示数据。"+description;r.save(update_fields=["description"])
             RoomDetail.objects.get_or_create(resource=r,defaults={"location_label":location_label,"capacity":cap,"space_category":space_category,"facilities":facilities,"safety_note":safety_placeholder})
             detail=RoomDetail.objects.get(resource=r)
+            demo_location={
+                "ROOM-101":("A","1层","101室"),"ROOM-102":("A","1层","102室"),
+                "ROOM-201":("B","2层","201室"),"ROOM-202":("B","2层","202室"),
+                "ROOM-301":("C","3层","301室"),"ROOM-302":("C","3层","302室"),
+            }.get(code)
+            if demo_location and not detail.building_id and detail.location_label==location_label:
+                suffix,floor,room_no=demo_location
+                detail.building=demo_buildings[suffix];detail.floor_label=floor;detail.room_number=room_no
+                detail.save(update_fields=["building","floor_label","room_number"])
             if r.description.startswith("演示数据。") and not detail.space_category and not detail.facilities:
                 detail.space_category=space_category;detail.facilities=facilities;detail.save(update_fields=["space_category","facilities"])
             if detail.safety_note=="结束时整理工位、关闭电源并交接。":detail.safety_note=safety_placeholder;detail.save(update_fields=["safety_note"])

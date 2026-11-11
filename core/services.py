@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils import timezone
 from .models import *
+from .opening_calendar import merge_time_windows
 from .request_context import correlated,correlation_id
 
 TZ = ZoneInfo("Asia/Shanghai")
@@ -639,7 +640,7 @@ def resource_snapshot(resource):
         state["equipment"]={"category":resource.equipment.category,"risk":resource.equipment.risk,"qualification_id":resource.equipment.qualification_id,"portable":resource.equipment.portable,"access_room_id":resource.equipment.access_room_id,"handover_location":resource.equipment.handover_location}
         state["accessories"]=list(resource.accessories.order_by("code").values("code","name","quantity","is_active"))
     else:
-        state["room"]={"location_label":resource.room.location_label,"capacity":resource.room.capacity,"space_category":resource.room.space_category,"facilities":resource.room.facilities,"safety_note":resource.room.safety_note}
+        state["room"]={"building_id":resource.room.building_id,"floor_label":resource.room.floor_label,"room_number":resource.room.room_number,"location_label":resource.room.location_label,"capacity":resource.room.capacity,"space_category":resource.room.space_category,"facilities":resource.room.facilities,"safety_note":resource.room.safety_note}
     return state
 
 @correlated
@@ -668,14 +669,20 @@ def save_resource(actor, data, resource_id=None, at=None):
         r=Resource.objects.create(code=data["code"],name=data["name"],kind=data["kind"],lab=lab,description=data["description"],created_at=at,updated_at=at);old={}
     if r.kind=="EQUIPMENT":
         require(bool(data.get("category")),"设备类别必填")
-        if not data.get("portable",True):
-            room=data.get("access_room")
+        portable=data.get("portable",True)
+        room=data.get("access_room")
+        if portable:
+            require(room is None,"可独立外借设备不能设置固定关联场地")
+        else:
             require(room and room.kind=="ROOM" and room.lab_id==r.lab_id,"固定设备须关联同实验室场地")
-        EquipmentDetail.objects.update_or_create(resource=r,defaults={"category":data["category"],"risk":data["risk"],"qualification":data.get("qualification"),"portable":data.get("portable",True),"access_room":data.get("access_room"),"handover_location":data.get("handover_location","")})
+        EquipmentDetail.objects.update_or_create(resource=r,defaults={"category":data["category"],"risk":data["risk"],"qualification":data.get("qualification"),"portable":portable,"access_room":room,"handover_location":data.get("handover_location","")})
         r.accessories.update(is_active=False)
         for code,name,quantity in parsed:Accessory.objects.update_or_create(resource=r,code=code,defaults={"name":name,"quantity":int(quantity),"is_active":True})
     else:
-        require(bool(data.get("capacity")),"场地容量必填");RoomDetail.objects.update_or_create(resource=r,defaults={"location_label":data.get("room_location","").strip(),"capacity":data["capacity"],"space_category":data.get("space_category","").strip(),"facilities":data.get("facilities","").strip()})
+        require(bool(data.get("capacity")),"场地容量必填")
+        building=data.get("building")
+        require(not building or (building.is_active and building.campus.is_active),"只能将场地关联到有效校区内的有效楼宇")
+        RoomDetail.objects.update_or_create(resource=r,defaults={"building":building,"floor_label":data.get("floor_label","").strip(),"room_number":data.get("room_number","").strip(),"location_label":data.get("room_location","").strip(),"capacity":data["capacity"],"space_category":data.get("space_category","").strip(),"facilities":data.get("facilities","").strip()})
     ev=audit(actor,r,"RESOURCE_EDIT" if resource_id else "RESOURCE_CREATE",old,resource_snapshot(Resource.objects.get(pk=r.pk)),data["reason"],at)
     if not resource_id:ServicePeriod.objects.create(resource=r,audit=ev,status="NORMAL",starts_at=at)
     elif r.kind=="EQUIPMENT":
@@ -730,10 +737,27 @@ def change_opening(actor,data,at=None):
     day=data["weekday"];effective=data["effective"]
     require(effective>at.astimezone(TZ).date(),"开放时间变更须从明天或以后生效，保留历史统计口径")
     closed=bool(data.get("closed_all_day"))
+    windows=data.get("windows")
+    if windows is None:
+        # Keep the service compatible with existing internal callers while
+        # the management form now submits a complete set of daily windows.
+        windows=[] if closed else [(data.get("starts_at"),data.get("ends_at"))]
     if closed:
-        require(data["starts_at"]==data["ends_at"],"全天关闭日历不应包含开放时段")
+        require(not windows,"全天关闭日历不应包含开放时段")
+        persisted_windows=[(time.min,time.min,True)]
     else:
-        require(data["starts_at"]<data["ends_at"],"关闭时间必须晚于开放时间")
+        require(bool(windows),"开放日必须至少有一段开放时段")
+        require(all(isinstance(pair,(tuple,list)) and len(pair)==2
+                    and isinstance(pair[0],time) and isinstance(pair[1],time)
+                    for pair in windows),"开放时段格式无效")
+        normalized=sorted(windows,key=lambda pair:pair[0])
+        previous_end=None
+        for starts_at,ends_at in normalized:
+            require(starts_at is not None and ends_at is not None and starts_at<ends_at,"关闭时间必须晚于开放时间，且时段不能跨日")
+            require(previous_end is None or starts_at>=previous_end,"开放时段不得重叠")
+            previous_end=ends_at
+        persisted_windows=[(starts_at,ends_at,False)
+            for starts_at,ends_at in merge_time_windows(normalized)]
     scoped=OpeningPeriod.objects.filter(lab=lab,weekday=day,**scope)
     require(not scoped.filter(valid_from__gte=effective).exists(),"该日或之后已有开放日历版本，请选择更晚日期")
     # 不隐式取消已承诺的预约；变更前要求人工协调冲突。
@@ -751,18 +775,26 @@ def change_opening(actor,data,at=None):
         if not room and b.resource.kind=="EQUIPMENT" and not b.resource.equipment.portable and b.resource.equipment.access_room_id:
             has_override=OpeningPeriod.objects.filter(resource_id=b.resource.equipment.access_room_id,weekday=day,valid_from__lte=a.date()).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=a.date())).exists()
             if has_override:continue
-        require(data["starts_at"]<=a.time().replace(tzinfo=None) and z.time().replace(tzinfo=None)<=data["ends_at"],"变更会影响已确认预约，请先协调处理")
+        booking_start=a.time().replace(tzinfo=None);booking_end=z.time().replace(tzinfo=None)
+        fits=any(not is_closed and starts_at<=booking_start and booking_end<=ends_at
+                 for starts_at,ends_at,is_closed in persisted_windows)
+        require(fits,"变更会影响已确认预约，请先协调处理")
     # Close every prior period that still covers the effective date. A period
     # with an explicit valid_to can also cross the new effective date; leaving
     # it intact would make both versions apply on the same day.
     prior_active=scoped.filter(valid_from__lt=effective).filter(Q(valid_to__isnull=True)|Q(valid_to__gte=effective))
     old=list(prior_active.values("starts_at","ends_at","valid_from","valid_to"))
     prior_active.update(valid_to=effective-timedelta(days=1))
-    obj=OpeningPeriod.objects.create(lab=lab,resource=room,weekday=day,starts_at=data["starts_at"],ends_at=data["ends_at"],closed_all_day=closed,valid_from=effective)
+    created=[]
+    for starts_at,ends_at,is_closed in persisted_windows:
+        created.append(OpeningPeriod.objects.create(lab=lab,resource=room,weekday=day,
+            starts_at=starts_at,ends_at=ends_at,closed_all_day=is_closed,valid_from=effective))
     subject=room or lab
-    ev=audit(actor,subject,"OPENING_CHANGE",{"periods":old},{"weekday":day,"from":effective,"starts_at":data["starts_at"],"ends_at":data["ends_at"],"closed_all_day":closed,"scope":"ROOM" if room else "LAB"},data["reason"],at)
+    ev=audit(actor,subject,"OPENING_CHANGE",{"periods":old},{"weekday":day,"from":effective,
+        "windows":[{"starts_at":a,"ends_at":b,"closed_all_day":is_closed} for a,b,is_closed in persisted_windows],
+        "scope":"ROOM" if room else "LAB"},data["reason"],at)
     for uid in Reservation.objects.filter(resource__lab=lab,status="PENDING",starts_at__date__gte=effective).values_list("applicant_id",flat=True).distinct():notify(ev,[User.objects.get(pk=uid)],"POLICY_IMPACT","开放时间将调整，待审核预约会按新日历复核",at)
-    return obj
+    return created[0]
 
 def incident_access(actor,item):
     return actor.pk==item.reporter_id or (item.reservation_id and item.reservation.applicant_id==actor.pk) or manager(actor,item.resource) or (actor.has_role("TECHNICIAN") and item.work_orders.filter(assigned_to=actor).exists())

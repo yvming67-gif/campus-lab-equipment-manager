@@ -44,6 +44,8 @@ reverse=load(ROOT/'docs/逻辑整改/业务规则反向追踪.json')
 for row in reverse:
     assert set(row['use_cases'])=={c['id'] for c in cases.values() if row['id'] in c['rules']},row['id']
     assert set(row['acceptance'])=={a['id'] for a in s['acceptance'] if row['id'] in a['rules']},row['id']
+evidence=load(ROOT/'docs/逻辑整改/验收证据覆盖表.json')
+assert [row['ac'] for row in evidence]==[a['id'] for a in s['acceptance']], '验收证据条目与规格编号不一致或顺序错误'
 schema=load(ROOT/'models/schema.json');models={m['model']:m for m in schema['models']}
 for model,expected in [('Reservation',{'PENDING','CONFIRMED','REJECTED','CANCELLED','IN_USE','COMPLETED','EXPIRED'}),('WorkOrder',{'OPEN','IN_PROGRESS','AWAITING_ACCEPTANCE','CLOSED'})]:
     values={k for k,v in next(f for f in models[model]['fields'] if f['name']=='status')['choices']}

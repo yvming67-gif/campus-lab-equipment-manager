@@ -369,6 +369,189 @@
       "indexes": []
     },
     {
+      "model": "Campus",
+      "table": "core_campus",
+      "label": "校区",
+      "fields": [
+        {
+          "name": "id",
+          "column": "id",
+          "label": "ID",
+          "type": "bigint",
+          "null": false,
+          "blank": true,
+          "pk": true,
+          "unique": true,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "code",
+          "column": "code",
+          "label": "校区编号",
+          "type": "varchar(32)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": true,
+          "default": "",
+          "choices": [],
+          "max_length": 32,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "name",
+          "column": "name",
+          "label": "校区名称",
+          "type": "varchar(80)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 80,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "is_active",
+          "column": "is_active",
+          "label": "启用",
+          "type": "boolean",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": true,
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        }
+      ],
+      "constraints": [],
+      "indexes": []
+    },
+    {
+      "model": "Building",
+      "table": "core_building",
+      "label": "楼宇",
+      "fields": [
+        {
+          "name": "id",
+          "column": "id",
+          "label": "ID",
+          "type": "bigint",
+          "null": false,
+          "blank": true,
+          "pk": true,
+          "unique": true,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "campus",
+          "column": "campus_id",
+          "label": "campus",
+          "type": "bigint",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_campus",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "code",
+          "column": "code",
+          "label": "楼宇编号",
+          "type": "varchar(32)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 32,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "name",
+          "column": "name",
+          "label": "楼宇名称",
+          "type": "varchar(100)",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 100,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "address_label",
+          "column": "address_label",
+          "label": "地址补充说明",
+          "type": "varchar(180)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 180,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "is_active",
+          "column": "is_active",
+          "label": "启用",
+          "type": "boolean",
+          "null": false,
+          "blank": false,
+          "pk": false,
+          "unique": false,
+          "default": true,
+          "choices": [],
+          "max_length": null,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        }
+      ],
+      "constraints": [
+        {
+          "name": "building_code_per_campus_unique",
+          "definition": "<UniqueConstraint: fields=('campus', 'code') name='building_code_per_campus_unique'>"
+        }
+      ],
+      "indexes": []
+    },
+    {
       "model": "Lab",
       "table": "core_lab",
       "label": "实验室",
@@ -1166,6 +1349,54 @@
           "fk": "core_resource",
           "one_to_one": true,
           "on_delete": "PROTECT"
+        },
+        {
+          "name": "building",
+          "column": "building_id",
+          "label": "building",
+          "type": "bigint",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_building",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
+          "name": "floor_label",
+          "column": "floor_label",
+          "label": "楼层标识",
+          "type": "varchar(40)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 40,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
+        },
+        {
+          "name": "room_number",
+          "column": "room_number",
+          "label": "房间编号",
+          "type": "varchar(40)",
+          "null": false,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": 40,
+          "fk": null,
+          "one_to_one": null,
+          "on_delete": null
         },
         {
           "name": "location_label",
@@ -2835,7 +3066,7 @@
         },
         {
           "name": "resource_confirmed_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001D2A473A7B0>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x0000028020D2A900>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
         }
       ],
       "indexes": [
@@ -4855,7 +5086,7 @@
         },
         {
           "name": "service_period_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001D2A4806D50>), '&&')] name='service_period_no_overlap'>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x0000028020E00190>), '&&')] name='service_period_no_overlap'>"
         }
       ],
       "indexes": []
@@ -6005,6 +6236,15 @@
       "name": "granted_by"
     },
     {
+      "from_table": "core_building",
+      "from_field": "campus_id",
+      "to_table": "core_campus",
+      "to_field": "id",
+      "null": false,
+      "unique": false,
+      "name": "campus"
+    },
+    {
       "from_table": "core_labgrant",
       "from_field": "user_id",
       "to_table": "core_user",
@@ -6093,6 +6333,15 @@
       "null": false,
       "unique": true,
       "name": "resource"
+    },
+    {
+      "from_table": "core_roomdetail",
+      "from_field": "building_id",
+      "to_table": "core_building",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "name": "building"
     },
     {
       "from_table": "core_safetyprocedure",

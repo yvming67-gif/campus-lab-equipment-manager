@@ -55,7 +55,7 @@ const screens = {
     }
   },
   resources: {
-    data: { items: [], labs: [{ id: '', name: '全部实验室' }], labIndex: 0, kind: 'EQUIPMENT', form: { q: '', category:'', facility:'', capacity_min:'', capacity_max:'' }, loading: false, error: '', stale: false, hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, overviewReady: false, overviewLoading: false, overviewError: '', timeSearch: false, advancedFilters:false, serviceStatuses:[{code:'',name:'全部状态'},{code:'NORMAL',name:'正常'},{code:'ISOLATED',name:'异常隔离'},{code:'MAINTENANCE',name:'维护中'},{code:'DISABLED',name:'停用'},{code:'SCRAPPED',name:'报废'}], serviceStatusIndex:0, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
+    data: { items: [], labs: [{ id: '', name: '全部管理单元' }], labIndex: 0, campuses:[{id:'',name:'全部校区'}],campusIndex:0,buildings:[{id:'',name:'全部楼宇'}],buildingIndex:0,kind: 'EQUIPMENT', form: { q: '', category:'', facility:'', capacity_min:'', capacity_max:'' }, loading: false, error: '', stale: false, hasMore: false, page: 1, total: 0, user: null, stats: { pending: 0, confirmed: 0, using: 0 }, upcoming: [], policy: null, overviewReady: false, overviewLoading: false, overviewError: '', timeSearch: false, advancedFilters:false, serviceStatuses:[{code:'',name:'全部状态'},{code:'NORMAL',name:'正常'},{code:'ISOLATED',name:'异常隔离'},{code:'MAINTENANCE',name:'维护中'},{code:'DISABLED',name:'停用'},{code:'SCRAPPED',name:'报废'}], serviceStatusIndex:0, slot: fmt.defaultForm(), appliedTime: '', minDate: fmt.day(), maxDate: fmt.day(Date.now()+14*86400000) },
     async onShow() {
       if (!api.requireLogin()) return;
       const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
@@ -73,15 +73,17 @@ const screens = {
     chooseQuickQueryDate(e) {this.chooseQueryDate({detail:{value:e.currentTarget.dataset.day}});},
     chooseQueryStart(e) {this.setData({'slot.start':e.detail.value});},
     chooseQueryEnd(e) {this.setData({'slot.end':e.detail.value});},
-    resetSearch() {this.setData({form:{q:'',category:'',facility:'',capacity_min:'',capacity_max:''},labIndex:0,timeSearch:false,advancedFilters:false,serviceStatusIndex:0});return this.load(1);},
+    resetSearch() {this.setData({form:{q:'',category:'',facility:'',capacity_min:'',capacity_max:''},labIndex:0,campusIndex:0,buildingIndex:0,timeSearch:false,advancedFilters:false,serviceStatusIndex:0});return this.load(1);},
     async load(page) {
       if (!api.requireLogin()) return;
       page = page || 1;
       const slot = this.data.timeSearch ? Object.assign({},this.data.slot) : null;
       if(slot && slot.start>=slot.end){this.setData({error:'查询结束时间必须晚于开始时间'});return;}
       const selectedLab=this.data.labs[this.data.labIndex] || this.data.labs[0];
+      const selectedCampus=this.data.campuses[this.data.campusIndex] || this.data.campuses[0];
+      const selectedBuilding=this.data.buildings[this.data.buildingIndex] || this.data.buildings[0];
       const serviceStatus=(this.data.serviceStatuses[this.data.serviceStatusIndex]||{}).code||'';
-      const submitted={kind:this.data.kind,q:this.data.form.q,category:this.data.form.category,facility:this.data.form.facility,capacity_min:this.data.form.capacity_min,capacity_max:this.data.form.capacity_max,serviceStatus,labId:selectedLab.id,slot};
+      const submitted={kind:this.data.kind,q:this.data.form.q,category:this.data.form.category,facility:this.data.form.facility,capacity_min:this.data.form.capacity_min,capacity_max:this.data.form.capacity_max,serviceStatus,labId:selectedLab.id,campusId:selectedCampus.id,buildingId:selectedBuilding.id,slot};
       const querySignature=JSON.stringify([submitted,slot]);
       if(page>1 && querySignature!==this._appliedQuery) page=1;
       const queryChanged=querySignature!==this._appliedQuery;
@@ -91,14 +93,19 @@ const screens = {
         ? { loading: true, error: '', stale: false, items: [], total: 0, hasMore: false, queryReady: false }
         : { loading: true, error: '', stale: false });
       try {
-        const data = await api.request('/resources/', 'GET', Object.assign({ kind:submitted.kind, q:submitted.q, category:submitted.category, facility:submitted.facility, capacity_min:submitted.capacity_min, capacity_max:submitted.capacity_max, service_status:submitted.serviceStatus, lab:submitted.labId, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
+        const data = await api.request('/resources/', 'GET', Object.assign({ kind:submitted.kind, q:submitted.q, category:submitted.category, facility:submitted.facility, capacity_min:submitted.capacity_min, capacity_max:submitted.capacity_max, service_status:submitted.serviceStatus, lab:submitted.labId,campus:submitted.campusId,building:submitted.buildingId, page }, slot ? {starts_at:slot.date+'T'+slot.start+':00',ends_at:slot.date+'T'+slot.end+':00'} : {}));
         if (serial !== this._serial) return;
         this._appliedSlot=slot;this._appliedQuery=querySignature;
         this._appliedFilterValues=submitted;this._appliedFilterOwner=api.session()?.draftScope;
-        const labs=[{id:'',name:'全部实验室'}].concat(data.labs);
+        const labs=[{id:'',name:'全部管理单元'}].concat(data.labs);
+        const campuses=[{id:'',name:'全部校区'}].concat(data.campuses||[]);
+        const campusId=(campuses.find(c=>String(c.id)===String(submitted.campusId))||campuses[0]).id;
+        const buildings=[{id:'',name:'全部楼宇'}].concat((data.buildings||[]).filter(b=>!campusId||String(b.campus_id)===String(campusId)));
         const chips=[];
         if(submitted.q)chips.push({key:'q',label:'搜索：'+submitted.q});
-        if(submitted.labId)chips.push({key:'lab',label:'实验室：'+selectedLab.name});
+        if(submitted.labId)chips.push({key:'lab',label:'管理单元：'+selectedLab.name});
+        if(submitted.campusId)chips.push({key:'campus',label:'校区：'+campuses.find(c=>String(c.id)===String(submitted.campusId))?.name});
+        if(submitted.buildingId)chips.push({key:'building',label:'楼宇：'+buildings.find(b=>String(b.id)===String(submitted.buildingId))?.name});
         if(submitted.category)chips.push({key:'category',label:'类别：'+submitted.category});
         if(submitted.facility)chips.push({key:'facility',label:'设施：'+submitted.facility});
         if(submitted.capacity_min)chips.push({key:'capacity_min',label:'容量≥'+submitted.capacity_min});
@@ -106,22 +113,24 @@ const screens = {
         if(submitted.serviceStatus)chips.push({key:'status',label:'状态：'+(this.data.serviceStatuses[this.data.serviceStatusIndex]||{}).name});
         if(slot)chips.push({key:'time',label:'时段：'+slot.date+' '+slot.start+'—'+slot.end});
         this._failedPage=page;
-        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '',appliedChips:chips,appliedKind:submitted.kind==='ROOM'?'整间场地':'设备',queryReady:true,stale:false,items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs,labIndex:Math.max(0,labs.findIndex(l=>String(l.id)===String(submitted.labId))),page: data.page, hasMore: data.has_more, total: data.total });
+        this.setData({appliedTime:slot ? slot.date+' '+slot.start+'—'+slot.end : '',appliedChips:chips,appliedKind:submitted.kind==='ROOM'?'整间场地':'设备',queryReady:true,stale:false,items: (page === 1 ? [] : this.data.items).concat(data.items.map(fmt.resource)), labs,labIndex:Math.max(0,labs.findIndex(l=>String(l.id)===String(submitted.labId))),campuses,campusIndex:Math.max(0,campuses.findIndex(c=>String(c.id)===String(submitted.campusId))),buildings,buildingIndex:Math.max(0,buildings.findIndex(b=>String(b.id)===String(submitted.buildingId))),page: data.page, hasMore: data.has_more, total: data.total });
       } catch (e) { if (serial === this._serial) this.setData({error:api.errorText(e),stale:!queryChanged&&this.data.items.length>0}); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
     retry() { return this.load(this._failedPage || 1); },
     search() { return this.load(1); },
     clearQueryFilter(e) {
       const saved=api.session(),applied=this._appliedFilterValues,key=e.currentTarget.dataset.key;
-      if(!saved||saved.draftScope!==this._appliedFilterOwner||!applied||!['q','lab','time','category','facility','capacity_min','capacity_max','status'].includes(key))return;
+      if(!saved||saved.draftScope!==this._appliedFilterOwner||!applied||!['q','lab','campus','building','time','category','facility','capacity_min','capacity_max','status'].includes(key))return;
       const form={q:applied.q,category:applied.category,facility:applied.facility,capacity_min:applied.capacity_min,capacity_max:applied.capacity_max};
       if(key in form)form[key]='';
-      this.setData({kind:applied.kind,form,labIndex:key==='lab'?0:Math.max(0,this.data.labs.findIndex(l=>String(l.id)===String(applied.labId))),timeSearch:key!=='time'&&!!applied.slot,serviceStatusIndex:key==='status'?0:Math.max(0,this.data.serviceStatuses.findIndex(x=>x.code===applied.serviceStatus))});
+      this.setData({kind:applied.kind,form,labIndex:key==='lab'?0:Math.max(0,this.data.labs.findIndex(l=>String(l.id)===String(applied.labId))),campusIndex:key==='campus'?0:Math.max(0,this.data.campuses.findIndex(c=>String(c.id)===String(applied.campusId))),buildingIndex:key==='campus'||key==='building'?0:Math.max(0,this.data.buildings.findIndex(b=>String(b.id)===String(applied.buildingId))),timeSearch:key!=='time'&&!!applied.slot,serviceStatusIndex:key==='status'?0:Math.max(0,this.data.serviceStatuses.findIndex(x=>x.code===applied.serviceStatus))});
       if(applied.slot&&key!=='time')this.setData({slot:Object.assign({},applied.slot),quickDates:fmt.quickDates(applied.slot.date,this.data.policy?.window_days)});
       return this.load(1);
     },
     chooseKind(e) { this.setData({ kind: e.currentTarget.dataset.kind }); return this.load(1); },
     chooseLab(e) { this.setData({ labIndex: Number(e.detail.value) }); return this.load(1); },
+    chooseCampus(e) { this.setData({ campusIndex:Number(e.detail.value),buildingIndex:0 });return this.load(1); },
+    chooseBuilding(e) { this.setData({ buildingIndex:Number(e.detail.value) });return this.load(1); },
     toggleFilters() { this.setData({advancedFilters:!this.data.advancedFilters}); },
     chooseServiceStatus(e) { this.setData({serviceStatusIndex:Number(e.detail.value)}); },
     more() { if (this.data.hasMore && !this.data.loading) return this.load(this.data.page + 1); },

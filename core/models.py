@@ -36,6 +36,28 @@ class UserRole(models.Model):
         verbose_name = "用户角色关联"
         constraints = [models.UniqueConstraint(fields=["user", "role"], name="user_role_unique")]
 
+class Campus(models.Model):
+    """Verified campus master data; demo rows must be explicitly labelled as simulated."""
+    code = models.CharField("校区编号", max_length=32, unique=True)
+    name = models.CharField("校区名称", max_length=80)
+    is_active = models.BooleanField("启用", default=True)
+    class Meta:
+        verbose_name = "校区"
+        ordering = ["code"]
+    def __str__(self): return self.name
+
+class Building(models.Model):
+    campus = models.ForeignKey(Campus, on_delete=models.PROTECT, related_name="buildings")
+    code = models.CharField("楼宇编号", max_length=32)
+    name = models.CharField("楼宇名称", max_length=100)
+    address_label = models.CharField("地址补充说明", max_length=180, blank=True)
+    is_active = models.BooleanField("启用", default=True)
+    class Meta:
+        verbose_name = "楼宇"
+        ordering = ["campus__code", "code"]
+        constraints = [models.UniqueConstraint(fields=["campus", "code"], name="building_code_per_campus_unique")]
+    def __str__(self): return f"{self.campus.name} · {self.name}"
+
 class Lab(models.Model):
     code = models.CharField("实验室编号", max_length=32, unique=True)
     name = models.CharField("名称", max_length=80)
@@ -89,6 +111,25 @@ class Resource(models.Model):
     @property
     def requires_approval(self):
         return self.kind == "ROOM" or self.equipment.risk != "NORMAL" or self.equipment.qualification_id is not None
+    @property
+    def location_label(self):
+        if self.kind == "ROOM":
+            return "场地位置"
+        equipment=self.equipment
+        if equipment.portable:
+            return "交接地点"
+        return "固定关联场地"
+    @property
+    def location_display(self):
+        if self.kind == "ROOM":
+            return self.room.display_location
+        equipment=self.equipment
+        if (not equipment.portable and equipment.access_room_id
+                and equipment.access_room.kind == "ROOM"):
+            return equipment.access_room.room.display_location
+        if equipment.portable:
+            return equipment.handover_location or "交接地点待登记"
+        return "固定关联场地待核实"
 
 class EquipmentDetail(models.Model):
     resource = models.OneToOneField(Resource, on_delete=models.PROTECT, related_name="equipment")
@@ -103,6 +144,10 @@ class EquipmentDetail(models.Model):
 
 class RoomDetail(models.Model):
     resource = models.OneToOneField(Resource, on_delete=models.PROTECT, related_name="room")
+    building = models.ForeignKey(Building, null=True, blank=True, on_delete=models.PROTECT, related_name="rooms")
+    floor_label = models.CharField("楼层标识", max_length=40, blank=True)
+    room_number = models.CharField("房间编号", max_length=40, blank=True)
+    # Legacy free-text location retained for gradual verification and migration.
     location_label = models.CharField("场地具体位置", max_length=160, blank=True)
     capacity = models.PositiveIntegerField("容纳人数", default=30)
     space_category = models.CharField("场地类别（本项目目录分类）", max_length=80, blank=True)
@@ -111,6 +156,15 @@ class RoomDetail(models.Model):
     class Meta:
         verbose_name = "场地属性"
         constraints = [models.CheckConstraint(condition=Q(capacity__gt=0), name="room_capacity_positive")]
+    @property
+    def display_location(self):
+        parts=[]
+        if self.building_id:
+            parts.append(self.building.campus.name)
+            parts.append(self.building.name)
+        if self.floor_label: parts.append(self.floor_label)
+        if self.room_number: parts.append(self.room_number)
+        return " · ".join(parts) or self.location_label or "场地位置待核实"
 
 class SafetyProcedure(models.Model):
     """Versioned safety information; published content is immutable."""

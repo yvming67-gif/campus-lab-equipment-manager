@@ -936,6 +936,18 @@
     "status": "源码定位"
   },
   {
+    "uc": "UC-20",
+    "file": "core/experience.py",
+    "symbol": "slot_options",
+    "lines": [
+      {
+        "start": 123,
+        "end": 178
+      }
+    ],
+    "status": "源码定位"
+  },
+  {
     "uc": "UC-21",
     "file": "core/views.py",
     "symbol": "audit_list",

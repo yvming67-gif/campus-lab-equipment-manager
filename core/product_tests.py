@@ -7,8 +7,10 @@ from django.contrib.sessions.backends.db import SessionStore
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
-from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, Notification, OpeningPeriod, Lab, RoomDetail, Accessory
+from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, Notification, OpeningPeriod, Lab, RoomDetail, Accessory, Campus, Building
 from . import services as s
+from .catalog import filter_resources
+from .forms import QueryForm, ResourceForm
 
 
 class ProductTests(TestCase):
@@ -61,24 +63,95 @@ class ProductTests(TestCase):
             with self.subTest(params=params):
                 page=self.client.get('/schedule/',params);self.assertEqual(page.status_code,200);self.assertFalse(page.context['form'].is_valid());self.assertEqual(page.context['rows'],[])
 
-    def test_room_specific_location_is_editable_and_shown_on_web_and_mini(self):
+    def test_structured_room_location_is_editable_and_shown_on_web_and_mini(self):
         room=Resource.objects.select_related('lab','room').get(code='ROOM-101')
         self.assertIn('演示楼A·1层·101室',room.room.location_label)
+        initial_location=room.location_display
         self.client.force_login(self.student)
         web=self.client.get(f'/resources/{room.pk}/')
-        self.assertContains(web,room.room.location_label)
+        self.assertContains(web,initial_location)
         mini=self.mini(f'resources/{room.pk}/')
         self.assertEqual(mini.status_code,200)
-        self.assertEqual(mini.json()['data']['location'],room.room.location_label)
+        self.assertEqual(mini.json()['data']['location'],initial_location)
 
         updated=s.save_resource(self.admin,{
             'lab':room.lab,'kind':'ROOM','code':room.code,'name':room.name,'description':room.description,
-            'capacity':room.room.capacity,'room_location':'演示楼A·1层·101室（位置字段更新测试）',
+            'capacity':room.room.capacity,'building':room.room.building,'floor_label':'2层','room_number':'209室',
+            'room_location':'旧位置兼容字段（位置编辑测试）',
             'space_category':room.room.space_category,'facilities':room.room.facilities,'reason':'自动化测试位置更新',
             'accessories':'',
         },room.pk)
         updated.refresh_from_db()
-        self.assertEqual(updated.room.location_label,'演示楼A·1层·101室（位置字段更新测试）')
+        self.assertEqual(updated.location_display,'演示校区 · 演示楼A · 2层 · 209室')
+        self.assertEqual(updated.room.location_label,'旧位置兼容字段（位置编辑测试）')
+
+    def test_portable_equipment_location_is_not_misrepresented_as_a_fixed_room(self):
+        room=Resource.objects.select_related('room__building__campus').get(code='ROOM-101')
+        detail=self.eq.equipment
+        detail.handover_location='实验教学中心服务台'
+        detail.access_room=room  # Simulate a legacy inconsistent record.
+        detail.save(update_fields=['handover_location','access_room'])
+        self.eq.refresh_from_db()
+
+        self.assertEqual(self.eq.location_label,'交接地点')
+        self.assertEqual(self.eq.location_display,'实验教学中心服务台')
+        query=QueryForm({'campus':str(room.room.building.campus_id),'building':str(room.room.building_id)})
+        self.assertTrue(query.is_valid(),query.errors)
+        self.assertNotIn(self.eq.pk,filter_resources(Resource.objects.all(),query.cleaned_data).values_list('pk',flat=True))
+
+        self.client.force_login(self.student)
+        web=self.client.get(f'/resources/{self.eq.pk}/')
+        self.assertContains(web,'交接地点：实验教学中心服务台')
+        self.assertNotContains(web,'实际交接地点')
+        mini=self.mini(f'resources/{self.eq.pk}/')
+        payload=mini.json()['data']
+        self.assertTrue(payload['portable'])
+        self.assertEqual(payload['location_label'],'交接地点')
+        self.assertEqual(payload['location'],'实验教学中心服务台')
+        self.assertEqual(payload['handover_location'],'实验教学中心服务台')
+
+    def test_resource_form_rejects_portable_equipment_with_fixed_room(self):
+        room=Resource.objects.get(code='ROOM-101')
+        form=ResourceForm({'code':'EQ-PORTABLE-INVALID','name':'可移动设备测试','kind':'EQUIPMENT',
+            'lab':str(self.eq.lab_id),'category':'测试设备','risk':'NORMAL','portable':'on',
+            'access_room':str(room.pk),'handover_location':'服务台'})
+        self.assertFalse(form.is_valid())
+        self.assertIn('access_room',form.errors)
+
+    def test_resource_service_rejects_portable_equipment_with_fixed_room(self):
+        room=Resource.objects.get(code='ROOM-101')
+        with self.assertRaises(s.BusinessError):
+            s.save_resource(self.admin,{'lab':self.eq.lab,'kind':'EQUIPMENT','code':'EQ-PORTABLE-INVALID',
+                'name':'可移动设备测试','description':'','category':'测试设备','risk':'NORMAL',
+                'portable':True,'access_room':room,'handover_location':'服务台','accessories':'',
+                'reason':'验证固定关联规则'})
+        self.assertFalse(Resource.objects.filter(code='EQ-PORTABLE-INVALID').exists())
+
+    def test_fixed_equipment_with_invalid_equipment_link_has_a_safe_location_fallback(self):
+        fixed=Resource.objects.select_related('equipment').get(code='EQ-ROB-FIX-01')
+        fixed.equipment.access_room=self.eq  # Simulate a legacy reference to the wrong resource kind.
+        fixed.equipment.save(update_fields=['access_room'])
+        fixed.refresh_from_db()
+        self.assertEqual(fixed.location_label,'固定关联场地')
+        self.assertEqual(fixed.location_display,'固定关联场地待核实')
+        self.client.force_login(self.student)
+        self.assertContains(self.client.get(f'/resources/{fixed.pk}/'),'固定关联场地待核实')
+        payload=self.mini(f'resources/{fixed.pk}/').json()['data']
+        self.assertEqual(payload['location'],'固定关联场地待核实')
+
+    def test_room_without_verified_location_does_not_fall_back_to_management_unit_note(self):
+        room=Resource.objects.select_related('lab','room').get(code='ROOM-101')
+        detail=room.room
+        detail.building=None;detail.floor_label='';detail.room_number='';detail.location_label=''
+        detail.save(update_fields=['building','floor_label','room_number','location_label'])
+        room.refresh_from_db()
+        self.assertEqual(room.location_display,'场地位置待核实')
+        self.client.force_login(self.student)
+        web=self.client.get(f'/resources/{room.pk}/')
+        self.assertContains(web,'场地位置：场地位置待核实')
+        self.assertNotContains(web,room.lab.location)
+        mini=self.mini(f'resources/{room.pk}/')
+        self.assertEqual(mini.json()['data']['location'],'场地位置待核实')
 
     def test_inactive_lab_blocks_web_booking_and_shows_the_actual_service_state(self):
         Lab.objects.filter(pk=self.eq.lab_id).update(is_active=False)
@@ -317,11 +390,25 @@ class ProductTests(TestCase):
     def test_calendar_catalog_date_intersection_and_invalid_range(self):
         today=timezone.localdate();a=today+timedelta(days=30);b=a+timedelta(days=7)
         op=OpeningPeriod.objects.create(lab=self.eq.lab,weekday=1,starts_at='08:00',ends_at='20:00',valid_from=a,valid_to=b)
+        op.refresh_from_db()
         e=CalendarException.objects.create(lab=self.eq.lab,day=a,closed=True,actor=self.system,reason='日期交集')
         self.client.force_login(self.system)
         params={'section':'calendars','directory_lab':self.eq.lab_id,'calendar_from':a.isoformat(),'calendar_to':a.isoformat()}
         page=self.client.get('/manage/',params)
-        self.assertIn(op,list(page.context['opening_periods']));self.assertEqual(list(page.context['calendar_exceptions']),[e])
+        opening_keys=list(page.context['opening_catalog_page'].paginator.object_list)
+        target_key={'lab_id':op.lab_id,'resource_id':op.resource_id,'weekday':op.weekday,
+                    'valid_from':op.valid_from,'valid_to':op.valid_to}
+        target_index=opening_keys.index(target_key)
+        params['openings_page']=target_index//page.context['opening_catalog_page'].paginator.per_page+1
+        page=self.client.get('/manage/',params)
+        groups=list(page.context['opening_periods'])
+        matching_group=any(
+            group['lab'].pk==op.lab_id and group['valid_from']==a and group['valid_to']==b
+            and any(start<=op.starts_at and end>=op.ends_at for start,end in group['windows'])
+            for group in groups
+        )
+        self.assertTrue(matching_group)
+        self.assertEqual(list(page.context['calendar_exceptions']),[e])
         params['calendar_to']=(a-timedelta(days=1)).isoformat()
         invalid=self.client.get('/manage/',params)
         self.assertContains(invalid,'结束日期不得早于起始日期');self.assertEqual(invalid.context['opening_catalog_page'].paginator.count,0)
@@ -338,3 +425,45 @@ class ProductTests(TestCase):
         page=self.client.get('/manage/',{'section':'calendars','directory_lab':hidden.pk})
         self.assertFalse(page.context['catalog_form'].is_valid());self.assertEqual(page.context['lab_catalog_page'].paginator.count,0)
         self.assertNotContains(page,hidden.name)
+
+
+class StructuredLocationDirectoryTests(TestCase):
+    @classmethod
+    def setUpTestData(cls): call_command('seed_demo',verbosity=0)
+
+    def test_seeded_rooms_have_explicitly_simulated_location_hierarchy(self):
+        campus=Campus.objects.get(code='CAMPUS-DEMO')
+        self.assertEqual(campus.name,'演示校区')
+        self.assertEqual(campus.buildings.count(),3)
+        room=Resource.objects.select_related('lab','room__building__campus').get(code='ROOM-101')
+        self.assertEqual(room.location_display,'演示校区 · 演示楼A · 1层 · 101室')
+        self.assertEqual(room.room.location_label,'演示楼A·1层·101室')
+
+    def test_building_filter_returns_rooms_and_associated_fixed_equipment(self):
+        building=Building.objects.get(code='BLD-DEMO-B')
+        form=QueryForm({'campus':str(building.campus_id),'building':str(building.pk)})
+        self.assertTrue(form.is_valid(),form.errors)
+        rows=filter_resources(Resource.objects.all(),form.cleaned_data)
+        self.assertEqual(set(rows.values_list('code',flat=True)),{'ROOM-201','ROOM-202','EQ-ROB-FIX-01'})
+
+    def test_campus_without_building_filters_only_resources_with_verified_structure(self):
+        campus=Campus.objects.get(code='CAMPUS-DEMO')
+        form=QueryForm({'campus':str(campus.pk)})
+        self.assertTrue(form.is_valid(),form.errors)
+        rows=filter_resources(Resource.objects.all(),form.cleaned_data)
+        self.assertEqual(rows.filter(kind='ROOM').count(),6)
+        self.assertEqual(set(rows.filter(kind='EQUIPMENT').values_list('code',flat=True)),{'EQ-ROB-FIX-01'})
+
+    def test_building_from_another_campus_is_rejected(self):
+        campus=Campus.objects.get(code='CAMPUS-DEMO')
+        foreign=Campus.objects.create(code='CAMPUS-TEST-OTHER',name='测试校区')
+        building=Building.objects.create(campus=foreign,code='BLD-OTHER',name='测试楼')
+        form=QueryForm({'campus':str(campus.pk),'building':str(building.pk)})
+        self.assertFalse(form.is_valid())
+        self.assertIn('building',form.errors)
+
+    def test_legacy_room_location_remains_usable_without_building_guess(self):
+        room=Resource.objects.get(code='ROOM-101')
+        room.room.building=None;room.room.floor_label='';room.room.room_number='';room.room.save()
+        room.refresh_from_db()
+        self.assertEqual(room.location_display,'演示楼A·1层·101室')

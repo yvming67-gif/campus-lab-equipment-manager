@@ -54,46 +54,116 @@
   },
   "local": {
     "checked_date": "2026-11-11",
-    "code_commit": "d74135bca99e0e078e11e4e778fafe70686fc3ef",
+    "code_commit": "410e04b1c59d19c11aa201b9e124ccf1cd92fcfb",
     "local_docs_commit_pending_push": true,
     "backend_full_suite": {
       "modules": 21,
-      "executed": 348,
-      "passed": 348,
+      "executed": 359,
+      "passed": 356,
       "failed": 0,
-      "skipped": 0,
-      "duration_seconds": 91.18,
+      "skipped": 3,
+      "duration_seconds": 87.078,
       "isolated_postgresql": true,
-      "note": "首次运行发现候选时段安全确认读取过量，修正后重新运行全部模块通过；23个候选时段测得12次数据库查询。"
+      "note": "修复相邻开放区间的候选列表遗漏后，定向80项及本次完整回归通过；完整回归3项跳过。23个候选时段测得12次数据库查询。"
     },
     "client_tests_passed": 127,
     "native_template_pages_compiled": 8,
     "responsive_visual_qa": "Not completed for the current source; do not infer from historical width checks.",
     "analysis_report": {
-      "formal_docx_sha256": "E5BEE730F821B7039D2BF828E1534C957869568AD33143C36374DE7775CE1D2A",
-      "current_preview_pages": 170,
+      "formal_docx_sha256": "757FE4699E462CDCACC1CD877FA8FE6A03413B13F92D6AABB51B9CB9AA33C6E8",
+      "current_preview_pages": 178,
+      "current_preview_renderer": "LibreOffice 26.2.4.2",
       "current_preview_toc_and_figure_list_checked": true,
       "current_preview_changed_pages_checked": [
-        11,
-        12
+        6,
+        42,
+        45,
+        100,
+        152,
+        155,
+        158,
+        178
       ],
       "current_preview_in_public_repo": false,
       "word_native_pagination_verified": false,
       "historical_preview_pages": 174,
+      "content_in_sync_with_current_opening_calendar_rules": true,
+      "content_sync_status": "正式DOCX已同步模型2.6、UC-20、AC-39/40、AC-67至AC-76及图4-1和图4-5；完成LibreOffice分页复核。",
       "pagination_difference_cause": "Not confirmed; LibreOffice versions/bitness/configuration differ; Microsoft Word native pagination not verified."
     },
-    "worktree_dirty": false,
+    "worktree_dirty": true,
+    "modified_tracked_files": 89,
+    "untracked_files": 2,
     "local_commits_ahead_of_cached_origin_main": 6,
     "data_model": {
-      "entities": 38,
-      "fields": 328,
-      "physical_foreign_keys": 69,
+      "entities": 40,
+      "fields": 341,
+      "physical_foreign_keys": 71,
       "static_validators_passed": true
+    },
+    "latest_uncommitted_verification": {
+      "date": "2026-11-11",
+      "base_commit": "410e04b1c59d19c11aa201b9e124ccf1cd92fcfb",
+      "cached_origin_main": "4d834d0c84829200b051813da55df9b52982eb21",
+      "migration": "core/migrations/0012_building_campus_roomdetail_floor_label_and_more.py",
+      "django_system_check": "pass",
+      "migration_drift_check": "pass",
+      "core_tests": {
+        "executed": 372,
+        "passed": 372,
+        "skipped": 0,
+        "failed": 0
+      },
+      "mini_program_tests": {
+        "passed": 127,
+        "failed": 0
+      },
+      "mini_program_native_template_compile": {
+        "pages": 8,
+        "wxml": "pass",
+        "wxss": "pass"
+      },
+      "acceptance_criteria": 76,
+      "data_design_pdf_pages": 35,
+      "github_updated": false,
+      "render_updated": false,
+      "wechat_package_updated": false,
+      "evidence_limit": "Local isolated tests and static checks only; no real campus inventory, production database migration, cloud write flow, WeChat device runtime, or current formal-publication state was verified."
+    },
+    "location_semantics_followup": {
+      "date": "2026-11-11",
+      "issues": ["AUD-0055", "AUD-0056", "AUD-0057", "AUD-0058"],
+      "code_and_regression_tests_added": true,
+      "backend_tests_executed": true,
+      "backend_tests_passed": 5,
+      "backend_product_tests_passed": 36,
+      "backend_core_tests_passed": 76,
+      "ci_backend_module_tests_executed": 369,
+      "ci_backend_module_tests_passed": 366,
+      "ci_backend_module_tests_skipped": 3,
+      "ci_backend_module_tests_failed": 0,
+      "backend_test_environment": "Django test runner created and destroyed isolated PostgreSQL test database test_campus_lab; local demo database and cloud databases were not touched.",
+      "backend_test_scope": "Five targeted location tests passed; core.product_tests passed 36 tests; core Django tests passed 76 tests; the exact 21-module backend CI command ran 369 tests: 366 passed, 3 skipped, and 0 failed. All used isolated PostgreSQL test databases.",
+      "initial_expanded_run_failures_fixed": ["AUD-0058 missing Campus/Building imports in mini resource directory API", "obsolete room location test assertion updated to structured display location"],
+      "mini_program_tests_passed": 127,
+      "native_template_pages_compiled": 8,
+      "static_validators_passed": true,
+      "github_updated": false,
+      "render_updated": false,
+      "wechat_package_updated": false
     },
     "safety_scope_migration": {
       "file": "core/migrations/0011_safety_information_scopes.py",
       "local_tests_passed": true,
       "cloud_migration_applied": false
+    },
+    "safety_and_opening_followup": {
+      "backend_ci_before_opening_form_fix": {"executed": 371, "passed": 371, "skipped": 0, "failed": 0},
+      "opening_calendar_module_after_form_fix": {"executed": 16, "passed": 16, "skipped": 0, "failed": 0},
+      "backend_ci_after_opening_form_fix": {"executed": 372, "passed": 372, "skipped": 0, "failed": 0},
+      "evidence_entries_registered": 76,
+      "issues": ["AUD-0059", "AUD-0060", "AUD-0061"],
+      "formal_docx_status": "两张用例图、正文及目录已同步，使用178页复核稿替换本地正式DOCX。"
     },
     "docs_and_code_pending_push": true,
     "cloud_runtime_update_verified": false
@@ -102,6 +172,7 @@
     "history_rewritten": false,
     "process_material_archived_locally": true,
     "formal_word_changed": true,
+    "formal_word_change_status": "本地正式稿已替换并按LibreOffice渲染复核；Microsoft Word原生分页及公开版本同步仍待验证。",
     "runtime_code_change_pending_push": true
   }
 }

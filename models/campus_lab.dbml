@@ -29,6 +29,22 @@ Table core_userrole {
   granted_at "timestamp with time zone" [not null, note: 'granted at']
   Note: '用户角色关联；约束及条件唯一项以迁移文件为准。'
 }
+Table core_campus {
+  id "bigint" [pk, not null, note: 'ID']
+  code "varchar(32)" [not null, unique, note: '校区编号']
+  name "varchar(80)" [not null, note: '校区名称']
+  is_active "boolean" [not null, note: '启用']
+  Note: '校区；约束及条件唯一项以迁移文件为准。'
+}
+Table core_building {
+  id "bigint" [pk, not null, note: 'ID']
+  campus_id "bigint" [not null, note: 'campus']
+  code "varchar(32)" [not null, note: '楼宇编号']
+  name "varchar(100)" [not null, note: '楼宇名称']
+  address_label "varchar(180)" [not null, note: '地址补充说明']
+  is_active "boolean" [not null, note: '启用']
+  Note: '楼宇；约束及条件唯一项以迁移文件为准。'
+}
 Table core_lab {
   id "bigint" [pk, not null, note: 'ID']
   code "varchar(32)" [not null, unique, note: '实验室编号']
@@ -89,6 +105,9 @@ Table core_equipmentdetail {
 Table core_roomdetail {
   id "bigint" [pk, not null, note: 'ID']
   resource_id "bigint" [not null, unique, note: 'resource']
+  building_id "bigint" [note: 'building']
+  floor_label "varchar(40)" [not null, note: '楼层标识']
+  room_number "varchar(40)" [not null, note: '房间编号']
   location_label "varchar(160)" [not null, note: '场地具体位置']
   capacity "integer" [not null, note: '容纳人数']
   space_category "varchar(80)" [not null, note: '场地类别（本项目目录分类）']
@@ -444,6 +463,7 @@ Table core_jobheartbeat {
 Ref: core_userrole.user_id > core_user.id
 Ref: core_userrole.role_id > core_role.id
 Ref: core_userrole.granted_by_id > core_user.id
+Ref: core_building.campus_id > core_campus.id
 Ref: core_labgrant.user_id > core_user.id
 Ref: core_labgrant.lab_id > core_lab.id
 Ref: core_userqualification.user_id > core_user.id
@@ -454,6 +474,7 @@ Ref: core_equipmentdetail.resource_id - core_resource.id
 Ref: core_equipmentdetail.qualification_id > core_qualificationtype.id
 Ref: core_equipmentdetail.access_room_id > core_resource.id
 Ref: core_roomdetail.resource_id - core_resource.id
+Ref: core_roomdetail.building_id > core_building.id
 Ref: core_safetyprocedure.lab_scope_id > core_lab.id
 Ref: core_safetyprocedure.resource_id > core_resource.id
 Ref: core_safetyprocedure.created_by_id > core_user.id

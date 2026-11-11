@@ -72,4 +72,13 @@
 <polyline points="468.0,353 490.0,353" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <polyline points="469.0,377 479.0,363 489.0,377" fill="none" stroke="#24384b" stroke-width="0.7"/>
 <text x="479.0" y="394.325" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="9.5" fill="#2a3436">消息服务</text>
+
+<polyline id="assoc-lab-opening" points="468,60 453,60 453,115 337.7,115" stroke="#536872" stroke-width="0.9" fill="none"/>
+<g id="actor-lab-opening" fill="none" stroke="#536872" stroke-width="1.1"><circle cx="479" cy="53.2" r="3"/>
+<polyline points="479,56.2 479,65"/>
+<polyline points="472,60 486,60"/>
+<polyline points="473,72 479,65 485,72"/>
+</g>
+<text x="479" y="81" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="7.2" fill="#2a3436">实验室</text>
+<text x="479" y="90" text-anchor="middle" font-family="Microsoft YaHei,sans-serif" font-size="7.2" fill="#2a3436">管理员</text>
 </svg>

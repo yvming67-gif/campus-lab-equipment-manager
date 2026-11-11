@@ -26,6 +26,20 @@ erDiagram
         bigint granted_by_id FK
         timestamp_with_time_zone granted_at
     }
+    core_campus {
+        bigint id PK
+        varchar code
+        varchar name
+        boolean is_active
+    }
+    core_building {
+        bigint id PK
+        bigint campus_id FK
+        varchar code
+        varchar name
+        varchar address_label
+        boolean is_active
+    }
     core_lab {
         bigint id PK
         varchar code
@@ -80,6 +94,9 @@ erDiagram
     core_roomdetail {
         bigint id PK
         bigint resource_id FK
+        bigint building_id FK
+        varchar floor_label
+        varchar room_number
         varchar location_label
         integer capacity
         varchar space_category
@@ -406,6 +423,7 @@ erDiagram
     core_user ||--o{ core_userrole : "user"
     core_role ||--o{ core_userrole : "role"
     core_user |o--o{ core_userrole : "granted_by"
+    core_campus ||--o{ core_building : "campus"
     core_user ||--o{ core_labgrant : "user"
     core_lab ||--o{ core_labgrant : "lab"
     core_user ||--o{ core_userqualification : "user"
@@ -416,6 +434,7 @@ erDiagram
     core_qualificationtype |o--o{ core_equipmentdetail : "qualification"
     core_resource |o--o{ core_equipmentdetail : "access_room"
     core_resource ||--o| core_roomdetail : "resource"
+    core_building |o--o{ core_roomdetail : "building"
     core_lab |o--o{ core_safetyprocedure : "lab_scope"
     core_resource |o--o{ core_safetyprocedure : "resource"
     core_user ||--o{ core_safetyprocedure : "created_by"

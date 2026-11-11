@@ -195,6 +195,44 @@ class SafetyProcedureTests(TestCase):
         self.assertEqual(acknowledged.status_code, 200, acknowledged.content)
         self.assertFalse(safety.needs_ack(self.teacher, equipment))
 
+    def test_room_safety_does_not_apply_to_associated_fixed_equipment(self):
+        equipment = Resource.objects.select_related("equipment__access_room").get(code="EQ-ROB-FIX-01")
+        room = equipment.equipment.access_room
+        LabGrant.objects.get_or_create(user=self.reviewer, lab=room.lab)
+        shared = self.create_published(lab=room.lab, title="测试管理单元通用版本")
+        room_only = self.create_published(resource=room, title="测试场地专属版本")
+        equipment_only = self.create_published(resource=equipment, title="测试设备专属版本")
+
+        self.assertEqual(set(safety.current_procedures(room)), {shared, room_only})
+        self.assertEqual(set(safety.current_procedures(equipment)), {shared, equipment_only})
+        self.client.force_login(self.teacher)
+        room_page = self.client.get(f"/resources/{room.pk}/")
+        equipment_page = self.client.get(f"/resources/{equipment.pk}/")
+        self.assertContains(room_page, room_only.title)
+        self.assertNotContains(room_page, equipment_only.title)
+        self.assertContains(equipment_page, equipment_only.title)
+        self.assertNotContains(equipment_page, room_only.title)
+
+    def test_equipment_checkout_requires_acknowledgement_of_new_version(self):
+        equipment = Resource.objects.get(code="EQ-OSC-01")
+        day = timezone.localdate() + timedelta(days=2)
+        start = timezone.make_aware(datetime.combine(day, time(10)), services.TZ)
+        booking = services.create_reservation(
+            self.teacher, equipment.pk, start, start + timedelta(hours=1),
+            "设备交接确认测试", request_key=uuid.uuid4(),
+        )
+        self.assertEqual(booking.status, "CONFIRMED")
+        version = self.create_published(resource=equipment)
+        with self.assertRaisesRegex(services.BusinessError, "阅读并确认"):
+            services.checkout(self.admin, booking.pk, self.teacher.school_no, equipment.code, at=start)
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, "CONFIRMED")
+        self.assertFalse(hasattr(booking, "loan"))
+
+        safety.acknowledge(self.teacher, version.pk)
+        loan = services.checkout(self.admin, booking.pk, self.teacher.school_no, equipment.code, at=start)
+        self.assertEqual(loan.reservation_id, booking.pk)
+
     def test_management_unit_information_applies_only_to_its_resources_and_fans_out_notifications(self):
         lab = self.room.lab
         equipment = Resource.objects.get(code="EQ-OSC-01")

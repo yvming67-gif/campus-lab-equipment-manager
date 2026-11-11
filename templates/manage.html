@@ -1,14 +1,15 @@
 {% extends 'base.html' %}{% block content %}
 <div class="page-top"><div><div class="eyebrow">ADMINISTRATION</div><h1>管理中心</h1><p>维护档案与规则参数，既有借还和审计事实继续保留。</p></div></div>
-<nav class="management-tabs" aria-label="管理分类"><a href="?section=overview" {% if section == 'overview' %}aria-current="page"{% endif %}>概览</a>{% if can_manage %}<a href="?section=resources" {% if section == 'resources' %}aria-current="page"{% endif %}>设备与场地</a>{% endif %}<a href="?section=calendars" {% if section == 'calendars' %}aria-current="page"{% endif %}>实验室与开放日历</a>{% if can_system %}<a href="?section=people" {% if section == 'people' %}aria-current="page"{% endif %}>用户与授权</a><a href="?section=access" {% if section == 'access' %}aria-current="page"{% endif %}>角色与培训目录</a>{% endif %}</nav>
+<nav class="management-tabs" aria-label="管理分类"><a href="?section=overview" {% if section == 'overview' %}aria-current="page"{% endif %}>概览</a>{% if can_manage %}<a href="?section=resources" {% if section == 'resources' %}aria-current="page"{% endif %}>设备与场地</a>{% endif %}<a href="?section=calendars" {% if section == 'calendars' %}aria-current="page"{% endif %}>管理单元与开放日历</a>{% if can_system %}<a href="?section=locations" {% if section == 'locations' %}aria-current="page"{% endif %}>校区与楼宇</a><a href="?section=people" {% if section == 'people' %}aria-current="page"{% endif %}>用户与授权</a><a href="?section=access" {% if section == 'access' %}aria-current="page"{% endif %}>角色与培训目录</a>{% endif %}</nav>
 {% if section == 'overview' %}<div class="info-strip"><b>按职责维护，按范围生效</b><p>实验室管理员维护授权范围内的资源与服务限制；系统管理员维护身份授权、开放日历和规则。账号管理权不会自动获得业务审批或维修验收权。</p><div class="actions"><a href="{% url 'deliveries' %}">通知投递与人工联系 →</a>{% if can_audit %}<a href="{% url 'audit' %}">变更审计 →</a>{% endif %}</div></div>{% endif %}
-{% if section == 'calendars' or section == 'access' %}{% include 'management_directory.html' %}{% endif %}
+{% if section == 'calendars' or section == 'access' or section == 'locations' %}{% include 'management_directory.html' %}{% endif %}
 {% if can_system and section == 'overview' or can_system and section == 'people' %}
 <div class="management-grid">
   <a class="panel" href="{% url 'calendar-exception' %}"><h2>单日开放例外</h2><p>节假日、闭馆与临时开放</p></a>
   <a class="panel" href="{% url 'manage-form' 'policy' %}"><h2>预约与通知参数 ↗</h2><p>{{ policy.window_days }}天 / {{ policy.slot_minutes }}分钟 / 版本{{ policy.version }}</p></a>
   <a class="panel" href="{% url 'manage-form' 'opening' %}"><h2>开放日历版本 ↗</h2><p>未来日期生效，保留历史口径</p></a>
-  <a class="panel" href="{% url 'manage-form' 'lab' %}"><h2>新增实验室 ↗</h2><p>编号、地点与基础信息</p></a>
+  <a class="panel" href="{% url 'manage-form' 'lab' %}"><h2>新增资源管理单元 ↗</h2><p>编号、地点与基础信息；一个单元可关联多个场地和设备</p></a>
+  <a class="panel" href="?section=locations"><h2>校区与楼宇档案 ↗</h2><p>维护经核实的物理位置主数据，不从旧文本推测地址</p></a>
 </div>
 <div class="section-heading"><h2>用户与授权</h2></div>
 <form method="get" class="filter-row panel" aria-label="用户筛选">
@@ -24,18 +25,18 @@
 {% include 'pagination.html' with page=user_page filters=user_filters page_param='users_page' pagination_label='用户授权分页' %}
 {% endif %}
 {% if can_manage and section == 'overview' or can_manage and section == 'resources' %}
-<div class="info-strip"><b>场地开放时段</b><p>授权实验室管理员可以维护本人范围内单间场地的每周时段；管理单元默认时段和单日例外仍由系统管理员维护。实验室关闭例外适用于其下全部场地。</p><a href="{% url 'manage-form' 'opening' %}">维护开放时段 →</a></div>
+<div class="info-strip"><b>场地开放时段</b><p>授权实验室管理员可以维护本人范围内单间场地的每周时段；管理单元默认时段和单日例外仍由系统管理员维护。管理单元关闭例外适用于其下全部场地。</p><a href="{% url 'manage-form' 'opening' %}">维护开放时段 →</a></div>
 {% endif %}
 {% if can_manage and section == 'overview' or can_manage and section == 'resources' %}
 <div class="section-heading"><h2>资源档案</h2><a class="button" href="{% url 'manage-form' 'resource' %}">新增资源 ↗</a></div>
 <form method="get" class="filter-row panel" aria-label="资源档案筛选">
   <input type="hidden" name="section" value="{{ section }}"><input type="hidden" name="user_q" value="{{ user_q }}"><input type="hidden" name="user_role" value="{{ user_role }}">
   <div><label for="manage-resource-q">资源名称或编号</label><input id="manage-resource-q" name="resource_q" value="{{ resource_q }}" maxlength="150"></div>
-  <div><label for="manage-resource-lab">实验室</label><select id="manage-resource-lab" name="resource_lab"><option value="">全部授权实验室</option>{% for lab in resource_labs %}<option value="{{ lab.pk }}" {% if resource_lab == lab.pk|stringformat:'s' %}selected{% endif %}>{{ lab.name }}</option>{% endfor %}</select></div>
+  <div><label for="manage-resource-lab">管理单元</label><select id="manage-resource-lab" name="resource_lab"><option value="">全部授权管理单元</option>{% for lab in resource_labs %}<option value="{{ lab.pk }}" {% if resource_lab == lab.pk|stringformat:'s' %}selected{% endif %}>{{ lab.name }}</option>{% endfor %}</select></div>
   <button class="button">检索资源</button>
 </form>
-<div class="table-wrap"><table><thead><tr><th>资源</th><th>实验室</th><th>状态</th><th>维护</th></tr></thead><tbody>
-{% for r in resources %}<tr><td><strong>{{ r.name }}</strong><small>{{ r.code }}</small></td><td>{{ r.lab.name }}</td><td>{{ r.get_service_status_display }}</td><td><a href="{% url 'manage-edit' 'resource' r.pk %}">档案</a>　<a href="{% url 'manage-edit' 'hold' r.pk %}">服务限制</a></td></tr>
+<div class="table-wrap"><table><thead><tr><th>资源</th><th>管理单元</th><th>记录位置</th><th>服务状态</th><th>维护</th></tr></thead><tbody>
+{% for r in resources %}<tr><td><strong>{{ r.name }}</strong><small>{{ r.code }}</small></td><td>{{ r.lab.name }}</td><td>{{ r.location_label }}：{{ r.location_display }}</td><td>{{ r.get_service_status_display }}</td><td><a href="{% url 'manage-edit' 'resource' r.pk %}">档案</a>　<a href="{% url 'manage-edit' 'hold' r.pk %}">服务限制</a></td></tr>
 {% empty %}<tr><td colspan="4" class="empty-state">没有符合条件的授权资源。</td></tr>{% endfor %}
 </tbody></table></div>
 {% include 'pagination.html' with page=resource_page filters=resource_filters page_param='resources_page' pagination_label='资源档案分页' %}

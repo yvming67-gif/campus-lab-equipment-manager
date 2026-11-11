@@ -2542,7 +2542,7 @@
   },
   {
     "ac": "AC-39",
-    "scenario": "给定合法新参数与变更原因；当保存；那么版本递增、历史保留，新操作按新规则检查。",
+    "scenario": "给定有相应范围权限的操作者填写未来生效且不重叠的多段周开放时段和变更依据；当保存并查看预约候选；那么相邻时段先合并，再按同一有效版本保存各连续时段，保留旧版本和实际关闭间隔，管理目录按版本成组展示，跨相邻输入时段的候选可用。",
     "fr": [
       "FR-20"
     ],
@@ -2605,8 +2605,28 @@
       "evidence": "证据/final-backend.log",
       "additional_evidence": null
     },
-    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
-    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+    "coverage": "历史版本断言与2026-11-11多时段开放日历定向测试；已复验相邻区间跨边界候选可用和真实关闭间隔候选排除；不代表验收标准所有条件或真实学校制度均已验证",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_runs": [
+      {
+        "date": "2026-11-11",
+        "command": ".local/test-venv/Scripts/python.exe manage.py test core.opening_calendar_tests core.experience_tests core.miniapi_tests --verbosity 1",
+        "result": "80项通过，0失败；包含相邻区间跨边界候选可用与真实关闭间隔候选排除断言；Django系统检查无问题",
+        "tests": [
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_weekly_schedule_supports_multiple_non_overlapping_windows",
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_management_form_saves_multiple_windows_as_one_effective_schedule",
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_adjacent_windows_form_one_continuous_reservable_period"
+        ],
+        "scope": "本地隔离测试环境；不证明目标学校开放制度或线上部署"
+      },
+      {
+        "date": "2026-11-11",
+        "command": "python manage.py test core.tests core.miniapi_tests core.remediation_tests core.operations_tests core.independent_tests core.logic_alignment_tests core.report_tests core.followup_tests core.backup_tests core.product_tests core.audit_fix_tests core.experience_tests core.phase1_api_tests core.phase1_web_tests core.phase1_independent_tests core.reference_ui_tests core.reference_independent_tests core.access_tests core.opening_calendar_tests core.safety_tests core.demo_identity_tests --noinput",
+        "result": "359项运行，356通过、3跳过、0失败；耗时87.078秒；Django系统检查无问题",
+        "tests": [],
+        "scope": "本地隔离PostgreSQL测试环境；不证明目标学校开放制度、线上部署或外部服务"
+      }
+    ]
   },
   {
     "ac": "AC-40",
@@ -2673,8 +2693,22 @@
       "evidence": "证据/final-backend.log",
       "additional_evidence": null
     },
-    "coverage": "历史相关断言；本轮全量回归通过不等于每条标准所有条件均已覆盖",
-    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。"
+    "coverage": "历史版本断言与2026-11-11多时段日历定向测试；服务端重叠拒绝、错误输入拒绝、相邻区间合并及已确认预约保护分别验证",
+    "limits": "按列出的测试断言核查已覆盖字段；真实学校制度、外部能力、全部角色页面与性能不能从单项功能通过推定。",
+    "current_runs": [
+      {
+        "date": "2026-11-11",
+        "command": ".local/test-venv/Scripts/python.exe manage.py test core.opening_calendar_tests core.experience_tests core.miniapi_tests --verbosity 1",
+        "result": "80项通过，0失败；Django系统检查无问题",
+        "tests": [
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_change_opening_rejects_overlapping_windows",
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_opening_form_parses_windows_and_rejects_overlap_or_bad_clock",
+          "core.opening_calendar_tests.RoomOpeningCalendarTests.test_adjacent_windows_form_one_continuous_reservable_period",
+          "core.tests.BusinessTests.test_opening_does_not_break_confirmed_booking"
+        ],
+        "scope": "本地隔离测试环境；不证明线上部署"
+      }
+    ]
   },
   {
     "ac": "AC-41",
@@ -4358,5 +4392,292 @@
     "current_test": "core/logic_alignment_tests.py:101 test_ac66_failed_recheck_keeps_commitment_until_explicit_cancel",
     "current_result": "本轮针对性运行通过",
     "evidence": "证据/former-executor-after.log；证据/logic-final-backend.log"
+  },
+  {
+    "ac": "AC-67",
+    "scenario": "给定编制人对场地有管理范围且来源、适用对象、内容和日期完整；当提交新版本复核；那么系统创建待审核版本并记录编制人、提交时间和审计，普通用户仍看不到草稿。",
+    "fr": [
+      "FR-28"
+    ],
+    "uc": [
+      "UC-28"
+    ],
+    "spec": [
+      "SPEC-28"
+    ],
+    "rules": [
+      "BR-29",
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖待审核版本不出现在当前安全信息查询中，单个用例未逐字段检查审计。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_pending_procedure_is_not_shown_and_missing_content_does_not_invent_a_block"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-68",
+    "scenario": "给定用户无目标场地范围或来源/必填内容缺失；当保存或提交；那么系统拒绝越权或不完整内容，并保留原发布版本及草稿状态。",
+    "fr": [
+      "FR-28"
+    ],
+    "uc": [
+      "UC-28"
+    ],
+    "spec": [
+      "SPEC-28"
+    ],
+    "rules": [
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖管理单元越权拒绝与场地管理页权限。必填字段遗漏与原版本保持的组合场景仍缺专门测试。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_lab_scope_authorization_and_database_enforce_exactly_one_target",
+      "core/safety_tests.py::test_room_scope_applies_to_web_management_and_mini_read_confirmation"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-69",
+    "scenario": "给定规程待审核、复核人与编制人不同且同属有范围LAB_ADMIN，并已人工核对来源与适用范围；当复核人提交非空意见后发布；那么系统保存审核人、时刻和意见，发布新版本并保留旧版与既有确认记录。",
+    "fr": [
+      "FR-29"
+    ],
+    "uc": [
+      "UC-29"
+    ],
+    "spec": [
+      "SPEC-29"
+    ],
+    "rules": [
+      "BR-29",
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖独立发布、作者通知与历史归属保护。人工核实学校来源属于岗位职责。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_review_decisions_notify_the_procedure_author",
+      "core/safety_tests.py::test_superseded_safety_publication_attribution_stays_immutable"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-70",
+    "scenario": "给定操作者为编制人、无目标管理单元或具体资源管理范围、审核状态已变化或意见为空；当发布或退回；那么系统拒绝转换并提示原因，不覆盖原版本或审核事实。",
+    "fr": [
+      "FR-29"
+    ],
+    "uc": [
+      "UC-29"
+    ],
+    "spec": [
+      "SPEC-29"
+    ],
+    "rules": [
+      "BR-29",
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖本人发布或退回被拒、空退回意见及原版本保留，未覆盖全部竞态组合。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_submitter_cannot_publish_own_procedure_and_pending_content_is_locked",
+      "core/safety_tests.py::test_reviewer_can_return_and_submitter_can_create_immutable_revision"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-71",
+    "scenario": "给定场地或设备资源有当前已发布且要求阅读确认的适用版本；当有权限用户查看并确认；那么页面展示来源/版本/适用内容，系统只为该用户记录这一个版本的确认，并在需要的预约/入场检查中重新校验。",
+    "fr": [
+      "FR-02"
+    ],
+    "uc": [
+      "UC-02"
+    ],
+    "spec": [
+      "SPEC-02"
+    ],
+    "rules": [
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖小程序接口读取、本人具体版本确认及入场时检查新版本。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_room_scope_applies_to_web_management_and_mini_read_confirmation",
+      "core/safety_tests.py::test_new_required_safety_version_is_rechecked_at_room_entry"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-72",
+    "scenario": "给定场地或设备资源没有当前有效的适用版本或版本已超过登记复核日；当用户查看资源详情；那么系统明确显示待确认/待复核，不将旧确认算作新版本确认，也不声称符合目标校制度；预约是否阻断按待确认组织规则处理。",
+    "fr": [
+      "FR-02"
+    ],
+    "uc": [
+      "UC-02"
+    ],
+    "spec": [
+      "SPEC-02"
+    ],
+    "rules": [
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖网页和小程序接口过期显示、不接受旧版本确认及课程演示条件下可提交预约。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_expired_review_version_is_historical_not_current_or_a_fake_booking_block"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-73",
+    "scenario": "给定管理单元已发布一条有效的管理单元通用安全信息；当有权限的用户查看该管理单元下任一场地或设备；那么详情显示同一管理单元版本及其来源/复核状态，阅读确认按该具体版本记录。",
+    "fr": [
+      "FR-02",
+      "FR-28",
+      "FR-29"
+    ],
+    "uc": [
+      "UC-02",
+      "UC-28",
+      "UC-29"
+    ],
+    "spec": [
+      "SPEC-02",
+      "SPEC-28",
+      "SPEC-29"
+    ],
+    "rules": [
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖同一管理单元的设备与场地共享具体版本确认、跨单元不适用。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_management_unit_information_applies_only_to_its_resources_and_fans_out_notifications"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-74",
+    "scenario": "给定同一管理单元含一个场地和一个与之关联的固定设备，且仅该场地发布资源专属安全版本；当分别查看场地和设备详情；那么该专属版本只出现在场地详情，固定设备只显示适用的管理单元通用或设备专属版本。",
+    "fr": [
+      "FR-02",
+      "FR-28"
+    ],
+    "uc": [
+      "UC-02",
+      "UC-28"
+    ],
+    "spec": [
+      "SPEC-02",
+      "SPEC-28"
+    ],
+    "rules": [
+      "BR-48",
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖场地与其关联固定设备在服务和网页上的专属范围隔离，二者仍共享同一管理单元版本。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_room_safety_does_not_apply_to_associated_fixed_equipment"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-75",
+    "scenario": "给定当前适用于设备的已发布版本要求阅读确认且借用人尚未确认；当用户提交预约或管理员办理实际借出；那么服务端拒绝成功预约/借出并提示确认适用版本，不生成成功Loan；确认正确版本后，在其他条件满足时可继续。",
+    "fr": [
+      "FR-04",
+      "FR-09"
+    ],
+    "uc": [
+      "UC-04",
+      "UC-09"
+    ],
+    "spec": [
+      "SPEC-04",
+      "SPEC-09"
+    ],
+    "rules": [
+      "BR-49"
+    ],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖新申请被拒及既有预约办理借出被拒；失败时不生成借出凭据，确认当前版本后成功交接。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/safety_tests.py::test_equipment_specific_safety_is_published_shown_and_requires_ack_when_configured",
+      "core/safety_tests.py::test_equipment_checkout_requires_acknowledgement_of_new_version"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
+  },
+  {
+    "ac": "AC-76",
+    "scenario": "给定同一演示校区下有两栋楼、若干场地和一台关联场地的固定设备，并存在未关联楼宇的旧位置记录；当用户选择校区及其中一栋楼筛选资源；那么结果仅包含该楼已登记的场地及其关联固定设备，跨校区楼宇组合被拒绝，旧位置不被猜测迁移，可移动设备不冒充具有结构化位置。",
+    "fr": [
+      "FR-02"
+    ],
+    "uc": [
+      "UC-02"
+    ],
+    "spec": [
+      "SPEC-02"
+    ],
+    "rules": [],
+    "quality": [],
+    "constraints": [],
+    "historical": null,
+    "coverage": "覆盖筛选结果、跨校区组合拒绝、旧地址保留和移动设备排除；网页与小程序接口详情验证不等同于原生容器复验。",
+    "limits": "在隔离PostgreSQL中使用课程模拟数据。",
+    "current_tests": [
+      "core/product_tests.py::test_building_filter_returns_rooms_and_associated_fixed_equipment",
+      "core/product_tests.py::test_building_from_another_campus_is_rejected",
+      "core/product_tests.py::test_legacy_room_location_remains_usable_without_building_guess",
+      "core/product_tests.py::test_portable_equipment_location_is_not_misrepresented_as_a_fixed_room"
+    ],
+    "current_result": "列出的测试在21个模块371项回归中通过",
+    "evidence": "docs/验证说明.md"
   }
 ]

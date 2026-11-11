@@ -1129,7 +1129,7 @@
       "Reservation",
       "AuditEvent"
     ],
-    "implementation": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception；core/catalog.py: calendar_catalog",
+    "implementation": "core/services.py: save_policy、change_opening；core/opening_calendar.py: merge_time_windows、weekly_allows、weekly_schedule；core/experience.py: slot_options；core/coordination.py: calendar_exception；core/catalog.py: calendar_catalog",
     "acceptance": [
       "AC-39",
       "AC-40",

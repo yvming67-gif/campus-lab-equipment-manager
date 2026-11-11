@@ -139,7 +139,7 @@ def dashboard(request):
 def resources(request):
     # The directory renders resource metadata, not accessory rows. Keep accessory
     # loading on the detail page so ordinary catalog visits do not fetch unused data.
-    form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","room")
+    form=QueryForm(request.GET or None);qs=Resource.objects.select_related("lab","equipment__qualification","equipment__access_room__room__building__campus","room__building__campus")
     times=None;d={};catalog_total=None
     if form.is_bound and form.is_valid():
         d=form.cleaned_data
@@ -149,7 +149,7 @@ def resources(request):
         qs=qs.none()
     page,filters=paginate(request,qs)
     if not (form.is_bound and not form.is_valid()):
-        catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','starts_at')) else page.paginator.count
+        catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','campus','building','starts_at')) else page.paginator.count
     items=list(page.object_list)
     for r in items:
         r.service_label=s.resource_service_label(r)
@@ -159,14 +159,14 @@ def resources(request):
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
         query=request.GET.copy();query.pop('page',None)
         r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
-    chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','实验室',d.get('lab')),('category','类别',d.get('category')),('facility','设施或配件',d.get('facility')),('capacity_min','最小容量',d.get('capacity_min')),('capacity_max','最大容量',d.get('capacity_max')),('service_status','服务状态',dict(Resource.STATUS).get(d.get('service_status')))])
+    chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','管理单元',d.get('lab')),('campus','校区',d.get('campus')),('building','楼宇',d.get('building')),('category','类别',d.get('category')),('facility','设施或配件',d.get('facility')),('capacity_min','最小容量',d.get('capacity_min')),('capacity_max','最大容量',d.get('capacity_max')),('service_status','服务状态',dict(Resource.STATUS).get(d.get('service_status')))])
     if times:chips.append({'label':'目标时段','value':f'{timezone.localtime(times[0]):%m-%d %H:%M}—{timezone.localtime(times[1]):%m-%d %H:%M}', 'url':ui.link('resources',request.GET,ui.CATALOG_KEYS,drop=('starts_at','ends_at'))})
     return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),
         'schedule_url':ui.catalog_schedule_link(request.GET,d),'query_scope':'当前可见资源目录','query_count':page.paginator.count,'query_total':catalog_total,'query_chips':chips,'query_invalid':form.is_bound and not form.is_valid()})
 
 @login_required
 def resource_detail(request,pk):
-    r=get_object_or_404(Resource.objects.select_related("lab","equipment__qualification","room").prefetch_related('accessories'),pk=pk)
+    r=get_object_or_404(Resource.objects.select_related("lab","equipment__qualification","equipment__access_room__room__building__campus","room__building__campus").prefetch_related('accessories'),pk=pk)
     start=timezone.localtime()+timedelta(days=1);start=start.replace(hour=10,minute=0,second=0,microsecond=0)
     end=start+timedelta(hours=1);selection_error=''
     if request.method=='GET' and (request.GET.get('starts_at') or request.GET.get('ends_at')):
@@ -481,7 +481,7 @@ def manage(request):
     protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN"))
     resource_q=request.GET.get("resource_q","").strip();user_q=request.GET.get("user_q","").strip()
     resource_lab=request.GET.get("resource_lab","");user_role=request.GET.get("user_role","")
-    resources=Resource.objects.filter(lab__labgrant__user=request.user).select_related("lab").distinct() if request.user.has_role("LAB_ADMIN") else Resource.objects.none()
+    resources=Resource.objects.filter(lab__labgrant__user=request.user).select_related("lab","room__building__campus","equipment__access_room__room__building__campus").distinct() if request.user.has_role("LAB_ADMIN") else Resource.objects.none()
     users=User.objects.prefetch_related("roles").all() if request.user.has_role("SYS_ADMIN") else User.objects.none()
     if resource_q:resources=resources.filter(Q(code__icontains=resource_q)|Q(name__icontains=resource_q))
     if resource_lab:
@@ -492,45 +492,65 @@ def manage(request):
     resource_page,resource_filters=paginate(request,resources.order_by("code","pk"),page_param="resources_page")
     user_page,user_filters=paginate(request,users.order_by("school_no","pk"),page_param="users_page")
     section=request.GET.get('section','overview')
-    if section not in ['overview','resources','people','calendars','access']:section='overview'
-    if section in ['people','access']:protected(request.user.has_role('SYS_ADMIN'))
+    if section not in ['overview','resources','people','calendars','access','locations']:section='overview'
+    if section in ['people','access','locations']:protected(request.user.has_role('SYS_ADMIN'))
     visible_labs=Lab.objects.all() if request.user.has_role('SYS_ADMIN') else Lab.objects.filter(labgrant__user=request.user).distinct()
     context_extra={'section':section,'directory_labs':visible_labs.order_by('code'),
 
         'qualification_types':QualificationType.objects.order_by('code'),
-        'role_directory':Role.objects.prefetch_related('users').order_by('code') if request.user.has_role('SYS_ADMIN') else Role.objects.none()}
+        'role_directory':Role.objects.prefetch_related('users').order_by('code') if request.user.has_role('SYS_ADMIN') else Role.objects.none(),
+        'campuses':Campus.objects.prefetch_related('buildings').order_by('code') if request.user.has_role('SYS_ADMIN') else Campus.objects.none(),
+        'buildings':Building.objects.select_related('campus').prefetch_related('rooms').order_by('campus__code','code') if request.user.has_role('SYS_ADMIN') else Building.objects.none()}
     if section=='calendars':context_extra.update(calendar_catalog(request,visible_labs))
     return render(request,"manage.html",{**context_extra,"title":"管理中心","resources":resource_page.object_list,"users":user_page.object_list,"labs":Lab.objects.all(),"resource_labs":Lab.objects.filter(labgrant__user=request.user).distinct().order_by("code"),"roles":Role.objects.order_by("code"),"policy":Policy.objects.get(pk=1),"resource_page":resource_page,"resource_filters":resource_filters,"user_page":user_page,"user_filters":user_filters,"resource_q":resource_q,"user_q":user_q,"resource_lab":resource_lab,"user_role":user_role})
 
 @login_required
 def manage_form(request,action,pk=None):
     protected(request.user.has_role("LAB_ADMIN","SYS_ADMIN") if action in ["resource","hold","opening"] else request.user.has_role("SYS_ADMIN"))
-    if action not in ["resource","hold","grant","policy","opening","lab"]:raise Http404
-    initial={};r=None
+    if action not in ["resource","hold","grant","policy","opening","lab","campus","building"]:raise Http404
+    initial={};r=None;location_obj=None
     if action in ["resource","hold"] and pk:
         r=get_object_or_404(Resource,pk=pk);protected(s.manager(request.user,r))
         initial={"code":r.code,"name":r.name,"kind":r.kind,"lab":r.lab,"description":r.description}
-        if r.kind=="ROOM":initial.update({"room_location":r.room.location_label,"capacity":r.room.capacity,"space_category":r.room.space_category,"facilities":r.room.facilities})
+        if r.kind=="ROOM":initial.update({"building":r.room.building,"floor_label":r.room.floor_label,"room_number":r.room.room_number,"room_location":r.room.location_label,"capacity":r.room.capacity,"space_category":r.room.space_category,"facilities":r.room.facilities})
         else:initial.update({"category":r.equipment.category,"risk":r.equipment.risk,"qualification":r.equipment.qualification,"portable":r.equipment.portable,"access_room":r.equipment.access_room,"handover_location":r.equipment.handover_location,"accessories":"\n".join(f"{a.code},{a.name},{a.quantity}" for a in r.accessories.filter(is_active=True))})
     if action=="grant" and pk:
         u=get_object_or_404(User,pk=pk);initial={"user":u,"roles":u.roles.all(),"labs":Lab.objects.filter(labgrant__user=u),"active":u.is_active}
     if action=="policy":initial=Policy.objects.get(pk=1).snapshot()
-    cls={"resource":ResourceForm,"hold":ActionForm,"grant":GrantForm,"policy":PolicyForm,"opening":OpeningForm,"lab":LabForm}[action]
+    if action=="campus" and pk:
+        location_obj=get_object_or_404(Campus,pk=pk)
+        initial={"code":location_obj.code,"name":location_obj.name,"active":location_obj.is_active}
+    if action=="building" and pk:
+        location_obj=get_object_or_404(Building.objects.select_related("campus"),pk=pk)
+        initial={"campus":location_obj.campus,"code":location_obj.code,"name":location_obj.name,"address_label":location_obj.address_label,"active":location_obj.is_active}
+    cls={"resource":ResourceForm,"hold":ActionForm,"grant":GrantForm,"policy":PolicyForm,"opening":OpeningForm,"lab":LabForm,"campus":CampusForm,"building":BuildingForm}[action]
     form=cls(request.POST or None,initial=initial)
     if action=="hold":form.fields["hold"]=forms.ChoiceField(label="手工服务限制",choices=[("","解除手工限制（仍检查异常与工单）"),("DISABLED","停用"),("SCRAPPED","报废")])
-    if action=="resource":form.fields["lab"].queryset=Lab.objects.filter(labgrant__user=request.user)
-    if action=="opening":
-        scoped_labs=Lab.objects.all() if request.user.has_role("SYS_ADMIN") else Lab.objects.filter(labgrant__user=request.user).distinct()
-        form.fields["lab"].queryset=scoped_labs
-        selected_lab_id=(request.POST.get("lab") if request.method=="POST" else None)
-        if selected_lab_id:
-            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab_id=selected_lab_id,lab__in=scoped_labs).order_by("code")
-        elif request.user.has_role("LAB_ADMIN") and not request.user.has_role("SYS_ADMIN"):
-            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab__in=scoped_labs).order_by("lab__code","code")
+    if action=="resource":
+        form.fields["lab"].queryset=Lab.objects.filter(labgrant__user=request.user)
+        form.fields["building"].queryset=Building.objects.filter(is_active=True,campus__is_active=True).select_related("campus").order_by("campus__code","code")
+    if action=="campus":
+        form.fields["code"].disabled=bool(location_obj)
+    if action=="building":
+        form.fields["campus"].queryset=Campus.objects.all().order_by("code")
+        if location_obj:
+            form.fields["campus"].disabled=True
+            form.fields["code"].disabled=True
         else:
-            form.fields["resource"].queryset=Resource.objects.filter(kind="ROOM",lab__in=scoped_labs).order_by("lab__code","code")
-        if request.user.has_role("LAB_ADMIN") and not request.user.has_role("SYS_ADMIN"):
-            form.fields["resource"].required=True
+            form.fields["campus"].queryset=Campus.objects.filter(is_active=True).order_by("code")
+    if action=="opening":
+        is_system_admin = request.user.has_role("SYS_ADMIN")
+        is_lab_admin = request.user.has_role("LAB_ADMIN")
+        granted_labs = Lab.objects.filter(labgrant__user=request.user)
+        form.fields["lab"].queryset = Lab.objects.all() if is_system_admin else granted_labs
+        room_options = Resource.objects.none()
+        if is_lab_admin:
+            room_options = Resource.objects.filter(kind="ROOM", lab__in=granted_labs)
+        selected_lab_id = s.positive_integer(request.POST.get("lab"))
+        if selected_lab_id:
+            room_options = room_options.filter(lab_id=selected_lab_id)
+        form.fields["resource"].queryset = room_options.order_by("lab__code", "code")
+        form.fields["resource"].required = not is_system_admin
     if request.method=="POST" and form.is_valid():
         d=form.cleaned_data
         try:
@@ -542,9 +562,28 @@ def manage_form(request,action,pk=None):
             elif action=="lab":
                 with transaction.atomic():
                     obj=Lab.objects.create(code=d["code"],name=d["name"],location=d["location"],description=d["description"]);s.audit(request.user,obj,"LAB_CREATE",new=d,reason=d["reason"])
+            elif action=="campus":
+                with transaction.atomic():
+                    if location_obj:
+                        old={"code":location_obj.code,"name":location_obj.name,"is_active":location_obj.is_active}
+                        location_obj.name=d["name"];location_obj.is_active=d["active"]
+                        location_obj.save(update_fields=["name","is_active"]);obj=location_obj;action_code="CAMPUS_EDIT"
+                    else:
+                        obj=Campus.objects.create(code=d["code"],name=d["name"],is_active=d["active"]);old={};action_code="CAMPUS_CREATE"
+                    s.audit(request.user,obj,action_code,old,{"code":obj.code,"name":obj.name,"is_active":obj.is_active},d["reason"])
+            elif action=="building":
+                with transaction.atomic():
+                    if location_obj:
+                        old={"campus_id":location_obj.campus_id,"code":location_obj.code,"name":location_obj.name,"address_label":location_obj.address_label,"is_active":location_obj.is_active}
+                        location_obj.name=d["name"];location_obj.address_label=d["address_label"];location_obj.is_active=d["active"]
+                        location_obj.save(update_fields=["name","address_label","is_active"]);obj=location_obj;action_code="BUILDING_EDIT"
+                    else:
+                        obj=Building.objects.create(campus=d["campus"],code=d["code"],name=d["name"],address_label=d["address_label"],is_active=d["active"]);old={};action_code="BUILDING_CREATE"
+                    s.audit(request.user,obj,action_code,old,{"campus_id":obj.campus_id,"campus":obj.campus.name,"code":obj.code,"name":obj.name,"address_label":obj.address_label,"is_active":obj.is_active},d["reason"])
             messages.success(request,"设置已保存，变更依据已记录");return redirect("manage")
         except (s.BusinessError,IntegrityError) as e:form.add_error(None,str(e) if isinstance(e,s.BusinessError) else "编号重复或记录已变化，请检查")
-    return render(request,"form.html",{"title":{"resource":"维护资源档案","hold":"调整服务限制","grant":"维护用户角色与管理范围","policy":"预约与通知参数","opening":"开放日历版本","lab":"新增实验室"}[action],"form":form,"subtitle":"变更将保留操作者与依据，既有借还事实及审计不可覆盖。"})
+    title={"resource":"维护资源档案","hold":"调整服务限制","grant":"维护用户角色与管理范围","policy":"预约与通知参数","opening":"开放日历版本","lab":"新增资源管理单元","campus":"维护校区档案" if location_obj else "新增校区档案","building":"维护楼宇档案" if location_obj else "新增楼宇档案"}[action]
+    return render(request,"form.html",{"title":title,"form":form,"subtitle":"位置主数据必须依据经核验的资产清册录入；模拟目录应明确标注。变更原因与操作者将留痕，既有业务事实不覆盖。"})
 
 @login_required
 def deliveries(request):

@@ -22,7 +22,7 @@ from .demo_identity import public_demo_user_allowed, verify_demo_password
 from .schedules import resource_schedule
 from .domain_labels import event_label, notification_label
 from .forms import BookingForm, QueryForm, ActionForm, IncidentForm
-from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification, SafetyProcedure
+from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification, SafetyProcedure, Campus, Building
 from .experience import slot_options, next_step
 from . import safety as safety_service
 from .opening_calendar import weekly_schedule
@@ -156,17 +156,22 @@ def resource_data(resource, times=None, user=None):
     data = {"id": resource.pk, "code": resource.code, "name": resource.name, "kind": resource.kind,
             "kind_label": resource.get_kind_display(), "description": resource.description,
             "lab": {"id": resource.lab_id, "name": resource.lab.name, "location": resource.lab.location, "active": resource.lab.is_active},
-            "location": (resource.room.location_label or resource.lab.location) if resource.kind == "ROOM" else resource.lab.location,
+            "location_label": resource.location_label, "location": resource.location_display,
             "service_status": resource.service_status, "service_label": s.resource_service_label(resource),
             "can_reserve": reservation_open, "reservation_block_reason": reservation_block_reason,
             "requires_approval": resource.requires_approval, "available": available, "available_label": label}
     if resource.kind == "ROOM":
         data.update(capacity=resource.room.capacity, space_category=resource.room.space_category,
+                    campus=resource.room.building.campus.name if resource.room.building_id else "",
+                    building=resource.room.building.name if resource.room.building_id else "",
+                    floor_label=resource.room.floor_label, room_number=resource.room.room_number,
                     facilities=resource.room.facilities, opening_schedule=weekly_schedule(resource))
     else:
         data.update(category=resource.equipment.category, risk=resource.equipment.get_risk_display(),
                     qualification=resource.equipment.qualification.name if resource.equipment.qualification_id else "无额外培训要求",
-                    physical_label=resource.equipment.get_physical_status_display())
+                    physical_label=resource.equipment.get_physical_status_display(),
+                    portable=resource.equipment.portable,
+                    handover_location=resource.equipment.handover_location)
     current_ids = {item.pk for item in safety_service.current_procedures(resource)}
     safety_rows = []
     for procedure in safety_service.latest_published_procedures(resource):
@@ -198,7 +203,7 @@ def resource_data(resource, times=None, user=None):
 
 
 def resources_qs():
-    return Resource.objects.select_related("lab", "equipment__qualification", "room").order_by("kind", "code")
+    return Resource.objects.select_related("lab", "equipment__qualification", "equipment__access_room__room__building__campus", "room__building__campus").order_by("kind", "code")
 
 
 def booking_data(booking):
@@ -286,6 +291,8 @@ def resources(request):
     times = (values["starts_at"], values["ends_at"]) if values["starts_at"] else None
     result = page_data(request, qs, lambda item: resource_data(item, times, request.mini_user))
     result["labs"] = list(Lab.objects.order_by("code").values("id", "name", "location"))
+    result["campuses"] = list(Campus.objects.filter(is_active=True).order_by("code").values("id", "name"))
+    result["buildings"] = list(Building.objects.filter(is_active=True,campus__is_active=True).order_by("campus__code","code").values("id","campus_id","name"))
     return result
 
 
@@ -299,7 +306,6 @@ def resource_detail(request, pk):
     result["can_apply"] = request.mini_user.has_role("TEACHER") if resource.kind == "ROOM" else True
     if resource.kind == "EQUIPMENT":
         accessory_rows = list(resource.accessories.order_by("code").values("code", "name", "quantity", "is_active"))
-        result["handover_location"] = resource.equipment.handover_location
         result["accessories"] = [
             {"code": item["code"], "name": item["name"], "quantity": item["quantity"]}
             for item in accessory_rows if item["is_active"]

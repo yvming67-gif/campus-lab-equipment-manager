@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from . import services
 from .experience import slot_options
+from .forms import OpeningForm
 from .models import CalendarException, Lab, LabGrant, OpeningPeriod, Resource, Role, User, UserRole
 from .opening_calendar import weekly_periods, weekly_schedule
 from .services import TZ
@@ -47,6 +48,94 @@ class RoomOpeningCalendarTests(TestCase):
         self.assertEqual(response.status_code,200)
         data=response.json()["data"]
         self.assertEqual(data["opening_schedule"],weekly_schedule(self.room_short))
+
+    def test_weekly_schedule_supports_multiple_non_overlapping_windows(self):
+        day=timezone.localdate()+timedelta(days=2)
+        services.change_opening(self.admin,{
+            "lab":self.room_short.lab,"resource":self.room_short,"weekday":day.isoweekday(),
+            "windows":[(time(8),time(12)),(time(13),time(17))],
+            "effective":day,"reason":"验证分段开放日历配置",
+        })
+
+        self.assertEqual(OpeningPeriod.objects.filter(lab=self.room_short.lab,resource=self.room_short,
+            weekday=day.isoweekday(),valid_from=day).count(),2)
+        entry=next(row for row in weekly_schedule(self.room_short) if row["date"]==day.isoformat())
+        self.assertEqual(entry["ranges"],["08:00—12:00","13:00—17:00"])
+
+        morning=timezone.make_aware(datetime.combine(day,time(11)),TZ)
+        lunch=timezone.make_aware(datetime.combine(day,time(12)),TZ)
+        afternoon=timezone.make_aware(datetime.combine(day,time(13)),TZ)
+        services.create_reservation(self.teacher,self.room_short.pk,morning,morning+timedelta(hours=1),"上午开放窗口测试")
+        with self.assertRaisesRegex(services.BusinessError,"开放时间"):
+            services.create_reservation(self.teacher,self.room_short.pk,lunch,lunch+timedelta(hours=1),"中间关闭窗口测试")
+        services.create_reservation(self.teacher,self.room_short.pk,afternoon,afternoon+timedelta(hours=1),"下午开放窗口测试")
+        preview=slot_options(self.room_short,self.teacher,day,120,at=timezone.now())
+        self.assertNotIn("11:00—13:00",{item["label"] for item in preview["items"]})
+
+    def test_opening_form_parses_windows_and_rejects_overlap_or_bad_clock(self):
+        lab=Lab.objects.get(code="LAB-101")
+        base={"lab":lab.pk,"weekday":2,"effective":(timezone.localdate()+timedelta(days=1)).isoformat(),"reason":"表单校验"}
+        valid=OpeningForm(data={**base,"windows":"13:00-17:00\n08:00-12:00"})
+        self.assertTrue(valid.is_valid(),valid.errors)
+        self.assertEqual(valid.cleaned_data["windows"],[(time(8),time(12)),(time(13),time(17))])
+
+        overlap=OpeningForm(data={**base,"windows":"08:00-12:00\n11:30-17:00"})
+        self.assertFalse(overlap.is_valid())
+        self.assertIn("不得重叠",str(overlap.errors))
+        malformed=OpeningForm(data={**base,"windows":"8am to 12pm"})
+        self.assertFalse(malformed.is_valid())
+        self.assertIn("格式错误",str(malformed.errors))
+
+    def test_management_form_saves_multiple_windows_as_one_effective_schedule(self):
+        day=timezone.localdate()+timedelta(days=2)
+        self.client.force_login(self.admin)
+        response=self.client.post("/manage/opening/",{
+            "lab":self.room_short.lab_id,"resource":self.room_short.pk,
+            "weekday":day.isoweekday(),"windows":"08:00-12:00\n13:00-17:00",
+            "effective":day.isoformat(),"reason":"网页配置分段开放时段",
+        })
+        self.assertEqual(response.status_code,302)
+        rows=list(OpeningPeriod.objects.filter(lab=self.room_short.lab,resource=self.room_short,
+            weekday=day.isoweekday(),valid_from=day).order_by("starts_at"))
+        self.assertEqual([(row.starts_at,row.ends_at) for row in rows],[(time(8),time(12)),(time(13),time(17))])
+        calendar=self.client.get("/manage/",{"section":"calendars","calendar_from":day.isoformat()})
+        groups=[group for group in calendar.context["opening_periods"] if group["resource"]==self.room_short
+            and group["valid_from"]==day]
+        self.assertEqual(len(groups),1)
+        self.assertEqual(groups[0]["windows"],[(time(8),time(12)),(time(13),time(17))])
+        self.assertContains(calendar,"08:00—12:00")
+        self.assertContains(calendar,"13:00—17:00")
+
+    def test_adjacent_windows_form_one_continuous_reservable_period(self):
+        day=timezone.localdate()+timedelta(days=2)
+        services.change_opening(self.admin,{
+            "lab":self.room_short.lab,"resource":self.room_short,"weekday":day.isoweekday(),
+            "windows":[(time(8),time(12)),(time(12),time(17))],
+            "effective":day,"reason":"相邻开放时段连续性测试",
+        })
+
+        rows=OpeningPeriod.objects.filter(lab=self.room_short.lab,resource=self.room_short,
+            weekday=day.isoweekday(),valid_from=day)
+        self.assertEqual(rows.count(),1)
+        self.assertEqual((rows.get().starts_at,rows.get().ends_at),(time(8),time(17)))
+        entry=next(row for row in weekly_schedule(self.room_short) if row["date"]==day.isoformat())
+        self.assertEqual(entry["ranges"],["08:00—17:00"])
+        preview=slot_options(self.room_short,self.teacher,day,120,at=timezone.now())
+        spanning=next(item for item in preview["items"] if item["label"]=="11:00—13:00")
+        self.assertTrue(spanning["available"],spanning["reason"])
+        start=timezone.make_aware(datetime.combine(day,time(11)),TZ)
+        booking=services.create_reservation(self.teacher,self.room_short.pk,start,start+timedelta(hours=2),"跨相邻区间预约")
+        self.assertEqual(booking.status,"PENDING")
+
+    def test_change_opening_rejects_overlapping_windows(self):
+        day=timezone.localdate()+timedelta(days=2)
+        values={"lab":self.room_short.lab,"resource":self.room_short,"weekday":day.isoweekday(),
+            "windows":[(time(8),time(12)),(time(11,30),time(17))],
+            "effective":day,"reason":"重叠窗口不得生效"}
+        with self.assertRaisesRegex(services.BusinessError,"不得重叠"):
+            services.change_opening(self.admin,values)
+        self.assertFalse(OpeningPeriod.objects.filter(lab=self.room_short.lab,resource=self.room_short,
+            weekday=day.isoweekday(),valid_from=day).exists())
 
     def test_room_specific_hours_control_reservations_and_fixed_equipment_dependency(self):
         day,start=self.day_and_time(19)
@@ -92,6 +181,32 @@ class RoomOpeningCalendarTests(TestCase):
         self.assertTrue(form.fields["resource"].required)
         self.assertEqual(set(form.fields["resource"].queryset.values_list("lab_id",flat=True)),{lab.pk})
         self.assertFalse(form.fields["lab"].queryset.filter(code="LAB-202").exists())
+
+    def test_system_admin_form_requires_lab_role_and_grant_for_room_overrides(self):
+        lab = self.room_short.lab
+        self.client.force_login(self.system)
+        form = self.client.get("/manage/opening/").context["form"]
+        self.assertFalse(form.fields["resource"].required)
+        self.assertFalse(form.fields["resource"].queryset.exists())
+        day = timezone.localdate() + timedelta(days=2)
+        values = {
+            "lab": lab.pk, "resource": self.room_short.pk, "weekday": day.isoweekday(),
+            "windows": "08:00-17:00", "effective": day.isoformat(), "reason": "验证周历角色范围",
+        }
+        denied = self.client.post("/manage/opening/", values)
+        self.assertIn("resource", denied.context["form"].errors)
+        malformed = self.client.post("/manage/opening/", {**values, "lab": "invalid"})
+        self.assertIn("lab", malformed.context["form"].errors)
+        accepted = self.client.post("/manage/opening/", {**values, "resource": ""})
+        self.assertEqual(accepted.status_code, 302)
+        self.assertTrue(OpeningPeriod.objects.filter(lab=lab, resource=None, valid_from=day).exists())
+
+        UserRole.objects.create(user=self.system, role=Role.objects.get(code="LAB_ADMIN"))
+        LabGrant.objects.create(user=self.system, lab=lab)
+        form = self.client.get("/manage/opening/").context["form"]
+        self.assertEqual(set(form.fields["resource"].queryset.values_list("lab_id", flat=True)), {lab.pk})
+        self.assertEqual(self.client.post("/manage/opening/", values).status_code, 302)
+        self.assertTrue(OpeningPeriod.objects.filter(resource=self.room_short, valid_from=day).exists())
 
     def test_room_schedule_change_cannot_make_an_existing_confirmed_booking_outside_hours(self):
         effective,start=self.day_and_time(17,day_offset=1)

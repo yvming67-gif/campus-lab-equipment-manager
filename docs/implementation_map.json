@@ -1,6 +1,6 @@
 {
   "UC-01": "core/views.py: login_page、identity、callback；core/miniapi.py: login、authenticate、logout",
-  "UC-02": "core/views.py: resources, resource_detail, lab_safety_manage, safety_ack; core/safety.py: current_procedures, acknowledge; core/miniapi.py: resource_data, safety_ack; miniprogram/pages/resource/index.wxml",
+  "UC-02": "core/views.py: resources, resource_detail, lab_safety_manage, safety_ack; core/catalog.py: filter_resources (campus/building filters for structured rooms/fixed equipment); core/miniapi.py: resources, resource_data, safety_ack (campus/building choices and location display); miniprogram/controllers.js: campus/building filters; miniprogram/pages/resources/index.wxml, miniprogram/pages/resource/index.wxml",
   "UC-03": "core/services.py: availability、validate；core/experience.py: slot_options；core/views.py: resources、resource_detail；core/product_views.py: schedule；core/miniapi.py: resources、resource_detail；core/ui_navigation.py: date_navigation、filter_chips、schedule_context",
   "UC-04": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
   "UC-05": "core/services.py: create_reservation、validate；core/miniapi.py: bookings；miniprogram/controllers.js: resource",
@@ -16,7 +16,7 @@
   "UC-15": "core/services.py: create_work_order；core/coordination.py: reassign_work",
   "UC-16": "core/services.py: update_work",
   "UC-17": "core/services.py: accept_work",
-  "UC-18": "core/services.py: save_resource、set_resource_hold；core/views.py: manage_form",
+  "UC-18": "core/services.py: save_resource, set_resource_hold; core/forms.py: ResourceForm, CampusForm, BuildingForm; core/views.py: manage_form (SYS_ADMIN-only campus/building master, resource location fields); core/models.py: Campus, Building, RoomDetail; core/migrations/0012_building_campus_roomdetail_floor_label_and_more.py; core/product_tests.py: StructuredLocationDirectoryTests",
   "UC-19": "core/services.py: grant_user；core/miniapi.py: me",
   "UC-20": "core/services.py: save_policy、change_opening；core/coordination.py: calendar_exception；core/catalog.py: calendar_catalog",
   "UC-21": "core/views.py: audit_list；core/migrations/0002_audit_immutable.py",

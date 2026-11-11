@@ -515,6 +515,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="actor-lab-opening" parent="1" vertex="1" value="实验室&lt;br&gt;管理员" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Microsoft YaHei;fontSize=7.2;fontColor=#2a3436;">
+          <mxGeometry x="52" y="603" width="22" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="assoc-lab-opening" parent="1" edge="1" source="actor-lab-opening" target="UC-20" style="edgeStyle=none;rounded=0;startArrow=none;endArrow=none;dashed=0;strokeColor=#536872;exitX=1;exitY=0.45;exitPerimeter=0;entryX=0.009;entryY=0.594;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

@@ -2,8 +2,9 @@
 from datetime import timedelta, time
 from django.core.management import call_command
 from django.db import connection
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.test.utils import CaptureQueriesContext
+from django.urls import reverse
 from django.utils import timezone
 from .models import (User, Resource, Reservation, Policy, CalendarException,
                      OpeningPeriod, SafetyAcknowledgement, SafetyProcedure,
@@ -174,10 +175,79 @@ class ExperienceTests(TestCase):
         with self.assertRaises(s.BusinessError):approval_context(b,self.student)
 
     def test_next_step_uses_real_locations_and_actual_status(self):
+        self.eq.equipment.handover_location="设备服务台（模拟交接地点）"
+        self.eq.equipment.save(update_fields=["handover_location"])
         b=self.book();step=next_step(b,at=self.now)
-        self.assertEqual(step["location"],self.eq.lab.location)
+        self.assertEqual(step["location"],"设备服务台（模拟交接地点）")
+        self.eq.equipment.handover_location=""
+        self.eq.equipment.save(update_fields=["handover_location"])
+        b=Reservation.objects.select_related("resource__lab","resource__equipment").get(pk=b.pk)
+        step=next_step(b,at=self.now)
+        self.assertEqual(step["location"],"交接地点待登记")
+        self.assertNotEqual(step["location"],self.eq.lab.location)
         self.assertIn("领取",step["title"])
         b.review_required=True
         self.assertIn("复核",next_step(b)["title"])
         b.status="IN_USE";b.review_required=False
         self.assertIn("超期",next_step(b,at=b.ends_at+timedelta(seconds=1))["title"])
+
+
+class RoleDashboardTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_demo",verbosity=0)
+
+    def dashboard_as(self,username):
+        client=Client()
+        client.force_login(User.objects.get(username=username))
+        response=client.get(reverse("dashboard"))
+        self.assertEqual(response.status_code,200)
+        return response
+
+    def test_student_dashboard_prioritizes_equipment_and_personal_bookings(self):
+        response=self.dashboard_as("student")
+        self.assertContains(response,"STUDENT / 个人实验安排")
+        self.assertContains(response,"查找教学设备")
+        self.assertContains(response,"查看我的预约与借还")
+        self.assertNotContains(response,"TEACHER / 课程安排")
+        self.assertNotContains(response,"处理待审核申请")
+
+    def test_teacher_dashboard_prioritizes_room_and_course_schedule(self):
+        response=self.dashboard_as("teacher")
+        self.assertContains(response,"TEACHER / 课程安排")
+        self.assertContains(response,"查找可预约场地")
+        self.assertContains(response,"我的场地预约")
+        self.assertContains(response,"等待审核，不占用资源时段")
+        self.assertNotContains(response,"SYSTEM ADMIN / 身份与配置")
+
+    def test_lab_admin_dashboard_routes_to_authorized_work_queues(self):
+        response=self.dashboard_as("admin")
+        self.assertContains(response,"LAB ADMIN / 今日管理")
+        self.assertContains(response,"处理待审核申请")
+        self.assertContains(response,"维护本实验室资源")
+        self.assertContains(response,"维修待验收")
+        self.assertNotContains(response,"SYSTEM ADMIN / 身份与配置")
+
+    def test_technician_dashboard_prioritizes_assigned_work_only(self):
+        response=self.dashboard_as("tech")
+        self.assertContains(response,"TECHNICIAN / 指派任务")
+        self.assertContains(response,"只处理分配给自己的维修工单")
+        self.assertContains(response,"打开我的维修任务")
+        self.assertNotContains(response,"处理待审核申请")
+        self.assertNotContains(response,"管理用户与授权")
+
+    def test_director_dashboard_shows_aggregate_not_actionable_approval(self):
+        response=self.dashboard_as("director")
+        self.assertContains(response,"CENTER OVERVIEW / 管理摘要")
+        self.assertContains(response,"查看资源利用报表")
+        self.assertContains(response,"审批由获授权实验室管理员办理")
+        self.assertNotContains(response,"处理待审核申请")
+        self.assertNotContains(response,"办理设备借出")
+
+    def test_system_admin_dashboard_separates_account_configuration_from_business_approval(self):
+        response=self.dashboard_as("sysadmin")
+        self.assertContains(response,"SYSTEM ADMIN / 身份与配置")
+        self.assertContains(response,"管理用户与授权")
+        self.assertContains(response,"查看角色与资格目录")
+        self.assertNotContains(response,"处理待审核申请")
+        self.assertNotContains(response,"维修待验收")

@@ -7,7 +7,7 @@ d=json.loads((ROOT/"docs/specification.json").read_text("utf-8"));schema=json.lo
 ids=lambda key:{x["id"] for x in d[key]}
 uc=ids("cases");br=ids("rules");qr=ids("quality");ac=ids("acceptance");fr={c["fr"] for c in d["cases"]};spec={c["spec"] for c in d["cases"]};problems=ids("problems")
 assert uc=={f'UC-{n:02d}' for n in range(1,30)}
-assert len(fr)==len(spec)==29 and len(br)==48 and len(qr)==11 and ac=={f'AC-{n:02}' for n in range(1,76)}
+assert len(fr)==len(spec)==29 and len(br)==48 and len(qr)==11 and ac=={f'AC-{n:02}' for n in range(1,77)}
 assert {c['id'] for c in d['constraints']}=={'DC-01'} and d['constraints'][0]['legacy_id']=='BR-47'
 assert set(mapping)==uc
 baseline=json.loads((ROOT/'docs/baseline.json').read_text('utf-8'))
@@ -67,7 +67,7 @@ for a in d['acceptance']:
     if a['id']=='AC-64':
         assert not a['uc'] and not a['fr'] and a['constraints']==['DC-01'] and 'QR-07' in a['quality']
     else:assert a['uc'] and set(a['uc'])<=uc and set(a['rules'])<=br
-print("PASS: 29 FR/UC/SPEC, 48 BR + DC-01, 11 QR, 75 AC; source/business/message/field/model references and explicit operational trace")
+print("PASS: 29 FR/UC/SPEC, 48 BR + DC-01, 11 QR, 76 AC; source/business/message/field/model references and explicit operational trace")
 
 # Full-field ERD is verified against the exported application model, not a manual table list.
 import hashlib

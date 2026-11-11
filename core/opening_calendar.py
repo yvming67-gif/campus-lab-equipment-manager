@@ -6,6 +6,18 @@ from django.utils import timezone
 from .models import CalendarException, OpeningPeriod
 
 
+def merge_time_windows(windows):
+    """Return sorted time ranges, merging overlaps and exactly adjacent ranges."""
+    merged=[]
+    for start,end in sorted(windows,key=lambda pair:pair[0]):
+        if merged and start<=merged[-1][1]:
+            previous_start,previous_end=merged[-1]
+            merged[-1]=(previous_start,max(previous_end,end))
+        else:
+            merged.append((start,end))
+    return merged
+
+
 def weekly_periods(resource, day):
     """Return the effective weekly rows for a resource on a local date.
 
@@ -37,11 +49,8 @@ def weekly_allows(resource, day, start_time, end_time, periods=None):
     effective = effective_weekly_rows(resource, day, periods)
     if any(row.closed_all_day for row in effective):
         return False
-    return any(
-        row.starts_at <= start_time
-        and row.ends_at >= end_time
-        for row in effective
-    )
+    windows=merge_time_windows((row.starts_at,row.ends_at) for row in effective)
+    return any(starts_at<=start_time and ends_at>=end_time for starts_at,ends_at in windows)
 
 
 def exception_for(resource, day, exceptions=None):
@@ -95,7 +104,8 @@ def weekly_schedule(resource, as_of=None):
         else:
             rows = effective_weekly_rows(resource, day, periods)
             closed = any(row.closed_all_day for row in rows)
-            ranges = [] if closed else [f"{row.starts_at:%H:%M}—{row.ends_at:%H:%M}" for row in rows]
+            windows=[] if closed else merge_time_windows((row.starts_at,row.ends_at) for row in rows)
+            ranges = [f"{starts_at:%H:%M}—{ends_at:%H:%M}" for starts_at,ends_at in windows]
             note = "每周全天关闭" if closed else "每周开放日历"
         result.append({
             "date": day.isoformat(),
