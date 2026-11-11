@@ -496,10 +496,10 @@
         <mxCell id="n42" parent="1" vertex="1" value="安全信息" style="rounded=0;strokeColor=#b7c3c0;fillColor=#eef3ef;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=9.5;fontColor=#24384b;">
           <mxGeometry x="89" y="710" width="330" height="18" as="geometry" />
         </mxCell>
-        <mxCell id="UC-28" parent="1" vertex="1" value="UC-28&lt;br&gt;编制并提交场地安全信息" style="ellipse;strokeColor=#356f69;fillColor=#eef3ef;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=8.2;fontColor=#2a3436;">
+        <mxCell id="UC-28" parent="1" vertex="1" value="UC-28&lt;br&gt;编制并提交安全信息" style="ellipse;strokeColor=#356f69;fillColor=#eef3ef;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=8.2;fontColor=#2a3436;">
           <mxGeometry x="104" y="738" width="138" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="UC-29" parent="1" vertex="1" value="UC-29&lt;br&gt;复核并发布场地安全信息" style="ellipse;strokeColor=#356f69;fillColor=#eef3ef;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=7.8;fontColor=#2a3436;">
+        <mxCell id="UC-29" parent="1" vertex="1" value="UC-29&lt;br&gt;复核并发布安全信息" style="ellipse;strokeColor=#356f69;fillColor=#eef3ef;whiteSpace=wrap;html=1;fontFamily=Microsoft YaHei;fontSize=7.8;fontColor=#2a3436;">
           <mxGeometry x="104" y="778" width="138" height="32" as="geometry" />
         </mxCell>
         <mxCell id="n43" parent="1" vertex="1" value="实验室管理员" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Microsoft YaHei;fontSize=8;fontColor=#2a3436;">
