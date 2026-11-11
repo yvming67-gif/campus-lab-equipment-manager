@@ -20,7 +20,7 @@ DOMAINS=[
  ("D","现场使用","设备交接与场地实际使用",["Loan","ReturnRecord","HandoverItem","RoomUse","Coordination"],"#e6eef5","#50778c",[["Loan","ReturnRecord"],["RoomUse","HandoverItem","Coordination"]]),
  ("E","异常与维修","证据、工单和独立验收",["Incident","Evidence","WorkOrder","WorkOrderEvent","IncidentResponse"],"#f3e8e1","#936c56",[["Incident","Evidence","IncidentResponse"],["WorkOrder","WorkOrderEvent"]]),
  ("F","审计与通知","状态区间和可追踪投递",["AuditEvent","ServicePeriod","Notification","Delivery","DeliveryAttempt","MockReceipt","JobHeartbeat"],"#ece9f2","#776785",[["AuditEvent","ServicePeriod","MockReceipt"],["Notification","Delivery","DeliveryAttempt","JobHeartbeat"]]),
- ("G","场地安全信息","来源、复核和版本明确的房间安全信息",["SafetyProcedure","SafetyAcknowledgement"],"#f1e9df","#8a674d",[["SafetyProcedure"],["SafetyAcknowledgement"]])]
+ ("G","资源安全信息","适用于管理单元或具体资源、具来源与复核版本的安全信息",["SafetyProcedure","SafetyAcknowledgement"],"#f1e9df","#8a674d",[["SafetyProcedure"],["SafetyAcknowledgement"]])]
 BY_DOMAIN={d[0]:d for d in DOMAINS}
 SCHEMA=json.loads((MODEL/"schema.json").read_text("utf-8"));BY={m["model"]:m for m in SCHEMA["models"]};TABLE={m["table"]:m for m in SCHEMA["models"]}
 CODES={n:d[0]+str(i+1).zfill(2) for d in DOMAINS for i,n in enumerate(d[3])}
@@ -283,7 +283,7 @@ def paint(scene,p,shared=False):
         p.line([(65,143),(2735,143)],"#aeb9bd",1)
         p.text(65,scene.height-65,"阅读顺序：资源 → 预约 → 现场使用 → 异常维修；身份、规则与审计为共用支撑。",12,INK,"ERDCJK")
         p.text(65,scene.height-40,f"实体代码用于跨域定位；R01-R{FK_COUNT:02d}对应完整关系索引。实体、字段及外键由实际模型导出。",10.8,MUTED,"ERDCJK")
-        p.text(2735,scene.height-40,"2026-11-09  /  ERD 2.4",10.5,MUTED,"ERDSans","right")
+        p.text(2735,scene.height-40,"2026-11-11  /  ERD 2.5",10.5,MUTED,"ERDSans","right")
         p.text(1790,scene.height-100,"关键约束",12,INK,"ERDCJK")
         p.text(1790,scene.height-80,"待审核不占资源；确认与使用中的重叠区间互斥。",10.5,MUTED,"ERDCJK")
         p.text(1790,scene.height-62,"设备与场地分别记录实际使用；审计逻辑引用不伪装为外键。",10.5,MUTED,"ERDCJK")
@@ -359,7 +359,7 @@ DOMAIN_NOTES={
  "D":["预约记录计划承诺；Loan、ReturnRecord、RoomUse分别记录实际使用事实。","配件交接保存名称、数量及状态快照，避免主档变化改写既有历史。"],
  "E":["异常与维修分开建模；同一异常最多一张开放工单，不合并不同故障。","维修提交结果与管理员独立验收分开记录，全部阻断解除后方可恢复。"],
  "F":["通知、渠道投递与每次尝试分层；失败重试不能回滚已保存业务。","AuditEvent的对象编号为逻辑引用；MockReceipt仅属于模拟消息适配器。"],
- "G":["场地安全信息按版本记录来源、生效日期和复核期限；无核实材料时不发布。","阅读确认关联用户和具体版本，不代表培训、考核、准入或现场检查。"]}
+ "G":["安全信息恰关联一个管理单元或具体资源；资源专属内容不自动继承给关联设备。","版本记录来源、生效日期和复核期限；阅读确认关联用户及版本，不代表培训、考核、准入或现场检查。"]}
 
 def export_pdfs(master,domains):
     path=DEST/"完整ERD总图.pdf";size=landscape(A0);c=canvas.Canvas(str(path),pagesize=size,pageCompression=1)
@@ -383,7 +383,7 @@ def export_index(master,domains):
     with (DEST/"关系索引.csv").open("w",encoding="utf-8-sig",newline="") as f:
         writer=csv.writer(f);writer.writerow(["关系编号","子实体代码","引用表","引用字段","父实体代码","目标表","目标字段","子记录对应父","父记录对应子","删除策略"])
         for r in REL:writer.writerow([r["id"],CODES[r["child"]],r["from_table"],r["from_field"],CODES[r["parent"]],r["to_table"],r["to_field"],"0..1" if r["null"] else "1","0..1" if r["unique"] else "0..N","PROTECT (ORM) / NO ACTION (SQL)"])
-    info={"schema_hash_format":"canonical-json-sorted-compact-utf8","schema_sha256":hashlib.sha256(json.dumps(SCHEMA,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest(),"entity_count":len(master.cards),"field_count":sum(len(c.rows) for c in master.cards.values()),"relationship_count":len(master.edges),"format":"complete-field-vector-v1","model_version":"2.4","generated_on":"2026-11-09","shared_reference_default":"hidden; all targets and IDs remain inline","entities":[{"model":c.name,"code":CODES[c.name],"table":c.model["table"],"fields":[r["field"]["column"] for r in c.rows],"rect":c.rect} for c in master.cards.values()],"relationships":[{"id":r["id"],"child":r["child"],"from_field":r["from_field"],"parent":r["parent"],"to_field":r["to_field"],"null":r["null"],"unique":r["unique"],"shared":r["shared"],"points":r["points"]} for r in master.edges],"domains":[{"code":s.groups[0]["key"],"entities":list(s.cards)} for s in domains]}
+    info={"schema_hash_format":"canonical-json-sorted-compact-utf8","schema_sha256":hashlib.sha256(json.dumps(SCHEMA,ensure_ascii=False,sort_keys=True,separators=(",",":")).encode("utf-8")).hexdigest(),"entity_count":len(master.cards),"field_count":sum(len(c.rows) for c in master.cards.values()),"relationship_count":len(master.edges),"format":"complete-field-vector-v1","model_version":"2.5","generated_on":"2026-11-11","shared_reference_default":"hidden; all targets and IDs remain inline","entities":[{"model":c.name,"code":CODES[c.name],"table":c.model["table"],"fields":[r["field"]["column"] for r in c.rows],"rect":c.rect} for c in master.cards.values()],"relationships":[{"id":r["id"],"child":r["child"],"from_field":r["from_field"],"parent":r["parent"],"to_field":r["to_field"],"null":r["null"],"unique":r["unique"],"shared":r["shared"],"points":r["points"]} for r in master.edges],"domains":[{"code":s.groups[0]["key"],"entities":list(s.cards)} for s in domains]}
     (DEST/"manifest.json").write_text(json.dumps(info,ensure_ascii=False,indent=2),"utf-8")
 
 def export_viewer():

@@ -1,12 +1,12 @@
 {
   "schema_hash_format": "canonical-json-sorted-compact-utf8",
-  "schema_sha256": "b2b4d908e3392b9d964555d13b32571a570d9e3dd3338cf022f00c52e000f7a5",
+  "schema_sha256": "c7f23d97df6213d8aae3777f5f809ecae30af2657d642d3a08f6ab09d012834a",
   "entity_count": 38,
-  "field_count": 327,
-  "relationship_count": 68,
+  "field_count": 328,
+  "relationship_count": 69,
   "format": "complete-field-vector-v1",
-  "model_version": "2.4",
-  "generated_on": "2026-11-09",
+  "model_version": "2.5",
+  "generated_on": "2026-11-11",
   "shared_reference_default": "hidden; all targets and IDs remain inline",
   "entities": [
     {
@@ -777,6 +777,7 @@
       "table": "core_safetyprocedure",
       "fields": [
         "id",
+        "lab_scope_id",
         "resource_id",
         "created_by_id",
         "reviewed_by_id",
@@ -810,7 +811,7 @@
         105.0,
         2497,
         335.0,
-        620
+        648
       ]
     },
     {
@@ -861,7 +862,7 @@
       ]
     },
     {
-      "id": "R21",
+      "id": "R22",
       "child": "OpeningPeriod",
       "from_field": "lab_id",
       "parent": "Lab",
@@ -889,7 +890,7 @@
       ]
     },
     {
-      "id": "R59",
+      "id": "R60",
       "child": "DeliveryAttempt",
       "from_field": "delivery_id",
       "parent": "Delivery",
@@ -917,7 +918,7 @@
       ]
     },
     {
-      "id": "R58",
+      "id": "R59",
       "child": "Delivery",
       "from_field": "notification_id",
       "parent": "Notification",
@@ -1033,7 +1034,7 @@
       ]
     },
     {
-      "id": "R23",
+      "id": "R24",
       "child": "PolicyRevision",
       "from_field": "policy_id",
       "parent": "Policy",
@@ -1061,7 +1062,7 @@
       ]
     },
     {
-      "id": "R33",
+      "id": "R34",
       "child": "ReturnRecord",
       "from_field": "loan_id",
       "parent": "Loan",
@@ -1089,7 +1090,7 @@
       ]
     },
     {
-      "id": "R55",
+      "id": "R56",
       "child": "ServicePeriod",
       "from_field": "audit_id",
       "parent": "AuditEvent",
@@ -1117,7 +1118,7 @@
       ]
     },
     {
-      "id": "R50",
+      "id": "R51",
       "child": "WorkOrderEvent",
       "from_field": "work_order_id",
       "parent": "WorkOrder",
@@ -1145,7 +1146,7 @@
       ]
     },
     {
-      "id": "R44",
+      "id": "R45",
       "child": "Evidence",
       "from_field": "incident_id",
       "parent": "Incident",
@@ -1281,7 +1282,7 @@
       ]
     },
     {
-      "id": "R18",
+      "id": "R19",
       "child": "SafetyAcknowledgement",
       "from_field": "procedure_id",
       "parent": "SafetyProcedure",
@@ -1317,7 +1318,7 @@
       ]
     },
     {
-      "id": "R46",
+      "id": "R47",
       "child": "WorkOrder",
       "from_field": "incident_id",
       "parent": "Incident",
@@ -1353,7 +1354,7 @@
       ]
     },
     {
-      "id": "R56",
+      "id": "R57",
       "child": "Notification",
       "from_field": "audit_id",
       "parent": "AuditEvent",
@@ -1389,7 +1390,7 @@
       ]
     },
     {
-      "id": "R29",
+      "id": "R30",
       "child": "ApprovalDecision",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -1445,7 +1446,7 @@
       ]
     },
     {
-      "id": "R26",
+      "id": "R27",
       "child": "Reservation",
       "from_field": "resource_id",
       "parent": "Resource",
@@ -1525,7 +1526,7 @@
       ]
     },
     {
-      "id": "R22",
+      "id": "R23",
       "child": "OpeningPeriod",
       "from_field": "resource_id",
       "parent": "Resource",
@@ -1569,7 +1570,7 @@
       ]
     },
     {
-      "id": "R67",
+      "id": "R68",
       "child": "IncidentResponse",
       "from_field": "incident_id",
       "parent": "Incident",
@@ -1613,7 +1614,7 @@
       ]
     },
     {
-      "id": "R65",
+      "id": "R66",
       "child": "CalendarException",
       "from_field": "lab_id",
       "parent": "Lab",
@@ -1657,7 +1658,7 @@
       ]
     },
     {
-      "id": "R61",
+      "id": "R62",
       "child": "ReservationReview",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -1701,7 +1702,7 @@
       ]
     },
     {
-      "id": "R60",
+      "id": "R61",
       "child": "MockReceipt",
       "from_field": "delivery_id",
       "parent": "Delivery",
@@ -1737,7 +1738,7 @@
       ]
     },
     {
-      "id": "R35",
+      "id": "R36",
       "child": "HandoverItem",
       "from_field": "loan_id",
       "parent": "Loan",
@@ -1905,7 +1906,7 @@
       ]
     },
     {
-      "id": "R20",
+      "id": "R21",
       "child": "Accessory",
       "from_field": "resource_id",
       "parent": "Resource",
@@ -1949,7 +1950,7 @@
       ]
     },
     {
-      "id": "R27",
+      "id": "R28",
       "child": "ReviewNote",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -2029,7 +2030,7 @@
       ]
     },
     {
-      "id": "R31",
+      "id": "R32",
       "child": "Loan",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -2117,7 +2118,7 @@
       ]
     },
     {
-      "id": "R37",
+      "id": "R38",
       "child": "RoomUse",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -2177,7 +2178,7 @@
       ]
     },
     {
-      "id": "R40",
+      "id": "R41",
       "child": "Incident",
       "from_field": "resource_id",
       "parent": "Resource",
@@ -2229,7 +2230,7 @@
       ]
     },
     {
-      "id": "R25",
+      "id": "R26",
       "child": "Reservation",
       "from_field": "applicant_id",
       "parent": "User",
@@ -2297,7 +2298,7 @@
       ]
     },
     {
-      "id": "R42",
+      "id": "R43",
       "child": "Incident",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -2349,7 +2350,7 @@
       ]
     },
     {
-      "id": "R36",
+      "id": "R37",
       "child": "HandoverItem",
       "from_field": "accessory_id",
       "parent": "Accessory",
@@ -2401,7 +2402,7 @@
       ]
     },
     {
-      "id": "R54",
+      "id": "R55",
       "child": "ServicePeriod",
       "from_field": "resource_id",
       "parent": "Resource",
@@ -2477,7 +2478,7 @@
       ]
     },
     {
-      "id": "R52",
+      "id": "R53",
       "child": "AuditEvent",
       "from_field": "actor_id",
       "parent": "User",
@@ -2521,7 +2522,7 @@
       ]
     },
     {
-      "id": "R57",
+      "id": "R58",
       "child": "Notification",
       "from_field": "recipient_id",
       "parent": "User",
@@ -2581,7 +2582,7 @@
       ]
     },
     {
-      "id": "R66",
+      "id": "R67",
       "child": "CalendarException",
       "from_field": "actor_id",
       "parent": "User",
@@ -2625,7 +2626,7 @@
       ]
     },
     {
-      "id": "R41",
+      "id": "R42",
       "child": "Incident",
       "from_field": "reporter_id",
       "parent": "User",
@@ -2701,7 +2702,7 @@
       ]
     },
     {
-      "id": "R43",
+      "id": "R44",
       "child": "Incident",
       "from_field": "confirmed_by_id",
       "parent": "User",
@@ -2769,7 +2770,7 @@
       ]
     },
     {
-      "id": "R53",
+      "id": "R54",
       "child": "AuditEvent",
       "from_field": "lab_id",
       "parent": "Lab",
@@ -2821,7 +2822,7 @@
       ]
     },
     {
-      "id": "R63",
+      "id": "R64",
       "child": "Coordination",
       "from_field": "reservation_id",
       "parent": "Reservation",
@@ -2873,7 +2874,7 @@
       ]
     },
     {
-      "id": "R15",
+      "id": "R16",
       "child": "SafetyProcedure",
       "from_field": "created_by_id",
       "parent": "User",
@@ -2884,50 +2885,6 @@
       "points": [
         [
           105.0,
-          2616.84
-        ],
-        [
-          80,
-          2616.84
-        ],
-        [
-          80,
-          2616
-        ],
-        [
-          48,
-          2616
-        ],
-        [
-          48,
-          296
-        ],
-        [
-          80,
-          296
-        ],
-        [
-          80,
-          306.84
-        ],
-        [
-          105.0,
-          306.84
-        ]
-      ]
-    },
-    {
-      "id": "R16",
-      "child": "SafetyProcedure",
-      "from_field": "reviewed_by_id",
-      "parent": "User",
-      "to_field": "id",
-      "null": true,
-      "unique": false,
-      "shared": true,
-      "points": [
-        [
-          105.0,
           2644.84
         ],
         [
@@ -2939,16 +2896,16 @@
           2648
         ],
         [
-          40,
+          48,
           2648
         ],
         [
-          40,
-          304
+          48,
+          296
         ],
         [
           80,
-          304
+          296
         ],
         [
           80,
@@ -2963,7 +2920,7 @@
     {
       "id": "R17",
       "child": "SafetyProcedure",
-      "from_field": "published_by_id",
+      "from_field": "reviewed_by_id",
       "parent": "User",
       "to_field": "id",
       "null": true,
@@ -2983,8 +2940,52 @@
           2672
         ],
         [
-          32,
+          40,
           2672
+        ],
+        [
+          40,
+          304
+        ],
+        [
+          80,
+          304
+        ],
+        [
+          80,
+          306.84
+        ],
+        [
+          105.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R18",
+      "child": "SafetyProcedure",
+      "from_field": "published_by_id",
+      "parent": "User",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          105.0,
+          2700.84
+        ],
+        [
+          80,
+          2700.84
+        ],
+        [
+          80,
+          2704
+        ],
+        [
+          32,
+          2704
         ],
         [
           32,
@@ -3005,7 +3006,7 @@
       ]
     },
     {
-      "id": "R30",
+      "id": "R31",
       "child": "ApprovalDecision",
       "from_field": "actor_id",
       "parent": "User",
@@ -3065,7 +3066,7 @@
       ]
     },
     {
-      "id": "R45",
+      "id": "R46",
       "child": "Evidence",
       "from_field": "uploaded_by_id",
       "parent": "User",
@@ -3125,7 +3126,7 @@
       ]
     },
     {
-      "id": "R47",
+      "id": "R48",
       "child": "WorkOrder",
       "from_field": "created_by_id",
       "parent": "User",
@@ -3185,7 +3186,7 @@
       ]
     },
     {
-      "id": "R48",
+      "id": "R49",
       "child": "WorkOrder",
       "from_field": "assigned_to_id",
       "parent": "User",
@@ -3245,7 +3246,7 @@
       ]
     },
     {
-      "id": "R49",
+      "id": "R50",
       "child": "WorkOrder",
       "from_field": "accepted_by_id",
       "parent": "User",
@@ -3313,7 +3314,7 @@
       ]
     },
     {
-      "id": "R24",
+      "id": "R25",
       "child": "PolicyRevision",
       "from_field": "actor_id",
       "parent": "User",
@@ -3373,7 +3374,7 @@
       ]
     },
     {
-      "id": "R62",
+      "id": "R63",
       "child": "ReservationReview",
       "from_field": "actor_id",
       "parent": "User",
@@ -3425,7 +3426,7 @@
       ]
     },
     {
-      "id": "R19",
+      "id": "R20",
       "child": "SafetyAcknowledgement",
       "from_field": "user_id",
       "parent": "User",
@@ -3477,7 +3478,7 @@
       ]
     },
     {
-      "id": "R68",
+      "id": "R69",
       "child": "IncidentResponse",
       "from_field": "actor_id",
       "parent": "User",
@@ -3529,7 +3530,7 @@
       ]
     },
     {
-      "id": "R28",
+      "id": "R29",
       "child": "ReviewNote",
       "from_field": "actor_id",
       "parent": "User",
@@ -3589,7 +3590,7 @@
       ]
     },
     {
-      "id": "R51",
+      "id": "R52",
       "child": "WorkOrderEvent",
       "from_field": "actor_id",
       "parent": "User",
@@ -3641,7 +3642,7 @@
       ]
     },
     {
-      "id": "R32",
+      "id": "R33",
       "child": "Loan",
       "from_field": "operator_id",
       "parent": "User",
@@ -3701,7 +3702,51 @@
       ]
     },
     {
-      "id": "R34",
+      "id": "R14",
+      "child": "SafetyProcedure",
+      "from_field": "lab_scope_id",
+      "parent": "Lab",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "shared": true,
+      "points": [
+        [
+          440.0,
+          2588.84
+        ],
+        [
+          464,
+          2588.84
+        ],
+        [
+          464,
+          2696
+        ],
+        [
+          968,
+          2696
+        ],
+        [
+          968,
+          288
+        ],
+        [
+          1000,
+          288
+        ],
+        [
+          1000,
+          306.84
+        ],
+        [
+          1025.0,
+          306.84
+        ]
+      ]
+    },
+    {
+      "id": "R35",
       "child": "ReturnRecord",
       "from_field": "operator_id",
       "parent": "User",
@@ -3731,16 +3776,16 @@
           1288
         ],
         [
-          968,
+          992,
           1288
         ],
         [
-          968,
-          944
+          992,
+          1048
         ],
         [
           520,
-          944
+          1048
         ],
         [
           520,
@@ -3769,7 +3814,7 @@
       ]
     },
     {
-      "id": "R38",
+      "id": "R39",
       "child": "RoomUse",
       "from_field": "started_by_id",
       "parent": "User",
@@ -3837,7 +3882,7 @@
       ]
     },
     {
-      "id": "R39",
+      "id": "R40",
       "child": "RoomUse",
       "from_field": "ended_by_id",
       "parent": "User",
@@ -3905,38 +3950,54 @@
       ]
     },
     {
-      "id": "R14",
+      "id": "R15",
       "child": "SafetyProcedure",
       "from_field": "resource_id",
       "parent": "Resource",
       "to_field": "id",
-      "null": false,
+      "null": true,
       "unique": false,
       "shared": true,
       "points": [
         [
           440.0,
-          2588.84
+          2616.84
         ],
         [
           464,
-          2588.84
+          2616.84
         ],
         [
           464,
-          2696
+          2616
         ],
         [
-          968,
-          2696
+          456,
+          2616
         ],
         [
-          968,
-          1320
+          456,
+          2704
+        ],
+        [
+          1008,
+          2704
+        ],
+        [
+          1008,
+          1408
+        ],
+        [
+          984,
+          1408
+        ],
+        [
+          984,
+          1328
         ],
         [
           1376,
-          1320
+          1328
         ],
         [
           1376,
@@ -3965,7 +4026,7 @@
       ]
     },
     {
-      "id": "R64",
+      "id": "R65",
       "child": "Coordination",
       "from_field": "actor_id",
       "parent": "User",
@@ -3992,11 +4053,11 @@
         ],
         [
           1864,
-          1328
+          1320
         ],
         [
           416,
-          1328
+          1320
         ],
         [
           416,

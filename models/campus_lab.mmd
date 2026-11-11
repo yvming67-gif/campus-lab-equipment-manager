@@ -88,6 +88,7 @@ erDiagram
     }
     core_safetyprocedure {
         bigint id PK
+        bigint lab_scope_id FK
         bigint resource_id FK
         integer version
         varchar title
@@ -415,7 +416,8 @@ erDiagram
     core_qualificationtype |o--o{ core_equipmentdetail : "qualification"
     core_resource |o--o{ core_equipmentdetail : "access_room"
     core_resource ||--o| core_roomdetail : "resource"
-    core_resource ||--o{ core_safetyprocedure : "resource"
+    core_lab |o--o{ core_safetyprocedure : "lab_scope"
+    core_resource |o--o{ core_safetyprocedure : "resource"
     core_user ||--o{ core_safetyprocedure : "created_by"
     core_user |o--o{ core_safetyprocedure : "reviewed_by"
     core_user |o--o{ core_safetyprocedure : "published_by"

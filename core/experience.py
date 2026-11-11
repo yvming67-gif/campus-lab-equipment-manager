@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from .models import (CalendarException, OpeningPeriod, Policy, Reservation,
-                     UserQualification)
+                     SafetyAcknowledgement, SafetyProcedure, UserQualification)
 from . import services as s
 
 
@@ -56,6 +56,15 @@ class SlotSnapshot:
                 Q(valid_to__isnull=True) | Q(valid_to__gte=day)))
         self.qualifications = list(UserQualification.objects.filter(user=user,
             revoked=False, issued_at__lte=at).values("qualification_id", "expires_at"))
+        today = timezone.localdate()
+        self.required_safety_ids = list(SafetyProcedure.objects.filter(
+            status="PUBLISHED", requires_acknowledgement=True,
+            effective_from__lte=today, review_due_date__gte=today,
+        ).filter(Q(resource_id=resource.pk) | Q(lab_scope_id=resource.lab_id))
+          .values_list("pk", flat=True))
+        self.acknowledged_safety_ids = set(SafetyAcknowledgement.objects.filter(
+            user=user, procedure_id__in=self.required_safety_ids
+        ).values_list("procedure_id", flat=True)) if self.required_safety_ids else set()
         self.user_overdue = s.overdue_for(user, at)
         self.resource_overdue = s.overdue_resource(resource, at)
 
@@ -91,6 +100,11 @@ class SlotSnapshot:
         return any(x["qualification_id"] == qualification_id and
                    (x["expires_at"] is None or x["expires_at"] >= end)
                    for x in self.qualifications)
+
+    def needs_safety_ack(self, user, resource):
+        if user.pk != self.user.pk or resource.pk != self.resource.pk:
+            raise ValueError("安全确认快照与当前用户或资源不一致")
+        return bool(set(self.required_safety_ids) - self.acknowledged_safety_ids)
 
     def future_count(self, kind, exclude):
         return sum(x["resource__kind"] == kind and x["pk"] != exclude for x in self.future)

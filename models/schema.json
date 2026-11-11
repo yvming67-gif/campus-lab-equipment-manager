@@ -1259,7 +1259,7 @@
     {
       "model": "SafetyProcedure",
       "table": "core_safetyprocedure",
-      "label": "场地安全规程版本",
+      "label": "安全信息版本",
       "fields": [
         {
           "name": "id",
@@ -1278,12 +1278,28 @@
           "on_delete": null
         },
         {
+          "name": "lab_scope",
+          "column": "lab_scope_id",
+          "label": "lab scope",
+          "type": "bigint",
+          "null": true,
+          "blank": true,
+          "pk": false,
+          "unique": false,
+          "default": "",
+          "choices": [],
+          "max_length": null,
+          "fk": "core_lab",
+          "one_to_one": false,
+          "on_delete": "PROTECT"
+        },
+        {
           "name": "resource",
           "column": "resource_id",
           "label": "resource",
           "type": "bigint",
-          "null": false,
-          "blank": false,
+          "null": true,
+          "blank": true,
           "pk": false,
           "unique": false,
           "default": "",
@@ -1749,12 +1765,24 @@
       ],
       "constraints": [
         {
+          "name": "safety_exactly_one_scope",
+          "definition": "<CheckConstraint: condition=(OR: (AND: ('lab_scope__isnull', False), ('resource__isnull', True)), (AND: ('lab_scope__isnull', True), ('resource__isnull', False))) name='safety_exactly_one_scope'>"
+        },
+        {
           "name": "safety_resource_version_unique",
-          "definition": "<UniqueConstraint: fields=('resource', 'version') name='safety_resource_version_unique'>"
+          "definition": "<UniqueConstraint: fields=('resource', 'version') name='safety_resource_version_unique' condition=(AND: ('resource__isnull', False))>"
         },
         {
           "name": "one_published_safety_per_resource",
           "definition": "<UniqueConstraint: fields=('resource',) name='one_published_safety_per_resource' condition=(AND: ('status', 'PUBLISHED'))>"
+        },
+        {
+          "name": "safety_lab_scope_version_unique",
+          "definition": "<UniqueConstraint: fields=('lab_scope', 'version') name='safety_lab_scope_version_unique' condition=(AND: ('lab_scope__isnull', False))>"
+        },
+        {
+          "name": "one_published_safety_per_lab_scope",
+          "definition": "<UniqueConstraint: fields=('lab_scope',) name='one_published_safety_per_lab_scope' condition=(AND: ('lab_scope__isnull', False), ('status', 'PUBLISHED'))>"
         }
       ],
       "indexes": []
@@ -2807,7 +2835,7 @@
         },
         {
           "name": "resource_confirmed_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001CF79ECECF0>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001D2A473A7B0>), '&&')] name='resource_confirmed_no_overlap' condition=(AND: ('status__in', ['CONFIRMED', 'IN_USE']))>"
         }
       ],
       "indexes": [
@@ -4827,7 +4855,7 @@
         },
         {
           "name": "service_period_no_overlap",
-          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001CF79FA3250>), '&&')] name='service_period_no_overlap'>"
+          "definition": "<ExclusionConstraint: index_type='GIST' expressions=[('resource', '='), (TsRange(F(starts_at), F(ends_at), <django.contrib.postgres.fields.ranges.RangeBoundary object at 0x000001D2A4806D50>), '&&')] name='service_period_no_overlap'>"
         }
       ],
       "indexes": []
@@ -6068,10 +6096,19 @@
     },
     {
       "from_table": "core_safetyprocedure",
+      "from_field": "lab_scope_id",
+      "to_table": "core_lab",
+      "to_field": "id",
+      "null": true,
+      "unique": false,
+      "name": "lab_scope"
+    },
+    {
+      "from_table": "core_safetyprocedure",
       "from_field": "resource_id",
       "to_table": "core_resource",
       "to_field": "id",
-      "null": false,
+      "null": true,
       "unique": false,
       "name": "resource"
     },

@@ -1,23 +1,28 @@
 {
-  "checked_date": "2026-11-10",
+  "checked_date": "2026-11-11",
   "runtime_commit": null,
   "runtime_commit_status": "线上应用没有公开部署提交号；本次只记录可直接观察的运行行为。",
   "web": {
     "url": "https://campus-lab-equipment-manager.onrender.com/",
     "access_url": "https://campus-lab-equipment-manager.onrender.com/access/",
+    "user_entry_method": "Open the fixed HTTPS URL directly in a browser; no QR code is required.",
     "access_http_status": 200,
     "health_url": "https://campus-lab-equipment-manager.onrender.com/health/",
     "health_http_status": 200,
     "health_status": "ready",
-    "public_identity_accounts": ["student", "student2", "teacher"],
+    "public_identity_accounts": [
+      "student",
+      "student2",
+      "teacher"
+    ],
     "management_accounts_listed": false,
-    "last_live_check": "2026-11-10; GET /health/ and /access/ returned 200; a CSRF-valid login-entry request opened the identity selector; no password or business write was submitted.",
+    "last_live_check": "2026-11-10; GET /health/ and /access/ returned 200; a CSRF-valid login-entry request opened the identity selector; no password or business write was submitted. A 2026-11-11 follow-up from the current review environment failed during TLS connection setup and is inconclusive, not evidence of an application outage.",
     "runtime_commit_verified": false,
     "available_to_public": true,
     "availability_limit": "Free instance sleep and provider quotas"
   },
   "wechat": {
-    "status_as_of": "2026-11-06; not rechecked on 2026-11-10",
+    "status_as_of": "Last independently verified snapshot: 2026-11-06. The owner later reported the replacement name was still under review; no current console check was completed.",
     "development_version": "1.4.1",
     "uploaded": true,
     "upload_bytes": 387607,
@@ -27,9 +32,14 @@
     "category_approved": true,
     "primary_category_set": true,
     "experience_version": "1.4.0",
-    "formal_version_published": false,
-    "basic_information": "A replacement name was selected later by the owner; current review result was not rechecked.",
-    "filing": "Not completed",
+    "formal_version_published": null,
+    "formal_version_published_as_of_last_verified_snapshot": false,
+    "intended_public_entry": "Search the approved and formally published mini-program name in WeChat; experience QR codes are for temporary authorized testing only.",
+    "public_search_entry_verified": false,
+    "public_search_entry_status": "No non-experience-account verification is recorded; public availability must not be claimed until such a check succeeds.",
+    "basic_information": "Owner reports the replacement name was still under review; not independently verified in the WeChat console.",
+    "filing": "Unknown after the 2026-11-06 snapshot; user screenshots show the information-entry workflow, not a submission or approval receipt.",
+    "page_content_indexing": "All mini-program pages remain disallowed by sitemap to avoid indexing user-specific booking, notification, and profile content. This is not evidence that public name search is enabled or disabled; verify the official search setting and access with a non-experience account.",
     "phone_acceptance": "Normal-validation release package not verified on phone",
     "iphone": "Deferred"
   },
@@ -43,32 +53,55 @@
     "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42738732700"
   },
   "local": {
-    "checked_date": "2026-11-10",
-    "code_commit": "4d834d0c84829200b051813da55df9b52982eb21",
+    "checked_date": "2026-11-11",
+    "code_commit": "dfb87c3c2226fa57ac550fd2efd94203612839e2",
     "local_docs_commit_pending_push": true,
     "backend_full_suite": {
       "modules": 21,
-      "executed": 343,
-      "passed": 343,
+      "executed": 348,
+      "passed": 348,
       "failed": 0,
       "skipped": 0,
-      "isolated_postgresql": true
+      "duration_seconds": 91.18,
+      "isolated_postgresql": true,
+      "note": "首次运行发现候选时段安全确认读取过量，修正后重新运行全部模块通过；23个候选时段测得12次数据库查询。"
     },
     "client_tests_passed": 127,
     "native_template_pages_compiled": 8,
     "responsive_visual_qa": "Not completed for the current source; do not infer from historical width checks.",
     "analysis_report": {
-      "formal_docx_sha256": "0394A82C8CB399FB525F2DD5F742D425057CC8F1C98199518770E8A609FBC361",
-      "current_preview_pages": 169,
+      "formal_docx_sha256": "E5BEE730F821B7039D2BF828E1534C957869568AD33143C36374DE7775CE1D2A",
+      "current_preview_pages": 170,
       "current_preview_toc_and_figure_list_checked": true,
+      "current_preview_changed_pages_checked": [
+        11,
+        12
+      ],
       "current_preview_in_public_repo": false,
+      "word_native_pagination_verified": false,
       "historical_preview_pages": 174,
       "pagination_difference_cause": "Not confirmed; LibreOffice versions/bitness/configuration differ; Microsoft Word native pagination not verified."
-    }
+    },
+    "worktree_dirty": true,
+    "local_commits_ahead_of_cached_origin_main": 3,
+    "data_model": {
+      "entities": 38,
+      "fields": 328,
+      "physical_foreign_keys": 69,
+      "static_validators_passed": true
+    },
+    "safety_scope_migration": {
+      "file": "core/migrations/0011_safety_information_scopes.py",
+      "local_tests_passed": true,
+      "cloud_migration_applied": false
+    },
+    "docs_and_code_pending_push": true,
+    "cloud_runtime_update_verified": false
   },
   "publication": {
     "history_rewritten": false,
     "process_material_archived_locally": true,
-    "formal_word_changed": false
+    "formal_word_changed": true,
+    "runtime_code_change_pending_push": true
   }
 }

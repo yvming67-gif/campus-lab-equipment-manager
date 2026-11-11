@@ -6,7 +6,8 @@ from django.test import TestCase
 from django.test.utils import CaptureQueriesContext
 from django.utils import timezone
 from .models import (User, Resource, Reservation, Policy, CalendarException,
-                     OpeningPeriod, UserQualification, UserRole, AuditEvent)
+                     OpeningPeriod, SafetyAcknowledgement, SafetyProcedure,
+                     UserQualification, UserRole, AuditEvent)
 from . import services as s
 from .experience import SlotSnapshot, slot_options, approval_context, next_step
 
@@ -125,6 +126,26 @@ class ExperienceTests(TestCase):
         self.assertTrue(all(x["available"] for x in result["items"]))
         self.assertEqual(AuditEvent.objects.count(),before)
         self.assertEqual(Reservation.objects.count(),0)
+
+    def test_full_day_candidate_safety_ack_check_is_batched_and_enforced(self):
+        today=timezone.localdate()
+        procedure=SafetyProcedure.objects.bulk_create([SafetyProcedure(
+            lab_scope=self.eq.lab,version=1,title="测试数据：资源安全信息",
+            effective_from=today,review_due_date=today+timedelta(days=30),
+            requires_acknowledgement=True,status="PUBLISHED",created_by=self.admin,
+            change_reason="仅用于验证候选时段读取，不是正式安全规程",
+        )])[0]
+        with CaptureQueriesContext(connection) as queries:
+            result=slot_options(self.eq,self.student,self.start.date(),60,at=self.now)
+        self.assertLessEqual(len(queries),16)
+        self.assertTrue(result["items"])
+        self.assertTrue(all(not item["available"] and "阅读并确认" in item["reason"] for item in result["items"]))
+
+        SafetyAcknowledgement.objects.create(procedure=procedure,user=self.student,acknowledged_at=self.now)
+        with CaptureQueriesContext(connection) as queries:
+            confirmed=slot_options(self.eq,self.student,self.start.date(),60,at=self.now)
+        self.assertLessEqual(len(queries),16)
+        self.assertTrue(all(item["available"] for item in confirmed["items"]))
 
     def test_slot_inputs_and_non_aligned_opening_start(self):
         for day,duration in [("bad",60),("2026-02-30",60),(self.start.date(),"1e3"),(self.start.date(),31),(self.start.date(),9999),((self.start+timedelta(days=30)).date(),60)]:

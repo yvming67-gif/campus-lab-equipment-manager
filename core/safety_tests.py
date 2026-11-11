@@ -5,6 +5,7 @@ from datetime import datetime, time, timedelta
 
 from django.core.management import call_command
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import IntegrityError, transaction
 from django.core.paginator import UnorderedObjectListWarning
 from django.test import Client, TestCase
 from django.utils import timezone
@@ -50,8 +51,10 @@ class SafetyProcedureTests(TestCase):
         values.update(updates)
         return values
 
-    def create_published(self, **updates):
-        draft, _ = safety.save_draft(self.admin, self.room.pk, self.procedure_values(**updates))
+    def create_published(self, resource=None, lab=None, **updates):
+        resource = resource or (None if lab else self.room)
+        draft, _ = safety.save_draft(self.admin, resource.pk if resource else None,
+                                     self.procedure_values(**updates), lab_id=lab.pk if lab else None)
         safety.submit_for_review(self.admin, draft.pk)
         return safety.publish(self.reviewer, draft.pk, "测试复核：来源、适用对象及版本信息已核对；测试内容不构成真实安全规程。")
 
@@ -166,29 +169,104 @@ class SafetyProcedureTests(TestCase):
         self.assertIn("已退回修订", return_notice.content)
         self.assertIn(note, return_notice.content)
 
-    def test_safety_workflow_rechecks_room_resource_kind_at_state_transitions(self):
-        equipment = Resource.objects.filter(kind="EQUIPMENT").first()
-        self.assertIsNotNone(equipment)
+    def test_equipment_specific_safety_is_published_shown_and_requires_ack_when_configured(self):
+        equipment = Resource.objects.get(code="EQ-OSC-01")
+        procedure = self.create_published(resource=equipment)
+        self.assertEqual(safety.current_procedures(equipment), [procedure])
+        self.assertTrue(safety.needs_ack(self.teacher, equipment))
+        self.assertFalse(safety.needs_ack(self.teacher, Resource.objects.get(code="EQ-SEN-01")))
 
-        draft, _ = safety.save_draft(self.admin, self.room.pk, self.procedure_values())
-        # Bypass model validation deliberately while keeping the existing
-        # (resource, version) uniqueness constraint valid for this corruption test.
-        next_version = SafetyProcedure.objects.filter(resource=equipment).order_by("-version").values_list("version", flat=True).first() or 0
-        SafetyProcedure.objects.filter(pk=draft.pk).update(resource_id=equipment.pk, version=next_version + 1)
-        with self.assertRaisesRegex(services.BusinessError, "只可关联场地资源"):
-            safety.submit_for_review(self.admin, draft.pk)
+        start = timezone.localtime(timezone.now() + timedelta(days=1)).replace(hour=10, minute=0, second=0, microsecond=0)
+        with self.assertRaisesRegex(services.BusinessError, "阅读并确认"):
+            services.create_reservation(self.teacher, equipment.pk, start, start + timedelta(hours=1),
+                                         "设备专属安全信息门控测试", request_key=uuid.uuid4())
+        self.client.force_login(self.teacher)
+        page = self.client.get(f"/resources/{equipment.pk}/")
+        self.assertContains(page, "资源专属")
+        self.assertContains(page, procedure.title)
 
-        pending, _ = safety.save_draft(
-            self.admin, self.room.pk,
-            self.procedure_values(change_reason="错误关联防御测试"),
-        )
-        safety.submit_for_review(self.admin, pending.pk)
-        next_version += 1
-        SafetyProcedure.objects.filter(pk=pending.pk).update(resource_id=equipment.pk, version=next_version + 1)
-        with self.assertRaisesRegex(services.BusinessError, "只可关联场地资源"):
-            safety.publish(self.reviewer, pending.pk, "不应通过错误资源关联")
-        with self.assertRaisesRegex(services.BusinessError, "只可关联场地资源"):
-            safety.return_for_revision(self.reviewer, pending.pk, "不应退回错误资源关联")
+        api_client = Client()
+        login = api_client.post("/api/mini/v1/auth/login/", json.dumps({"username": "teacher", "password": "Demo@2026"}), content_type="application/json")
+        token = login.json()["data"]["token"]
+        headers = {"HTTP_AUTHORIZATION": "Bearer " + token}
+        detail = api_client.get(f"/api/mini/v1/resources/{equipment.pk}/", **headers).json()["data"]
+        self.assertEqual(detail["safety_procedures"][0]["scope"], "RESOURCE")
+        acknowledged = api_client.post(f"/api/mini/v1/resources/{equipment.pk}/safety/{procedure.pk}/ack/", "{}", content_type="application/json", **headers)
+        self.assertEqual(acknowledged.status_code, 200, acknowledged.content)
+        self.assertFalse(safety.needs_ack(self.teacher, equipment))
+
+    def test_management_unit_information_applies_only_to_its_resources_and_fans_out_notifications(self):
+        lab = self.room.lab
+        equipment = Resource.objects.get(code="EQ-OSC-01")
+        other_lab_equipment = Resource.objects.get(code="EQ-CAM-01")
+        procedure = self.create_published(lab=lab)
+        self.assertEqual(safety.current_procedures(self.room), [procedure])
+        self.assertIn(procedure, safety.current_procedures(equipment))
+        self.assertNotIn(procedure, safety.current_procedures(other_lab_equipment))
+        self.assertTrue(safety.needs_ack(self.teacher, self.room))
+        self.assertTrue(safety.needs_ack(self.teacher, equipment))
+        self.assertFalse(safety.needs_ack(self.teacher, other_lab_equipment))
+        self.assertEqual(procedure.scope_label, "管理单元通用")
+
+        safety.acknowledge(self.teacher, procedure.pk, resource=equipment)
+        self.assertFalse(safety.needs_ack(self.teacher, equipment))
+        self.assertFalse(safety.needs_ack(self.teacher, self.room))
+        with self.assertRaisesRegex(services.BusinessError, "不能作为当前版本确认"):
+            safety.acknowledge(self.teacher, procedure.pk, resource=other_lab_equipment)
+
+    def test_lab_wide_publication_notifies_future_confirmed_bookings_in_scope_only(self):
+        day = timezone.localdate() + timedelta(days=3)
+        room_start = timezone.make_aware(datetime.combine(day, time(10)), services.TZ)
+        equipment_start = timezone.make_aware(datetime.combine(day, time(12)), services.TZ)
+        other_start = timezone.make_aware(datetime.combine(day, time(14)), services.TZ)
+        in_lab_equipment = Resource.objects.get(code="EQ-OSC-01")
+        outside_lab_equipment = Resource.objects.get(code="EQ-SEN-02")
+
+        room_booking = services.create_reservation(self.teacher, self.room.pk, room_start, room_start + timedelta(hours=1),
+                                                   "创建管理单元通知测试预约", request_key=uuid.uuid4())
+        self.assertEqual(room_booking.status, "PENDING")
+        services.approve(self.admin, room_booking.pk, True, "仅用于安全信息通知测试")
+        equipment_booking = services.create_reservation(self.teacher, in_lab_equipment.pk, equipment_start,
+                                                        equipment_start + timedelta(hours=1), "同范围设备通知测试预约",
+                                                        request_key=uuid.uuid4())
+        outside_booking = services.create_reservation(self.teacher, outside_lab_equipment.pk, other_start,
+                                                      other_start + timedelta(hours=1), "其他管理单元不应收到通知",
+                                                      request_key=uuid.uuid4())
+        self.assertEqual(equipment_booking.status, "CONFIRMED")
+        self.assertEqual(outside_booking.status, "CONFIRMED")
+
+        self.create_published(lab=self.room.lab)
+        notices = list(self.teacher.notifications.filter(kind="SAFETY_VERSION", audit__action="SAFETY_PUBLISH"))
+        self.assertEqual(len(notices), 1)
+        notified_text = "\n".join(item.content for item in notices)
+        self.assertIn(room_booking.code, notified_text)
+        self.assertIn(equipment_booking.code, notified_text)
+        self.assertNotIn(outside_booking.code, notified_text)
+
+    def test_lab_scope_authorization_and_database_enforce_exactly_one_target(self):
+        with self.assertRaisesRegex(services.BusinessError, "管理权限"):
+            safety.save_draft(self.outside, None, self.procedure_values(), lab_id=self.room.lab_id)
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                SafetyProcedure.objects.create(version=1, created_by=self.admin, **self.procedure_values())
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                SafetyProcedure.objects.create(resource=self.room, lab_scope=self.room.lab, version=999,
+                                               created_by=self.admin, **self.procedure_values())
+
+    def test_web_management_unit_page_and_equipment_safety_ack_use_scope_permissions(self):
+        lab = self.room.lab
+        outsider = Client()
+        outsider.force_login(self.outside)
+        self.assertEqual(outsider.get(f"/labs/{lab.pk}/safety/").status_code, 403)
+        admin = Client()
+        admin.force_login(self.admin)
+        self.assertContains(admin.get(f"/labs/{lab.pk}/safety/"), "管理单元通用")
+
+        equipment = Resource.objects.get(code="EQ-OSC-01")
+        procedure = self.create_published(lab=lab)
+        response = admin.post(f"/resources/{equipment.pk}/safety/{procedure.pk}/ack/")
+        self.assertEqual(response.status_code, 302)
 
     def test_web_review_form_records_return_note_and_shows_it_to_submitter(self):
         draft, _ = safety.save_draft(self.admin, self.room.pk, self.procedure_values())

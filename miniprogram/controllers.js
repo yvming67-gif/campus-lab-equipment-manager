@@ -193,8 +193,10 @@ const screens = {
       this.setData({'form.date':item.starts_at.slice(0,10),'form.start':item.starts_at.slice(11,16),'form.end':item.ends_at.slice(11,16),availability:'已带入所选时段，提交时将重新检查资格、配额与冲突',available:null,loading:invalidateAvailability(this)});
     },
     reportIncident() {if(!this.data.busy && !this.data.safetyBusy && api.requireLogin() && this.data.item)wx.navigateTo({url:'/pages/incident/index?resource='+this.data.id});},
-    async acknowledgeSafety() {
-      const procedure=this.data.item && this.data.item.safety_procedure;
+    async acknowledgeSafety(event) {
+      const item=this.data.item;
+      const requestedId=Number(event && event.currentTarget && event.currentTarget.dataset && event.currentTarget.dataset.procedureId);
+      const procedure=(item && (item.safety_procedures||[]).find(row=>row.id===requestedId)) || (item && item.safety_procedure);
       if(!procedure || !procedure.requires_acknowledgement || this.data.safetyBusy || this.data.busy || this.data.stale || !api.requireLogin())return;
       this.setData({safetyBusy:true,error:''});
       try {

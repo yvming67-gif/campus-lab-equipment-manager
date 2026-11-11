@@ -24,7 +24,8 @@ def positive_integer(value, maximum=9223372036854775807):
     return number if 0<number<=maximum else None
 
 def manager(actor, resource):
-    return actor.has_role("LAB_ADMIN") and LabGrant.objects.filter(user=actor, lab=resource.lab).exists()
+    lab = resource if isinstance(resource, Lab) else resource.lab
+    return actor.has_role("LAB_ADMIN") and LabGrant.objects.filter(user=actor, lab=lab).exists()
 
 def check_manager(actor, resource):
     require(manager(actor, resource), "无此实验室业务管理权限")
@@ -114,9 +115,8 @@ def validate(booking, policy, at, exclude=None, time_at=None, snapshot=None):
     require(user.is_active, "账号已停用")
     has_role = snapshot.has_role if snapshot is not None else user.has_role
     require(has_role("TEACHER") if resource.kind == "ROOM" else has_role("STUDENT", "TEACHER"), "仅教师可预约场地；设备需学生或教师身份")
-    if resource.kind == "ROOM":
-        from .safety import needs_ack
-        require(not needs_ack(user, resource), "请先阅读并确认该场地当前版本的安全信息；阅读确认不代替培训或准入许可")
+    from .safety import needs_ack
+    require(not needs_ack(user, resource, snapshot=snapshot), "请先阅读并确认适用于该资源的当前安全信息；阅读确认不代替培训或准入许可")
     start, end = booking.starts_at, booking.ends_at
     if snapshot is not None:snapshot.ensure(user,resource,at,start,end)
     validate_time(resource, start, end, policy, time_at if time_at is not None else at, snapshot=snapshot)
@@ -179,9 +179,9 @@ def availability(resource, start, end, at=None, applicant=None):
         return False, str(error)
     accepting, reason = resource_reservation_state(resource)
     if not accepting: return False, reason
-    if applicant and resource.kind == "ROOM":
+    if applicant:
         from .safety import needs_ack
-        if needs_ack(applicant, resource): return False, "需先阅读确认该场地当前版本的安全信息"
+        if needs_ack(applicant, resource): return False, "需先阅读确认适用于该资源的当前安全信息"
     if overdue_resource(resource, at): return False, "超期使用待处理"
     from .coordination import check_dependency
     try:check_dependency(resource,start,end,applicant)
@@ -279,9 +279,8 @@ def _check_start(booking, resource, at):
     from .coordination import check_calendar,check_dependency
     check_calendar(resource,booking.starts_at,booking.ends_at)
     check_dependency(resource,booking.starts_at,booking.ends_at,booking.applicant,at=at,check_actual=True)
-    if resource.kind=="ROOM":
-        from .safety import needs_ack
-        require(not needs_ack(booking.applicant,resource),"场地安全信息已有新版本；请先在场地详情阅读并确认当前版本，再重新办理入场")
+    from .safety import needs_ack
+    require(not needs_ack(booking.applicant,resource),"适用于该资源的安全信息已有新版本；请先在资源详情阅读并确认当前版本，再开始使用")
     deadline=booking.late_start_until or booking.starts_at+timedelta(minutes=policy.grace_minutes)
     require(booking.starts_at<=at<booking.ends_at and at<=deadline, f"未到使用时间或已超过{policy.grace_minutes}分钟领取/入场宽限")
     require(resource.lab.is_active,"所属实验室管理单元已停用，不能开始使用")

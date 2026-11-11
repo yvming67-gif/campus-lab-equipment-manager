@@ -22,7 +22,7 @@ from .demo_identity import public_demo_user_allowed, verify_demo_password
 from .schedules import resource_schedule
 from .domain_labels import event_label, notification_label
 from .forms import BookingForm, QueryForm, ActionForm, IncidentForm
-from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification
+from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification, SafetyProcedure
 from .experience import slot_options, next_step
 from . import safety as safety_service
 from .opening_calendar import weekly_schedule
@@ -161,28 +161,39 @@ def resource_data(resource, times=None, user=None):
             "can_reserve": reservation_open, "reservation_block_reason": reservation_block_reason,
             "requires_approval": resource.requires_approval, "available": available, "available_label": label}
     if resource.kind == "ROOM":
-        procedure = safety_service.latest_published_procedure(resource)
-        current = safety_service.current_procedure(resource)
         data.update(capacity=resource.room.capacity, space_category=resource.room.space_category,
-                    facilities=resource.room.facilities, opening_schedule=weekly_schedule(resource),
-                    safety_procedure=None, safety_acknowledged=False, safety_current=bool(procedure and current and procedure.pk == current.pk))
-        if procedure:
-            data["safety_procedure"] = {
-                "id": procedure.pk, "version": procedure.version, "title": procedure.title,
-                "risk_categories": procedure.risk_categories, "applicable_users": procedure.applicable_users,
-                "prerequisites": procedure.prerequisites, "required_ppe": procedure.required_ppe,
-                "pre_use_checks": procedure.pre_use_checks, "operating_cautions": procedure.operating_cautions,
-                "prohibited_actions": procedure.prohibited_actions, "incident_route": procedure.incident_route,
-                "source_title": procedure.source_title, "source_reference": procedure.source_reference,
-                "source_version": procedure.source_version, "effective_from": procedure.effective_from.isoformat() if procedure.effective_from else None,
-                "review_due_date": procedure.review_due_date.isoformat() if procedure.review_due_date else None,
-                "requires_acknowledgement": procedure.requires_acknowledgement,
-            }
-            data["safety_acknowledged"] = safety_service.acknowledged(user, procedure)
+                    facilities=resource.room.facilities, opening_schedule=weekly_schedule(resource))
     else:
         data.update(category=resource.equipment.category, risk=resource.equipment.get_risk_display(),
                     qualification=resource.equipment.qualification.name if resource.equipment.qualification_id else "无额外培训要求",
                     physical_label=resource.equipment.get_physical_status_display())
+    current_ids = {item.pk for item in safety_service.current_procedures(resource)}
+    safety_rows = []
+    for procedure in safety_service.latest_published_procedures(resource):
+        safety_rows.append({
+            "id": procedure.pk, "version": procedure.version, "title": procedure.title,
+            "scope": "MANAGEMENT_UNIT" if procedure.lab_scope_id else "RESOURCE",
+            "scope_label": procedure.scope_label,
+            "risk_categories": procedure.risk_categories, "applicable_users": procedure.applicable_users,
+            "prerequisites": procedure.prerequisites, "required_ppe": procedure.required_ppe,
+            "pre_use_checks": procedure.pre_use_checks, "operating_cautions": procedure.operating_cautions,
+            "prohibited_actions": procedure.prohibited_actions, "incident_route": procedure.incident_route,
+            "source_title": procedure.source_title, "source_reference": procedure.source_reference,
+            "source_version": procedure.source_version,
+            "effective_from": procedure.effective_from.isoformat() if procedure.effective_from else None,
+            "review_due_date": procedure.review_due_date.isoformat() if procedure.review_due_date else None,
+            "requires_acknowledgement": procedure.requires_acknowledgement,
+            "is_current": procedure.pk in current_ids,
+            "acknowledged": safety_service.acknowledged(user, procedure),
+        })
+    data["safety_procedures"] = safety_rows
+    # Keep the previous singular fields for old mini-program builds while new
+    # clients render every applicable scope.
+    primary = next((item for item in safety_rows if item["scope"] == "RESOURCE"),
+                   safety_rows[0] if safety_rows else None)
+    data["safety_procedure"] = primary
+    data["safety_current"] = bool(primary and primary["is_current"])
+    data["safety_acknowledged"] = bool(primary and primary["acknowledged"])
     return data
 
 
@@ -315,9 +326,9 @@ def resource_detail(request, pk):
 
 @endpoint("POST")
 def safety_ack(request, pk, procedure_id):
-    resource = get_object_or_404(Resource, pk=pk, kind="ROOM")
-    procedure = get_object_or_404(resource.safety_procedures, pk=procedure_id, status="PUBLISHED")
-    item = safety_service.acknowledge(request.mini_user, procedure.pk)
+    resource = get_object_or_404(Resource.objects.select_related("lab"), pk=pk)
+    procedure = get_object_or_404(SafetyProcedure.objects.select_related("resource", "lab_scope"), pk=procedure_id, status="PUBLISHED")
+    item = safety_service.acknowledge(request.mini_user, procedure.pk, resource=resource)
     return {"acknowledged": True, "version": procedure.version,
             "acknowledged_at": date_text(item.acknowledged_at),
             "notice": "此阅读确认不代表培训、考核或进入许可"}

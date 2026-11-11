@@ -204,10 +204,13 @@ def resource_detail(request,pk):
     back=request.GET.copy()
     for key in list(back):
         if key not in ui.CATALOG_KEYS:back.pop(key,None)
-    procedure=safety_service.latest_published_procedure(r) if r.kind=="ROOM" else None
-    current_procedure=safety_service.current_procedure(r) if r.kind=="ROOM" else None
-    safety_current=bool(procedure and current_procedure and procedure.pk==current_procedure.pk)
-    context={"title":r.name,"resource":r,"form":form,"can_apply":can_apply,"reservation_open":reservation_open,"reservation_block_reason":reservation_block_reason,"service_label":service_label,"manageable":s.manager(request.user,r),"safety_procedure":procedure,"safety_current":safety_current,"safety_acknowledged":safety_service.acknowledged(request.user,current_procedure),"safety_review_overdue":bool(procedure and not safety_current),"opening_schedule":weekly_schedule(r) if r.kind=="ROOM" else [],"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error,
+    published_safety=safety_service.latest_published_procedures(r)
+    current_safety_ids={item.pk for item in safety_service.current_procedures(r)}
+    safety_entries=[{"procedure":item,"is_current":item.pk in current_safety_ids,
+                     "acknowledged":safety_service.acknowledged(request.user,item),
+                     "scope_label":item.scope_label} for item in published_safety]
+    manageable=s.manager(request.user,r)
+    context={"title":r.name,"resource":r,"form":form,"can_apply":can_apply,"reservation_open":reservation_open,"reservation_block_reason":reservation_block_reason,"service_label":service_label,"manageable":manageable,"safety_entries":safety_entries,"opening_schedule":weekly_schedule(r) if r.kind=="ROOM" else [],"reservations":schedule_page.object_list,"schedule_page":schedule_page,"schedule_filters":schedule_filters,"schedule_day":schedule_day,"schedule_error":schedule_error,
              'slots':options,'slot_day':slot_day,'slot_error':slot_error,'duration_minutes':str(duration),'selection_error':selection_error,'policy':policy,
              'catalog_back':reverse('resources')+('?' + back.urlencode() if back else ''),
              'catalog_filters':[(key,value) for key,value in request.GET.items() if key in ui.CATALOG_KEYS and key not in ['starts_at','ends_at']]}
@@ -215,30 +218,47 @@ def resource_detail(request,pk):
 
 @login_required
 def safety_manage(request,pk):
-    resource=get_object_or_404(Resource.objects.select_related("lab"),pk=pk,kind="ROOM")
-    protected(s.manager(request.user,resource))
-    draft=resource.safety_procedures.filter(status="DRAFT",created_by=request.user).order_by("-version").first()
+    resource=get_object_or_404(Resource.objects.select_related("lab"),pk=pk)
+    return _safety_manage(request,resource=resource)
+
+@login_required
+def lab_safety_manage(request,pk):
+    lab=get_object_or_404(Lab,pk=pk)
+    return _safety_manage(request,lab=lab)
+
+def _safety_manage(request,resource=None,lab=None):
+    target=lab or resource
+    protected(bool(target) and s.manager(request.user,target))
+    scope_filter={"lab_scope":lab} if lab else {"resource":resource}
+    target_id=lab.pk if lab else resource.pk
+    manage_route="safety-manage-lab" if lab else "safety-manage"
+    draft=SafetyProcedure.objects.filter(**scope_filter,status="DRAFT",created_by=request.user).order_by("-version").first()
     initial={}
     if draft:
         initial={name:getattr(draft,name) for name in ["title","risk_categories","applicable_users","prerequisites","required_ppe","pre_use_checks","operating_cautions","prohibited_actions","incident_route","source_title","source_reference","source_version","source_effective_date","effective_from","review_due_date","requires_acknowledgement","change_reason"]}
     form=SafetyProcedureForm(request.POST or None,initial=initial)
     if request.method=="POST" and form.is_valid():
         try:
-            procedure,_=safety_service.save_draft(request.user,resource.pk,form.cleaned_data,draft.pk if draft else None)
+            procedure,_=safety_service.save_draft(request.user,resource.pk if resource else None,form.cleaned_data,draft.pk if draft else None,lab_id=lab.pk if lab else None)
             if request.POST.get("action")=="submit":
                 safety_service.submit_for_review(request.user,procedure.pk)
                 messages.success(request,"安全信息已提交审核；正式内容须由另一位授权管理员复核后发布")
             else:messages.success(request,"安全信息草稿已保存，尚未对申请人展示")
-            return redirect("safety-manage",pk=resource.pk)
+            return redirect(manage_route,pk=target_id)
         except (s.BusinessError,IntegrityError) as error:form.add_error(None,str(error) if isinstance(error,s.BusinessError) else "版本状态已变化，请刷新后重试")
-    versions=resource.safety_procedures.select_related("created_by","reviewed_by").order_by("-version")[:10]
-    return render(request,"safety_manage.html",{"title":"维护场地安全信息","resource":resource,"form":form,"draft":draft,"versions":versions})
+    versions=SafetyProcedure.objects.filter(**scope_filter).select_related("created_by","reviewed_by").order_by("-version")[:10]
+    target_name=lab.name if lab else f"{resource.lab.name} / {resource.name}"
+    return_url=reverse("resources")+(f"?lab={lab.pk}" if lab else f"?lab={resource.lab_id}")
+    return render(request,"safety_manage.html",{"title":"维护安全信息","target":target,"target_name":target_name,"return_url":return_url,"resource":resource,"lab":lab,"scope_label":"管理单元通用" if lab else "资源专属","form":form,"draft":draft,"versions":versions,"manage_route":manage_route,"target_id":target_id})
 
 @login_required
 @require_POST
 def safety_review(request,pk,action):
-    procedure=get_object_or_404(SafetyProcedure.objects.select_related("resource"),pk=pk)
-    protected(s.manager(request.user,procedure.resource))
+    procedure=get_object_or_404(SafetyProcedure.objects.select_related("resource__lab","lab_scope"),pk=pk)
+    target=procedure.lab_scope if procedure.lab_scope_id else procedure.resource
+    protected(s.manager(request.user,target))
+    manage_route="safety-manage-lab" if procedure.lab_scope_id else "safety-manage"
+    target_id=procedure.lab_scope_id or procedure.resource_id
     try:
         if action=="submit":safety_service.submit_for_review(request.user,procedure.pk)
         elif action=="publish":safety_service.publish(request.user,procedure.pk,request.POST.get("review_note"))
@@ -246,19 +266,19 @@ def safety_review(request,pk,action):
         elif action=="revise":
             revision=safety_service.start_revision(request.user,procedure.pk)
             messages.success(request,f"已创建安全信息修订草稿 v{revision.version}；原退回版本保持不变")
-            return redirect("safety-manage",pk=procedure.resource_id)
+            return redirect(manage_route,pk=target_id)
         else:raise Http404
         messages.success(request,"安全信息状态及复核记录已保存")
     except s.BusinessError as error:messages.error(request,str(error))
-    return redirect("safety-manage",pk=procedure.resource_id)
+    return redirect(manage_route,pk=target_id)
 
 @login_required
 @require_POST
 def safety_ack(request,pk,procedure_id):
-    resource=get_object_or_404(Resource,pk=pk,kind="ROOM")
+    resource=get_object_or_404(Resource.objects.select_related("lab"),pk=pk)
     try:
-        procedure=get_object_or_404(SafetyProcedure,pk=procedure_id,resource=resource)
-        safety_service.acknowledge(request.user,procedure.pk)
+        procedure=get_object_or_404(SafetyProcedure.objects.select_related("resource","lab_scope"),pk=procedure_id,status="PUBLISHED")
+        safety_service.acknowledge(request.user,procedure.pk,resource=resource)
         messages.success(request,"已记录你确认阅读的安全信息版本；这不代表培训、考核或准入许可")
     except s.BusinessError as error:messages.error(request,str(error))
     return redirect("resource",pk=resource.pk)

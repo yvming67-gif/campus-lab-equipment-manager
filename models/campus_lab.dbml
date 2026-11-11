@@ -98,7 +98,8 @@ Table core_roomdetail {
 }
 Table core_safetyprocedure {
   id "bigint" [pk, not null, note: 'ID']
-  resource_id "bigint" [not null, note: 'resource']
+  lab_scope_id "bigint" [note: 'lab scope']
+  resource_id "bigint" [note: 'resource']
   version "integer" [not null, note: '版本号']
   title "varchar(160)" [not null, note: '规程标题']
   risk_categories "text" [not null, note: '风险类别']
@@ -126,7 +127,7 @@ Table core_safetyprocedure {
   published_at "timestamp with time zone" [note: 'published at']
   change_reason "text" [not null, note: '编制或修订原因']
   created_at "timestamp with time zone" [not null, note: 'created at']
-  Note: '场地安全规程版本；约束及条件唯一项以迁移文件为准。'
+  Note: '安全信息版本；约束及条件唯一项以迁移文件为准。'
 }
 Table core_safetyacknowledgement {
   id "bigint" [pk, not null, note: 'ID']
@@ -453,6 +454,7 @@ Ref: core_equipmentdetail.resource_id - core_resource.id
 Ref: core_equipmentdetail.qualification_id > core_qualificationtype.id
 Ref: core_equipmentdetail.access_room_id > core_resource.id
 Ref: core_roomdetail.resource_id - core_resource.id
+Ref: core_safetyprocedure.lab_scope_id > core_lab.id
 Ref: core_safetyprocedure.resource_id > core_resource.id
 Ref: core_safetyprocedure.created_by_id > core_user.id
 Ref: core_safetyprocedure.reviewed_by_id > core_user.id

@@ -92,7 +92,9 @@
       "AC-03",
       "AC-04",
       "AC-71",
-      "AC-72"
+      "AC-72",
+      "AC-73",
+      "AC-74"
     ],
     "evidence": "验收证据覆盖表.json保留历史；一期通道实施与验证另见../接口与通道.md"
   },
@@ -219,7 +221,8 @@
       "AC-07",
       "AC-08",
       "AC-56",
-      "AC-57"
+      "AC-57",
+      "AC-75"
     ],
     "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
   },
@@ -520,7 +523,8 @@
       "AC-55",
       "AC-57",
       "AC-61",
-      "AC-62"
+      "AC-62",
+      "AC-75"
     ],
     "evidence": "验收证据覆盖表.json；历史证据与本轮运行分开"
   },
@@ -1624,7 +1628,8 @@
     "implementation": "core/safety.py: publish, return_for_revision；core/views.py: safety_review",
     "acceptance": [
       "AC-69",
-      "AC-70"
+      "AC-70",
+      "AC-73"
     ],
     "evidence": "静态追踪；课程方案与学校现状区分，运行证据另列。"
   },
@@ -1666,7 +1671,9 @@
     "implementation": "core/safety.py: current_procedure, acknowledge；core/views.py: resource_detail, safety_ack；core/miniapi.py: resource_detail, safety_ack",
     "acceptance": [
       "AC-71",
-      "AC-72"
+      "AC-72",
+      "AC-73",
+      "AC-74"
     ],
     "evidence": "课程需求与官方安全资料组织原则；未证明目标校现状，运行证据以针对性测试记录为准。"
   }

@@ -195,7 +195,7 @@ def build_story(schema: dict, manifest: dict, relation_rows: list[dict]) -> list
     domain_titles = {
         "A": "身份与权限", "B": "资源与开放", "C": "预约与规则",
         "D": "现场使用", "E": "异常与维修", "F": "审计与通知",
-        "G": "场地安全信息",
+        "G": "资源安全信息",
     }
     story = [Spacer(1, 29 * mm)]
     story += [
@@ -207,7 +207,7 @@ def build_story(schema: dict, manifest: dict, relation_rows: list[dict]) -> list
         Spacer(1, 27 * mm),
         para("姓名：宋明俞　　学号：1602240221", cover_subtitle),
         para("班级：信管1402　　课程：系统分析与设计", cover_subtitle),
-        para("模型版本 2.4　　2026年11月9日", cover_kicker),
+        para("模型版本 2.5　　2026年11月11日", cover_kicker),
         PageBreak(),
     ]
 
@@ -219,7 +219,7 @@ def build_story(schema: dict, manifest: dict, relation_rows: list[dict]) -> list
     ))
     story.append(para(
         "模型范围包括身份与管理范围、实验室管理单元、独立场地与设备、开放日历、预约与审批、"
-        "设备和场地实际使用、异常与维修、审计与通知，以及场地安全规程版本与阅读确认。"
+        "设备和场地实际使用、异常与维修、审计与通知，以及管理单元/资源安全信息版本与阅读确认。"
         "Django会话及框架内部授权组、迁移记录不列入业务实体。AuditEvent的entity_type与entity_id"
         "是逻辑引用，不能当作物理外键。"
     ))
@@ -243,7 +243,7 @@ def build_story(schema: dict, manifest: dict, relation_rows: list[dict]) -> list
         ["设备与房间依赖", "EquipmentDetail与Resource一对一；可移动设备独立预约。固定设备可关联房间，候选时段和实际场地使用需同时满足关联限制。"],
         ["计划与事实", "Reservation记录预约计划；ApprovalDecision与ReservationReview分开记录初始决定和后续复核；Loan、ReturnRecord、RoomUse记录真实交接和使用事实。"],
         ["异常与维修", "Incident、IncidentResponse、Evidence保留报告、核实和证据；WorkOrder与WorkOrderEvent记录维修分派、执行和验收。维修完成不自动恢复资源状态。"],
-        ["安全信息", "SafetyProcedure保存来源、版本、适用对象、生效与复核信息；SafetyAcknowledgement把用户确认关联到具体版本。阅读确认不等于培训、考核、门禁或现场检查。"],
+        ["安全信息", "SafetyProcedure恰关联一个管理单元或一个具体资源；管理单元通用版本适用于该单元下资源，资源专属版本只适用于指定资源，不自动由场地继承给关联设备。SafetyAcknowledgement把用户确认关联到具体用户和版本。阅读确认不等于培训、考核、门禁或现场检查。"],
         ["可用性与状态", "资源服务状态、实物状态、预约生命周期、指定时间可用性、资格、安全规程与通知投递分别表达，不能压成一个可用/不可用字段。"],
         ["责任与审计", "业务状态变化保留操作者、时间和前后状态；不同业务角色指向User但责任含义不同。历史凭据采用追加记录，不以新状态覆盖旧事实。"],
     ]
@@ -378,7 +378,7 @@ def main():
             topMargin=TOP, bottomMargin=BOTTOM,
             title="Campus Lab Equipment Reservation and Loan Management System - ERD and Data Design",
             author="Song Mingyu",
-            subject="Model 2.4; 38 entities; 327 fields; 68 physical foreign keys",
+            subject="Model 2.5; 38 entities; 328 fields; 69 physical foreign keys",
         )
         document.build(build_story(schema, manifest, manifest["relationships"]), onFirstPage=on_page, onLaterPages=on_page)
         from pypdf import PdfReader
@@ -386,7 +386,7 @@ def main():
         if len(result.pages) < 35:
             raise ValueError(f"输出页数异常：{len(result.pages)}")
         text_content = "\n".join((page.extract_text() or "") for page in result.pages)
-        for required in ("SafetyProcedure", "SafetyAcknowledgement", "R68", "模型版本 2.4"):
+        for required in ("SafetyProcedure", "SafetyAcknowledgement", "R69", "模型版本 2.5"):
             if required not in text_content:
                 raise ValueError(f"最终PDF缺少必需内容：{required}")
         os.replace(temp_path, DESTINATION)

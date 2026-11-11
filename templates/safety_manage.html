@@ -2,17 +2,17 @@
 {% block content %}
 <div class="page-top">
   <div>
-    <a class="back-link" href="{% url 'resource' resource.pk %}">← 返回{{ resource.name }}</a>
+    <a class="back-link" href="{{ return_url }}">← 返回资源目录</a>
     <div class="eyebrow">CONTROLLED SAFETY INFORMATION</div>
-    <h1>场地安全信息版本</h1>
-    <p>{{ resource.lab.name }} / {{ resource.name }} · 仅维护本人有管理授权的场地</p>
+    <h1>维护安全信息版本</h1>
+    <p>{{ scope_label }} · {{ target_name }}{% if resource %} · {{ resource.get_kind_display }}{% endif %}</p>
   </div>
 </div>
 
 <div class="info-strip safety-disclaimer">
   <b>安全信息必须有可核验的批准来源</b>
   <p>请依据本单位现行制度、经批准的操作规程或责任岗位确认材料填写。不得用课程假设补写风险、个人防护用品、操作步骤或应急联系人。阅读确认不替代培训、考核、准入或现场判断。</p>
-  <p>复核人发布时须检查来源文件及适用范围并记录复核意见；系统只保存该责任记录，不会自动证明来源真实、有效或已获学校批准。</p>
+  <p>“管理单元通用”仅表示该信息按系统中选定的管理单元关联到其资源，不证明真实组织层级，也不自动继承到其他管理单元。复核人须核对来源和适用范围并记录意见；系统记录本身不证明来源真实、有效或已获学校批准。</p>
 </div>
 
 <section class="panel">
@@ -47,7 +47,7 @@
       <div>
         <strong>v{{ item.version }} · {{ item.title }}</strong>
         <span class="badge {% if item.status == 'PUBLISHED' %}confirmed{% elif item.status == 'PENDING_REVIEW' %}pending{% elif item.status == 'RETURNED' %}warning{% else %}muted{% endif %}">{{ item.get_status_display }}</span>
-        <p class="fine">来源：{{ item.source_title|default:'未登记' }}（{{ item.source_version|default:'未登记版本' }}）· 创建：{{ item.created_at|date:'Y-m-d H:i' }}{% if item.reviewed_by %} · 复核：{{ item.reviewed_by.display_name }} · {{ item.reviewed_at|date:'Y-m-d H:i' }}{% endif %}</p>
+        <p class="fine">{{ item.scope_label }} · 来源：{{ item.source_title|default:'未登记' }}（{{ item.source_version|default:'未登记版本' }}）· 创建：{{ item.created_at|date:'Y-m-d H:i' }}{% if item.reviewed_by %} · 复核：{{ item.reviewed_by.display_name }} · {{ item.reviewed_at|date:'Y-m-d H:i' }}{% endif %}</p>
         {% if item.source_reference %}<p class="fine">来源编号或链接：{{ item.source_reference }}</p>{% endif %}
         {% if item.review_note %}<div class="info-strip"><b>复核意见</b><p>{{ item.review_note|linebreaksbr }}</p></div>{% endif %}
       </div>
@@ -68,7 +68,7 @@
       {% endif %}
     </article>
   {% empty %}
-    <p class="empty-state">此场地尚无版本记录。没有经批准材料时，申请人只会看到“待责任岗位确认”。</p>
+    <p class="empty-state">此范围尚无版本记录。未发布内容不会展示给申请人，系统不生成默认安全规程。</p>
   {% endfor %}
 </section>
 {% endblock %}

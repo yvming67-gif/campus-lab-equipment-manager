@@ -116,7 +116,12 @@ class SafetyProcedure(models.Model):
     """Versioned safety information; published content is immutable."""
     STATUS = [("DRAFT", "草稿"), ("PENDING_REVIEW", "待审核"),
               ("RETURNED", "退回修订"), ("PUBLISHED", "已发布"), ("SUPERSEDED", "已被新版本替代")]
-    resource = models.ForeignKey(Resource, on_delete=models.PROTECT, related_name="safety_procedures")
+    # A controlled safety version belongs either to a management unit (Lab)
+    # or to one concrete resource (room/equipment). Exactly one scope is set.
+    lab_scope = models.ForeignKey(Lab, null=True, blank=True, on_delete=models.PROTECT,
+                                  related_name="safety_procedures")
+    resource = models.ForeignKey(Resource, null=True, blank=True, on_delete=models.PROTECT,
+                                 related_name="safety_procedures")
     version = models.PositiveIntegerField("版本号")
     title = models.CharField("规程标题", max_length=160)
     risk_categories = models.TextField("风险类别", blank=True)
@@ -146,16 +151,29 @@ class SafetyProcedure(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        verbose_name = "场地安全规程版本"
-        ordering = ["resource_id", "-version"]
+        verbose_name = "安全信息版本"
+        ordering = ["lab_scope_id", "resource_id", "-version"]
         constraints = [
-            models.UniqueConstraint(fields=["resource", "version"], name="safety_resource_version_unique"),
+            models.CheckConstraint(
+                condition=(Q(lab_scope__isnull=False, resource__isnull=True) |
+                           Q(lab_scope__isnull=True, resource__isnull=False)),
+                name="safety_exactly_one_scope",
+            ),
+            models.UniqueConstraint(fields=["resource", "version"], condition=Q(resource__isnull=False), name="safety_resource_version_unique"),
             models.UniqueConstraint(fields=["resource"], condition=Q(status="PUBLISHED"), name="one_published_safety_per_resource"),
+            models.UniqueConstraint(fields=["lab_scope", "version"], condition=Q(lab_scope__isnull=False), name="safety_lab_scope_version_unique"),
+            models.UniqueConstraint(fields=["lab_scope"], condition=Q(status="PUBLISHED", lab_scope__isnull=False), name="one_published_safety_per_lab_scope"),
         ]
 
     @property
     def lab_id(self):
-        return self.resource.lab_id
+        if self.lab_scope_id:
+            return self.lab_scope_id
+        return self.resource.lab_id if self.resource_id else None
+
+    @property
+    def scope_label(self):
+        return "管理单元通用" if self.lab_scope_id else "资源专属"
 
     @property
     def source_url(self):
@@ -169,9 +187,9 @@ class SafetyProcedure(models.Model):
             return super().save(*args, **kwargs)
 
         previous = type(self).objects.get(pk=self.pk)
-        identity = ["resource_id", "version", "created_by_id", "created_at"]
+        identity = ["lab_scope_id", "resource_id", "version", "created_by_id", "created_at"]
         if any(getattr(previous, field) != getattr(self, field) for field in identity):
-            raise ValidationError("安全规程的资源、版本和创建记录不可变更")
+            raise ValidationError("安全信息的目标范围、版本和创建记录不可变更")
         content = ["title", "risk_categories", "applicable_users", "prerequisites", "required_ppe",
                    "pre_use_checks", "operating_cautions", "prohibited_actions", "incident_route",
                    "source_title", "source_reference", "source_version", "source_effective_date",

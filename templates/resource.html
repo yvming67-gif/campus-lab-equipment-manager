@@ -7,7 +7,41 @@
 </section>{% endif %}
 <div class="two-column"><section class="panel"><span class="eyebrow">RESOURCE PROFILE</span><h2>资源信息</h2><p>{{ resource.description }}</p><dl><dt>资源类型</dt><dd>{{ resource.get_kind_display }}</dd><dt>确认方式</dt><dd>{% if resource.requires_approval %}人工审核，待审核不占用时段{% else %}普通设备通过规则检查后自动确认{% endif %}</dd>
 {% if resource.kind == 'ROOM' %}<dt>场地类别</dt><dd>{{ resource.room.space_category|default:'待管理员登记' }}</dd><dt>容量</dt><dd>{{ resource.room.capacity }}人</dd><dt>设施</dt><dd>{{ resource.room.facilities|default:'设施信息待管理员登记' }}</dd><dt>近期开放时段（北京时间）</dt><dd class="opening-schedule">{% for item in opening_schedule %}<span><b>{{ item.date }} {{ item.weekday }}</b>　{{ item.ranges|join:', '|default:item.note }}　<small>{{ item.note }}</small></span>{% endfor %}<small>场地有独立每周时段时优先使用；管理单元的单日例外适用于全部场地。提交和审核时以后端当前日历为准。</small></dd>{% else %}<dt>设备分级</dt><dd>{{ resource.equipment.get_risk_display }}</dd><dt>当前实物状态</dt><dd>{{ resource.equipment.get_physical_status_display }}</dd><dt>培训资格</dt><dd>{{ resource.equipment.qualification|default:'无专项要求' }}</dd><dt>交接地点</dt><dd>{{ resource.equipment.handover_location|default:'未登记，请向实验室管理员确认' }}</dd>{% endif %}</dl>
-{% if resource.kind == 'ROOM' %}<section class="safety-card" aria-labelledby="safety-title"><div class="section-heading"><h3 id="safety-title">场地安全信息</h3>{% if safety_procedure %}<span class="badge {% if safety_review_overdue %}warning{% else %}confirmed{% endif %}">{% if safety_review_overdue %}过期或待复核{% else %}当前发布 · v{{ safety_procedure.version }}{% endif %}</span>{% endif %}</div>{% if safety_procedure %}{% if safety_review_overdue %}<p class="message warning">该版本已不满足当前生效与复核条件，仅供追溯来源；请责任岗位重新核实。系统不会把它作为现行规程，也不据此推断新的阻断规则。</p>{% endif %}<p class="fine">来源：{{ safety_procedure.source_title }} · 版本 {{ safety_procedure.source_version }} · 生效 {{ safety_procedure.effective_from|date:'Y-m-d' }}{% if safety_procedure.source_url %} · <a href="{{ safety_procedure.source_url }}" target="_blank" rel="noopener">查看来源 ↗</a>{% elif safety_procedure.source_reference %} · 材料编号：{{ safety_procedure.source_reference }}{% endif %}</p><dl><dt>风险类别与适用对象</dt><dd>{{ safety_procedure.risk_categories }}<br>{{ safety_procedure.applicable_users }}</dd><dt>前置条件与防护</dt><dd>{{ safety_procedure.prerequisites }}<br>{{ safety_procedure.required_ppe }}</dd><dt>使用前检查</dt><dd>{{ safety_procedure.pre_use_checks }}</dd><dt>操作注意事项</dt><dd>{{ safety_procedure.operating_cautions }}</dd><dt>禁止事项</dt><dd>{{ safety_procedure.prohibited_actions }}</dd><dt>异常处置路径</dt><dd>{{ safety_procedure.incident_route }}</dd></dl>{% if safety_current and safety_procedure.requires_acknowledgement %}{% if safety_acknowledged %}<p class="fine">已记录你对安全信息版本 v{{ safety_procedure.version }} 的阅读确认。</p>{% elif can_apply %}<form method="post" action="{% url 'safety-ack' resource.pk safety_procedure.pk %}">{% csrf_token %}<button class="button secondary">阅读并确认此版本</button></form>{% else %}<p class="fine">预约前需要阅读确认；确认不等于完成培训、考核或准入许可。</p>{% endif %}{% elif safety_review_overdue and safety_procedure.requires_acknowledgement %}<p class="fine">此历史版本不接受新的预约前确认；安全信息是否需要阻断预约须依据学校批准的规则配置。</p>{% endif %}<p class="fine">阅读确认仅绑定本版本及用户，不代替培训、考核、门禁授权或现场判断。</p>{% else %}<div class="info-strip"><b>安全信息待责任岗位确认</b><p>目前没有已发布的正式安全规程。演示数据不包含经核定的危险类别、防护用品、操作步骤或应急联系人；本项目不据此推断现场制度。</p><p>当前演示规则不会仅因未发布规程而自动阻止申请或审批；这不是学校安全许可，真实使用前须由校方责任岗位决定是否暂停相关预约。</p></div>{% endif %}{% if manageable %}<a class="touch-link" href="{% url 'safety-manage' resource.pk %}">维护安全信息版本 ↗</a>{% endif %}</section>{% endif %}
+<section class="safety-card" aria-labelledby="safety-title">
+  <div class="section-heading"><h3 id="safety-title">安全操作信息</h3><span class="fine">信息仅适用于其登记范围</span></div>
+  <p class="fine">管理单元通用信息与此房间或设备专属信息分别展示。系统不自动将房间规程套用到固定设备；适用范围由有权限的责任岗位依据批准来源确认。</p>
+  {% for entry in safety_entries %}
+    {% with procedure=entry.procedure %}
+    <article class="safety-version">
+      <div class="section-heading">
+        <h4>{{ entry.scope_label }} · {{ procedure.title }}</h4>
+        <span class="badge {% if entry.is_current %}confirmed{% else %}warning{% endif %}">{% if entry.is_current %}当前发布 · v{{ procedure.version }}{% else %}过期或待复核 · v{{ procedure.version }}{% endif %}</span>
+      </div>
+      {% if not entry.is_current %}<p class="message warning">此版本仅供追溯来源；请责任岗位重新核实。系统不会把过期版本当作当前安全信息。</p>{% endif %}
+      <p class="fine">来源：{{ procedure.source_title }} · 版本 {{ procedure.source_version }} · 生效 {{ procedure.effective_from|date:'Y-m-d' }} · 复核期限 {{ procedure.review_due_date|date:'Y-m-d' }}{% if procedure.source_url %} · <a href="{{ procedure.source_url }}" target="_blank" rel="noopener">查看来源 ↗</a>{% elif procedure.source_reference %} · 材料编号：{{ procedure.source_reference }}{% endif %}</p>
+      <dl>
+        <dt>风险类别与适用对象</dt><dd>{{ procedure.risk_categories }}<br>{{ procedure.applicable_users }}</dd>
+        <dt>前置条件与防护</dt><dd>{{ procedure.prerequisites }}<br>{{ procedure.required_ppe }}</dd>
+        <dt>使用前检查</dt><dd>{{ procedure.pre_use_checks }}</dd>
+        <dt>操作注意事项</dt><dd>{{ procedure.operating_cautions }}</dd>
+        <dt>禁止事项</dt><dd>{{ procedure.prohibited_actions }}</dd>
+        <dt>异常处置路径</dt><dd>{{ procedure.incident_route }}</dd>
+      </dl>
+      {% if entry.is_current and procedure.requires_acknowledgement %}
+        {% if entry.acknowledged %}<p class="fine">已记录你对该安全信息 v{{ procedure.version }} 的阅读确认。</p>
+        {% elif can_apply %}<form method="post" action="{% url 'safety-ack' resource.pk procedure.pk %}">{% csrf_token %}<button class="button secondary">阅读并确认此版本</button></form>
+        {% else %}<p class="fine">开始预约或使用前需要阅读确认；确认不等于培训、考核或准入许可。</p>{% endif %}
+      {% endif %}
+      <p class="fine">阅读确认仅绑定本版本及用户，不代替培训、考核、门禁授权或现场判断。</p>
+    </article>
+    {% endwith %}
+  {% empty %}
+    <div class="info-strip"><b>暂无已发布的安全信息</b><p>演示数据不包含经核定的危险类别、防护用品、操作步骤或应急联系人；系统不生成或猜测现场安全制度。</p><p>未发布信息本身不会自动阻止预约。这不代表真实环境已获安全许可，适用规则须由校方责任岗位确认。</p></div>
+  {% endfor %}
+  {% if manageable %}
+    <div class="actions"><a class="touch-link" href="{% url 'safety-manage-lab' resource.lab_id %}">维护管理单元通用信息 ↗</a><a class="touch-link" href="{% url 'safety-manage' resource.pk %}">维护此资源专属信息 ↗</a></div>
+  {% endif %}
+</section>
 {% if resource.kind == 'EQUIPMENT' %}<h3>配件清单</h3>{% for a in resource.accessories.all %}{% if a.is_active %}<p class="detail-row">{{ a.name }} <b>× {{ a.quantity }}</b></p>{% endif %}{% endfor %}{% endif %}
 <h3>已确认占用</h3><form method="get" class="filter-row"><div><label for="schedule-day">查看占用日期</label><input id="schedule-day" type="date" name="schedule_day" value="{{ schedule_day }}"></div><button class="button secondary">按日查看</button><a href="{% url 'resource' resource.pk %}">全部后续占用</a></form>
 {% if schedule_error %}<p class="message error">{{ schedule_error }}</p>{% endif %}<p class="muted">共{{ schedule_page.paginator.count }}项 · 本页显示{{ reservations|length }}项。使用中记录保留至实际结束；仅展示时段及状态。</p>{% for b in reservations %}<p class="detail-row">{{ b.starts_at|date:'m-d H:i' }} — {{ b.ends_at|date:'H:i' }}<span>{{ b.get_status_display }}{% if b.status == 'IN_USE' %} · 实际使用未结束{% endif %}</span></p>{% empty %}<p class="muted">暂无已确认的占用。</p>{% endfor %}
