@@ -5,7 +5,7 @@ import uuid
 from unittest.mock import patch
 from django.contrib.sessions.backends.db import SessionStore
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils import timezone
 from .models import User, Resource, Reservation, CalendarException, LabGrant, Role, UserRole, Incident, WorkOrder, AuditEvent, Notification, OpeningPeriod, Lab, RoomDetail, Accessory, Campus, Building
 from . import services as s
@@ -321,6 +321,29 @@ class ProductTests(TestCase):
 
         detail.refresh_from_db()
         self.assertEqual(detail.location_label,'')
+
+    @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True)
+    def test_public_demo_upgrade_links_only_unmodified_legacy_room_locations(self):
+        details = RoomDetail.objects.filter(resource__code__in=["ROOM-101", "ROOM-102", "ROOM-201"])
+        details.update(building=None, floor_label="", room_number="")
+        details.filter(resource__code="ROOM-102").update(location_label="自定义地址")
+        details.filter(resource__code="ROOM-201").update(room_number="自定义房号")
+        reservation = self.book()
+        before = (User.objects.count(), Resource.objects.count(), Reservation.objects.count(), AuditEvent.objects.count())
+
+        for _ in range(2):
+            call_command("seed_demo", if_empty=True, verbosity=0)
+
+        known = details.get(resource__code="ROOM-101")
+        self.assertEqual((known.building.code, known.floor_label, known.room_number), ("BLD-DEMO-A", "1层", "101室"))
+        custom_address = details.get(resource__code="ROOM-102")
+        self.assertIsNone(custom_address.building_id)
+        self.assertEqual(custom_address.location_label, "自定义地址")
+        custom_number = details.get(resource__code="ROOM-201")
+        self.assertIsNone(custom_number.building_id)
+        self.assertEqual(custom_number.room_number, "自定义房号")
+        self.assertEqual((User.objects.count(), Resource.objects.count(), Reservation.objects.count(), AuditEvent.objects.count()), before)
+        self.assertTrue(Reservation.objects.filter(pk=reservation.pk).exists())
 
     def test_personal_cards_filter_to_self_for_multi_role_manager(self):
         self.book();self.client.force_login(self.admin)

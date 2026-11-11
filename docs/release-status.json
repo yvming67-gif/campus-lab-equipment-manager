@@ -109,11 +109,12 @@
       "django_system_check": "pass",
       "migration_drift_check": "pass",
       "core_tests": {
-        "executed": 372,
-        "passed": 372,
+        "executed": 373,
+        "passed": 373,
         "skipped": 0,
         "failed": 0
       },
+      "cloud_configuration_local_tests": {"executed": 8, "passed": 8, "failed": 0},
       "mini_program_tests": {
         "passed": 127,
         "failed": 0
@@ -162,7 +163,7 @@
       "opening_calendar_module_after_form_fix": {"executed": 16, "passed": 16, "skipped": 0, "failed": 0},
       "backend_ci_after_opening_form_fix": {"executed": 372, "passed": 372, "skipped": 0, "failed": 0},
       "evidence_entries_registered": 76,
-      "issues": ["AUD-0059", "AUD-0060", "AUD-0061"],
+      "issues": ["AUD-0059", "AUD-0060", "AUD-0061", "AUD-0062"],
       "formal_docx_status": "两张用例图、正文及目录已同步，使用178页复核稿替换本地正式DOCX。"
     },
     "docs_and_code_pending_push": true,
