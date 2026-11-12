@@ -3,7 +3,7 @@
 <div class="identity-card">
   <h1>演示账号登录</h1>
   {% if public_demo %}
-  <p>学生与教师的演示密码为 <code>Demo@2026</code>。其他岗位使用各自的账号密码。</p>
+  <p>公开学生和教师账号使用 <code>Demo@2026</code>。专用账号和其他岗位使用各自的密码。</p>
   {% else %}
   <p>请选择模拟账号，演示密码为 <code>Demo@2026</code>。</p>
   {% endif %}
@@ -14,7 +14,7 @@
     <select id="username" name="username" required autocomplete="username">
       <option value="">请选择账号</option>
       {% for a in accounts %}
-      <option value="{{ a.username }}"{% if a.username == username %} selected{% endif %}>{{ a.roles.all|join:"、"|default:a.display_name }} · {{ a.username }}</option>
+      <option value="{{ a.username }}"{% if a.username == username %} selected{% endif %}>{{ a.display_name }} · {{ a.roles.all|join:"、" }} · {{ a.username }}</option>
       {% endfor %}
     </select>
     <label for="password">密码</label>

@@ -22,8 +22,8 @@ from .forms import *
 from . import services as s
 from .reports import utilization
 from .demo_identity import (
-    STAFF_SESSION, authenticate_staff_demo, public_demo_user_allowed,
-    valid_staff_demo_token, verify_demo_password, web_demo_accounts,
+    PRIVATE_SESSION, authenticate_private_demo, public_demo_user_allowed,
+    valid_private_demo_token, verify_demo_password, web_demo_accounts,
 )
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
@@ -90,12 +90,12 @@ def identity(request):
     username = request.POST.get("username", "")
     if request.method == "POST":
         password = request.POST.get("password", "")
-        user, staff_token = authenticate_staff_demo(username, password)
+        user, private_token = authenticate_private_demo(username, password)
         if not user:
             user = verify_demo_password(username, password)
         if user:
             assertion = {"sub": user.school_no, "nonce": request.session["idp_nonce"]}
-            request.session["pending_demo_staff"] = staff_token
+            request.session["pending_demo_private"] = private_token
             ticket = signing.dumps(assertion, key=settings.MOCK_IDP_KEY, salt="mock-idp")
             return redirect(reverse("callback") + "?" + urlencode({"ticket": ticket}))
         error = "账号或密码不正确，或账号已停用。"
@@ -125,12 +125,12 @@ def callback(request):
         protected(assertion["nonce"]==request.session.pop("idp_nonce",None))
         user=get_object_or_404(User,school_no=assertion["sub"],is_active=True)
     except (signing.BadSignature,KeyError):raise PermissionDenied
-    staff_token = request.session.pop("pending_demo_staff", "")
+    private_token = request.session.pop("pending_demo_private", "")
     if not public_demo_user_allowed(user):
-        protected(valid_staff_demo_token(user, staff_token))
+        protected(valid_private_demo_token(user, private_token))
     login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-    if staff_token:
-        request.session[STAFF_SESSION] = staff_token
+    if private_token:
+        request.session[PRIVATE_SESSION] = private_token
     s.audit(user, user, "LOGIN", new={"identity": "MOCK"}, reason="课程模拟身份断言校验通过")
     return redirect("dashboard")
 

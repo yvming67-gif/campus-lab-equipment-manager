@@ -12,11 +12,13 @@ MOCK_IDP_KEY = os.environ.get("MOCK_IDP_KEY", keys["idp"])
 DEBUG = os.environ.get("DEBUG", "0") == "1"
 DEMO_MODE = os.environ.get("DEMO_MODE", "1") == "1"
 PUBLIC_DEMO_MODE = os.environ.get("CAMPUS_PUBLIC_DEMO", "0") == "1"
-CAMPUS_DEMO_STAFF_PASSWORDS = {
+CAMPUS_DEMO_PRIVATE_PASSWORDS = {
     "admin": os.environ.get("CAMPUS_DEMO_LAB_ADMIN_PASSWORD", ""),
     "tech": os.environ.get("CAMPUS_DEMO_TECH_PASSWORD", ""),
     "sysadmin": os.environ.get("CAMPUS_DEMO_SYSADMIN_PASSWORD", ""),
     "director": os.environ.get("CAMPUS_DEMO_DIRECTOR_PASSWORD", ""),
+    "student_lab": os.environ.get("CAMPUS_DEMO_STUDENT_LAB_PASSWORD", ""),
+    "teacher_lab": os.environ.get("CAMPUS_DEMO_TEACHER_LAB_PASSWORD", ""),
 }
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",")
 INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "django.contrib.messages", "django.contrib.staticfiles", "django.contrib.postgres", "core"]

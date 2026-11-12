@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
+from core.demo_identity import provision_private_applicants
 from core.models import *
 from core.services import create_reservation, approve, checkout, start_room, report_incident, audit
 
@@ -192,7 +193,8 @@ class Command(BaseCommand):
                 linked = fill_known_demo_room_locations()
                 if linked:
                     self.stdout.write(f"Linked {linked} known demo room locations.")
-            self.stdout.write("Existing demo data preserved; initialization skipped.")
+            provision_private_applicants()
+            self.stdout.write("Existing demo data preserved; general initialization skipped.")
             return
         roles = [("STUDENT","学生"),("TEACHER","教师"),("LAB_ADMIN","实验室管理员"),("TECHNICIAN","维修人员"),("SYS_ADMIN","系统管理员"),("DIRECTOR","实验教学中心主任")]
         for code,name in roles: Role.objects.get_or_create(code=code,defaults={"name":name})
@@ -257,4 +259,5 @@ class Command(BaseCommand):
             robot.equipment.save(update_fields=["portable","access_room"])
         policy,_=Policy.objects.get_or_create(pk=1)
         PolicyRevision.objects.get_or_create(policy=policy,version=policy.version,defaults={"data":policy.snapshot(),"reason":"课程案例初始参数"})
+        provision_private_applicants()
         self.stdout.write("Demo seed ready: 7 accounts, 3 demo lab units, 9 equipment, 6 demo room resources.")

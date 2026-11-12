@@ -8,27 +8,53 @@ from django.contrib.auth import logout
 from django.core import signing
 from django.shortcuts import redirect
 from django.utils.crypto import constant_time_compare
-from .models import User
+from .models import Role, User, UserRole
 
 PUBLIC_DEMO_ROLE_CODES = frozenset({"STUDENT", "TEACHER"})
-DEMO_STAFF_IDENTITIES = {
+PRIVATE_APPLICANTS = {
+    "student_lab": ("S-DEMO-LAB", "STUDENT", "模拟实验学生"),
+    "teacher_lab": ("T-DEMO-LAB", "TEACHER", "模拟实验教师"),
+}
+PRIVATE_IDENTITIES = {
+    **{username: (school_no, role) for username, (school_no, role, _) in PRIVATE_APPLICANTS.items()},
     "admin": ("A-DEMO-01", "LAB_ADMIN"),
     "tech": ("M-DEMO-01", "TECHNICIAN"),
     "sysadmin": ("Y-DEMO-01", "SYS_ADMIN"),
     "director": ("D-DEMO-01", "DIRECTOR"),
 }
-STAFF_SESSION = "course_demo_staff"
-STAFF_MAX_AGE = 4 * 60 * 60
+PRIVATE_SESSION = "course_demo_private"
+PRIVATE_MAX_AGE = 4 * 60 * 60
 
 
-def staff_password(user):
+def configured_private_password(username):
     if not settings.DEMO_MODE or not settings.PUBLIC_DEMO_MODE:
         return ""
+    password = settings.CAMPUS_DEMO_PRIVATE_PASSWORDS.get(username, "")
+    return password if 24 <= len(password) <= 128 else ""
+
+
+def provision_private_applicants():
+    for username, (school_no, role_code, display_name) in PRIVATE_APPLICANTS.items():
+        if not configured_private_password(username):
+            continue
+        role = Role.objects.filter(code=role_code).first()
+        if not role or User.objects.filter(school_no=school_no).exclude(username=username).exists():
+            continue
+        user, created = User.objects.get_or_create(
+            username=username, defaults={
+                "school_no": school_no, "display_name": display_name, "password": make_password(None),
+            },
+        )
+        if created:
+            UserRole.objects.create(user=user, role=role)
+
+
+def private_password(user):
     if not user.is_active or user.is_staff or user.is_superuser:
         return ""
-    identity = DEMO_STAFF_IDENTITIES.get(user.username)
-    password = settings.CAMPUS_DEMO_STAFF_PASSWORDS.get(user.username, "")
-    if (identity and 24 <= len(password) <= 128 and user.school_no == identity[0]
+    identity = PRIVATE_IDENTITIES.get(user.username)
+    password = configured_private_password(user.username)
+    if (identity and password and user.school_no == identity[0]
             and {role.code for role in user.roles.all()} == {identity[1]}):
         return password
     return ""
@@ -40,28 +66,28 @@ def web_demo_accounts():
         return accounts
     return [
         user for user in accounts
-        if public_demo_user_allowed(user) or staff_password(user)
+        if public_demo_user_allowed(user) or private_password(user)
     ]
 
 
-def authenticate_staff_demo(username, submitted):
-    if username not in DEMO_STAFF_IDENTITIES or not 24 <= len(submitted) <= 128:
+def authenticate_private_demo(username, submitted):
+    if username not in PRIVATE_IDENTITIES or not 24 <= len(submitted) <= 128:
         return None, ""
     user = User.objects.filter(username=username, is_active=True).first()
-    password = staff_password(user) if user else ""
+    password = private_password(user) if user else ""
     if password and constant_time_compare(submitted, password):
-        token = signing.dumps(user.pk, key=password, salt=STAFF_SESSION)
+        token = signing.dumps(user.pk, key=password, salt=PRIVATE_SESSION)
         return user, token
     return None, ""
 
 
-def valid_staff_demo_token(user, token):
-    password = staff_password(user)
+def valid_private_demo_token(user, token):
+    password = private_password(user)
     if not password or not isinstance(token, str):
         return False
     try:
-        return signing.loads(token, key=password, fallback_keys=[], salt=STAFF_SESSION,
-                             max_age=STAFF_MAX_AGE) == user.pk
+        return signing.loads(token, key=password, fallback_keys=[], salt=PRIVATE_SESSION,
+                             max_age=PRIVATE_MAX_AGE) == user.pk
     except signing.BadSignature:
         return False
 
@@ -70,7 +96,7 @@ def public_demo_user_allowed(user):
     """Allow only active accounts whose complete role set is public-safe."""
     if not settings.PUBLIC_DEMO_MODE:
         return True
-    if not user.is_active:
+    if not user.is_active or user.username in PRIVATE_IDENTITIES:
         return False
     role_codes = {role.code for role in user.roles.all()}
     return bool(role_codes & PUBLIC_DEMO_ROLE_CODES) and role_codes <= PUBLIC_DEMO_ROLE_CODES
@@ -95,14 +121,14 @@ def verify_demo_password(username, password):
 
 
 class PublicDemoSessionMiddleware:
-    """Require a current staff credential for privileged sessions in the public demo."""
+    """Require current account credentials for private sessions in the public demo."""
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         if (settings.DEMO_MODE and settings.PUBLIC_DEMO_MODE and request.user.is_authenticated
                 and not public_demo_user_allowed(request.user)
-                and not valid_staff_demo_token(request.user, request.session.get(STAFF_SESSION))):
+                and not valid_private_demo_token(request.user, request.session.get(PRIVATE_SESSION))):
             logout(request)
             return redirect("login")
         return self.get_response(request)
