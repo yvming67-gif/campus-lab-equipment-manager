@@ -184,7 +184,7 @@ def resources(request):
     for r in items:
         r.service_label=s.resource_service_label(r)
         r.reservation_open,r.reservation_block_reason=s.resource_reservation_state(r)
-        r.available_label="请选择目标时段查询"
+        r.available_label="尚未选择目标时段"
         r.available=None
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
         query=request.GET.copy();query.pop('page',None)
