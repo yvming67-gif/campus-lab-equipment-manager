@@ -206,31 +206,31 @@ class RoleDashboardTests(TestCase):
 
     def test_student_dashboard_prioritizes_equipment_and_personal_bookings(self):
         response=self.dashboard_as("student")
-        self.assertContains(response,"STUDENT / 个人实验安排")
+        self.assertContains(response,"个人实验安排")
         self.assertContains(response,"查找教学设备")
         self.assertContains(response,"查看我的预约与借还")
-        self.assertNotContains(response,"TEACHER / 课程安排")
+        self.assertNotContains(response,"课程安排")
         self.assertNotContains(response,"处理待审核申请")
 
     def test_teacher_dashboard_prioritizes_room_and_course_schedule(self):
         response=self.dashboard_as("teacher")
-        self.assertContains(response,"TEACHER / 课程安排")
+        self.assertContains(response,"课程安排")
         self.assertContains(response,"查找可预约场地")
         self.assertContains(response,"我的场地预约")
         self.assertContains(response,"等待审核，不占用资源时段")
-        self.assertNotContains(response,"SYSTEM ADMIN / 身份与配置")
+        self.assertNotContains(response,"身份与配置")
 
     def test_lab_admin_dashboard_routes_to_authorized_work_queues(self):
         response=self.dashboard_as("admin")
-        self.assertContains(response,"LAB ADMIN / 今日管理")
+        self.assertContains(response,"今日管理")
         self.assertContains(response,"处理待审核申请")
         self.assertContains(response,"维护本实验室资源")
         self.assertContains(response,"维修待验收")
-        self.assertNotContains(response,"SYSTEM ADMIN / 身份与配置")
+        self.assertNotContains(response,"身份与配置")
 
     def test_technician_dashboard_prioritizes_assigned_work_only(self):
         response=self.dashboard_as("tech")
-        self.assertContains(response,"TECHNICIAN / 指派任务")
+        self.assertContains(response,"指派任务")
         self.assertContains(response,"只处理分配给自己的维修工单")
         self.assertContains(response,"打开我的维修任务")
         self.assertNotContains(response,"处理待审核申请")
@@ -238,7 +238,7 @@ class RoleDashboardTests(TestCase):
 
     def test_director_dashboard_shows_aggregate_not_actionable_approval(self):
         response=self.dashboard_as("director")
-        self.assertContains(response,"CENTER OVERVIEW / 管理摘要")
+        self.assertContains(response,"管理摘要")
         self.assertContains(response,"查看资源利用报表")
         self.assertContains(response,"审批由获授权实验室管理员办理")
         self.assertNotContains(response,"处理待审核申请")
@@ -246,7 +246,7 @@ class RoleDashboardTests(TestCase):
 
     def test_system_admin_dashboard_separates_account_configuration_from_business_approval(self):
         response=self.dashboard_as("sysadmin")
-        self.assertContains(response,"SYSTEM ADMIN / 身份与配置")
+        self.assertContains(response,"身份与配置")
         self.assertContains(response,"管理用户与授权")
         self.assertContains(response,"查看角色与资格目录")
         self.assertNotContains(response,"处理待审核申请")

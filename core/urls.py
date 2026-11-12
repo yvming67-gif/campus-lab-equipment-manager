@@ -12,3 +12,4 @@ urlpatterns += [
 ]
 
 urlpatterns += [path('operations/health/',cv.operations_health,name='operations-health')]
+urlpatterns += [path('review/',v.review_login,name='review-login')]

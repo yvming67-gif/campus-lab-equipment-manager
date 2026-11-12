@@ -15,12 +15,15 @@ from django.http import FileResponse,Http404,JsonResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.views.decorators.http import require_POST
+from django.utils.crypto import constant_time_compare
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_POST, require_http_methods
 from .models import *
 from .forms import *
 from . import services as s
 from .reports import utilization
 from .demo_identity import public_demo_accounts, verify_demo_password
+from .demo_identity import grant_review_session, review_accounts, review_key
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
 from .catalog import calendar_catalog, filter_resources
@@ -91,6 +94,27 @@ def identity(request):
         error="模拟账号或演示密码不正确，或账号已停用"
     return render(request,"identity.html",{"title":"模拟学校身份认证","accounts":accounts,"error":error})
 
+@never_cache
+@require_http_methods(["GET", "POST"])
+def review_login(request):
+    key = review_key()
+    if not key:
+        raise Http404
+    accounts = review_accounts()
+    error = ""
+    if request.method == "POST":
+        submitted = request.POST.get("review_code", "")
+        username = request.POST.get("username", "")
+        if len(submitted) <= 128 and constant_time_compare(submitted, key):
+            for user, _ in accounts:
+                if user.username == username:
+                    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+                    grant_review_session(request, user, key)
+                    s.audit(user, user, "LOGIN", new={"identity": "MOCK_REVIEW"}, reason="评审演示身份验证通过")
+                    return redirect("dashboard")
+        error = "评审访问码或账号有误。"
+    return render(request, "review_login.html", {"title": "评审演示", "accounts": accounts, "error": error})
+
 def callback(request):
     if not settings.DEMO_MODE:
         nonce=request.session.pop("idp_nonce",None)
@@ -120,19 +144,21 @@ def signout(request):
 @login_required
 def dashboard(request):
     now=timezone.now();mine=Reservation.objects.filter(applicant=request.user)
-    context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"resource_count":Resource.objects.count(),"lab_count":Lab.objects.count(),"policy":Policy.objects.get(pk=1),"overdue":s.overdue_for(request.user,now),
+    context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"overdue":s.overdue_for(request.user,now),
              "is_student":request.user.has_role("STUDENT"),"is_teacher":request.user.has_role("TEACHER"),"is_lab_admin":request.user.has_role("LAB_ADMIN"),"is_technician":request.user.has_role("TECHNICIAN"),"is_director":request.user.has_role("DIRECTOR"),"is_sys_admin":request.user.has_role("SYS_ADMIN")}
     if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
     if request.user.has_role("DIRECTOR"):
         context.update({"director_pending":Reservation.objects.filter(status="PENDING").count(),"director_incidents":Incident.objects.filter(status="PENDING").count(),"director_acceptance":WorkOrder.objects.filter(status="AWAITING_ACCEPTANCE").count()})
     if request.user.has_role("TECHNICIAN"):
-        context["technician_open"]=WorkOrder.objects.filter(assigned_to=request.user,status__in=["OPEN","IN_PROGRESS"]).count()
+        assigned = scoped_work(request.user).filter(assigned_to=request.user, status__in=["OPEN", "IN_PROGRESS"]).order_by("pk")
+        context["technician_open"] = assigned.count()
+        context["technician_jobs"] = assigned[:5]
     if request.user.has_role("TEACHER"):
         context["teacher_room_upcoming"]=mine.filter(resource__kind="ROOM",status__in=["CONFIRMED","IN_USE"],ends_at__gt=now).count()
+        context["teacher_rooms"] = mine.filter(resource__kind="ROOM", ends_at__gt=now,
+            status__in=["PENDING", "CONFIRMED", "IN_USE"]).select_related("resource__lab").order_by("starts_at")[:5]
     scoped=scoped_bookings(request.user)
     context['tasks']=tasks_for(request.user,scoped,scoped_incidents(request.user),scoped_work(request.user),now)
-    context['upcoming']=mine.filter(Q(status='IN_USE')|Q(status='CONFIRMED',ends_at__gt=now)).select_related('resource__lab').order_by('starts_at')[:4]
-    context['unread_preview']=request.user.notifications.filter(read_at__isnull=True).order_by('-created_at')[:3]
     return render(request,"dashboard.html",context)
 
 @login_required
@@ -147,6 +173,10 @@ def resources(request):
         if d["starts_at"]:times=(d["starts_at"],d["ends_at"])
     elif form.is_bound:
         qs=qs.none()
+    room_directory = d.get("kind") == "ROOM"
+    room_filters_open = room_directory and any(value for key, value in d.items() if key != "kind")
+    if room_directory:
+        qs = qs.order_by("lab__code", "code", "pk")
     page,filters=paginate(request,qs)
     if not (form.is_bound and not form.is_valid()):
         catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','campus','building','starts_at')) else page.paginator.count
@@ -161,7 +191,7 @@ def resources(request):
         r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
     chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','管理单元',d.get('lab')),('campus','校区',d.get('campus')),('building','楼宇',d.get('building')),('category','类别',d.get('category')),('facility','设施或配件',d.get('facility')),('capacity_min','最小容量',d.get('capacity_min')),('capacity_max','最大容量',d.get('capacity_max')),('service_status','服务状态',dict(Resource.STATUS).get(d.get('service_status')))])
     if times:chips.append({'label':'目标时段','value':f'{timezone.localtime(times[0]):%m-%d %H:%M}—{timezone.localtime(times[1]):%m-%d %H:%M}', 'url':ui.link('resources',request.GET,ui.CATALOG_KEYS,drop=('starts_at','ends_at'))})
-    return render(request,"resources.html",{"title":"资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),
+    return render(request,"resources.html",{"title":"教室目录" if room_directory else "资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),"room_directory":room_directory,"room_filters_open":room_filters_open,"directory_kind":d.get("kind"),
         'schedule_url':ui.catalog_schedule_link(request.GET,d),'query_scope':'当前可见资源目录','query_count':page.paginator.count,'query_total':catalog_total,'query_chips':chips,'query_invalid':form.is_bound and not form.is_valid()})
 
 @login_required

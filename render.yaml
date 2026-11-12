@@ -16,6 +16,8 @@ services:
         value: '1'
       - key: CAMPUS_PUBLIC_DEMO
         value: '1'
+      - key: CAMPUS_REVIEW_CODE
+        sync: false
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: MOCK_IDP_KEY

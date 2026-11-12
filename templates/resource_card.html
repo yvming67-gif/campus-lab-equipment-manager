@@ -1,0 +1,14 @@
+{% load domain_labels %}
+<article class="resource-card">
+  <div class="card-top"><span class="resource-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#{{ r|resource_icon }}"/></svg></span><span class="badge {% if not r.lab.is_active %}warning{% else %}{{ r.service_status|lower }}{% endif %}">服务{{ r.service_label }}</span></div>
+  <span class="code">{{ r.code }}</span><h3>{{ r.name }}</h3>
+  {% if not room_directory %}<p>{{ r.lab.name }}</p>{% endif %}
+  {% if r.location_display != '场地位置待核实' %}<p>{{ r.location_label }}：{{ r.location_display }}</p>{% endif %}
+  <dl class="resource-facts">
+    <dt>资源类型</dt><dd>{% if r.kind == 'ROOM' %}整间场地 · {{ r.room.capacity }}人{% if r.room.space_category %} · {{ r.room.space_category }}{% endif %}{% else %}{{ r.equipment.category }}{% endif %}</dd>
+    {% if r.kind == 'ROOM' and r.room.facilities %}<dt>设施</dt><dd>{{ r.room.facilities }}</dd>{% endif %}
+    {% if r.kind == 'EQUIPMENT' %}<dt>当前实物</dt><dd>{{ r.equipment.get_physical_status_display }}</dd>{% endif %}
+    <dt>确认方式</dt><dd>{% if r.requires_approval %}人工审核{% else %}规则通过后自动确认{% endif %}</dd>
+  </dl>
+  <div class="resource-bottom"><small class="{% if r.available == False %}warning{% endif %}"><b>目标时段</b><br>{{ r.available_label }}</small><a class="touch-link" href="{{ r.detail_url }}">查看详情 ↗</a></div>
+</article>

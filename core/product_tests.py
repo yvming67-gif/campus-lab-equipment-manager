@@ -71,6 +71,8 @@ class ProductTests(TestCase):
         web=self.client.get(f'/resources/{room.pk}/')
         self.assertContains(web,initial_location)
         self.assertContains(web,'暂无已核验的场地实拍图。')
+        self.assertNotContains(web, "暂无已发布的安全信息")
+        self.assertNotContains(web, 'id="safety-title"')
         mini=self.mini(f'resources/{room.pk}/')
         self.assertEqual(mini.status_code,200)
         self.assertEqual(mini.json()['data']['location'],initial_location)
@@ -254,12 +256,12 @@ class ProductTests(TestCase):
 
     def test_role_homepages_prioritize_different_authorized_work(self):
         cases=[
-            ('student','STUDENT / 个人实验安排','查找教学设备','LAB ADMIN / 今日管理'),
-            ('teacher','TEACHER / 课程安排','查找可预约场地','SYSTEM ADMIN / 身份与配置'),
-            ('admin','LAB ADMIN / 今日管理','处理待审核申请','SYSTEM ADMIN / 身份与配置'),
-            ('tech','TECHNICIAN / 指派任务','打开我的维修任务','处理待审核申请'),
-            ('director','CENTER OVERVIEW / 管理摘要','查看资源利用报表','管理用户与授权'),
-            ('sysadmin','SYSTEM ADMIN / 身份与配置','管理用户与授权','处理待审核申请'),
+            ('student','个人实验安排','查找教学设备','今日管理'),
+            ('teacher','课程安排','查找可预约场地','身份与配置'),
+            ('admin','今日管理','处理待审核申请','身份与配置'),
+            ('tech','指派任务','打开我的维修任务','处理待审核申请'),
+            ('director','管理摘要','查看资源利用报表','管理用户与授权'),
+            ('sysadmin','身份与配置','管理用户与授权','处理待审核申请'),
         ]
         for username,heading,action,forbidden in cases:
             with self.subTest(role=username):
@@ -267,10 +269,18 @@ class ProductTests(TestCase):
                 page=self.client.get('/')
                 self.assertEqual(page.status_code,200)
                 self.assertContains(page,heading)
-                role_banner=re.search(r'<section class="workspace-banner role-banner[^\"]*">(.*?)</section>',page.content.decode(),re.S)
+                role_banner=re.search(r'<section class="workspace-banner role-banner[^\"]*"[^>]*>(.*?)</section>',page.content.decode(),re.S)
                 self.assertIsNotNone(role_banner)
                 self.assertIn(action,role_banner.group(1))
                 self.assertNotIn(forbidden,role_banner.group(1))
+
+    def test_room_directory_shows_individual_rooms_grouped_by_lab(self):
+        self.client.force_login(User.objects.get(username="teacher"))
+        page = self.client.get("/resources/", {"kind": "ROOM"})
+        self.assertContains(page, 'class="room-group"', count=3)
+        self.assertContains(page, "2 间教室", count=3)
+        for room in Resource.objects.filter(kind="ROOM"):
+            self.assertContains(page, f'href="/resources/{room.pk}/?kind=ROOM"')
 
     def test_seed_demo_has_varied_rooms_and_only_adds_missing_records(self):
         self.assertEqual(Lab.objects.count(),3)

@@ -66,7 +66,21 @@ label,.field label { color:#515154; font-size:12px; }
 .resource-icon { background:#eaf2ff; color:#0066cc; border:0; border-radius:14px; width:50px; height:50px; }
 .resource-icon.room { background:#f2edff; color:#7653b7; border:0; }
 .resource-icon svg { width:28px; height:28px; }
-.resource-card h2 { font-size:18px; font-weight:650; letter-spacing:-.025em; }
+.resource-card h3 { font-size:18px; font-weight:650; letter-spacing:-.025em; }
+.directory-nav { margin-bottom:18px; }
+.room-filter > summary { width:fit-content; padding:10px 12px; cursor:pointer; color:#235580; }
+.room-filter > form { margin-top:12px; }
+.room-group { margin:24px 0 30px; }
+.room-group + .room-group { padding-top:16px; border-top:1px solid var(--line); }
+.room-group .section-heading { flex-wrap:wrap; }
+.room-group .resource-grid { grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr)); }
+.lab-operations { border-inline-start:4px solid #ab6e2b; }
+.repair-work { border-inline-start:4px solid #28735d; }
+.center-overview { border-inline-start:4px solid #365d8a; }
+.configuration-work { border-inline-start:4px solid #69598b; }
+.course-planner { border-inline-start:4px solid #23738d; }
+.student-reservations { border-inline-start:4px solid #456ac5; }
+.worklist { margin-bottom:22px; }
 .resource-card p,.resource-meta { font-size:12px; color:#6e6e73; }
 .resource-card-foot { padding:16px 0; border-color:var(--line); font-size:12px; }
 .resource-card-foot small { font-size:10px; } .resource-card-foot a { font-weight:550; }

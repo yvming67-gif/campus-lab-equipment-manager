@@ -378,7 +378,7 @@ class SafetyProcedureTests(TestCase):
         self.client.force_login(self.teacher)
         page=self.client.get(f"/resources/{self.room.pk}/")
         self.assertContains(page,"过期或待复核")
-        self.assertContains(page,"仅供追溯来源")
+        self.assertContains(page,"此规程暂不可用于操作")
         self.assertNotContains(page,"阅读并确认此版本")
         api_client=Client()
         login=api_client.post("/api/mini/v1/auth/login/",json.dumps({"username":"teacher","password":"Demo@2026"}),content_type="application/json")

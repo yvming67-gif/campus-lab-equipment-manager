@@ -6,6 +6,8 @@ from django.test import Client, TestCase, override_settings
 from .demo_identity import public_demo_accounts, public_demo_user_allowed, verify_demo_password
 from .models import User
 
+REVIEW_CODE = "review-test-code-with-24-characters"
+
 
 class PublicDemoIdentityTests(TestCase):
     @classmethod
@@ -14,6 +16,43 @@ class PublicDemoIdentityTests(TestCase):
         cls.student = User.objects.get(username="student")
         cls.admin = User.objects.get(username="admin")
         cls.teacher = User.objects.get(username="teacher")
+
+    @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True, CAMPUS_REVIEW_CODE=REVIEW_CODE)
+    def test_review_access_uses_separate_code_and_real_role_workspaces(self):
+        choices = (
+            ("admin", "实验室运营"),
+            ("tech", "维修工作台"),
+            ("sysadmin", "系统设置"),
+            ("director", "中心概览"),
+        )
+        client = Client()
+        self.assertContains(client.get("/access/"), 'href="/review/"')
+        self.assertNotContains(client.get("/review/"), REVIEW_CODE)
+        for username, heading in choices:
+            with self.subTest(username=username):
+                client = Client()
+                denied = client.post("/review/", {"username": username, "review_code": "Demo@2026"})
+                self.assertContains(denied, "评审访问码或账号有误")
+                self.assertNotIn("_auth_user_id", client.session)
+                accepted = client.post("/review/", {"username": username, "review_code": REVIEW_CODE}, follow=True)
+                self.assertContains(accepted, f"<h1>{heading}</h1>")
+        self.assertEqual(Client().get("/review/").status_code, 200)
+
+    @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True, CAMPUS_REVIEW_CODE=REVIEW_CODE)
+    def test_review_session_is_revoked_when_code_rotates_and_does_not_enable_mini(self):
+        client = Client()
+        client.post("/review/", {"username": "admin", "review_code": REVIEW_CODE})
+        self.assertEqual(client.get("/").status_code, 200)
+        response = client.post("/api/mini/v1/auth/login/", json.dumps({"username": "admin", "password": REVIEW_CODE}), content_type="application/json")
+        self.assertEqual(response.status_code, 401)
+        with override_settings(CAMPUS_REVIEW_CODE=REVIEW_CODE + "-rotated"):
+            self.assertRedirects(client.get("/"), "/login/", fetch_redirect_response=False)
+        self.assertNotIn("_auth_user_id", client.session)
+
+    @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True, CAMPUS_REVIEW_CODE="")
+    def test_review_access_is_closed_without_a_configured_code(self):
+        self.assertEqual(self.client.get("/review/").status_code, 404)
+        self.assertNotContains(self.client.get("/access/"), 'href="/review/"')
 
     @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True)
     def test_public_demo_identity_page_lists_only_student_and_teacher_accounts(self):

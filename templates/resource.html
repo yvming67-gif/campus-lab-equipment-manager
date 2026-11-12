@@ -13,9 +13,9 @@
 </section>{% endif %}
 <div class="two-column"><section class="panel"><span class="eyebrow">RESOURCE PROFILE</span><h2>资源信息</h2><p>{{ resource.description }}</p><dl><dt>资源类型</dt><dd>{{ resource.get_kind_display }}</dd><dt>确认方式</dt><dd>{% if resource.requires_approval %}人工审核，待审核不占用时段{% else %}普通设备通过规则检查后自动确认{% endif %}</dd>
 {% if resource.kind == 'ROOM' %}<dt>场地类别</dt><dd>{{ resource.room.space_category|default:'待管理员登记' }}</dd><dt>容量</dt><dd>{{ resource.room.capacity }}人</dd><dt>设施</dt><dd>{{ resource.room.facilities|default:'设施信息待管理员登记' }}</dd><dt>近期开放时段（北京时间）</dt><dd class="opening-schedule">{% for item in opening_schedule %}<span><b>{{ item.date }} {{ item.weekday }}</b>　{{ item.ranges|join:', '|default:item.note }}　<small>{{ item.note }}</small></span>{% endfor %}<small>场地有独立每周时段时优先使用；管理单元的单日例外适用于全部场地。提交和审核时以后端当前日历为准。</small></dd>{% else %}<dt>设备分级</dt><dd>{{ resource.equipment.get_risk_display }}</dd><dt>当前实物状态</dt><dd>{{ resource.equipment.get_physical_status_display }}</dd><dt>培训资格</dt><dd>{{ resource.equipment.qualification|default:'无专项要求' }}</dd>{% if not resource.equipment.portable %}<dt>实际交接地点</dt><dd>{{ resource.equipment.handover_location|default:'未登记，请向实验室管理员确认' }}</dd>{% endif %}{% endif %}</dl>
+{% if safety_entries %}
 <section class="safety-card" aria-labelledby="safety-title">
-  <div class="section-heading"><h3 id="safety-title">安全操作信息</h3><span class="fine">信息仅适用于其登记范围</span></div>
-  <p class="fine">管理单元通用信息与此房间或设备专属信息分别展示。系统不自动将房间规程套用到固定设备；适用范围由有权限的责任岗位依据批准来源确认。</p>
+  <h3 id="safety-title">安全操作信息</h3>
   {% for entry in safety_entries %}
     {% with procedure=entry.procedure %}
     <article class="safety-version">
@@ -23,7 +23,7 @@
         <h4>{{ entry.scope_label }} · {{ procedure.title }}</h4>
         <span class="badge {% if entry.is_current %}confirmed{% else %}warning{% endif %}">{% if entry.is_current %}当前发布 · v{{ procedure.version }}{% else %}过期或待复核 · v{{ procedure.version }}{% endif %}</span>
       </div>
-      {% if not entry.is_current %}<p class="message warning">此版本仅供追溯来源；请责任岗位重新核实。系统不会把过期版本当作当前安全信息。</p>{% endif %}
+      {% if not entry.is_current %}<p class="message warning">此规程暂不可用于操作，请联系实验室管理员。</p>{% endif %}
       <p class="fine">来源：{{ procedure.source_title }} · 版本 {{ procedure.source_version }} · 生效 {{ procedure.effective_from|date:'Y-m-d' }} · 复核期限 {{ procedure.review_due_date|date:'Y-m-d' }}{% if procedure.source_url %} · <a href="{{ procedure.source_url }}" target="_blank" rel="noopener">查看来源 ↗</a>{% elif procedure.source_reference %} · 材料编号：{{ procedure.source_reference }}{% endif %}</p>
       <dl>
         <dt>风险类别与适用对象</dt><dd>{{ procedure.risk_categories }}<br>{{ procedure.applicable_users }}</dd>
@@ -41,13 +41,12 @@
       <p class="fine">阅读确认仅绑定本版本及用户，不代替培训、考核、门禁授权或现场判断。</p>
     </article>
     {% endwith %}
-  {% empty %}
-    <div class="info-strip"><b>暂无已发布的安全信息</b><p>演示数据不包含经核定的危险类别、防护用品、操作步骤或应急联系人；系统不生成或猜测现场安全制度。</p><p>未发布信息本身不会自动阻止预约。这不代表真实环境已获安全许可，适用规则须由校方责任岗位确认。</p></div>
   {% endfor %}
+</section>
+{% endif %}
   {% if manageable %}
     <div class="actions"><a class="touch-link" href="{% url 'safety-manage-lab' resource.lab_id %}">维护管理单元通用信息 ↗</a><a class="touch-link" href="{% url 'safety-manage' resource.pk %}">维护此资源专属信息 ↗</a></div>
   {% endif %}
-</section>
 {% if resource.kind == 'EQUIPMENT' %}<h3>配件清单</h3>{% for a in resource.accessories.all %}{% if a.is_active %}<p class="detail-row">{{ a.name }} <b>× {{ a.quantity }}</b></p>{% endif %}{% endfor %}{% endif %}
 <h3>已确认占用</h3><form method="get" class="filter-row"><div><label for="schedule-day">查看占用日期</label><input id="schedule-day" type="date" name="schedule_day" value="{{ schedule_day }}"></div><button class="button secondary">按日查看</button><a href="{% url 'resource' resource.pk %}">全部后续占用</a></form>
 {% if schedule_error %}<p class="message error">{{ schedule_error }}</p>{% endif %}<p class="muted">共{{ schedule_page.paginator.count }}项 · 本页显示{{ reservations|length }}项。使用中记录保留至实际结束；仅展示时段及状态。</p>{% for b in reservations %}<p class="detail-row">{{ b.starts_at|date:'m-d H:i' }} — {{ b.ends_at|date:'H:i' }}<span>{{ b.get_status_display }}{% if b.status == 'IN_USE' %} · 实际使用未结束{% endif %}</span></p>{% empty %}<p class="muted">暂无已确认的占用。</p>{% endfor %}

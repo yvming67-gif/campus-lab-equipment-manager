@@ -1,30 +1,52 @@
-{% extends 'base.html' %}{% block content %}
-<div class="page-top"><div><div class="eyebrow">WORKSPACE / {{ today|date:'Y.m.d' }}</div><h1>你好，{{ user.display_name }}</h1><p>工作台根据当前角色突出需要处理的事项；业务权限仍由服务端逐项检查。</p></div><div class="actions"><a class="button secondary" href="{% url 'schedule' %}">查看资源日程</a><a class="button" href="{% url 'resources' %}">查找资源 ↗</a></div></div>
-{% if overdue %}<div class="message error">存在逾期未完成的使用记录，请按预约详情指引联系管理员办理归还或离场。</div>{% endif %}
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-top"><div><h1>{% if is_lab_admin %}实验室运营{% elif is_technician %}维修工作台{% elif is_director %}中心概览{% elif is_sys_admin %}系统设置{% elif is_teacher %}课程资源安排{% else %}我的实验预约{% endif %}</h1><p>{{ user.display_name }} · {{ today|date:'Y年n月j日' }}</p></div></div>
+{% if overdue %}<p class="message error">有逾期未结束的记录，请联系管理员办理归还或离场。</p>{% endif %}
 
 {% if is_lab_admin %}
-<section class="workspace-banner role-banner"><div><span class="eyebrow">LAB ADMIN / 今日管理</span><h2>先核实现场与授权范围内的业务队列。</h2><p>审批通过不等于完成交接；维修执行与验收须分开处理。</p></div><div class="role-actions"><a class="button" href="{% url 'bookings' %}?queue=review">处理待审核申请{% if to_review %} · {{ to_review }}{% endif %}</a><a class="button secondary" href="{% url 'manage' %}?section=resources">维护本实验室资源</a></div></section>
+<section class="workspace-banner role-banner lab-operations" aria-labelledby="lab-work-title">
+  <div><h2 id="lab-work-title">今日管理</h2><p>审核预约、安排交接和处理异常。</p></div>
+  <div class="role-actions"><a class="button" href="{% url 'bookings' %}?queue=review">处理待审核申请 · {{ to_review }}</a><a class="button secondary" href="{% url 'manage' %}?section=resources">维护本实验室资源</a></div>
+</section>
+<h2>我的工作队列</h2>
+<section class="task-grid" aria-label="实验室运营待办">{% for task in tasks %}<a class="task-card" href="{{ task.url }}"><span>{{ task.name }}</span><strong>{{ task.count }}</strong><p>{{ task.note }}</p></a>{% endfor %}</section>
+<div class="section-heading"><h2>近期预约记录</h2><a href="{% url 'bookings' %}">查看全部 →</a></div>{% include 'booking_table.html' with bookings=recent %}
 {% endif %}
+
 {% if is_technician %}
-<section class="workspace-banner role-banner technician-banner"><div><span class="eyebrow">TECHNICIAN / 指派任务</span><h2>只处理分配给自己的维修工单。</h2><p>记录检查与维修过程；提交维修结果后等待另一位授权人员验收。</p></div><a class="button" href="{% url 'work' %}?status=ACTIVE">打开我的维修任务 · {{ technician_open }}</a></section>
+<section class="workspace-banner role-banner repair-work" aria-labelledby="repair-work-title">
+  <div><h2 id="repair-work-title">指派任务</h2><p>只处理分配给自己的维修工单。</p></div><a class="button" href="{% url 'work' %}?status=ACTIVE">打开我的维修任务 · {{ technician_open }}</a>
+</section>
+<section class="panel worklist" aria-label="待处理维修工单">{% for job in technician_jobs %}<a class="upcoming-item" href="{% url 'work-detail' job.pk %}"><span class="badge">{{ job.get_status_display }}</span><strong>{{ job.incident.resource.name }}</strong><small>{{ job.incident.resource.lab.name }}</small></a>{% empty %}<p class="empty-state">当前没有分配给你的待处理工单。</p>{% endfor %}</section>
 {% endif %}
+
 {% if is_director %}
-<section class="workspace-banner role-banner director-banner"><div><span class="eyebrow">CENTER OVERVIEW / 管理摘要</span><h2>查看汇总趋势与待处理事项。</h2><p>报表口径按已记录的资源开放时段、预约和实际使用计算；明细须按授权范围访问。</p></div><div class="role-actions"><a class="button" href="{% url 'reports' %}">查看资源利用报表</a><a class="button secondary" href="{% url 'audit' %}">查看审计记录</a></div></section>
-<div class="stats director-stats"><div class="stat"><span>待审核申请</span><strong>{{ director_pending }}</strong><small>中心汇总；审批由获授权实验室管理员办理</small></div><div class="stat"><span>待核实异常</span><strong>{{ director_incidents }}</strong><small>中心汇总；事实由负责岗位核实</small></div><div class="stat"><span>维修待验收</span><strong>{{ director_acceptance }}</strong><small>中心汇总；由非维修执行人验收</small></div><a class="stat accent" href="{% url 'reports' %}"><span>统计周期</span><strong>31<em>天内</em></strong><small>仅按报表规则统计已发生时段</small></a></div>
+<section class="workspace-banner role-banner center-overview" aria-labelledby="center-work-title">
+  <div><h2 id="center-work-title">管理摘要</h2><p>查看预约、异常和维修的中心汇总。</p></div><div class="role-actions"><a class="button" href="{% url 'reports' %}">查看资源利用报表</a><a class="button secondary" href="{% url 'audit' %}">查看审计记录</a></div>
+</section>
+<div class="stats director-stats"><div class="stat"><span>待审核申请</span><strong>{{ director_pending }}</strong><small>审批由获授权实验室管理员办理</small></div><div class="stat"><span>待核实异常</span><strong>{{ director_incidents }}</strong></div><div class="stat"><span>维修待验收</span><strong>{{ director_acceptance }}</strong></div><a class="stat accent" href="{% url 'reports' %}"><span>统计周期</span><strong>31<em>天</em></strong></a></div>
 {% endif %}
+
 {% if is_sys_admin %}
-<section class="workspace-banner role-banner sysadmin-banner"><div><span class="eyebrow">SYSTEM ADMIN / 身份与配置</span><h2>维护账号、角色和基础配置。</h2><p>系统管理权限不会自动授予预约审批、现场交接或维修验收权限。</p></div><div class="role-actions"><a class="button" href="{% url 'manage' %}?section=people">管理用户与授权</a><a class="button secondary" href="{% url 'manage' %}?section=access">查看角色与资格目录</a></div></section>
+<section class="workspace-banner role-banner configuration-work" aria-labelledby="system-work-title">
+  <div><h2 id="system-work-title">身份与配置</h2><p>维护人员授权、位置档案和开放日历。</p></div><div class="role-actions"><a class="button" href="{% url 'manage' %}?section=people">管理用户与授权</a><a class="button secondary" href="{% url 'manage' %}?section=access">查看角色与资格目录</a></div>
+</section>
+<div class="task-grid"><a class="task-card" href="{% url 'manage' %}?section=locations"><strong>校区与楼宇</strong><p>维护地址档案</p></a><a class="task-card" href="{% url 'manage' %}?section=calendars"><strong>开放日历</strong><p>维护每周时段和临时调整</p></a><a class="task-card" href="{% url 'audit' %}"><strong>审计记录</strong><p>查询操作历史</p></a></div>
 {% endif %}
+
 {% if is_teacher %}
-<section class="workspace-banner role-banner teacher-banner"><div><span class="eyebrow">TEACHER / 课程安排</span><h2>设备借用与整间场地预约分开办理。</h2><p>教师可申请场地；预约获批后仍由管理员登记实际开始与结束。</p></div><div class="role-actions"><a class="button" href="{% url 'resources' %}?kind=ROOM">查找可预约场地</a><a class="button secondary" href="{% url 'bookings' %}?scope=mine&amp;kind=ROOM">我的场地预约 · {{ teacher_room_upcoming }}</a></div></section>
+<section class="workspace-banner role-banner course-planner" aria-labelledby="teacher-work-title">
+  <div><h2 id="teacher-work-title">课程安排</h2><p>按实验室选择教室，再核对容量和开放时段。</p></div><div class="role-actions"><a class="button" href="{% url 'resources' %}?kind=ROOM">查找可预约场地</a><a class="button secondary" href="{% url 'resources' %}?kind=EQUIPMENT">查找设备</a></div>
+</section>
+<div class="workbench-columns"><section class="panel"><div class="section-heading"><h2>我的场地预约</h2><a href="{% url 'bookings' %}?scope=mine&amp;kind=ROOM">全部 →</a></div>{% for b in teacher_rooms %}<a class="upcoming-item" href="{% url 'booking' b.pk %}"><span class="badge {{ b.status|lower }}">{{ b.get_status_display }}</span><strong>{{ b.resource.name }}</strong><small>{{ b.starts_at|date:'m-d H:i' }}—{{ b.ends_at|date:'H:i' }}</small></a>{% empty %}<p class="empty-state">暂无即将开始的场地预约。</p>{% endfor %}</section><section class="panel"><h2>课程日程</h2><p>已确认或使用中的场地安排 {{ teacher_room_upcoming }} 项。</p><p>等待审核，不占用资源时段。</p><a href="{% url 'schedule' %}?kind=ROOM">打开场地日程 →</a></section></div>
 {% elif is_student %}
-<section class="workspace-banner role-banner student-banner"><div><span class="eyebrow">STUDENT / 个人实验安排</span><h2>先核对目标时段和设备条件。</h2><p>学生可以申请设备；场地预约由教师提出。候选时段是查询快照，提交时会再次核验。</p></div><div class="role-actions"><a class="button" href="{% url 'resources' %}?kind=EQUIPMENT">查找教学设备</a><a class="button secondary" href="{% url 'bookings' %}?scope=mine">查看我的预约与借还</a></div></section>
+<section class="workspace-banner role-banner student-reservations" aria-labelledby="student-work-title">
+  <div><h2 id="student-work-title">个人实验安排</h2><p>预约实验设备，查看领取、归还和审核进度。</p></div><div class="role-actions"><a class="button" href="{% url 'resources' %}?kind=EQUIPMENT">查找教学设备</a><a class="button secondary" href="{% url 'bookings' %}?scope=mine">查看我的预约与借还</a></div>
+</section>
+<div class="stats personal-stats"><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=PENDING"><span>待审核</span><strong>{{ pending }}</strong></a><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=CONFIRMED"><span>待领取</span><strong>{{ confirmed }}</strong></a><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=IN_USE"><span>使用中</span><strong>{{ using }}</strong></a></div>
 {% endif %}
 
-{% if tasks %}<div class="section-heading"><h2>我的工作队列</h2><span class="muted">只显示当前角色可访问的处理入口</span></div><section class="task-grid">{% for task in tasks %}<a class="task-card" href="{{ task.url }}"><span>{{ task.name }}</span><strong>{{ task.count }}</strong><p>{{ task.note }}</p><small>进入处理队列 →</small></a>{% endfor %}</section>{% endif %}
-
-{% if is_student or is_teacher %}<div class="stats personal-stats"><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=PENDING"><span>我的待审核</span><strong>{{ pending|stringformat:'02d' }}</strong><small>等待审核，不占用资源时段 →</small></a><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=CONFIRMED"><span>我的已确认</span><strong>{{ confirmed|stringformat:'02d' }}</strong><small>等待领取或入场 →</small></a><a class="stat" href="{% url 'bookings' %}?scope=mine&amp;status=IN_USE"><span>我的使用中</span><strong>{{ using|stringformat:'02d' }}</strong><small>按时办理归还或离场 →</small></a><div class="stat accent"><span>预约窗口</span><strong>{{ policy.window_days }}<em>天</em></strong><small>{{ policy.slot_minutes }}分钟粒度 · 最长{{ policy.max_hours }}小时</small></div></div>{% endif %}
-
-{% if upcoming or unread_preview %}<div class="workbench-columns"><section class="panel"><div class="section-heading"><h2>{% if is_teacher %}接下来的课程资源安排{% else %}接下来要使用{% endif %}</h2><a href="{% url 'bookings' %}?scope=mine">我的记录 →</a></div>{% for b in upcoming %}<a class="upcoming-item" href="{% url 'booking' b.pk %}"><span class="badge {{ b.status|lower }}">{{ b.get_status_display }}</span><strong>{{ b.resource.name }}</strong><small>{{ b.starts_at|date:'m-d H:i' }}—{{ b.ends_at|date:'H:i' }} · {{ b.resource.lab.name }}</small>{% if b.review_required %}<small class="warning">暂停交接，请先联系管理员复核</small>{% endif %}</a>{% empty %}<p class="empty-state">暂无已确认或使用中的预约。可从资源目录开始查询。</p>{% endfor %}</section><section class="panel"><div class="section-heading"><h2>未读动态</h2><a href="{% url 'notifications' %}">消息中心 →</a></div>{% for n in unread_preview %}<div class="workbench-message"><small>{{ n.created_at|date:'m-d H:i' }}</small><p>{{ n.content }}</p></div>{% empty %}<p class="empty-state">暂无未读消息。</p>{% endfor %}<p class="fine">系统内通知保留业务进展；外部渠道投递结果单独记录。</p></section></div>{% endif %}
-{% if is_student or is_teacher or is_lab_admin %}<div class="section-heading"><h2>近期预约记录</h2><a href="{% url 'bookings' %}">查看全部 →</a></div>{% include 'booking_table.html' with bookings=recent %}<div class="info-strip"><b>预约与现场交接</b><p>待审核不占时段，批准时再次检查。可移动设备与场地分别预约；固定设备还受关联场地和实际使用状态约束。系统记录不代替实物检查和现场交接。</p></div>{% endif %}
+{% if is_student or is_teacher %}
+<div class="section-heading"><h2>近期预约记录</h2><a href="{% url 'bookings' %}?scope=mine">查看全部 →</a></div>{% include 'booking_table.html' with bookings=recent %}
+{% endif %}
 {% endblock %}
