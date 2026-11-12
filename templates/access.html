@@ -6,14 +6,9 @@
   <h1>校园实验资源中心</h1>
   <p>查询设备与场地，管理每一次预约。当前为公开课程演示，使用模拟账号与数据。</p>
   <h2>网站</h2>
-  <p>使用学生或教师演示账号查询和预约资源。</p>
-  <p><a class="button" href="{% url 'login' %}">进入网页演示</a></p>
-  <p>公开演示密码：<code>Demo@2026</code>。不要填写真实隐私或账号凭据。</p>
-  {% if review_available %}
-  <h2>评审演示</h2>
-  <p>持评审访问码可体验实验室管理员、维修人员、系统管理员和中心主任工作台。</p>
-  <p><a class="button secondary" href="{% url 'review-login' %}">进入评审演示</a></p>
-  {% endif %}
+  <p>学生、教师及已开通的岗位账号均从同一入口登录。</p>
+  <p><a class="button" href="{% url 'login' %}">登录系统</a></p>
+  <p>学生与教师的演示密码为 <code>Demo@2026</code>。</p>
   <h2>微信小程序</h2>
   <p>公开正式版尚未发布。请使用网页预约。</p>
   <p><a href="https://github.com/yvming67-gif/campus-lab-equipment-manager">源代码、分析报告与运行说明</a></p>

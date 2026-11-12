@@ -15,15 +15,16 @@ from django.http import FileResponse,Http404,JsonResponse
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.crypto import constant_time_compare
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST, require_http_methods
+from django.views.decorators.http import require_POST
 from .models import *
 from .forms import *
 from . import services as s
 from .reports import utilization
-from .demo_identity import public_demo_accounts, verify_demo_password
-from .demo_identity import grant_review_session, review_accounts, review_key
+from .demo_identity import (
+    STAFF_SESSION, authenticate_staff_demo, public_demo_user_allowed,
+    valid_staff_demo_token, verify_demo_password, web_demo_accounts,
+)
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
 from .catalog import calendar_catalog, filter_resources
@@ -70,6 +71,7 @@ def login_page(request):
         return redirect("identity")
     return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE})
 
+@never_cache
 def identity(request):
     if not settings.DEMO_MODE:
         if not request.session.get("idp_nonce"):return redirect("login")
@@ -83,38 +85,27 @@ def identity(request):
         except (ImproperlyConfigured,ValueError):
             return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员"},status=503)
     if not request.session.get("idp_nonce"):return redirect("login")
-    accounts=public_demo_accounts()
-    error=""
-    if request.method=="POST":
-        username=request.POST.get("username","")
-        user=verify_demo_password(username,request.POST.get("password",""))
+    accounts = web_demo_accounts()
+    error = ""
+    username = request.POST.get("username", "")
+    if request.method == "POST":
+        password = request.POST.get("password", "")
+        user, staff_token = authenticate_staff_demo(username, password)
+        if not user:
+            user = verify_demo_password(username, password)
         if user:
-            ticket=signing.dumps({"sub":user.school_no,"nonce":request.session["idp_nonce"]},key=settings.MOCK_IDP_KEY,salt="mock-idp")
-            return redirect(reverse("callback")+"?"+urlencode({"ticket":ticket}))
-        error="模拟账号或演示密码不正确，或账号已停用"
-    return render(request,"identity.html",{"title":"模拟学校身份认证","accounts":accounts,"error":error})
+            assertion = {"sub": user.school_no, "nonce": request.session["idp_nonce"]}
+            request.session["pending_demo_staff"] = staff_token
+            ticket = signing.dumps(assertion, key=settings.MOCK_IDP_KEY, salt="mock-idp")
+            return redirect(reverse("callback") + "?" + urlencode({"ticket": ticket}))
+        error = "账号或密码不正确，或账号已停用。"
+    return render(request, "identity.html", {
+        "title": "演示账号登录", "accounts": accounts, "error": error,
+        "username": username, "public_demo": settings.PUBLIC_DEMO_MODE,
+    })
+
 
 @never_cache
-@require_http_methods(["GET", "POST"])
-def review_login(request):
-    key = review_key()
-    if not key:
-        raise Http404
-    accounts = review_accounts()
-    error = ""
-    if request.method == "POST":
-        submitted = request.POST.get("review_code", "")
-        username = request.POST.get("username", "")
-        if len(submitted) <= 128 and constant_time_compare(submitted, key):
-            for user, _ in accounts:
-                if user.username == username:
-                    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
-                    grant_review_session(request, user, key)
-                    s.audit(user, user, "LOGIN", new={"identity": "MOCK_REVIEW"}, reason="评审演示身份验证通过")
-                    return redirect("dashboard")
-        error = "评审访问码或账号有误。"
-    return render(request, "review_login.html", {"title": "评审演示", "accounts": accounts, "error": error})
-
 def callback(request):
     if not settings.DEMO_MODE:
         nonce=request.session.pop("idp_nonce",None)
@@ -134,7 +125,13 @@ def callback(request):
         protected(assertion["nonce"]==request.session.pop("idp_nonce",None))
         user=get_object_or_404(User,school_no=assertion["sub"],is_active=True)
     except (signing.BadSignature,KeyError):raise PermissionDenied
-    login(request,user,backend="django.contrib.auth.backends.ModelBackend");s.audit(user,user,"LOGIN",new={"identity":"MOCK"},reason="课程模拟身份断言校验通过")
+    staff_token = request.session.pop("pending_demo_staff", "")
+    if not public_demo_user_allowed(user):
+        protected(valid_staff_demo_token(user, staff_token))
+    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
+    if staff_token:
+        request.session[STAFF_SESSION] = staff_token
+    s.audit(user, user, "LOGIN", new={"identity": "MOCK"}, reason="课程模拟身份断言校验通过")
     return redirect("dashboard")
 
 @require_POST

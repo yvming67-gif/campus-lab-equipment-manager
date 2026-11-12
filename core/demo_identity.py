@@ -7,52 +7,61 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth import logout
 from django.core import signing
 from django.shortcuts import redirect
+from django.utils.crypto import constant_time_compare
 from .models import User
 
 PUBLIC_DEMO_ROLE_CODES = frozenset({"STUDENT", "TEACHER"})
-REVIEW_IDENTITIES = {
-    "admin": ("A-DEMO-01", "LAB_ADMIN", "实验室管理员"),
-    "tech": ("M-DEMO-01", "TECHNICIAN", "维修人员"),
-    "sysadmin": ("Y-DEMO-01", "SYS_ADMIN", "系统管理员"),
-    "director": ("D-DEMO-01", "DIRECTOR", "实验教学中心主任"),
+DEMO_STAFF_IDENTITIES = {
+    "admin": ("A-DEMO-01", "LAB_ADMIN"),
+    "tech": ("M-DEMO-01", "TECHNICIAN"),
+    "sysadmin": ("Y-DEMO-01", "SYS_ADMIN"),
+    "director": ("D-DEMO-01", "DIRECTOR"),
 }
-REVIEW_SESSION = "course_demo_review"
-REVIEW_MAX_AGE = 4 * 60 * 60
+STAFF_SESSION = "course_demo_staff"
+STAFF_MAX_AGE = 4 * 60 * 60
 
 
-def review_key():
-    key = getattr(settings, "CAMPUS_REVIEW_CODE", "")
-    return key if settings.DEMO_MODE and settings.PUBLIC_DEMO_MODE and 24 <= len(key) <= 128 else ""
-
-
-def review_identity(user):
+def staff_password(user):
+    if not settings.DEMO_MODE or not settings.PUBLIC_DEMO_MODE:
+        return ""
     if not user.is_active or user.is_staff or user.is_superuser:
-        return None
-    identity = REVIEW_IDENTITIES.get(user.username)
-    if identity and user.school_no == identity[0] and set(user.roles.values_list("code", flat=True)) == {identity[1]}:
-        return identity
-    return None
+        return ""
+    identity = DEMO_STAFF_IDENTITIES.get(user.username)
+    password = settings.CAMPUS_DEMO_STAFF_PASSWORDS.get(user.username, "")
+    if (identity and 24 <= len(password) <= 128 and user.school_no == identity[0]
+            and {role.code for role in user.roles.all()} == {identity[1]}):
+        return password
+    return ""
 
 
-def review_accounts():
+def web_demo_accounts():
+    accounts = User.objects.filter(is_active=True).order_by("pk").prefetch_related("roles")
+    if not settings.PUBLIC_DEMO_MODE:
+        return accounts
     return [
-        (user, identity[2])
-        for user in User.objects.filter(username__in=REVIEW_IDENTITIES).order_by("pk")
-        if (identity := review_identity(user))
+        user for user in accounts
+        if public_demo_user_allowed(user) or staff_password(user)
     ]
 
 
-def grant_review_session(request, user, key):
-    request.session[REVIEW_SESSION] = signing.dumps(user.pk, key=key, salt=REVIEW_SESSION)
+def authenticate_staff_demo(username, submitted):
+    if username not in DEMO_STAFF_IDENTITIES or not 24 <= len(submitted) <= 128:
+        return None, ""
+    user = User.objects.filter(username=username, is_active=True).first()
+    password = staff_password(user) if user else ""
+    if password and constant_time_compare(submitted, password):
+        token = signing.dumps(user.pk, key=password, salt=STAFF_SESSION)
+        return user, token
+    return None, ""
 
 
-def has_review_session(request):
-    key = review_key()
-    if not key or not review_identity(request.user):
+def valid_staff_demo_token(user, token):
+    password = staff_password(user)
+    if not password or not isinstance(token, str):
         return False
     try:
-        return signing.loads(request.session.get(REVIEW_SESSION, ""), key=key, fallback_keys=[],
-                             salt=REVIEW_SESSION, max_age=REVIEW_MAX_AGE) == request.user.pk
+        return signing.loads(token, key=password, fallback_keys=[], salt=STAFF_SESSION,
+                             max_age=STAFF_MAX_AGE) == user.pk
     except signing.BadSignature:
         return False
 
@@ -63,15 +72,8 @@ def public_demo_user_allowed(user):
         return True
     if not user.is_active:
         return False
-    role_codes = set(user.roles.values_list("code", flat=True))
+    role_codes = {role.code for role in user.roles.all()}
     return bool(role_codes & PUBLIC_DEMO_ROLE_CODES) and role_codes <= PUBLIC_DEMO_ROLE_CODES
-
-
-def public_demo_accounts():
-    accounts = User.objects.filter(is_active=True).order_by("pk")
-    if not settings.PUBLIC_DEMO_MODE:
-        return accounts
-    return [user for user in accounts if public_demo_user_allowed(user)]
 
 
 def verify_demo_password(username, password):
@@ -93,13 +95,14 @@ def verify_demo_password(username, password):
 
 
 class PublicDemoSessionMiddleware:
-    """Revoke already-issued shared-demo staff sessions after public-mode activation."""
+    """Require a current staff credential for privileged sessions in the public demo."""
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         if (settings.DEMO_MODE and settings.PUBLIC_DEMO_MODE and request.user.is_authenticated
-                and not public_demo_user_allowed(request.user) and not has_review_session(request)):
+                and not public_demo_user_allowed(request.user)
+                and not valid_staff_demo_token(request.user, request.session.get(STAFF_SESSION))):
             logout(request)
             return redirect("login")
         return self.get_response(request)

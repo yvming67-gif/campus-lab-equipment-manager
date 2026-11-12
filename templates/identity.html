@@ -1,1 +1,26 @@
-{% extends 'base.html' %}{% block content %}<div class="identity-card"><h1>演示账号登录</h1><p>请选择账号。公开演示密码为 <code>Demo@2026</code>。</p>{% if error %}<div class="message error">{{ error }}</div>{% endif %}<form method="post">{% csrf_token %}<label for="username">模拟账号</label><select id="username" name="username">{% for a in accounts %}<option value="{{ a.username }}">{{ a.display_name }} · {{ a.username }}</option>{% endfor %}</select><label for="password">演示密码</label><input id="password" name="password" type="password" required autocomplete="current-password"><button class="button full">登录</button></form><p><a href="{% url 'access' %}">返回访问入口</a></p></div>{% endblock %}
+{% extends 'base.html' %}
+{% block content %}
+<div class="identity-card">
+  <h1>演示账号登录</h1>
+  {% if public_demo %}
+  <p>学生与教师的演示密码为 <code>Demo@2026</code>。其他岗位使用各自的账号密码。</p>
+  {% else %}
+  <p>请选择模拟账号，演示密码为 <code>Demo@2026</code>。</p>
+  {% endif %}
+  {% if error %}<p class="message error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <label for="username">账号</label>
+    <select id="username" name="username" required autocomplete="username">
+      <option value="">请选择账号</option>
+      {% for a in accounts %}
+      <option value="{{ a.username }}"{% if a.username == username %} selected{% endif %}>{{ a.roles.all|join:"、"|default:a.display_name }} · {{ a.username }}</option>
+      {% endfor %}
+    </select>
+    <label for="password">密码</label>
+    <input id="password" name="password" type="password" required maxlength="128" autocomplete="current-password">
+    <button class="button full">登录</button>
+  </form>
+  <p><a href="{% url 'access' %}">返回访问入口</a></p>
+</div>
+{% endblock %}
