@@ -53,8 +53,8 @@
     "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42738732700"
   },
   "local": {
-    "checked_date": "2026-11-11",
-    "code_commit": "3291801663c7cad71714397049b15dc39a1d34ea",
+    "checked_date": "2026-11-12",
+    "code_commit": "b33b02ff30d9a79acd8198e7b8b4f31d2e9f1692",
     "local_docs_commit_pending_push": true,
     "backend_full_suite": {
       "modules": 21,
@@ -62,7 +62,7 @@
       "passed": 373,
       "failed": 0,
       "skipped": 0,
-      "duration_seconds": 111.442,
+      "duration_seconds": 88.762,
       "isolated_postgresql": true,
       "note": "覆盖已有公开演示库位置补齐、两次初始化、人工位置保留，以及预约和审计记录保留。"
     },
@@ -108,7 +108,7 @@
     "worktree_dirty": false,
     "modified_tracked_files": 0,
     "untracked_files": 0,
-    "local_commits_ahead_of_cached_origin_main": 8,
+    "local_commits_ahead_of_cached_origin_main": 10,
     "data_model": {
       "entities": 40,
       "fields": 341,
@@ -116,8 +116,8 @@
       "static_validators_passed": true
     },
     "latest_verification": {
-      "date": "2026-11-11",
-      "code_commit": "3291801663c7cad71714397049b15dc39a1d34ea",
+      "date": "2026-11-12",
+      "code_commit": "b33b02ff30d9a79acd8198e7b8b4f31d2e9f1692",
       "cached_origin_main": "4d834d0c84829200b051813da55df9b52982eb21",
       "migration": "core/migrations/0012_building_campus_roomdetail_floor_label_and_more.py",
       "django_system_check": "pass",
@@ -133,7 +133,8 @@
         "python_version": "3.13.12",
         "first_start_passed": true,
         "restart_passed": true,
-        "double_click_launcher_verified": false,
+        "launcher_cmd_verified": true,
+        "path_python_fallback_verified": true,
         "startup_tests_passed": 11,
         "restored_tables_compared": 47,
         "portable_backup_tests_passed": 4,
