@@ -451,6 +451,64 @@ class ProductTests(TestCase):
         self.assertNotContains(page,hidden.name)
 
 
+@override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True)
+class LegacyPublicDemoCatalogTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.applicant = User.objects.create(username="legacy_teacher", school_no="T-DEMO-LEGACY")
+        first_lab = Lab.objects.create(
+            code="LAB-101", name="电子与传感实验室", location="实验楼 A101",
+            description="示波器与传感器教学。全部为模拟资源。",
+        )
+        second_lab = Lab.objects.create(
+            code="LAB-202", name="机器人与数字影像实验室", location="实验楼 B202",
+            description="机器人、摄影与协同课程。",
+        )
+        for code, lab in (("ROOM-101", first_lab), ("ROOM-202", second_lab)):
+            room = Resource.objects.create(
+                code=code, lab=lab, kind="ROOM", name=f"{lab.name}整间场地", description="场地与室内设备分别预约。",
+            )
+            RoomDetail.objects.create(resource=room, capacity=24)
+        cls.original = Resource.objects.get(code="ROOM-101")
+        cls.original.room.location_label = "管理员登记的地址"
+        cls.original.room.save(update_fields=["location_label"])
+        now = timezone.now()
+        cls.reservation = Reservation.objects.create(
+            resource=cls.original, applicant=cls.applicant, starts_at=now,
+            ends_at=now + timedelta(hours=1), purpose="既有演示预约", approval_mode="MANUAL", status="CONFIRMED",
+        )
+        cls.event = s.audit(cls.applicant, cls.reservation, "TEST_EXISTING", new={"status": "CONFIRMED"})
+
+    def test_public_upgrade_adds_examples_and_preserves_legacy_records(self):
+        for _ in range(2):
+            call_command("seed_demo", if_empty=True, verbosity=0)
+        self.assertEqual(Resource.objects.filter(kind="ROOM").count(), 6)
+        self.assertEqual(Lab.objects.count(), 3)
+        self.assertEqual(User.objects.count(), 1)
+        self.assertEqual(Reservation.objects.count(), 1)
+        self.reservation.refresh_from_db()
+        self.assertEqual(self.reservation.resource_id, self.original.pk)
+        self.assertTrue(AuditEvent.objects.filter(pk=self.event.pk).exists())
+        self.assertEqual(AuditEvent.objects.count(), 5)
+        self.original.refresh_from_db()
+        self.assertEqual(self.original.name, "电子与传感实验室整间场地")
+        self.assertEqual(self.original.room.location_label, "管理员登记的地址")
+        for code in ("ROOM-102", "ROOM-201", "ROOM-301", "ROOM-302"):
+            room = Resource.objects.get(code=code)
+            self.assertTrue(room.name.startswith("演示·"))
+            self.assertTrue(room.room.building_id)
+            self.assertEqual(OpeningPeriod.objects.filter(resource=room).count(), 7)
+            self.assertEqual(room.service_periods.count(), 1)
+
+    def test_unrecognized_existing_catalog_is_not_extended(self):
+        Lab.objects.filter(code="LAB-202").update(description="独立管理资料")
+        call_command("seed_demo", if_empty=True, verbosity=0)
+        self.assertEqual(Resource.objects.filter(kind="ROOM").count(), 2)
+        self.assertEqual(Lab.objects.count(), 2)
+        self.assertFalse(Campus.objects.exists())
+        self.assertEqual(AuditEvent.objects.count(), 1)
+
+
 class StructuredLocationDirectoryTests(TestCase):
     @classmethod
     def setUpTestData(cls): call_command('seed_demo',verbosity=0)

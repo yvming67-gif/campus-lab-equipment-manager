@@ -17,6 +17,25 @@ DEMO_ROOM_LOCATIONS = {
     "ROOM-301": ("LAB-303", "C", "3层", "301室"),
     "ROOM-302": ("LAB-303", "C", "3层", "302室"),
 }
+DEMO_LAB_303 = {
+    "name": "演示·计算与物联网实验室",
+    "location": "演示楼 C · 3层",
+    "description": "课程演示管理单元；用途、地点和资源均为模拟示例。",
+}
+LEGACY_PUBLIC_DEMO = {
+    "LAB-101": ("电子与传感实验室", "实验楼 A101", "示波器与传感器教学。全部为模拟资源。", "ROOM-101"),
+    "LAB-202": ("机器人与数字影像实验室", "实验楼 B202", "机器人、摄影与协同课程。", "ROOM-202"),
+}
+LEGACY_ROOM_DESCRIPTION = "场地与室内设备分别预约。"
+SAFETY_PLACEHOLDER = "安全信息待责任岗位确认。本演示占位不构成风险评估、操作规程、培训、准入或安全许可；现场以经批准并现行有效的安全材料为准。"
+DEMO_ROOM_SPECS = (
+    ("ROOM-101", 32, "演示·电子测量教室 101", "适用课程：电子测量（模拟示例）；示例设施：教学桌与投影设备。", "综合教学实验室", "教学桌；投影设备（均为模拟示例）", time(8), time(18)),
+    ("ROOM-102", 20, "演示·传感器实验教室 102", "适用课程：传感器基础（模拟示例）；示例设施：可移动教学台。", "传感器教学实验室", "可移动教学台（模拟示例）", time(9), time(20)),
+    ("ROOM-201", 24, "演示·机器人实践教室 201", "适用课程：机器人实践（模拟示例）；设施和设备依赖须由管理员核实。", "机器人实践实验室", "教学工作台；设备依赖待核实（模拟示例）", time(8), time(19)),
+    ("ROOM-202", 16, "演示·数字影像教室 202", "适用课程：数字影像（模拟示例）；示例设施：教学工作台。", "数字影像教学实验室", "影像教学工作台（模拟示例）", time(10), time(18)),
+    ("ROOM-301", 36, "演示·计算机实验教室 301", "适用课程：计算实验（模拟示例）；示例设施：学生工作站。", "计算机教学实验室", "学生工作站（均为模拟示例）", time(8), time(20)),
+    ("ROOM-302", 18, "演示·物联网教学教室 302", "适用课程：物联网教学（模拟示例）；固定设备约束以实际档案为准。", "物联网教学实验室", "物联网教学设备依赖待核实（模拟示例）", time(9), time(17)),
+)
 
 
 def fill_known_demo_room_locations():
@@ -83,6 +102,81 @@ def grant_new_demo_lab_scopes(admin, labs, newly_created_lab_ids, admin_created=
             LabGrant.objects.get_or_create(user=admin, lab=lab)
 
 
+def seed_demo_room(lab, spec, *, repair_existing=False):
+    code, capacity, name, description, category, facilities, opens, closes = spec
+    _, building, floor, number = DEMO_ROOM_LOCATIONS[code]
+    location = f"演示楼{building}·{floor}·{number}"
+    status = "MAINTENANCE" if code == "ROOM-302" else "NORMAL"
+    status_note = " 演示状态示例：该场地当前维护中，不代表任何真实学校或实际房间状态。" if status == "MAINTENANCE" else ""
+    demo_description = f"演示数据。{description}"
+    resource, created = Resource.objects.get_or_create(
+        code=code, defaults={
+            "name": name, "lab": lab, "kind": "ROOM", "description": demo_description + status_note,
+            "service_status": status,
+        },
+    )
+    if not created:
+        if not repair_existing or resource.kind != "ROOM" or resource.lab_id != lab.pk:
+            return False
+        changes = []
+        legacy = LEGACY_PUBLIC_DEMO.get(lab.code)
+        if legacy and code == legacy[3] and resource.name == f"{legacy[0]}整间场地":
+            resource.name = name
+            changes.append("name")
+        if resource.description == LEGACY_ROOM_DESCRIPTION:
+            resource.description = demo_description
+            changes.append("description")
+        if changes:
+            resource.save(update_fields=changes)
+
+    detail, _ = RoomDetail.objects.get_or_create(resource=resource, defaults={
+        "location_label": location, "capacity": capacity, "space_category": category,
+        "facilities": facilities, "safety_note": SAFETY_PLACEHOLDER,
+    })
+    if repair_existing:
+        changes = []
+        if resource.description.startswith("演示数据。") and not detail.space_category and not detail.facilities:
+            detail.space_category, detail.facilities = category, facilities
+            changes.extend(("space_category", "facilities"))
+        if detail.safety_note == "结束时整理工位、关闭电源并交接。":
+            detail.safety_note = SAFETY_PLACEHOLDER
+            changes.append("safety_note")
+        if changes:
+            detail.save(update_fields=changes)
+    if created:
+        ensure_demo_opening_periods(lab=lab, resource=resource, starts_at=opens, ends_at=closes)
+    if not resource.service_periods.exists():
+        event = audit(None, resource, "RESOURCE_CREATE", new={"status": resource.service_status},
+                      reason="模拟资源初始化", at=resource.created_at)
+        ServicePeriod.objects.create(resource=resource, starts_at=resource.created_at,
+                                     status=resource.service_status, audit=event)
+    return created
+
+
+def extend_legacy_public_demo_rooms():
+    """Add the missing catalog examples only to the recognized original public demo."""
+    labs = {}
+    for code, (name, location, description, room_code) in LEGACY_PUBLIC_DEMO.items():
+        lab = Lab.objects.filter(code=code, name=name, location=location, description=description, is_active=True).first()
+        if lab is None or not RoomDetail.objects.filter(
+            resource__lab=lab, resource__code=room_code, resource__kind="ROOM",
+            resource__name=f"{name}整间场地", resource__description=LEGACY_ROOM_DESCRIPTION,
+        ).exists():
+            return 0
+        labs[code] = lab
+    lab, created = Lab.objects.get_or_create(code="LAB-303", defaults=DEMO_LAB_303)
+    if lab.is_active and all(getattr(lab, field) == value for field, value in DEMO_LAB_303.items()):
+        labs[lab.code] = lab
+        if created:
+            ensure_demo_opening_periods(lab=lab, starts_at=time(8), ends_at=time(20))
+    added = 0
+    for spec in DEMO_ROOM_SPECS:
+        lab = labs.get(DEMO_ROOM_LOCATIONS[spec[0]][0])
+        if lab is not None:
+            added += seed_demo_room(lab, spec)
+    return added
+
+
 class Command(BaseCommand):
     help = "幂等初始化模拟资源、人员和可演示业务；不会清空已有数据"
     def add_arguments(self, parser):
@@ -92,6 +186,9 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if options.get("if_empty") and User.objects.exists():
             if settings.DEMO_MODE and settings.PUBLIC_DEMO_MODE:
+                added = extend_legacy_public_demo_rooms()
+                if added:
+                    self.stdout.write(f"Added {added} simulated room resources to the known public demo.")
                 linked = fill_known_demo_room_locations()
                 if linked:
                     self.stdout.write(f"Linked {linked} known demo room locations.")
@@ -108,7 +205,7 @@ class Command(BaseCommand):
                 UserRole.objects.get_or_create(user=u,role=Role.objects.get(code=role))
         lab1,lab1_created=Lab.objects.get_or_create(code="LAB-101",defaults={"name":"演示·电子与传感实验室","location":"演示楼 A · 1层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
         lab2,lab2_created=Lab.objects.get_or_create(code="LAB-202",defaults={"name":"演示·机器人与数字影像实验室","location":"演示楼 B · 2层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
-        lab3,lab3_created=Lab.objects.get_or_create(code="LAB-303",defaults={"name":"演示·计算与物联网实验室","location":"演示楼 C · 3层","description":"课程演示管理单元；用途、地点和资源均为模拟示例。"})
+        lab3,lab3_created=Lab.objects.get_or_create(code="LAB-303",defaults=DEMO_LAB_303)
         # Convert only the exact labels created by earlier versions of this seed.
         # Any locally edited values are left untouched.
         legacy_labels={
@@ -146,38 +243,10 @@ class Command(BaseCommand):
             if not r.service_periods.exists():
                 ev=audit(None,r,"RESOURCE_CREATE",new={"status":r.service_status},reason="模拟资源初始化",at=r.created_at)
                 ServicePeriod.objects.create(resource=r,starts_at=r.created_at,status=r.service_status,audit=ev)
-        rooms=[
-            ("ROOM-101",lab1,32,"演示·电子测量教室 101","适用课程：电子测量（模拟示例）；示例设施：教学桌与投影设备。","综合教学实验室","教学桌；投影设备（均为模拟示例）","演示楼A·1层·101室"),
-            ("ROOM-102",lab1,20,"演示·传感器实验教室 102","适用课程：传感器基础（模拟示例）；示例设施：可移动教学台。","传感器教学实验室","可移动教学台（模拟示例）","演示楼A·1层·102室"),
-            ("ROOM-201",lab2,24,"演示·机器人实践教室 201","适用课程：机器人实践（模拟示例）；设施和设备依赖须由管理员核实。","机器人实践实验室","教学工作台；设备依赖待核实（模拟示例）","演示楼B·2层·201室"),
-            ("ROOM-202",lab2,16,"演示·数字影像教室 202","适用课程：数字影像（模拟示例）；示例设施：教学工作台。","数字影像教学实验室","影像教学工作台（模拟示例）","演示楼B·2层·202室"),
-            ("ROOM-301",lab3,36,"演示·计算机实验教室 301","适用课程：计算实验（模拟示例）；示例设施：学生工作站。","计算机教学实验室","学生工作站（模拟示例）","演示楼C·3层·301室"),
-            ("ROOM-302",lab3,18,"演示·物联网教学教室 302","适用课程：物联网教学（模拟示例）；固定设备约束以实际档案为准。","物联网教学实验室","物联网教学设备依赖待核实（模拟示例）","演示楼C·3层·302室"),
-        ]
-        legacy_room_names={"ROOM-101":"电子与传感实验室整间场地","ROOM-202":"机器人与数字影像实验室整间场地"}
-        safety_placeholder="安全信息待责任岗位确认。本演示占位不构成风险评估、操作规程、培训、准入或安全许可；现场以经批准并现行有效的安全材料为准。"
-        room_hours={"ROOM-101":(time(8),time(18)),"ROOM-102":(time(9),time(20)),"ROOM-201":(time(8),time(19)),"ROOM-202":(time(10),time(18)),"ROOM-301":(time(8),time(20)),"ROOM-302":(time(9),time(17))}
-        for code,lab,cap,name,description,space_category,facilities,location_label in rooms:
-            demo_status="MAINTENANCE" if code=="ROOM-302" else "NORMAL"
-            status_note="演示状态示例：该场地当前维护中，不代表任何真实学校或实际房间状态。" if code=="ROOM-302" else ""
-            r,new=Resource.objects.get_or_create(code=code,defaults={"name":name,"lab":lab,"kind":"ROOM","description":"演示数据。"+description+(" "+status_note if status_note else ""),"service_status":demo_status})
-            if r.name==legacy_room_names.get(code):r.name=name;r.save(update_fields=["name"])
-            if r.description=="场地与室内设备分别预约。":r.description="演示数据。"+description;r.save(update_fields=["description"])
-            RoomDetail.objects.get_or_create(resource=r,defaults={"location_label":location_label,"capacity":cap,"space_category":space_category,"facilities":facilities,"safety_note":safety_placeholder})
-            detail=RoomDetail.objects.get(resource=r)
-            if r.description.startswith("演示数据。") and not detail.space_category and not detail.facilities:
-                detail.space_category=space_category;detail.facilities=facilities;detail.save(update_fields=["space_category","facilities"])
-            if detail.safety_note=="结束时整理工位、关闭电源并交接。":detail.safety_note=safety_placeholder;detail.save(update_fields=["safety_note"])
-            # Course-demo room schedules intentionally vary by room; they do
-            # not represent any real institution's opening hours.
-            opens,closes=room_hours[code]
-            if new:
-                ensure_demo_opening_periods(
-                    lab=lab, resource=r, starts_at=opens, ends_at=closes,
-                )
-            if not r.service_periods.exists():
-                ev=audit(None,r,"RESOURCE_CREATE",new={"status":r.service_status},reason="模拟资源初始化",at=r.created_at)
-                ServicePeriod.objects.create(resource=r,starts_at=r.created_at,status=r.service_status,audit=ev)
+        labs_by_code = {lab.code: lab for lab in (lab1, lab2, lab3)}
+        for spec in DEMO_ROOM_SPECS:
+            lab_code = DEMO_ROOM_LOCATIONS[spec[0]][0]
+            seed_demo_room(labs_by_code[lab_code], spec, repair_existing=True)
         fill_known_demo_room_locations()
         # Exercise the fixed-equipment constraint on fresh demo installations.
         # Never rewrite a resource or equipment record already present.

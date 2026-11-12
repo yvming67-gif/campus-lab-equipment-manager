@@ -16,7 +16,9 @@
       "teacher"
     ],
     "management_accounts_listed": false,
-    "last_live_check": "2026-11-11; unauthenticated GET /health/ returned 200 with status ready, and GET / and /access/ returned 200 HTML. The access page states that the mini-program's formal entry is not open yet. No login or business write was submitted. An earlier TLS failure from another client in the same review environment was inconclusive.",
+    "last_live_check": "2026-11-12。演示直达页可打开，健康检查返回ready。公开学生演示会话中看到校区与楼宇筛选、场地照片提示及未发布安全信息提示。未写入预约业务数据。",
+    "new_release_behavior_verified": true,
+    "shared_demo_rooms_at_live_check": 2,
     "runtime_commit_verified": false,
     "available_to_public": true,
     "availability_limit": "Free instance sleep and provider quotas"
@@ -44,13 +46,13 @@
     "iphone": "Deferred"
   },
   "ci": {
-    "runtime_commit": "4d834d0c84829200b051813da55df9b52982eb21",
+    "runtime_commit": "77be647b77838a08970921a9ceb3a31db43d0d3b",
     "jobs_passed": [
       "test",
       "windows-first-install",
       "cloud-profile"
     ],
-    "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/42738732700"
+    "run_url": "https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/runs/43129963312"
   },
   "local": {
     "checked_date": "2026-11-12",
@@ -82,6 +84,15 @@
       "product_tests_after_photo_notice_passed": 37,
       "mini_program_tests_after_photo_notice_passed": 127,
       "native_template_pages_compiled_after_photo_notice": 8
+    },
+    "legacy_shared_demo_catalog_verification": {
+      "date": "2026-11-12",
+      "baseline_shared_rooms": 2,
+      "isolated_upgrade_rooms": 6,
+      "isolated_upgrade_lab_units": 3,
+      "idempotence_and_legacy_data_verified": true,
+      "backend_tests_passed": 375,
+      "shared_upgrade_status": "待本次提交上线后复查"
     },
     "analysis_report": {
       "formal_docx_sha256": "757FE4699E462CDCACC1CD877FA8FE6A03413B13F92D6AABB51B9CB9AA33C6E8",
@@ -195,10 +206,11 @@
     "cloud_runtime_update_verified": false
   },
   "publication": {
+    "github_main_verified_commit": "77be647b77838a08970921a9ceb3a31db43d0d3b",
     "history_rewritten": false,
     "process_material_archived_locally": true,
     "formal_word_changed": true,
-    "formal_word_change_status": "本地正式稿已替换并按LibreOffice渲染复核；Microsoft Word原生分页及公开版本同步仍待验证。",
+    "formal_word_change_status": "正式稿已按LibreOffice渲染复核并随GitHub提交公开；Microsoft Word原生分页仍待验证。",
     "runtime_code_change_pending_push": true
   }
 }
