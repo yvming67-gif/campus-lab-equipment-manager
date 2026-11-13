@@ -13,6 +13,24 @@ test('quick dates use Beijing midnight and bound a zero-day or short configured 
  assert.equal(fmt.quickDates('',0,at).length,1);assert.equal(fmt.quickDates('',2,at).length,3);
 });
 
+test('teacher room shortcut applies the room query and opens capacity filters', async () => {
+ const p=page('resources');
+ assert.equal(p.openRoomFinder(), undefined);
+ assert.equal(requests.length, 0);
+ const session=storage.get('campus-mini-session');
+ session.user.can_book_room=true;
+ p.setData({'form.q':'示波器','form.category':'电子设备'});
+ const loading=p.openRoomFinder();
+ assert.equal(p.data.kind,'ROOM');
+ assert.equal(p.data.advancedFilters,true);
+ assert.equal(requests[0].data.kind,'ROOM');
+ assert.equal(requests[0].data.q,'');
+ assert.equal(requests[0].data.category,'');
+ ok(requests[0],result());
+ await loading;
+ assert.equal(p.data.appliedKind,'整间场地');
+});
+
 test('choosing a quick date invalidates stale candidate data and retains the booking purpose',async()=>{
  const p=page('resource');p.setData({id:1,item:{id:1,policy:{window_days:14}},'form.purpose':'保留实验目的'});const pending=p.loadSlots();
  const day=p.data.quickDates[2].day;p.chooseQuickDate({currentTarget:{dataset:{day}}});

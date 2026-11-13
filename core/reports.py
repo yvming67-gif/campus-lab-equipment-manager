@@ -3,6 +3,29 @@ from django.utils import timezone
 from .models import *
 from .services import TZ, BusinessError
 from .opening_calendar import effective_weekly_rows
+from .ui_navigation import parse_day
+
+DEFAULT_REPORT_DAYS = 7
+
+def report_window(now, first_date="", last_date=""):
+    """Convert inclusive China-local dates into a bounded reporting interval."""
+    today = now.astimezone(TZ).date()
+    first = today - timedelta(days=DEFAULT_REPORT_DAYS - 1)
+    if first_date:
+        first = parse_day(first_date)
+        if first is None:
+            raise BusinessError("起始日期无效，请选择有效日期")
+    start = datetime.combine(first, datetime.min.time(), TZ)
+    if not last_date:
+        return start, now
+    last = parse_day(last_date)
+    if last is None:
+        raise BusinessError("结束日期无效，请选择有效日期")
+    try:
+        exclusive_end = datetime.combine(last + timedelta(days=1), datetime.min.time(), TZ)
+    except OverflowError:
+        raise BusinessError("结束日期超出可统计范围，请选择有效日期") from None
+    return start, min(now, exclusive_end)
 
 def intersection(a,b,c,d):return max(0,(min(b,d)-max(a,c)).total_seconds())
 def utilization(resources,start,end,at=None):

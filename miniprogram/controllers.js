@@ -128,6 +128,15 @@ const screens = {
       return this.load(1);
     },
     chooseKind(e) { this.setData({ kind: e.currentTarget.dataset.kind }); return this.load(1); },
+    openRoomFinder() {
+      if (!api.session()?.user.can_book_room) return;
+      const filters = { kind: 'ROOM', advancedFilters: true };
+      if (this.data.kind !== 'ROOM') {
+        filters.form = { ...this.data.form, q: '', category: '', facility: '' };
+      }
+      this.setData(filters, () => wx.pageScrollTo({ selector: '#resource-search', duration: 0 }));
+      return this.load(1);
+    },
     chooseLab(e) { this.setData({ labIndex: Number(e.detail.value) }); return this.load(1); },
     chooseCampus(e) { this.setData({ campusIndex:Number(e.detail.value),buildingIndex:0 });return this.load(1); },
     chooseBuilding(e) { this.setData({ buildingIndex:Number(e.detail.value) });return this.load(1); },

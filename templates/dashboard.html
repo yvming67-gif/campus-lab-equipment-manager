@@ -5,7 +5,7 @@
 
 {% if is_lab_admin %}
 <section class="workspace-banner role-banner lab-operations" aria-labelledby="lab-work-title">
-  <div><h2 id="lab-work-title">今日管理</h2><p>审核预约、安排交接和处理异常。</p></div>
+  <div><h2 id="lab-work-title">预约与交接</h2><p>审核预约、安排交接和处理异常。</p></div>
   <div class="role-actions"><a class="button" href="{% url 'bookings' %}?queue=review">处理待审核申请 · {{ to_review }}</a><a class="button secondary" href="{% url 'manage' %}?section=resources">维护本实验室资源</a></div>
 </section>
 <h2>我的工作队列</h2>
@@ -24,7 +24,7 @@
 <section class="workspace-banner role-banner center-overview" aria-labelledby="center-work-title">
   <div><h2 id="center-work-title">管理摘要</h2><p>查看预约、异常和维修的中心汇总。</p></div><div class="role-actions"><a class="button" href="{% url 'reports' %}">查看资源利用报表</a><a class="button secondary" href="{% url 'audit' %}">查看审计记录</a></div>
 </section>
-<div class="stats director-stats"><div class="stat"><span>待审核申请</span><strong>{{ director_pending }}</strong><small>审批由获授权实验室管理员办理</small></div><div class="stat"><span>待核实异常</span><strong>{{ director_incidents }}</strong></div><div class="stat"><span>维修待验收</span><strong>{{ director_acceptance }}</strong></div><a class="stat accent" href="{% url 'reports' %}"><span>统计周期</span><strong>31<em>天</em></strong></a></div>
+<div class="stats director-stats"><div class="stat"><span>待审核申请</span><strong>{{ director_pending }}</strong><small>审批由获授权实验室管理员办理</small></div><div class="stat"><span>待核实异常</span><strong>{{ director_incidents }}</strong></div><div class="stat"><span>维修待验收</span><strong>{{ director_acceptance }}</strong></div><a class="stat accent" href="{% url 'reports' %}"><span>利用报表默认范围</span><strong>{{ default_report_days }}<em>天</em></strong><small>含今天，统计至当前时间</small></a></div>
 {% endif %}
 
 {% if is_sys_admin %}

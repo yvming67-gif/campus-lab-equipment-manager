@@ -222,7 +222,7 @@ class RoleDashboardTests(TestCase):
 
     def test_lab_admin_dashboard_routes_to_authorized_work_queues(self):
         response=self.dashboard_as("admin")
-        self.assertContains(response,"今日管理")
+        self.assertContains(response,"预约与交接")
         self.assertContains(response,"处理待审核申请")
         self.assertContains(response,"维护本实验室资源")
         self.assertContains(response,"维修待验收")

@@ -65,11 +65,16 @@ class PhaseOneWebTests(TestCase):
         r=self.client.get('/bookings/',{'queue':'review'})
         ids=[b.pk for b in r.context['bookings']]
         self.assertEqual(ids[:2],[older.pk,newer.pk])
+        self.assertContains(r, f"预约编号 {older.code}")
+        filtered = self.client.get('/bookings/', {'queue': 'review', 'q': older.code})
+        self.assertContains(filtered, f"预约编号 {older.code}")
+        self.assertNotContains(filtered, f"预约编号 {newer.code}")
         r=self.client.get('/bookings/',{'queue':'review','sort':'starts'})
         self.assertEqual([b.pk for b in r.context['bookings']][:2],[newer.pk,older.pk])
         LabGrant.objects.filter(user=self.admin,lab=self.camera.lab).delete()
         r=self.client.get('/bookings/',{'queue':'review'})
         self.assertNotIn(older.pk,[b.pk for b in r.context['bookings']])
+        self.assertNotContains(r, f"预约编号 {older.code}")
 
     def test_approval_context_is_private_and_only_a_snapshot(self):
         b=self.book(age=10);self.client.force_login(self.admin)

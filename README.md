@@ -51,7 +51,7 @@
 | 矢量ERD | [完整总图](models/ERD/完整ERD总图.pdf) · [A4分域图册](models/ERD/分域ERD图册.pdf) |
 | 可编辑模型 | [draw.io总图](models/图形源文件/ERD-00-完整实体关系总图.drawio) · [JSON、DBML、Mermaid、UML及离线交互图说明](models/README.md) |
 
-[模型目录](models/README.md)列出各数据域及读图方法。[验证记录](docs/验证说明.md)汇总已覆盖的场景及待验证事项。
+[模型目录](models/README.md)列出各数据域及读图方法。[产品对标与实装验证](docs/产品对标与实装验证.md)记录案例依据、操作结果及改动前后截图。[验证记录](docs/验证说明.md)汇总已覆盖的场景及待验证事项。
 
 ## 资源结构与安全信息
 

@@ -85,9 +85,17 @@ class AuditInputFixTests(TestCase):
     def test_aud0106_default_date_uses_china_date_after_midnight(self):
         from datetime import datetime, timezone as dt_timezone
         self.client.force_login(self.admin)
-        with patch('core.views.timezone.now', return_value=datetime(2026, 10, 25, 16, 30, tzinfo=dt_timezone.utc)):
+        now = datetime(2026, 10, 25, 16, 30, tzinfo=dt_timezone.utc)
+        expected_start = datetime(2026, 10, 20, tzinfo=s.TZ)
+        with patch('core.views.timezone.now', return_value=now), patch('core.views.utilization', return_value=[]) as utilization:
             response = self.client.get('/reports/')
+            self.client.get('/reports/', {'start': '2026-10-20', 'end': '2026-10-26'})
+        self.assertEqual(utilization.call_count, 2)
+        for call in utilization.call_args_list:
+            self.assertEqual(call.args[1:], (expected_start, now))
+            self.assertEqual(call.kwargs, {'at': now})
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'name="start" value="2026-10-20"')
         self.assertContains(response, 'name="end" value="2026-10-26"')
 
     def test_aud0106_regular_report_end_date_keeps_working(self):
@@ -97,6 +105,12 @@ class AuditInputFixTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context['error'])
         self.assertTrue(response.context['rows'])
+
+    def test_nonstandard_report_date_is_an_error_without_empty_results(self):
+        self.client.force_login(self.admin)
+        response = self.client.get('/reports/', {'start': '2026-1-1'})
+        self.assertContains(response, '起始日期无效，请选择有效日期')
+        self.assertNotContains(response, '无可统计数据')
 
 
 class AuditDeliveryChannelFixTests(TestCase):

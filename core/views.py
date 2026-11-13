@@ -1,5 +1,5 @@
 import json,secrets,uuid,hashlib
-from datetime import datetime,timedelta
+from datetime import timedelta
 from pathlib import Path
 from urllib.parse import urlencode
 from django.conf import settings
@@ -20,7 +20,7 @@ from django.views.decorators.http import require_POST
 from .models import *
 from .forms import *
 from . import services as s
-from .reports import utilization
+from .reports import DEFAULT_REPORT_DAYS, report_window, utilization
 from .demo_identity import (
     PRIVATE_SESSION, authenticate_private_demo, public_demo_user_allowed,
     valid_private_demo_token, verify_demo_password, web_demo_accounts,
@@ -146,6 +146,7 @@ def dashboard(request):
     if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
     if request.user.has_role("DIRECTOR"):
         context.update({"director_pending":Reservation.objects.filter(status="PENDING").count(),"director_incidents":Incident.objects.filter(status="PENDING").count(),"director_acceptance":WorkOrder.objects.filter(status="AWAITING_ACCEPTANCE").count()})
+        context["default_report_days"] = DEFAULT_REPORT_DAYS
     if request.user.has_role("TECHNICIAN"):
         assigned = scoped_work(request.user).filter(assigned_to=request.user, status__in=["OPEN", "IN_PROGRESS"]).order_by("pk")
         context["technician_open"] = assigned.count()
@@ -491,17 +492,28 @@ def audit_list(request):
 
 @login_required
 def reports(request):
-    protected(request.user.has_role("LAB_ADMIN","DIRECTOR"));now=timezone.now();start=(now-timedelta(days=7)).replace(hour=0,minute=0,second=0,microsecond=0);end=now
-    error="";page=None
+    protected(request.user.has_role("LAB_ADMIN", "DIRECTOR"))
+    now = timezone.now()
+    start_input = request.GET.get("start", "")
+    end_input = request.GET.get("end", "")
+    default_start, _ = report_window(now)
+    start_input = start_input or default_start.date().isoformat()
+    end_input = end_input or now.astimezone(s.TZ).date().isoformat()
+    rows, error, page, end = [], "", None, None
     try:
-        if request.GET.get("start"):start=timezone.make_aware(datetime.strptime(request.GET["start"],"%Y-%m-%d"))
-        if request.GET.get("end"):end=min(now,timezone.make_aware(datetime.strptime(request.GET["end"],"%Y-%m-%d"))+timedelta(days=1))
-        qs=Resource.objects.select_related("lab")
-        if not request.user.has_role("DIRECTOR"):qs=qs.filter(lab__labgrant__user=request.user)
-        page=Paginator(qs.order_by("code"),50).get_page(request.GET.get("page",1));rows=utilization(page.object_list,start,end)
-    except (ValueError,s.BusinessError) as e:rows=[];error=str(e)
-    except OverflowError:rows=[];error="结束日期超出可统计范围，请选择有效日期"
-    return render(request,"reports.html",{"title":"利用与运行报表","rows":rows,"start":start,"end":end,"start_input":request.GET.get("start") or timezone.localdate(start).isoformat(),"end_input":request.GET.get("end") or timezone.localdate(end).isoformat(),"error":error,"page":page})
+        start, end = report_window(now, start_input, end_input)
+        resources = Resource.objects.select_related("lab")
+        if not request.user.has_role("DIRECTOR"):
+            resources = resources.filter(lab__labgrant__user=request.user)
+        result_page = Paginator(resources.order_by("code"), 50).get_page(request.GET.get("page", 1))
+        rows = utilization(result_page.object_list, start, end, at=now)
+        page = result_page
+    except s.BusinessError as exc:
+        error = str(exc)
+    return render(request, "reports.html", {
+        "title": "利用与运行报表", "rows": rows, "end": end, "error": error, "page": page,
+        "start_input": start_input, "end_input": end_input, "default_report_days": DEFAULT_REPORT_DAYS,
+    })
 
 @login_required
 def manage(request):

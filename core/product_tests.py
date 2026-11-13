@@ -256,9 +256,9 @@ class ProductTests(TestCase):
 
     def test_role_homepages_prioritize_different_authorized_work(self):
         cases=[
-            ('student','个人实验安排','查找教学设备','今日管理'),
+            ('student','个人实验安排','查找教学设备','预约与交接'),
             ('teacher','课程安排','查找可预约场地','身份与配置'),
-            ('admin','今日管理','处理待审核申请','身份与配置'),
+            ('admin','预约与交接','处理待审核申请','身份与配置'),
             ('tech','指派任务','打开我的维修任务','处理待审核申请'),
             ('director','管理摘要','查看资源利用报表','管理用户与授权'),
             ('sysadmin','身份与配置','管理用户与授权','处理待审核申请'),

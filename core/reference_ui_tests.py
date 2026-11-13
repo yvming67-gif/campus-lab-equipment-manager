@@ -75,6 +75,12 @@ class ReferenceExperienceTests(TestCase):
         self.assertContains(schedule,'公开的有效占用')
         self.assertNotContains(schedule,booking.purpose)
 
+    def test_teacher_keeps_room_kind_when_refining_booking_list(self):
+        teacher = User.objects.get(username='teacher')
+        self.client.force_login(teacher)
+        response = self.client.get('/bookings/', {'scope': 'mine', 'kind': 'ROOM', 'status': 'PENDING'})
+        self.assertContains(response, '<input type="hidden" name="kind" value="ROOM">', html=True)
+
     def test_foreign_session_filter_context_is_not_restored_or_echoed(self):
         self.client.force_login(self.other)
         response=self.client.get('/schedule/',{'origin':'records','record_user':self.student.pk,'record_q':'另一个账号的查询上下文','record_status':'PENDING','day':self.start.date().isoformat()})

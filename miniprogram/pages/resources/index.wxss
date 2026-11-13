@@ -1,1 +1,2 @@
 /* Shared visual system is defined in app.wxss. */
+.teacher-room-actions { margin: 20rpx 0; } .teacher-room-actions .secondary { min-height: 88rpx; }
