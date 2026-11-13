@@ -11,6 +11,14 @@ from django.utils.crypto import constant_time_compare
 from .models import Role, User, UserRole
 
 PUBLIC_DEMO_ROLE_CODES = frozenset({"STUDENT", "TEACHER"})
+ROLE_TASKS = {
+    "STUDENT": "查设备、申请借用、跟进进度",
+    "TEACHER": "安排课程实验、申请教室和设备",
+    "LAB_ADMIN": "审核申请、办理交接、验收维修",
+    "TECHNICIAN": "处理指派工单、提交维修结果",
+    "SYS_ADMIN": "维护人员授权、参数和开放日历",
+    "DIRECTOR": "查看中心报表与审计记录",
+}
 PRIVATE_APPLICANTS = {
     "student_lab": ("S-DEMO-LAB", "STUDENT", "模拟实验学生"),
     "teacher_lab": ("T-DEMO-LAB", "TEACHER", "模拟实验教师"),
@@ -62,12 +70,13 @@ def private_password(user):
 
 def web_demo_accounts():
     accounts = User.objects.filter(is_active=True).order_by("pk").prefetch_related("roles")
-    if not settings.PUBLIC_DEMO_MODE:
-        return accounts
-    return [
-        user for user in accounts
-        if public_demo_user_allowed(user) or private_password(user)
-    ]
+    visible = []
+    for user in accounts:
+        if not (public_demo_user_allowed(user) or private_password(user)):
+            continue
+        user.role_tasks = "；".join(ROLE_TASKS[role.code] for role in user.roles.all() if role.code in ROLE_TASKS)
+        visible.append(user)
+    return visible
 
 
 def authenticate_private_demo(username, submitted):

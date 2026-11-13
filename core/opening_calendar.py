@@ -1,6 +1,6 @@
 """Resolve lab defaults and optional per-room weekly opening schedules."""
 from django.db.models import Q
-from datetime import timedelta
+from datetime import date, timedelta
 from django.utils import timezone
 
 from .models import CalendarException, OpeningPeriod
@@ -84,19 +84,38 @@ def weekly_schedule(resource, as_of=None):
     again at the point of action.
     """
     as_of = as_of or timezone.localdate()
-    end = as_of + timedelta(days=6)
+    return schedule_by_resource([resource], as_of, days=7)[resource.pk]
+
+
+def schedule_by_resource(resources, as_of, *, days):
+    """Read the same calendar for one or many cards using two queries."""
+    if not resources:
+        return {}
+    days = min(days, (date.max - as_of).days + 1)
+    end = as_of + timedelta(days=days - 1)
+    labs = {resource.lab_id for resource in resources}
+    periods_by_lab = {lab: [] for lab in labs}
     periods = list(OpeningPeriod.objects.filter(
-        lab_id=resource.lab_id, valid_from__lte=end,
+        lab_id__in=labs, valid_from__lte=end,
     ).filter(Q(valid_to__isnull=True) | Q(valid_to__gte=as_of)).order_by("starts_at"))
+    for row in periods:
+        periods_by_lab[row.lab_id].append(row)
     exceptions = {
-        row.day: row for row in CalendarException.objects.filter(
-            lab_id=resource.lab_id, active=True, day__range=(as_of, end)
+        (row.lab_id, row.day): row for row in CalendarException.objects.filter(
+            lab_id__in=labs, active=True, day__range=(as_of, end)
         )
     }
+    return {
+        resource.pk: _display_schedule(resource, as_of, days, periods_by_lab[resource.lab_id], exceptions)
+        for resource in resources
+    }
+
+
+def _display_schedule(resource, as_of, days, periods, exceptions):
     result = []
-    for offset in range(7):
+    for offset in range(days):
         day = as_of + timedelta(days=offset)
-        exception = exceptions.get(day)
+        exception = exceptions.get((resource.lab_id, day))
         if exception:
             ranges = [] if exception.closed else [f"{exception.starts_at:%H:%M}—{exception.ends_at:%H:%M}"]
             closed = exception.closed

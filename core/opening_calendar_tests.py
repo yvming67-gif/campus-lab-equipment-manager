@@ -49,6 +49,20 @@ class RoomOpeningCalendarTests(TestCase):
         data=response.json()["data"]
         self.assertEqual(data["opening_schedule"],weekly_schedule(self.room_short))
 
+    def test_catalog_opening_summary_matches_selected_date_in_both_clients(self):
+        day, start = self.day_and_time(10)
+        query = {"kind": "ROOM", "starts_at": start.isoformat(), "ends_at": (start + timedelta(hours=1)).isoformat()}
+        self.client.force_login(self.teacher)
+        web = self.client.get("/resources/", query)
+        card = next(item for item in web.context["resources"] if item.pk == self.room_short.pk)
+        token = self.client.post("/api/mini/v1/auth/login/",
+            json.dumps({"username": "teacher", "password": "Demo@2026"}), content_type="application/json").json()["data"]["token"]
+        mini = self.client.get("/api/mini/v1/resources/", query, HTTP_AUTHORIZATION="Bearer " + token)
+        item = next(item for item in mini.json()["data"]["items"] if item["id"] == self.room_short.pk)
+        self.assertEqual(item["opening_summary"], card.opening_summary)
+        self.assertEqual(item["opening_summary"]["date"], day.isoformat())
+        self.assertEqual(item["opening_schedule"], weekly_schedule(self.room_short))
+
     def test_weekly_schedule_supports_multiple_non_overlapping_windows(self):
         day=timezone.localdate()+timedelta(days=2)
         services.change_opening(self.admin,{

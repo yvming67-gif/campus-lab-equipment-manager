@@ -5,8 +5,9 @@
   <section class="login-intro"><h1>校园实验资源中心</h1><p>查询教室与设备，预约实验资源，跟进使用安排。</p></section>
   <section class="login-card">
     <h2>{% if demo %}演示账号登录{% else %}统一身份登录{% endif %}</h2>
-    <form method="post">{% csrf_token %}<button class="button full">{% if demo %}选择演示账号{% else %}进入学校统一身份入口{% endif %}</button></form>
-    {% if demo %}<p><a href="{% url 'access' %}">查看其他访问方式</a></p>{% endif %}
+    {% if login_destination %}<p>登录后继续前往{% if login_destination == '/resources/?kind=ROOM' %}教室目录{% elif login_destination == '/resources/?kind=EQUIPMENT' %}设备目录{% else %}资源目录{% endif %}。</p>{% endif %}
+    <form method="post">{% csrf_token %}{% if login_destination %}<input type="hidden" name="next" value="{{ login_destination }}">{% endif %}<button class="button full">{% if demo %}选择演示账号{% else %}进入学校统一身份入口{% endif %}</button></form>
+    <p><a href="{% url 'access' %}">返回实验资源中心</a></p>
   </section>
 </div>
 {% endblock %}

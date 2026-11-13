@@ -203,3 +203,4 @@ button,.tab,.status-filter,.field-value,.hero-stat { min-height: 44px; }.field-v
 .opening-list{padding-top:16rpx}.opening-item{display:grid;grid-template-columns:1fr 1.15fr;gap:6rpx 12rpx;padding:12rpx 0;border-bottom:1rpx solid #e5ebe2;font-size:23rpx}.opening-item .muted{grid-column:1/-1;color:#6e6e73}
 
 .location-filter-note{padding:8rpx 4rpx;color:var(--text-secondary);font-size:24rpx;line-height:1.5}.location-filter{gap:12rpx}.location-filter picker{min-width:0;flex:1}
+.stage-marker { color:#145ba2; font-size:23rpx; font-weight:600; margin-right:8rpx; }

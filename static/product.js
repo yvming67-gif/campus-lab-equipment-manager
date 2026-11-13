@@ -108,13 +108,82 @@ const reservationSummary = document.querySelector('[data-reservation-summary]');
 if (reservationSummary) {
   const start = document.querySelector('#reservation-form input[name=starts_at]');
   const end = document.querySelector('#reservation-form input[name=ends_at]');
+  const purpose = document.querySelector('#reservation-form textarea[name=purpose]');
+  const participants = document.querySelector('#reservation-form input[name=participants]');
   const output = reservationSummary.querySelector('[data-time-summary]');
+  const purposeOutput = reservationSummary.querySelector('[data-purpose-summary]');
+  const participantsOutput = reservationSummary.querySelector('[data-participants-summary]');
   const update = () => {
     output.textContent = start.value && end.value
       ? `${start.value.replace('T', ' ')} — ${end.value.replace('T', ' ')}（北京时间）`
       : '请填写完整起止时间。';
+    purposeOutput.textContent = purpose.value.trim() || '尚未填写';
+    if (participantsOutput) participantsOutput.textContent = participants.value || '尚未填写';
   };
-  if (start && end && output) {
-    start.addEventListener('input', update); end.addEventListener('input', update); update();
+  if (start && end && purpose && output && purposeOutput) {
+    for (const field of [start, end, purpose, participants]) field?.addEventListener('input', update);
+    update();
   }
+}
+
+const recovery = document.querySelector('[data-reservation-recovery]');
+const reservationResult = document.querySelector('[data-reservation-result]');
+if (reservationResult) {
+  try {
+    const key = 'reservation-receipt:' + reservationResult.dataset.context;
+    const pending = JSON.parse(sessionStorage.getItem(key));
+    if (pending?.request_key === reservationResult.dataset.reservationResult) sessionStorage.removeItem(key);
+  } catch (_) { /* The form still works when browser storage is unavailable. */ }
+}
+if (recovery) {
+  const form = document.querySelector('#reservation-form form');
+  const storageKey = 'reservation-receipt:' + recovery.dataset.context;
+  const fields = ['starts_at', 'ends_at', 'purpose', 'participants', 'request_key', 'expected_approval_mode'];
+  const readForm = () => Object.fromEntries(fields.map(name => [name, form.elements[name].value]));
+  const showReceipt = key => {
+    const url = new URL(recovery.dataset.url, location.origin);
+    url.searchParams.set('key', key);
+    recovery.querySelector('a').href = url;
+    recovery.hidden = false;
+  };
+  const lockOriginal = () => {
+    for (const field of ['starts_at', 'ends_at', 'purpose', 'participants']) form.elements[field].readOnly = true;
+    form.querySelector('[type=submit]').textContent = '按原内容重试';
+  };
+  let pending = null;
+  try {
+    pending = JSON.parse(sessionStorage.getItem(storageKey));
+    if (pending && recovery.dataset.rejected === pending.request_key) {
+      sessionStorage.removeItem(storageKey);
+      pending = null;
+    }
+    if (pending && fields.every(name => typeof pending[name] === 'string')) {
+      showReceipt(pending.request_key);
+      if (form) {
+        for (const name of fields) form.elements[name].value = pending[name];
+        form.elements.purpose.dispatchEvent(new Event('input'));
+        form.querySelector('[data-mode-summary]').textContent = pending.expected_approval_mode === 'MANUAL'
+          ? '原申请由实验室管理员审核，待审核不占时段'
+          : '原申请规则通过后自动确认';
+        lockOriginal();
+      }
+    } else {
+      pending = null;
+    }
+  } catch (_) { /* Receipt link can still appear on submit. */ }
+  window.addEventListener('pageshow', event => {
+    if (event.persisted && pending) location.reload();
+  });
+  form?.addEventListener('submit', event => {
+    const values = readForm();
+    if (pending && fields.some(name => values[name] !== pending[name])) {
+      event.preventDefault();
+      return;
+    }
+    if (!values.request_key) return;
+    pending = values;
+    lockOriginal();
+    showReceipt(values.request_key);
+    try { sessionStorage.setItem(storageKey, JSON.stringify(values)); } catch (_) { /* Optional recovery after reload. */ }
+  });
 }

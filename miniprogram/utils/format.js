@@ -17,9 +17,12 @@ function resourceMark(item) {
 }
 function resource(item) {
   const accessories=Array.isArray(item.accessories)?item.accessories:[];
+  const day = item.opening_summary || (Array.isArray(item.opening_schedule) ? item.opening_schedule[0] : null);
+  const openingSummary = day ? day.date.slice(5) + ' · ' + (day.ranges.length ? day.ranges.join('、') : day.note) : '';
   const risk=item.kind==='EQUIPMENT'?(item.risk||'待核实'):'';
   return Object.assign({}, item, resourceMark(item), {
     reference_photo:photos.forResource(item),
+    opening_summary:openingSummary,
     schedule:(item.schedule||[]).map(x=>Object.assign({},x,{time_label:dateTime(x.starts_at)+' — '+x.ends_at.slice(11,16)})),
     mode_label:item.requires_approval?'人工审核':'规则通过后自动确认',
     risk_label:risk,

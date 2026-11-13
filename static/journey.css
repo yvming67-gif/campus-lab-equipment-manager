@@ -1,0 +1,35 @@
+.access-page { max-width:1100px; margin:auto; padding:clamp(20px,5vw,64px); }
+.access-hero { display:grid; grid-template-columns:1.15fr 1fr; align-items:center; gap:clamp(22px,5vw,56px); padding:clamp(24px,5vw,56px); border:1px solid #dbe5e0; border-radius:28px; background:linear-gradient(135deg,#fff,#eef5f0); }
+.access-logo { display:block; margin-bottom:20px; border-radius:18px; }
+.access-hero h1 { font-size:clamp(29px,4vw,48px); margin:0 0 12px; }
+.access-hero p { margin:0 0 16px; line-height:1.7; }
+.access-hero .fine { margin:12px 0 0; }
+.access-directory { display:grid; gap:12px; }
+.access-route { display:flex; min-height:68px; align-items:center; gap:14px; padding:15px 17px; border:1px solid #dce5df; border-radius:18px; background:#fff; color:#244c3d; }
+.access-route:hover { background:#f5faf7; border-color:#8fb09d; }
+.access-route strong,.access-route small { display:block; }
+.access-route small { margin-top:4px; }
+.access-guide { margin-top:26px; }
+.access-help summary { min-height:44px; padding:12px 0; cursor:pointer; }
+.role-login.identity-card { max-width:740px; margin:clamp(16px,5vw,64px) auto; }
+.role-login fieldset { margin:14px 0; padding:0; border:0; min-inline-size:0; }
+.role-login legend { margin-bottom:8px; font-weight:600; }
+.role-login-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.role-login-option { display:flex; align-items:flex-start; gap:10px; min-height:56px; padding:10px; border:1px solid #dedee6; border-radius:12px; background:#fff; cursor:pointer; }
+.role-login-option input[type=radio] { width:16px; min-height:16px; height:16px; margin:2px 0 0; padding:0; flex:none; accent-color:#0066cc; }
+.role-login-option:has(input:checked) { border-color:#0066cc; background:#edf5ff; }
+.role-login-option:focus-within { outline:2px solid #0066cc; outline-offset:2px; }
+.role-login-option small { display:block; margin-top:2px; overflow-wrap:anywhere; }
+.role-login #password { display:block; width:100%; }
+.reservation-stages { display:flex; flex-wrap:wrap; gap:8px 16px; margin:0 0 16px; padding:0; list-style:none; color:#53535a; font-size:13px; }
+.reservation-stages li { padding:4px 0; }
+.reservation-stages [aria-current=step] { color:#0056ac; font-weight:650; border-bottom:2px solid currentColor; }
+.reservation-summary dd { overflow-wrap:anywhere; white-space:pre-wrap; }
+.resource-card-links { display:flex; flex-wrap:wrap; gap:0 12px; }
+.resource-card-links a { min-height:44px; display:inline-flex; align-items:center; }
+#resource-times { scroll-margin-top:20px; }
+@media (max-width:640px) {
+  .access-hero { grid-template-columns:1fr; }
+  .role-login.identity-card { margin:16px; padding:18px; }
+  .role-login-grid { grid-template-columns:1fr; }
+}

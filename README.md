@@ -2,7 +2,7 @@
   <img src="miniprogram/assets/brand-icon.png" width="72" height="72" alt="校园实验资源中心标识">
   <h1>校园实验室设备预约与借用管理系统</h1>
   <p>设备借用 · 场地预约 · 现场交接 · 异常与维修追踪</p>
-  <p><a href="https://campus-lab-equipment-manager.onrender.com/login/">在线演示</a> · <a href="#windows本机运行">本机运行</a> · <a href="#分析报告与数据模型">项目文档</a></p>
+  <p><a href="https://campus-lab-equipment-manager.onrender.com/access/">在线演示</a> · <a href="#windows本机运行">本机运行</a> · <a href="#分析报告与数据模型">项目文档</a></p>
 </div>
 
 [![自动检查](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/yvming67-gif/campus-lab-equipment-manager/actions/workflows/ci.yml)
@@ -13,7 +13,7 @@
 
 ### 在线网页
 
-1. 打开[校园实验资源中心](https://campus-lab-equipment-manager.onrender.com/login/)，点击「选择演示账号」。
+1. 打开[校园实验资源中心](https://campus-lab-equipment-manager.onrender.com/access/)，选择「进入系统」，再通过「选择演示账号」选取角色卡片。
 2. 选择 `student` 或 `student2`（学生），或 `teacher`（教师）。这三个公开账号使用密码 **`Demo@2026`**。
 3. 登录后从资源目录查找「数字示波器」，选择可用时段并提交预约。普通设备通过检查后自动确认。仅教师可申请整间实验室，申请提交后进入待审核。
 
@@ -39,6 +39,8 @@
 
 查看[分组教室目录](docs/演示界面/教室目录.png)和[场地详情](docs/演示界面/场地详情.png)。截图使用本机模拟数据。
 
+[网站入口](docs/演示界面/实验资源中心入口.png) · [角色登录](docs/演示界面/角色卡片登录.png) · [预约核对](docs/演示界面/预约提交核对.png)
+
 </details>
 
 ## 分析报告与数据模型
@@ -51,7 +53,7 @@
 | 矢量ERD | [完整总图](models/ERD/完整ERD总图.pdf) · [A4分域图册](models/ERD/分域ERD图册.pdf) |
 | 可编辑模型 | [draw.io总图](models/图形源文件/ERD-00-完整实体关系总图.drawio) · [JSON、DBML、Mermaid、UML及离线交互图说明](models/README.md) |
 
-[模型目录](models/README.md)列出各数据域及读图方法。[产品对标与实装验证](docs/产品对标与实装验证.md)记录案例依据、操作结果及改动前后截图。[验证记录](docs/验证说明.md)汇总已覆盖的场景及待验证事项。
+[模型目录](models/README.md)列出各数据域及读图方法。[访问入口与预约流程](docs/访问入口与预约流程.md)说明本轮设计及验证。[产品对标与实装验证](docs/产品对标与实装验证.md)记录早期案例依据、操作结果及改动前后截图。
 
 ## 资源结构与安全信息
 

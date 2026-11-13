@@ -44,6 +44,19 @@ class PhaseOneWebTests(TestCase):
         self.assertIn('q=',r.context['catalog_back'])
         self.assertTrue(r.context['slots']['items'])
         self.assertTrue(all('#reservation-form' in item['url'] for item in r.context['slots']['items']))
+        self.assertContains(r, '提交前核对')
+        self.assertContains(r, 'data-purpose-summary')
+
+    def test_web_reservation_receipt_can_only_be_read_by_applicant(self):
+        reservation = self.book()
+        query = {"key": reservation.request_key}
+        self.client.force_login(self.student)
+        response = self.client.get("/reservation-receipt/", query)
+        self.assertRedirects(response, f"/bookings/{reservation.pk}/", fetch_redirect_response=False)
+        self.client.force_login(self.other)
+        response = self.client.get("/reservation-receipt/", query, follow=True)
+        self.assertContains(response, "暂未找到该次预约的结果")
+        self.assertNotContains(response, reservation.code)
 
     def test_invalid_slot_and_invalid_selection_have_recovery_text(self):
         self.client.force_login(self.student)

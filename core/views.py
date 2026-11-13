@@ -16,7 +16,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from .models import *
 from .forms import *
 from . import services as s
@@ -31,7 +31,7 @@ from .catalog import calendar_catalog, filter_resources
 from .experience import slot_options, approval_context, next_step
 from . import ui_navigation as ui
 from . import safety as safety_service
-from .opening_calendar import weekly_schedule
+from .opening_calendar import schedule_by_resource, weekly_schedule
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     # A stable primary-key order prevents rows moving between pages when a
@@ -64,12 +64,20 @@ def scoped_work(user):
     if user.has_role("TECHNICIAN"):q|=Q(assigned_to=user)
     return qs.filter(q).distinct()
 
+def directory_login_destination(value):
+    directory = reverse("resources")
+    return value if value in {directory, directory + "?kind=EQUIPMENT", directory + "?kind=ROOM"} else ""
+
+
 def login_page(request):
-    if request.user.is_authenticated:return redirect("dashboard")
+    destination = directory_login_destination(request.POST.get("next") if request.method == "POST" else request.GET.get("next"))
+    if request.user.is_authenticated:
+        return redirect(destination or "dashboard")
     if request.method=="POST":
         request.session["idp_nonce"]=secrets.token_urlsafe(24)
+        request.session["login_destination"] = destination
         return redirect("identity")
-    return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE})
+    return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE,"login_destination":destination})
 
 @never_cache
 def identity(request):
@@ -83,7 +91,7 @@ def identity(request):
             if target.scheme!='https' or not target.hostname or target.username or target.password:raise ValueError('不安全的身份跳转地址')
             return redirect(url)
         except (ImproperlyConfigured,ValueError):
-            return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员"},status=503)
+            return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员","login_destination":request.session.get("login_destination","")},status=503)
     if not request.session.get("idp_nonce"):return redirect("login")
     accounts = web_demo_accounts()
     error = ""
@@ -102,6 +110,7 @@ def identity(request):
     return render(request, "identity.html", {
         "title": "演示账号登录", "accounts": accounts, "error": error,
         "username": username, "public_demo": settings.PUBLIC_DEMO_MODE,
+        "login_destination": request.session.get("login_destination", ""),
     })
 
 
@@ -119,7 +128,7 @@ def callback(request):
         except (ImproperlyConfigured,ValueError,KeyError):raise PermissionDenied
         login(request,user,backend="django.contrib.auth.backends.ModelBackend")
         s.audit(user,user,"LOGIN",new={"identity":"SCHOOL"},reason="学校身份适配器校验通过；使用既有本地授权")
-        return redirect("dashboard")
+        return redirect(directory_login_destination(request.session.pop("login_destination", "")) or "dashboard")
     try:
         assertion=signing.loads(request.GET.get("ticket",""),key=settings.MOCK_IDP_KEY,salt="mock-idp",max_age=60)
         protected(assertion["nonce"]==request.session.pop("idp_nonce",None))
@@ -132,7 +141,7 @@ def callback(request):
     if private_token:
         request.session[PRIVATE_SESSION] = private_token
     s.audit(user, user, "LOGIN", new={"identity": "MOCK"}, reason="课程模拟身份断言校验通过")
-    return redirect("dashboard")
+    return redirect(directory_login_destination(request.session.pop("login_destination", "")) or "dashboard")
 
 @require_POST
 def signout(request):
@@ -179,7 +188,14 @@ def resources(request):
     if not (form.is_bound and not form.is_valid()):
         catalog_total=Resource.objects.count() if any(d.get(key) for key in ('q','kind','lab','campus','building','starts_at')) else page.paginator.count
     items=list(page.object_list)
+    room_cards = [item for item in items if item.kind == "ROOM"]
+    opening_date = timezone.localtime(times[0]).date() if times else timezone.localdate()
+    opening = schedule_by_resource(room_cards, opening_date, days=1)
+    can_choose_equipment = request.user.has_role("STUDENT", "TEACHER")
+    can_choose_room = request.user.has_role("TEACHER")
     for r in items:
+        if r.kind == "ROOM":
+            r.opening_summary = opening[r.pk][0]
         r.service_label=s.resource_service_label(r)
         r.reservation_open,r.reservation_block_reason=s.resource_reservation_state(r)
         r.available_label="尚未选择目标时段"
@@ -187,6 +203,8 @@ def resources(request):
         if times:r.available,r.available_label=s.availability(r,*times,applicant=request.user)
         query=request.GET.copy();query.pop('page',None)
         r.detail_url=reverse('resource',args=[r.pk])+('?' + query.urlencode() if query else '')
+        if r.reservation_open and (can_choose_room if r.kind == "ROOM" else can_choose_equipment):
+            r.select_time_url = r.detail_url + "#resource-times"
     chips=ui.filter_chips('resources',request.GET,ui.CATALOG_KEYS,[('q','资源搜索',d.get('q')),('kind','类型',dict(Resource.KIND).get(d.get('kind'))),('lab','管理单元',d.get('lab')),('campus','校区',d.get('campus')),('building','楼宇',d.get('building')),('category','类别',d.get('category')),('facility','设施或配件',d.get('facility')),('capacity_min','最小容量',d.get('capacity_min')),('capacity_max','最大容量',d.get('capacity_max')),('service_status','服务状态',dict(Resource.STATUS).get(d.get('service_status')))])
     if times:chips.append({'label':'目标时段','value':f'{timezone.localtime(times[0]):%m-%d %H:%M}—{timezone.localtime(times[1]):%m-%d %H:%M}', 'url':ui.link('resources',request.GET,ui.CATALOG_KEYS,drop=('starts_at','ends_at'))})
     return render(request,"resources.html",{"title":"教室目录" if room_directory else "资源目录","form":form,"resources":items,"page":page,"filters":filters,"times":times,"policy":Policy.objects.get(pk=1),"room_directory":room_directory,"room_filters_open":room_filters_open,"directory_kind":d.get("kind"),
@@ -243,6 +261,21 @@ def resource_detail(request,pk):
              'catalog_back':reverse('resources')+('?' + back.urlencode() if back else ''),
              'catalog_filters':[(key,value) for key,value in request.GET.items() if key in ui.CATALOG_KEYS and key not in ['starts_at','ends_at']]}
     return render(request,"resource.html",context)
+
+
+@login_required
+@never_cache
+@require_GET
+def reservation_receipt(request):
+    try:
+        key = uuid.UUID(request.GET.get("key", ""))
+    except ValueError:
+        return redirect("bookings")
+    reservation = Reservation.objects.filter(applicant=request.user, request_key=key).only("pk").first()
+    if reservation:
+        return redirect("booking", pk=reservation.pk)
+    messages.info(request, "暂未找到该次预约的结果。若刚提交，请稍候再次核对；可返回原表单按原内容重试。")
+    return redirect("bookings")
 
 @login_required
 def safety_manage(request,pk):

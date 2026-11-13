@@ -179,7 +179,8 @@ def slot_options(resource, user, day, duration_minutes=60, at=None):
 
 def next_step(booking, at=None):
     at = at or timezone.now(); resource = booking.resource
-    location = resource.location_display or "交接地点尚未登记，请联系实验室管理员"
+    location = (resource.equipment.handover_location or "交接地点待登记"
+                if resource.kind == "EQUIPMENT" else resource.location_display)
     if booking.status == "PENDING":
         title, role, action = "等待审核", "对应实验室管理员", "查看审核通知；待审核期间可补充说明。时段尚未保留。"
     elif booking.status == "CONFIRMED" and booking.review_required:

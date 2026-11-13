@@ -1,16 +1,38 @@
 {% extends 'base.html' %}{% load static %}
 {% block content %}
-<section class="login-card" style="max-width:760px;margin:32px auto">
-  <img src="{% static 'brand-icon.png' %}" width="64" height="64" alt="墨绿烧瓶与预约勾选标识">
-  <p class="eyebrow">CAMPUS LAB / 访问入口</p>
-  <h1>校园实验资源中心</h1>
-  <p>查询设备与场地，管理每一次预约。当前为公开课程演示，使用模拟账号与数据。</p>
-  <h2>网站</h2>
-  <p>学生、教师及已开通的岗位账号均从同一入口登录。</p>
-  <p><a class="button" href="{% url 'login' %}">登录系统</a></p>
-  <p>公开学生和教师账号使用 <code>Demo@2026</code>。</p>
-  <h2>微信小程序</h2>
-  <p>公开正式版尚未发布。请使用网页预约。</p>
-  <p><a href="https://github.com/yvming67-gif/campus-lab-equipment-manager">源代码、分析报告与运行说明</a></p>
-</section>
+{% url 'resources' as directory %}
+<div class="access-page">
+  <section class="access-hero" aria-labelledby="access-title">
+    <div>
+      <img class="access-logo" src="{% static 'brand-icon.png' %}" width="64" height="64" alt="">
+      <h1 id="access-title">校园实验资源中心</h1>
+      <p>查找实验设备与教室，选择使用时段，跟进预约和现场交接。</p>
+      <a class="button" href="{% url 'login' %}">进入系统</a>
+      {% if demo %}<p class="fine">课程演示 · 使用模拟账号和资源数据</p>{% endif %}
+    </div>
+    <nav class="access-directory" aria-label="查找实验资源">
+      <a class="access-route" href="{{ directory }}?kind=EQUIPMENT">
+        <svg class="nav-icon" aria-hidden="true"><use href="#icon-equipment"/></svg>
+        <span><strong>查找设备</strong><small>查看交接地点、培训要求和候选时段</small></span>
+      </a>
+      <a class="access-route" href="{{ directory }}?kind=ROOM">
+        <svg class="nav-icon" aria-hidden="true"><use href="#icon-room"/></svg>
+        <span><strong>查找教室</strong><small>按实验室查看位置、容量和开放安排</small></span>
+      </a>
+    </nav>
+  </section>
+  <section class="access-guide" aria-labelledby="access-guide-title">
+    <h2 id="access-guide-title">预约与使用</h2>
+    <ol class="reservation-stages">
+      <li>选资源与时段</li><li>核对并提交</li><li>查看结果与下一步</li>
+    </ol>
+    {% if demo %}
+      <details class="access-help"><summary>演示账号与小程序</summary>
+        {% if public_demo %}<p>公开学生和教师账号使用 <code>Demo@2026</code>。已开通的岗位账号通过同一入口登录。</p>{% else %}<p>本机模拟账号使用 <code>Demo@2026</code>。</p>{% endif %}
+        <p>微信小程序公开正式版尚未发布。当前可使用网页预约。</p>
+        <p><a href="https://github.com/yvming67-gif/campus-lab-equipment-manager">项目文档与运行说明</a></p>
+      </details>
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

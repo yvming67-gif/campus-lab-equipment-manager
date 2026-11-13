@@ -1,1 +1,13 @@
-<form method="post" {% if multipart %}enctype="multipart/form-data"{% endif %} class="business-form">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}{% if field.is_hidden %}{{ field }}{% else %}<div class="field {% if field.errors %}invalid{% endif %}">{{ field.label_tag }}{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endif %}{% endfor %}<button class="button" type="submit">确认并保存 →</button></form>
+<form method="post" {% if multipart %}enctype="multipart/form-data"{% endif %} class="business-form">{% csrf_token %}{{ form.non_field_errors }}{% for field in form %}{% if field.is_hidden %}{{ field }}{% if field.errors %}<p class="message error" role="alert">提交信息不完整，请刷新页面后核对再提交。</p>{% endif %}{% else %}<div class="field {% if field.errors %}invalid{% endif %}">{{ field.label_tag }}{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{{ field.errors }}</div>{% endif %}{% endfor %}{% if reservation_review %}
+<div class="reservation-summary" data-reservation-summary>
+  <h3>提交前核对</h3>
+  <dl>
+    <dt>资源</dt><dd>{{ resource.name }}</dd>
+    <dt>时段</dt><dd data-time-summary>{{ form.starts_at.value|default:"待填写" }} — {{ form.ends_at.value|default:"待填写" }}（北京时间）</dd>
+    <dt>用途</dt><dd data-purpose-summary>{{ form.purpose.value|default:"尚未填写" }}</dd>
+    {% if resource.kind == "ROOM" %}<dt>参与人数</dt><dd data-participants-summary>{{ form.participants.value|default:"尚未填写" }}</dd>{% endif %}
+    <dt>确认方式</dt><dd data-mode-summary>{% if form.expected_approval_mode.value == 'MANUAL' %}由实验室管理员审核，待审核不占时段{% else %}规则通过后自动确认{% endif %}</dd>
+  </dl>
+</div>
+{% endif %}
+<button class="button" type="submit">{% if reservation_review %}提交预约{% else %}确认并保存 →{% endif %}</button></form>

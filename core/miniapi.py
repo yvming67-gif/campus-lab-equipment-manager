@@ -25,7 +25,7 @@ from .forms import BookingForm, QueryForm, ActionForm, IncidentForm
 from .models import User, Lab, Resource, Reservation, Notification, Policy, AuditEvent, UserQualification, SafetyProcedure, Campus, Building
 from .experience import slot_options, next_step
 from . import safety as safety_service
-from .opening_calendar import weekly_schedule
+from .opening_calendar import schedule_by_resource, weekly_schedule
 from .catalog import filter_resources
 from .request_context import correlation_id
 
@@ -127,13 +127,16 @@ def cleaned(form):
     return form.cleaned_data
 
 
-def page_data(request, qs, serializer):
+def page_data(request, qs, serializer, *, prepare=None):
     raw = request.GET.get("page", "1")
     if not re.fullmatch(r"[1-9][0-9]{0,5}", raw):
         raise ApiError("VALIDATION_ERROR", "页码必须为正整数", fields={"page": ["页码无效"]})
     paginator = Paginator(qs, 20)
     page = paginator.get_page(int(raw))
-    return {"items": [serializer(x) for x in page.object_list], "page": page.number, "total": paginator.count, "has_more": page.has_next()}
+    items = list(page.object_list)
+    if prepare:
+        serializer = prepare(items)
+    return {"items": [serializer(x) for x in items], "page": page.number, "total": paginator.count, "has_more": page.has_next()}
 
 
 def date_text(value):
@@ -150,7 +153,7 @@ def policy_data():
     return {key: getattr(policy, key) for key in ("window_days", "slot_minutes", "max_hours", "equipment_quota", "room_quota", "simultaneous_equipment", "grace_minutes")}
 
 
-def resource_data(resource, times=None, user=None):
+def resource_data(resource, times=None, user=None, *, opening_schedule=None, opening_summary=None):
     available, label = s.availability(resource, *times, applicant=user) if times else (None, "请选择目标时段")
     reservation_open, reservation_block_reason = s.resource_reservation_state(resource)
     data = {"id": resource.pk, "code": resource.code, "name": resource.name, "kind": resource.kind,
@@ -165,7 +168,9 @@ def resource_data(resource, times=None, user=None):
                     campus=resource.room.building.campus.name if resource.room.building_id else "",
                     building=resource.room.building.name if resource.room.building_id else "",
                     floor_label=resource.room.floor_label, room_number=resource.room.room_number,
-                    facilities=resource.room.facilities, opening_schedule=weekly_schedule(resource))
+                    facilities=resource.room.facilities,
+                    opening_schedule=weekly_schedule(resource) if opening_schedule is None else opening_schedule,
+                    opening_summary=opening_summary)
     else:
         data.update(category=resource.equipment.category, risk=resource.equipment.get_risk_display(),
                     qualification=resource.equipment.qualification.name if resource.equipment.qualification_id else "无额外培训要求",
@@ -289,7 +294,17 @@ def resources(request):
     values = cleaned(QueryForm(request.GET))
     qs = filter_resources(resources_qs(), values)
     times = (values["starts_at"], values["ends_at"]) if values["starts_at"] else None
-    result = page_data(request, qs, lambda item: resource_data(item, times, request.mini_user))
+    opening_date = timezone.localtime(times[0]).date() if times else timezone.localdate()
+
+    def prepare_catalog(items):
+        rooms = [item for item in items if item.kind == "ROOM"]
+        today = timezone.localdate()
+        schedules = schedule_by_resource(rooms, today, days=7)
+        summaries = schedules if opening_date == today else schedule_by_resource(rooms, opening_date, days=1)
+        return lambda item: resource_data(item, times, request.mini_user,
+            opening_schedule=schedules.get(item.pk), opening_summary=summaries.get(item.pk, [None])[0])
+
+    result = page_data(request, qs, None, prepare=prepare_catalog)
     result["labs"] = list(Lab.objects.order_by("code").values("id", "name", "location"))
     result["campuses"] = list(Campus.objects.filter(is_active=True).order_by("code").values("id", "name"))
     result["buildings"] = list(Building.objects.filter(is_active=True,campus__is_active=True).order_by("campus__code","code").values("id","campus_id","name"))

@@ -30,6 +30,25 @@ class PublicDemoIdentityTests(TestCase):
         cls.teacher = User.objects.get(username="teacher")
 
     @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True, CAMPUS_DEMO_PRIVATE_PASSWORDS=STAFF_PASSWORDS)
+    def test_directory_destination_survives_sign_in_and_failed_password(self):
+        for kind in ("ROOM", "EQUIPMENT"):
+            with self.subTest(kind=kind):
+                client = Client()
+                target = "/resources/?kind=" + kind
+                page = client.get(target, follow=True)
+                self.assertContains(page, f'<input type="hidden" name="next" value="{target}">', html=True)
+                client.post("/login/", {"next": target})
+                denied = client.post("/identity/", {"username": "teacher", "password": "incorrect"})
+                self.assertContains(denied, 'value="teacher" required checked')
+                self.assertContains(denied, '安排课程实验、申请教室和设备')
+                response = client.post("/identity/", {"username": "teacher", "password": "Demo@2026"}, follow=True)
+                self.assertEqual(response.redirect_chain[-1][0], target)
+        client = Client()
+        client.post("/login/", {"next": "https://example.invalid/"})
+        response = client.post("/identity/", {"username": "teacher", "password": "Demo@2026"}, follow=True)
+        self.assertEqual(response.redirect_chain[-1][0], "/")
+
+    @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True, CAMPUS_DEMO_PRIVATE_PASSWORDS=STAFF_PASSWORDS)
     def test_roles_sign_in_through_the_same_web_entry(self):
         choices = (
             ("admin", "实验室运营"),
