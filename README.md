@@ -30,7 +30,7 @@
 | 系统管理员 | `sysadmin` | 维护角色授权、基础数据、预约参数及默认开放日历 |
 | 实验教学中心主任 | `director` | 查看中心利用率报表和只读审计记录 |
 
-`student_lab`、`teacher_lab` 及四个管理与协作岗位使用各自的密码，由部署方私下提供。小程序提供师生查询与预约。管理操作在网页完成。
+`student_lab`、`teacher_lab` 及四个管理与协作岗位使用各自的密码。已获仓库访问权限的用户可在[云端岗位账号与密码](https://github.com/yvming67-gif/campus-lab-demo-accounts)查看。小程序提供师生查询与预约。管理操作在网页完成。
 
 <details>
 <summary>查看本机网页演示截图</summary>
