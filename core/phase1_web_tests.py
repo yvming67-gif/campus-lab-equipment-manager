@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.html import escape
 from .models import User, Resource, LabGrant, ApprovalDecision
 from . import services as s
 
@@ -31,8 +32,11 @@ class PhaseOneWebTests(TestCase):
         self.assertContains(r,'尚未选择目标时段')
         self.assertContains(r,'服务正常')
         self.assertContains(r,'目标时段')
-        self.assertIn('q=',r.context['resources'][0].detail_url)
-        self.assertIn('kind=EQUIPMENT',r.context['resources'][0].detail_url)
+        resource = r.context["resources"][0]
+        self.assertIn("q=", resource.detail_url)
+        self.assertIn("kind=EQUIPMENT", resource.detail_url)
+        self.assertContains(r, f'<a class="resource-card-detail" href="{escape(resource.detail_url)}">{escape(resource.name)}</a>', html=True)
+        self.assertContains(r, f'<a class="touch-link resource-time-link" href="{escape(resource.detail_url)}#resource-times">查看时段</a>', html=True)
 
     def test_chosen_slot_prefills_the_actual_business_form(self):
         self.client.force_login(self.student)

@@ -18,8 +18,17 @@
 .reservation-stages li { padding:4px 0; }
 .reservation-stages [aria-current=step] { color:#0056ac; font-weight:650; border-bottom:2px solid currentColor; }
 .reservation-summary dd { overflow-wrap:anywhere; white-space:pre-wrap; }
-.resource-card-links { display:flex; flex-wrap:wrap; gap:0 12px; }
-.resource-card-links a { min-height:44px; display:inline-flex; align-items:center; }
+.resource-card-detail { color:inherit; }
+.resource-card-detail::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  border-radius:20px;
+}
+.resource-card-detail:focus-visible { outline:none; }
+.resource-card-detail:focus-visible::after { outline:3px solid #0071e3; outline-offset:3px; }
+.resource-card .resource-time-link { position:relative; z-index:2; }
 #resource-times { scroll-margin-top:20px; }
 @media (max-width:640px) {
   .access-hero { grid-template-columns:1fr; }
