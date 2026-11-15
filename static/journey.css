@@ -65,3 +65,39 @@
   .access-hero { grid-template-columns:1fr; }
   .account-login.identity-card { margin:16px; padding:20px; }
 }
+
+.workbench-area-heading { position:relative; display:flex; flex-wrap:wrap; align-items:center; gap:0 12px; }
+.workbench-area-heading h2 { margin:0; }
+.workbench-help summary {
+  min-height:44px;
+  display:flex;
+  align-items:center;
+  padding:0 8px;
+  color:#0056ac;
+  cursor:pointer;
+}
+.workbench-help summary:hover,.workbench-help[open] summary { text-decoration:underline; }
+.workspace-banner .workbench-help-note {
+  position:absolute;
+  inset-block-start:100%;
+  inset-inline-start:0;
+  z-index:2;
+  width:min(20rem,calc(100vw - 90px));
+  padding:12px 14px;
+  border:1px solid #d2dae7;
+  border-radius:12px;
+  background:#fff;
+  color:#242c39;
+  box-shadow:0 6px 20px #26375420;
+  font-size:13px;
+  line-height:1.6;
+}
+.workspace-banner:has(.workbench-help[open]) { position:relative; z-index:2; }
+@media (prefers-reduced-motion:no-preference) {
+  .workbench-heading h1 { animation:access-enter .36s ease-out; }
+  @keyframes workbench-help-enter {
+    from { opacity:.88; }
+    to { opacity:1; }
+  }
+  .workbench-help[open] .workbench-help-note { animation:workbench-help-enter .18s ease-out; }
+}

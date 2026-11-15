@@ -272,6 +272,7 @@ class ProductTests(TestCase):
                 role_banner=re.search(r'<section class="workspace-banner role-banner[^\"]*"[^>]*>(.*?)</section>',page.content.decode(),re.S)
                 self.assertIsNotNone(role_banner)
                 self.assertIn(action,role_banner.group(1))
+                self.assertIn('data-workbench-help', role_banner.group(1))
                 self.assertNotIn(forbidden,role_banner.group(1))
 
     def test_room_directory_shows_individual_rooms_grouped_by_lab(self):
