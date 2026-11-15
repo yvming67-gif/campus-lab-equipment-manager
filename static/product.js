@@ -66,6 +66,20 @@ if (navigation) {
   else if (compact.addListener) compact.addListener(syncNavigation);
 }
 
+// Animate each surface once when it enters the viewport. The initial markup is always visible.
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+const revealItems = document.querySelectorAll('[data-scroll-reveal]');
+if (revealItems.length && 'IntersectionObserver' in window && !motionPreference.matches) {
+  const reveal = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-revealed');
+      reveal.unobserve(entry.target);
+    });
+  }, { threshold: 0.12 });
+  revealItems.forEach(item => reveal.observe(item));
+}
+
 // Soft reflected light follows the pointer only on interactive surfaces.
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {

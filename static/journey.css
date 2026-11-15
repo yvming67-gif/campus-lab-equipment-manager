@@ -8,6 +8,37 @@
 .access-route { display:flex; min-height:68px; align-items:center; gap:14px; padding:15px 17px; border:1px solid #dce5df; border-radius:18px; background:#fff; color:#244c3d; }
 .access-route:hover { background:#f5faf7; border-color:#8fb09d; }
 .access-route strong,.access-route small { display:block; }
+.access-route::after {
+  content:"";
+  flex:none;
+  width:7px;
+  height:7px;
+  margin:0 2px 0 auto;
+  border:solid currentColor;
+  border-width:1.5px 1.5px 0 0;
+  transform:rotate(45deg);
+}
+@media (prefers-reduced-motion:no-preference) {
+  @keyframes access-enter {
+    from { opacity:.65; translate:0 10px; }
+    to { opacity:1; translate:0 0; }
+  }
+  @keyframes surface-enter {
+    from { opacity:.88; translate:0 8px; }
+    to { opacity:1; translate:0 0; }
+  }
+  .access-hero h1,.access-hero p:not(.fine),.access-hero .button,.access-route {
+    animation:access-enter .42s cubic-bezier(.2,.8,.2,1) backwards;
+  }
+  .access-hero p:not(.fine) { animation-delay:.05s; }
+  .access-hero .button,.access-route:first-child { animation-delay:.10s; }
+  .access-route + .access-route { animation-delay:.15s; }
+  [data-scroll-reveal].is-revealed { animation:surface-enter .32s ease-out; }
+  .access-route { transition:background-color .18s,border-color .18s,scale .15s; }
+  .access-route::after { transition:translate .18s; }
+  .access-route:hover::after,.access-route:focus-visible::after { translate:3px 0; }
+  .access-route:active,.resource-card:has(.resource-card-detail:active) { scale:.99; }
+}
 .access-route small { margin-top:4px; }
 .access-guide { margin-top:26px; }
 .access-help summary { min-height:44px; padding:12px 0; cursor:pointer; }

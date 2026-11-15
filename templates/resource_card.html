@@ -1,5 +1,5 @@
 {% load domain_labels %}
-<article class="resource-card">
+<article class="resource-card" data-scroll-reveal>
   <div class="card-top"><span class="resource-symbol"><svg class="nav-icon" aria-hidden="true"><use href="#{{ r|resource_icon }}"/></svg></span><span class="badge {% if not r.lab.is_active %}warning{% else %}{{ r.service_status|lower }}{% endif %}">服务{{ r.service_label }}</span></div>
   <span class="code">{{ r.code }}</span>
   <h3><a class="resource-card-detail" href="{{ r.detail_url }}">{{ r.name }}</a></h3>
