@@ -7,7 +7,7 @@ from django.core.management import call_command
 from django.test import Client, TestCase, override_settings
 from django.utils import timezone
 
-from .demo_identity import public_demo_user_allowed, verify_demo_password, web_demo_accounts
+from .demo_identity import public_demo_user_allowed, verify_demo_password
 from .models import ApprovalDecision, Incident, Reservation, Resource, User, WorkOrder
 
 STAFF_PASSWORDS = {
@@ -37,11 +37,10 @@ class PublicDemoIdentityTests(TestCase):
                 target = "/resources/?kind=" + kind
                 page = client.get(target, follow=True)
                 self.assertContains(page, f'<input type="hidden" name="next" value="{target}">', html=True)
-                client.post("/login/", {"next": target})
-                denied = client.post("/identity/", {"username": "teacher", "password": "incorrect"})
-                self.assertContains(denied, 'value="teacher" required checked')
-                self.assertContains(denied, '安排课程实验、申请教室和设备')
-                response = client.post("/identity/", {"username": "teacher", "password": "Demo@2026"}, follow=True)
+                denied = client.post("/login/", {"next": target, "username": "teacher", "password": "incorrect"})
+                self.assertContains(denied, 'value="teacher"')
+                self.assertNotContains(denied, 'incorrect')
+                response = client.post("/login/", {"next": target, "username": "teacher", "password": "Demo@2026"}, follow=True)
                 self.assertEqual(response.redirect_chain[-1][0], target)
         client = Client()
         client.post("/login/", {"next": "https://example.invalid/"})
@@ -61,16 +60,17 @@ class PublicDemoIdentityTests(TestCase):
         for username, heading in choices:
             with self.subTest(username=username):
                 client = Client()
-                identity = client.post("/login/", follow=True)
-                self.assertContains(identity, f'value="{username}"')
-                self.assertContains(identity, 'value="student"')
+                identity = client.get("/login/")
+                self.assertContains(identity, 'name="username" type="text"')
+                self.assertContains(identity, 'name="password" type="password"')
+                self.assertNotContains(identity, 'type="radio"')
                 self.assertNotContains(identity, STAFF_PASSWORDS[username])
                 for password in ("Demo@2026", STAFF_PASSWORDS["tech" if username == "admin" else "admin"]):
-                    denied = client.post("/identity/", {"username": username, "password": password})
+                    denied = client.post("/login/", {"username": username, "password": password})
                     self.assertContains(denied, "账号或密码不正确")
                     self.assertNotIn("_auth_user_id", client.session)
                 accepted = client.post(
-                    "/identity/", {"username": username, "password": STAFF_PASSWORDS[username]}, follow=True
+                    "/login/", {"username": username, "password": STAFF_PASSWORDS[username]}, follow=True
                 )
                 self.assertContains(accepted, f"<h1>{heading}</h1>")
                 self.assertEqual(accepted.wsgi_request.user.username, username)
@@ -239,7 +239,7 @@ class PublicDemoIdentityTests(TestCase):
         self.assertNotContains(response, 'value="tech"')
 
     @override_settings(DEMO_MODE=True, PUBLIC_DEMO_MODE=True)
-    def test_public_demo_identity_page_lists_only_student_and_teacher_accounts(self):
+    def test_public_login_gives_examples_for_shared_student_and_teacher_accounts(self):
         self.admin.roles.add(self.student.roles.get(code="STUDENT"))
         client = Client()
         client.post("/login/")
@@ -276,7 +276,6 @@ class PublicDemoIdentityTests(TestCase):
     def test_public_demo_rejects_account_with_both_student_and_admin_roles(self):
         self.admin.roles.add(self.student.roles.get(code="STUDENT"))
         self.assertFalse(public_demo_user_allowed(self.admin))
-        self.assertNotIn(self.admin, web_demo_accounts())
 
         web_client = Client()
         web_client.post("/login/")

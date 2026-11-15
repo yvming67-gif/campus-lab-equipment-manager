@@ -23,7 +23,7 @@ from . import services as s
 from .reports import DEFAULT_REPORT_DAYS, report_window, utilization
 from .demo_identity import (
     PRIVATE_SESSION, authenticate_private_demo, public_demo_user_allowed,
-    valid_private_demo_token, verify_demo_password, web_demo_accounts,
+    valid_private_demo_token, verify_demo_password,
 )
 from .schedules import resource_schedule
 from .workbench import tasks_for, booking_queue, acceptance_queue
@@ -69,6 +69,7 @@ def directory_login_destination(value):
     return value if value in {directory, directory + "?kind=EQUIPMENT", directory + "?kind=ROOM"} else ""
 
 
+@never_cache
 def login_page(request):
     destination = directory_login_destination(request.POST.get("next") if request.method == "POST" else request.GET.get("next"))
     if request.user.is_authenticated:
@@ -76,7 +77,11 @@ def login_page(request):
     if request.method=="POST":
         request.session["idp_nonce"]=secrets.token_urlsafe(24)
         request.session["login_destination"] = destination
+        if settings.DEMO_MODE and ("username" in request.POST or "password" in request.POST):
+            return demo_login(request, destination)
         return redirect("identity")
+    if settings.DEMO_MODE:
+        return demo_login(request, destination)
     return render(request,"login.html",{"title":"统一身份入口","demo":settings.DEMO_MODE,"login_destination":destination})
 
 @never_cache
@@ -93,9 +98,12 @@ def identity(request):
         except (ImproperlyConfigured,ValueError):
             return render(request,"login.html",{"title":"统一身份入口","demo":False,"error":"学校身份服务尚未完成配置或验证，请联系运维人员","login_destination":request.session.get("login_destination","")},status=503)
     if not request.session.get("idp_nonce"):return redirect("login")
-    accounts = web_demo_accounts()
+    return demo_login(request, directory_login_destination(request.session.get("login_destination", "")))
+
+
+def demo_login(request, destination):
     error = ""
-    username = request.POST.get("username", "")
+    username = request.POST.get("username", "").strip()
     if request.method == "POST":
         password = request.POST.get("password", "")
         user, private_token = authenticate_private_demo(username, password)
@@ -108,9 +116,9 @@ def identity(request):
             return redirect(reverse("callback") + "?" + urlencode({"ticket": ticket}))
         error = "账号或密码不正确，或账号已停用。"
     return render(request, "identity.html", {
-        "title": "演示账号登录", "accounts": accounts, "error": error,
+        "title": "演示账号登录", "error": error,
         "username": username, "public_demo": settings.PUBLIC_DEMO_MODE,
-        "login_destination": request.session.get("login_destination", ""),
+        "login_destination": destination,
     })
 
 

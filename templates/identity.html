@@ -1,34 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="identity-card role-login">
+<section class="identity-card account-login">
   <h1>演示账号登录</h1>
-  {% if public_demo %}
-    <p>公开学生和教师账号使用 <code>Demo@2026</code>。专用账号和其他岗位使用各自的密码。</p>
-  {% else %}
-    <p>请选择模拟账号，演示密码为 <code>Demo@2026</code>。</p>
-  {% endif %}
+  {% if login_destination %}<p>登录后继续前往{% if login_destination == '/resources/?kind=ROOM' %}教室目录{% elif login_destination == '/resources/?kind=EQUIPMENT' %}设备目录{% else %}资源目录{% endif %}。</p>{% endif %}
   {% if error %}<p class="message error" role="alert">{{ error }}</p>{% endif %}
-  {% if accounts %}
-    <form method="post">
-      {% csrf_token %}
-      <fieldset>
-        <legend>选择账号</legend>
-        <div class="role-login-grid">
-          {% for a in accounts %}
-            <label class="role-login-option">
-              <input type="radio" name="username" value="{{ a.username }}" required{% if a.username == username %} checked{% endif %}>
-              <span><strong>{{ a.display_name }}</strong><small>{{ a.roles.all|join:"、" }} · {{ a.username }}</small>{% if a.role_tasks %}<small>{{ a.role_tasks }}</small>{% endif %}</span>
-            </label>
-          {% endfor %}
-        </div>
-      </fieldset>
-      <label for="password">密码</label>
-      <input id="password" name="password" type="password" required maxlength="128" autocomplete="current-password">
-      <button class="button full">登录</button>
-    </form>
-  {% else %}
-    <p role="status">当前没有可用的演示账号，请联系部署管理员开通。</p>
-  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {% if login_destination %}<input type="hidden" name="next" value="{{ login_destination }}">{% endif %}
+    <label for="username">账号</label>
+    <input id="username" name="username" type="text" value="{{ username }}" required maxlength="150"
+           autocomplete="username" autocapitalize="none" spellcheck="false">
+    <label for="password">密码</label>
+    <input id="password" name="password" type="password" required maxlength="128" autocomplete="current-password">
+    <button class="button full">登录</button>
+  </form>
+  <p class="fine">{% if public_demo %}公开体验可使用 <code>student</code>、<code>student2</code> 或 <code>teacher</code>，密码为 <code>Demo@2026</code>。岗位账号使用各自的密码。{% else %}本机模拟账号密码为 <code>Demo@2026</code>。{% endif %}</p>
   <p><a href="{% url 'access' %}">返回实验资源中心</a></p>
 </section>
 {% endblock %}

@@ -29,10 +29,7 @@ class CloudProfileTests(TestCase):
         client = self.client_for_cloud()
         client.get("/login/", secure=True)
         token = client.cookies["csrftoken"].value
-        response = client.post("/login/", {"csrfmiddlewaretoken": token}, secure=True, HTTP_ORIGIN="https://cloud-test.example")
-        self.assertRedirects(response, "/identity/", fetch_redirect_response=False)
-        client.get("/identity/", secure=True)
-        response = client.post("/identity/", {"username": "student", "password": "Demo@2026", "csrfmiddlewaretoken": client.cookies["csrftoken"].value}, secure=True, HTTP_ORIGIN="https://cloud-test.example")
+        response = client.post("/login/", {"username": "student", "password": "Demo@2026", "csrfmiddlewaretoken": token}, secure=True, HTTP_ORIGIN="https://cloud-test.example")
         self.assertEqual(response.status_code, 302)
         callback = client.get(response["Location"], secure=True)
         self.assertEqual(callback.status_code, 302)
