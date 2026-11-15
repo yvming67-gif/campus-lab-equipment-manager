@@ -30,7 +30,20 @@
 | 系统管理员 | `sysadmin` | 维护角色授权、基础数据、预约参数及默认开放日历 |
 | 实验教学中心主任 | `director` | 查看中心利用率报表和只读审计记录 |
 
-`student_lab`、`teacher_lab` 及四个管理与协作岗位使用各自的密码。已获仓库访问权限的用户可在[云端岗位账号与密码](https://github.com/yvming67-gif/campus-lab-demo-accounts)查看。小程序提供师生查询与预约。管理操作在网页完成。
+小程序提供师生查询与预约。管理操作在网页完成。
+
+### 云端岗位账号与密码
+
+打开[网页登录](https://campus-lab-equipment-manager.onrender.com/login/)，输入对应账号和密码。
+
+| 岗位 | 登录账号 | 登录密码 |
+| --- | --- | --- |
+| 实验室管理员 | `admin` | `9be6e6403570355b9fab49ca8fc94b7ee817f493a74132a45271a3b43025489e` |
+| 维修人员 | `tech` | `6170f8d5c5e3dd3dd5880ea1fad81ce03dfdb511ac644f43700b05a0eb66fa21` |
+| 系统管理员 | `sysadmin` | `50d43e1caed041b2efe7b5e9ca19f984a9a30ee58b9c0c6cf4ffbf2ae89bf63b` |
+| 实验教学中心主任 | `director` | `c9f9580ae4004ac051c74c557e37ba69beeb71e659da3cad3b76f23325b97762` |
+| 专用学生 | `student_lab` | `0f4ab2e4a4bf66b10a68fd3bc23ab3a9fbd3c4a2cc13b2b273b129ca10a9684b` |
+| 专用教师 | `teacher_lab` | `3165056427962d7ccce1bff90cb6416ef983b24d3d60975597ce30bc41889f5a` |
 
 <details>
 <summary>查看本机网页演示截图</summary>
