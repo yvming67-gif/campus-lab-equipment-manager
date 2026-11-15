@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %}{% load static %}
 {% block content %}
 <div class="page-top workbench-heading"><div><h1>{% if is_lab_admin %}实验室运营{% elif is_technician %}维修工作台{% elif is_director %}中心概览{% elif is_sys_admin %}系统设置{% elif is_teacher %}课程资源安排{% else %}我的实验预约{% endif %}</h1><p>{{ user.display_name }} · {{ today|date:'Y年n月j日' }}</p></div></div>
 {% if overdue %}<p class="message error">有逾期未结束的记录，请联系管理员办理归还或离场。</p>{% endif %}
@@ -6,8 +6,18 @@
 {% if is_lab_admin %}
 <section class="workspace-banner role-banner lab-operations" data-scroll-reveal aria-labelledby="lab-work-title">
   <div><div class="workbench-area-heading"><h2 id="lab-work-title">预约与交接</h2>{% include "workbench_help.html" with description="打开待审核队列，可核对资格、开放条件和冲突。审核通过后，领取或入场仍需现场交接。" only %}</div><p>审核预约、安排交接和处理异常。</p></div>
-  <div class="role-actions"><a class="button" href="{% url 'bookings' %}?queue=review">处理待审核申请 · {{ to_review }}</a><a class="button secondary" href="{% url 'manage' %}?section=resources">维护本实验室资源</a></div>
+  <div class="role-actions"><a class="button" href="{% url 'bookings' %}?queue=review">处理待审核申请</a><a class="button secondary" href="{% url 'manage' %}?section=resources">维护本实验室资源</a></div>
 </section>
+<section class="panel review-board" aria-labelledby="review-board-title"
+         data-review-board="{% url 'review-board-snapshot' %}" data-scroll-reveal>
+  <div class="section-heading">
+    <h2 id="review-board-title">临近开始的待审申请</h2>{% if review_demo %}<small>模拟数据</small>{% endif %}
+    <a class="touch-link" href="{% url 'dashboard' %}" data-review-refresh>刷新</a>
+  </div>
+  <p class="fine review-feed-status" role="status" data-review-status></p>
+  <div data-review-content>{% include "review_snapshot.html" %}</div>
+</section>
+<script defer src="{% static 'review_board.js' %}"></script>
 <h2>我的工作队列</h2>
 <section class="task-grid" aria-label="实验室运营待办">{% for task in tasks %}<a data-scroll-reveal class="task-card" href="{{ task.url }}"><span>{{ task.name }}</span><strong>{{ task.count }}</strong><p>{{ task.note }}</p></a>{% endfor %}</section>
 <div class="section-heading"><h2>近期预约记录</h2><a href="{% url 'bookings' %}">查看全部 →</a></div>{% include 'booking_table.html' with bookings=recent %}

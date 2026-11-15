@@ -11,6 +11,7 @@ from .models import User, Resource, Reservation, CalendarException, LabGrant, Ro
 from . import services as s
 from .catalog import filter_resources
 from .forms import QueryForm, ResourceForm
+from .workbench import review_snapshot
 
 
 class ProductTests(TestCase):
@@ -274,6 +275,81 @@ class ProductTests(TestCase):
                 self.assertIn(action,role_banner.group(1))
                 self.assertIn('data-workbench-help', role_banner.group(1))
                 self.assertNotIn(forbidden,role_banner.group(1))
+
+    def test_review_board_windows_share_counts_and_scope_with_queue(self):
+        at = self.start - timedelta(hours=1)
+        foreign = Resource.objects.exclude(lab_id=self.eq.lab_id).first()
+        LabGrant.objects.get_or_create(user=self.admin, lab=self.eq.lab)
+        LabGrant.objects.filter(user=self.admin, lab=foreign.lab).delete()
+
+        def make(offset, applicant=self.student, resource=self.eq):
+            start = at + timedelta(minutes=offset)
+            return Reservation.objects.create(
+                applicant=applicant, resource=resource, starts_at=start,
+                ends_at=start + timedelta(hours=1), created_at=at - timedelta(minutes=10),
+                purpose="看板不得包含的说明", status="PENDING", approval_mode="MANUAL",
+            )
+
+        make(0)
+        priority = [make(1), make(60)]
+        soon = [make(61), make(120)]
+        later = make(121)
+        own = make(25, applicant=self.admin)
+        outside = make(40, resource=foreign)
+
+        with self.assertNumQueries(1):
+            snapshot = review_snapshot(self.admin, at)
+        groups = {"priority": priority, "soon": soon, "future": priority + soon + [later]}
+        self.assertEqual([row["booking"].pk for row in snapshot["rows"]], [b.pk for b in priority + soon])
+        self.client.force_login(self.admin)
+        with patch("core.views.timezone.now", return_value=at):
+            for metric in snapshot["numbers"]:
+                expected = groups[metric["key"]]
+                queue = self.client.get(metric["url"])
+                self.assertEqual(metric["count"], len(expected))
+                self.assertEqual([b.pk for b in queue.context["bookings"]], [b.pk for b in expected])
+            snapshot_response = self.client.get("/workbench/review/snapshot/")
+            self.assertContains(snapshot_response, 'data-review-metric="priority"')
+            for booking in (own, outside, later):
+                self.assertNotContains(snapshot_response, f'data-review-key="{booking.pk}"')
+            self.assertNotContains(snapshot_response, "看板不得包含的说明")
+            self.assertNotContains(snapshot_response, self.student.school_no)
+            self.assertIn("no-store", snapshot_response["Cache-Control"])
+            rejected_filter = self.client.get("/bookings/?queue=review&review_window=invalid")
+            self.assertEqual(list(rejected_filter.context["bookings"]), [])
+
+    def test_review_snapshot_follows_submission_clock_and_review(self):
+        teacher = User.objects.get(username="teacher")
+        room = Resource.objects.filter(kind="ROOM", lab=self.eq.lab).first()
+        LabGrant.objects.get_or_create(user=self.admin, lab=room.lab)
+        first = self.start - timedelta(minutes=90)
+        second = self.start - timedelta(minutes=30)
+        path = "/workbench/review/snapshot/"
+        self.assertEqual(self.client.get(path).status_code, 401)
+        self.client.force_login(self.system)
+        self.assertEqual(self.client.get(path).status_code, 403)
+        self.client.force_login(self.admin)
+        with patch("core.views.timezone.now", return_value=first):
+            self.assertContains(self.client.get(path), "未来两小时内暂无待审核申请。")
+            submitted = s.create_reservation(
+                teacher, room.pk, self.start, self.start + timedelta(hours=1), "看板验收",
+            )
+            snapshot = self.client.get(path)
+            self.assertContains(snapshot, f'data-review-key="{submitted.pk}"')
+            self.assertContains(snapshot, '<span class="review-stage">即将开始</span>', html=True)
+        with patch("core.views.timezone.now", return_value=second):
+            self.assertContains(self.client.get(path), '<span class="review-stage review-stage--priority">优先处理</span>', html=True)
+            decision = self.client.post(
+                f"/bookings/{submitted.pk}/review/",
+                {"choice": "approve", "reason": "看板验收通过", "version": submitted.version},
+            )
+            self.assertRedirects(decision, f"/bookings/{submitted.pk}/", fetch_redirect_response=False)
+            submitted.refresh_from_db()
+            self.assertEqual(submitted.status, "CONFIRMED")
+            self.assertNotContains(self.client.get(path), f'data-review-key="{submitted.pk}"')
+        LabGrant.objects.filter(user=self.admin).delete()
+        self.assertContains(self.client.get(path), "未来两小时内暂无待审核申请。")
+        self.assertEqual(self.client.post(path).status_code, 405)
 
     def test_room_directory_shows_individual_rooms_grouped_by_lab(self):
         self.client.force_login(User.objects.get(username="teacher"))

@@ -1,8 +1,65 @@
 """Read-only work queues. State transitions remain in the transaction services."""
-from django.db.models import Q
+from datetime import timedelta
+from urllib.parse import urlencode
+
+from django.db.models import Count, Q, Window
 from django.urls import reverse
 from django.utils import timezone
-from .models import AuditEvent
+from .models import AuditEvent, LabGrant, Reservation
+
+
+REVIEW_WINDOWS = {
+    "priority": "优先处理（1 小时内）",
+    "soon": "即将开始（1–2 小时）",
+    "future": "全部可处理待审",
+}
+
+
+def managed_reviews(user, queryset=None):
+    queryset = Reservation.objects.all() if queryset is None else queryset
+    labs = LabGrant.objects.filter(user=user).values("lab_id")
+    return queryset.filter(resource__lab_id__in=labs, status="PENDING").exclude(applicant=user)
+
+
+def review_window_conditions(now):
+    one_hour = now + timedelta(hours=1)
+    two_hours = now + timedelta(hours=2)
+    return {
+        "priority": Q(starts_at__gt=now, starts_at__lte=one_hour),
+        "soon": Q(starts_at__gt=one_hour, starts_at__lte=two_hours),
+        "future": Q(starts_at__gt=now),
+    }
+
+
+def review_snapshot(user, now):
+    conditions = review_window_conditions(now)
+    # Window aggregates and preview rows come from a single PostgreSQL statement.
+    totals = {key: Window(Count("pk", filter=condition)) for key, condition in conditions.items()}
+    rows = list(managed_reviews(user).filter(conditions["future"])
+                .select_related("resource__lab")
+                .only("starts_at", "ends_at", "created_at", "status", "resource__name", "resource__lab__name")
+                .annotate(**totals).order_by("starts_at", "pk")[:5])
+    counts = {key: getattr(rows[0], key) if rows else 0 for key in REVIEW_WINDOWS}
+    numbers = [
+        {
+            "key": key, "label": label, "count": counts[key],
+            "percent": round(counts[key] * 100 / counts["future"]) if counts["future"] else 0,
+            "url": reverse("bookings") + "?" + urlencode({"queue": "review", "review_window": key, "sort": "starts"}),
+        }
+        for key, label in REVIEW_WINDOWS.items()
+    ]
+    preview = []
+    for row in rows:
+        remaining = row.starts_at - now
+        if remaining > timedelta(hours=2):
+            break
+        preview.append({
+            "booking": row,
+            "label": "优先处理" if remaining <= timedelta(hours=1) else "即将开始",
+            "priority": remaining <= timedelta(hours=1),
+            "wait_minutes": max(0, (now - row.created_at) // timedelta(minutes=1)),
+        })
+    return {"numbers": numbers, "rows": preview, "updated_at": now}
 
 
 def acceptance_queue(qs, user):
@@ -27,13 +84,12 @@ def tasks_for(user, bookings, incidents, work, now=None):
     if user.has_role('LAB_ADMIN'):
         managed = bookings.filter(resource__lab__labgrant__user=user).distinct()
         for key, name, note in [
-            ('review', '待审核申请', '先核对用途、资格与可用时段'),
             ('recheck', '待复核承诺', '条件变化后先复核，再交接'),
             ('handover', '今日待交接', '已确认不代表已经领取或入场'),
             ('overdue', '超期未结束', '核实实物与人员，协调后续使用'),
         ]:
             qs = booking_queue(managed, key, now)
-            if key in ['review','recheck']: qs = qs.exclude(applicant=user)
+            if key == 'recheck': qs = qs.exclude(applicant=user)
             cards.append({'name': name, 'count': qs.count(), 'note': note,
                           'url': reverse('bookings')+'?queue='+key})
         pending = incidents.filter(resource__lab__labgrant__user=user, status='PENDING').distinct()

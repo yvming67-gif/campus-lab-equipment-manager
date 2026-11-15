@@ -11,8 +11,9 @@ from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied,ImproperlyConfigured
 from django.db import IntegrityError,transaction
 from django.db.models import Q,Count
-from django.http import FileResponse,Http404,JsonResponse
+from django.http import FileResponse,Http404,HttpResponse,JsonResponse
 from django.shortcuts import render,redirect,get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
@@ -26,7 +27,10 @@ from .demo_identity import (
     valid_private_demo_token, verify_demo_password,
 )
 from .schedules import resource_schedule
-from .workbench import tasks_for, booking_queue, acceptance_queue
+from .workbench import (
+    REVIEW_WINDOWS, acceptance_queue, booking_queue, managed_reviews,
+    review_snapshot, review_window_conditions, tasks_for,
+)
 from .catalog import calendar_catalog, filter_resources
 from .experience import slot_options, approval_context, next_step
 from . import ui_navigation as ui
@@ -156,11 +160,13 @@ def signout(request):
     logout(request);return redirect("login")
 
 @login_required
+@never_cache
 def dashboard(request):
     now=timezone.now();mine=Reservation.objects.filter(applicant=request.user)
     context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"overdue":s.overdue_for(request.user,now),
              "is_student":request.user.has_role("STUDENT"),"is_teacher":request.user.has_role("TEACHER"),"is_lab_admin":request.user.has_role("LAB_ADMIN"),"is_technician":request.user.has_role("TECHNICIAN"),"is_director":request.user.has_role("DIRECTOR"),"is_sys_admin":request.user.has_role("SYS_ADMIN")}
-    if request.user.has_role("LAB_ADMIN"):context["to_review"]=scoped_bookings(request.user).filter(status="PENDING").exclude(applicant=request.user).count()
+    if context["is_lab_admin"]:
+        context.update(review=review_snapshot(request.user, now), review_demo=settings.DEMO_MODE)
     if request.user.has_role("DIRECTOR"):
         context.update({"director_pending":Reservation.objects.filter(status="PENDING").count(),"director_incidents":Incident.objects.filter(status="PENDING").count(),"director_acceptance":WorkOrder.objects.filter(status="AWAITING_ACCEPTANCE").count()})
         context["default_report_days"] = DEFAULT_REPORT_DAYS
@@ -175,6 +181,17 @@ def dashboard(request):
     scoped=scoped_bookings(request.user)
     context['tasks']=tasks_for(request.user,scoped,scoped_incidents(request.user),scoped_work(request.user),now)
     return render(request,"dashboard.html",context)
+
+@never_cache
+@require_GET
+def review_board_snapshot(request):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=401)
+    if not request.user.has_role("LAB_ADMIN"):
+        return HttpResponse(status=403)
+    review = review_snapshot(request.user, timezone.now())
+    return HttpResponse(render_to_string("review_snapshot.html", {"review": review}))
+
 
 @login_required
 def resources(request):
@@ -357,11 +374,23 @@ def bookings(request):
     qs=scoped_bookings(request.user);q=request.GET.get("q","");status=request.GET.get("status","");lab=request.GET.get("lab","");day=request.GET.get("day","");kind=request.GET.get("kind","")
     if request.GET.get('scope')=='mine':qs=qs.filter(applicant=request.user)
     queue=request.GET.get('queue','')
+    review_window = request.GET.get("review_window", "")
     if queue:
         protected(request.user.has_role('LAB_ADMIN'))
-        qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
-        if queue in ['review','recheck']:qs=qs.exclude(applicant=request.user)
+        if queue == "review":
+            qs = managed_reviews(request.user, qs)
+        else:
+            qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
+            if queue == "recheck": qs=qs.exclude(applicant=request.user)
     scope_total=qs.count() if any((q,status,lab,day,kind)) else None;selected_day=ui.parse_day(day);query_invalid=False
+    if queue == "review" and review_window:
+        condition = review_window_conditions(timezone.now()).get(review_window)
+        if condition is None:
+            qs = qs.none()
+            query_invalid = True
+            messages.error(request, "请选择有效的待审时间范围")
+        else:
+            qs = qs.filter(condition)
     if q:qs=qs.filter(Q(code__icontains=q)|Q(resource__name__icontains=q)|Q(resource__code__icontains=q)|Q(applicant__display_name__icontains=q))
     if status:qs=qs.filter(status=status)
     if lab:
@@ -385,7 +414,7 @@ def bookings(request):
     chips=ui.filter_chips('bookings',request.GET,ui.RECORD_KEYS,[('q','记录搜索',q),('status','状态',dict(Reservation.STATUS).get(status,'无效状态')),('lab','实验室',lab_labels.get(lab,'无效实验室')),('day','开始日期',day),('kind','资源类型',dict(Resource.KIND).get(kind,'无效类型'))])
     return render(request,"bookings.html",{"title":"预约与使用记录","bookings":page.object_list,"page":page,"filters":filters,"statuses":Reservation.STATUS,"labs":labs,'sort':sort,
         'date_nav':ui.date_navigation('bookings',request.GET,ui.RECORD_KEYS,selected=selected_day,all_dates=True),'schedule_url':ui.records_schedule_link(request.GET,request.user),
-        'query_scope':scope_label,'query_total':scope_total,'query_count':page.paginator.count,'query_chips':chips,'query_invalid':query_invalid})
+        'query_scope':scope_label,'query_total':scope_total,'query_count':page.paginator.count,'query_chips':chips,'query_invalid':query_invalid,'review_window_label':REVIEW_WINDOWS.get(review_window) if queue == 'review' else None})
 
 @login_required
 def booking(request,pk):

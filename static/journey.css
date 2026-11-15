@@ -101,3 +101,67 @@
   }
   .workbench-help[open] .workbench-help-note { animation:workbench-help-enter .18s ease-out; }
 }
+
+.review-board { margin-bottom:24px; }
+.review-board .section-heading { flex-wrap:wrap; margin:0; }
+.review-feed-status:empty { display:none; }
+.review-updated { display:block; margin:4px 0 6px; }
+.review-bar-label { margin:0 0 10px; }
+.review-counts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-bottom:16px; }
+.review-metric {
+  display:grid;
+  align-content:start;
+  gap:5px;
+  min-height:76px;
+  padding:12px;
+  border-radius:12px;
+  background:#f4f7fb;
+  color:#224362;
+}
+.review-metric--priority { background:#fff1ea; color:#853914; }
+.review-metric--soon { background:#fff7df; color:#694500; }
+.review-metric strong { font-size:24px; line-height:1.2; font-variant-numeric:tabular-nums; }
+.review-bar { display:block; height:5px; border-radius:5px; background:#0001; overflow:hidden; }
+.review-bar > span { display:block; height:100%; border-radius:inherit; background:currentColor; }
+.review-preview { margin:0; padding:0; list-style:none; }
+.review-preview > li { border-top:1px solid var(--line); }
+.review-preview > .empty-state { margin:0; }
+.review-row {
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:8px;
+  padding:6px 4px;
+}
+.review-row:hover { background:#f6f9ff; }
+.review-row:has(details[open]) { z-index:3; }
+.review-row-link { min-width:0; color:inherit; overflow-wrap:anywhere; }
+.review-row-link small { display:block; }
+.review-row-link::after { content:""; position:absolute; inset:0; border-radius:7px; }
+.review-row-link:focus-visible::after { outline:2px solid #0071e3; }
+.review-stage { font-size:12px; font-weight:600; color:#694500; }
+.review-stage--priority { color:#853914; }
+.review-summary summary { position:relative; z-index:1; }
+.review-summary .workbench-help-note {
+  position:absolute;
+  inset-block-start:100%;
+  inset-inline-end:0;
+  z-index:2;
+  width:min(19rem,100%);
+  margin:0;
+  padding:12px 14px;
+  border:1px solid #d2dae7;
+  border-radius:12px;
+  background:#fff;
+  color:#242c39;
+  box-shadow:0 6px 20px #26375420;
+}
+@media (prefers-reduced-motion:no-preference) {
+  .review-bar > span { transition:width .24s ease-out; }
+  .review-summary[open] .workbench-help-note { animation:workbench-help-enter .18s ease-out; }
+}
+@media (max-width:540px) {
+  .review-counts { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .review-metric--future { grid-column:1/-1; min-height:44px; grid-template-columns:1fr auto; }
+}

@@ -80,26 +80,25 @@ if (revealItems.length && 'IntersectionObserver' in window && !motionPreference.
   revealItems.forEach(item => reveal.observe(item));
 }
 
-// The native disclosure also supports touch and keyboard without hover.
-const hoverHelp = document.querySelectorAll('[data-workbench-help]');
-hoverHelp.forEach(help => {
-  help.addEventListener('pointerenter', event => {
-    if (event.pointerType === 'mouse') help.open = true;
-  });
-  help.addEventListener('pointerleave', event => {
-    if (event.pointerType === 'mouse') help.open = false;
+// Delegate disclosure interactions so dynamically refreshed previews behave the same way.
+function hoverDisclosure(event, open) {
+  if (event.pointerType !== 'mouse') return;
+  const row = event.target.closest('[data-review-key]');
+  const help = row?.querySelector('[data-workbench-help]') ?? event.target.closest('[data-workbench-help]');
+  if (help && !(row ?? help).contains(event.relatedTarget)) help.open = open;
+}
+document.addEventListener('pointerover', event => hoverDisclosure(event, true));
+document.addEventListener('pointerout', event => hoverDisclosure(event, false));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') {
+    document.querySelectorAll('[data-workbench-help][open]').forEach(help => { help.open = false; });
+  }
+});
+document.addEventListener('pointerdown', event => {
+  document.querySelectorAll('[data-workbench-help][open]').forEach(help => {
+    if (!help.contains(event.target)) help.open = false;
   });
 });
-if (hoverHelp.length) {
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') hoverHelp.forEach(help => { help.open = false; });
-  });
-  document.addEventListener('pointerdown', event => {
-    hoverHelp.forEach(help => {
-      if (!help.contains(event.target)) help.open = false;
-    });
-  });
-}
 
 // Soft reflected light follows the pointer only on interactive surfaces.
 if (window.matchMedia('(hover: hover) and (pointer: fine)').matches &&

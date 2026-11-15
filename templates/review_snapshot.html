@@ -1,0 +1,38 @@
+<time class="fine review-updated" datetime="{{ review.updated_at|date:'c' }}" data-review-time>
+  更新于 {{ review.updated_at|date:"H:i:s" }}（北京时间）
+</time>
+<p class="fine review-bar-label">短条显示该组占全部可处理待审的比例。</p>
+<div class="review-counts">
+  {% for item in review.numbers %}
+    <a class="review-metric review-metric--{{ item.key }}" href="{{ item.url }}" data-review-metric="{{ item.key }}">
+      <span>{{ item.label }}</span>
+      <strong data-review-value>{{ item.count }}</strong>
+      {% if item.key != "future" %}
+        <span class="review-bar" aria-hidden="true"><span style="width:{{ item.percent }}%" data-review-bar></span></span>
+      {% endif %}
+    </a>
+  {% endfor %}
+</div>
+<ul class="review-preview" aria-label="最先开始的五条待审申请" data-review-list>
+{% for row in review.rows %}
+  {% with b=row.booking %}
+    <li class="review-row" data-review-key="{{ b.pk }}">
+      <a class="review-row-link" href="{% url 'booking' b.pk %}" data-review-link>
+        <strong>{{ b.resource.name }}</strong>
+        <small>{{ b.resource.lab.name }} · {{ b.starts_at|date:"m-d H:i" }}</small>
+      </a>
+      <span class="review-stage{% if row.priority %} review-stage--priority{% endif %}">{{ row.label }}</span>
+      <details class="workbench-help review-summary" data-workbench-help>
+        <summary aria-label="查看{{ b.resource.name }}申请摘要">摘要</summary>
+        <p class="workbench-help-note">
+          <strong>{{ b.resource.name }}</strong><br>
+          {{ b.starts_at|date:"m-d H:i" }} 至 {{ b.ends_at|date:"m-d H:i" }}（北京时间）<br>
+          已等待 {{ row.wait_minutes }} 分钟 · {{ b.get_status_display }}
+        </p>
+      </details>
+    </li>
+  {% endwith %}
+{% empty %}
+  <li class="empty-state">未来两小时内暂无待审核申请。</li>
+{% endfor %}
+</ul>

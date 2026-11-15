@@ -13,3 +13,4 @@ urlpatterns += [
 
 urlpatterns += [path('operations/health/',cv.operations_health,name='operations-health')]
 urlpatterns += [path('reservation-receipt/', v.reservation_receipt, name='reservation-receipt')]
+urlpatterns += [path("workbench/review/snapshot/", v.review_board_snapshot, name="review-board-snapshot")]
