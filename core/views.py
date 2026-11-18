@@ -28,7 +28,7 @@ from .demo_identity import (
 )
 from .schedules import resource_schedule
 from .workbench import (
-    REVIEW_WINDOWS, acceptance_queue, booking_queue, managed_reviews,
+    REVIEW_WINDOWS, acceptance_queue, booking_queue, handover_snapshot, managed_bookings, managed_reviews,
     review_snapshot, review_window_conditions, tasks_for,
 )
 from .catalog import calendar_catalog, filter_resources
@@ -36,6 +36,7 @@ from .experience import slot_options, approval_context, next_step
 from . import ui_navigation as ui
 from . import safety as safety_service
 from .opening_calendar import schedule_by_resource, weekly_schedule
+from .review_trends import METRICS as REVIEW_METRICS, approval_detail, approval_trend
 
 def paginate(request,queryset,size=30,*,page_param='page'):
     # A stable primary-key order prevents rows moving between pages when a
@@ -166,7 +167,10 @@ def dashboard(request):
     context={"title":"工作台","pending":mine.filter(status="PENDING").count(),"confirmed":mine.filter(status="CONFIRMED").count(),"using":mine.filter(status="IN_USE").count(),"recent":scoped_bookings(request.user)[:6],"today":now,"overdue":s.overdue_for(request.user,now),
              "is_student":request.user.has_role("STUDENT"),"is_teacher":request.user.has_role("TEACHER"),"is_lab_admin":request.user.has_role("LAB_ADMIN"),"is_technician":request.user.has_role("TECHNICIAN"),"is_director":request.user.has_role("DIRECTOR"),"is_sys_admin":request.user.has_role("SYS_ADMIN")}
     if context["is_lab_admin"]:
-        context.update(review=review_snapshot(request.user, now), review_demo=settings.DEMO_MODE)
+        context.update(
+            review=review_snapshot(request.user, now), handover=handover_snapshot(request.user, now),
+            review_demo=settings.DEMO_MODE, trend=approval_trend(request.user, now),
+        )
     if request.user.has_role("DIRECTOR"):
         context.update({"director_pending":Reservation.objects.filter(status="PENDING").count(),"director_incidents":Incident.objects.filter(status="PENDING").count(),"director_acceptance":WorkOrder.objects.filter(status="AWAITING_ACCEPTANCE").count()})
         context["default_report_days"] = DEFAULT_REPORT_DAYS
@@ -178,8 +182,7 @@ def dashboard(request):
         context["teacher_room_upcoming"]=mine.filter(resource__kind="ROOM",status__in=["CONFIRMED","IN_USE"],ends_at__gt=now).count()
         context["teacher_rooms"] = mine.filter(resource__kind="ROOM", ends_at__gt=now,
             status__in=["PENDING", "CONFIRMED", "IN_USE"]).select_related("resource__lab").order_by("starts_at")[:5]
-    scoped=scoped_bookings(request.user)
-    context['tasks']=tasks_for(request.user,scoped,scoped_incidents(request.user),scoped_work(request.user),now)
+    context['tasks']=tasks_for(request.user,scoped_incidents(request.user),scoped_work(request.user))
     return render(request,"dashboard.html",context)
 
 @never_cache
@@ -189,8 +192,43 @@ def review_board_snapshot(request):
         return HttpResponse(status=401)
     if not request.user.has_role("LAB_ADMIN"):
         return HttpResponse(status=403)
-    review = review_snapshot(request.user, timezone.now())
-    return HttpResponse(render_to_string("review_snapshot.html", {"review": review}))
+    now = timezone.now()
+    context = {"review": review_snapshot(request.user, now), "handover": handover_snapshot(request.user, now)}
+    fragment = render_to_string("review_snapshot.html", context)
+    if request.GET.get("trend") == "1":
+        fragment += render_to_string("review_trend.html", {"trend": approval_trend(request.user, now)})
+    return HttpResponse(fragment)
+
+
+@login_required
+@never_cache
+@require_GET
+def review_trend_detail(request):
+    protected(request.user.has_role("LAB_ADMIN"))
+    now = timezone.now()
+    today = timezone.localdate(now)
+    day = ui.parse_day(request.GET.get("day"))
+    metric = request.GET.get("metric")
+    if not day or not today - timedelta(days=6) <= day <= today or metric not in REVIEW_METRICS:
+        raise Http404
+    entries = approval_detail(request.user, day, metric, now)
+    if metric == "remaining":
+        if not approval_trend(request.user, now)["coverage"]:
+            return render(request, "review_trend_detail.html", {
+                "title": REVIEW_METRICS[metric][0], "day": day, "coverage_missing": True, "as_of": now, "today": today,
+            })
+        page, filters = paginate(request, entries.select_related("resource", "applicant"))
+        rows = [{"booking": booking, "at": booking.created_at, "label": "当日仍待审"} for booking in page]
+    else:
+        page, filters = paginate(request, entries)
+        bookings = scoped_bookings(request.user).filter(pk__in=[event.entity_id for event in page]).in_bulk()
+        rows = [{"booking": bookings[event.entity_id], "at": event.created_at,
+                 "label": {"SUBMIT": "提交待审", "APPROVE": "通过", "REJECT": "驳回"}[event.action]}
+                for event in page if event.entity_id in bookings]
+    return render(request, "review_trend_detail.html", {
+        "title": REVIEW_METRICS[metric][0], "day": day, "rows": rows, "page": page, "filters": filters,
+        "as_of": now, "today": today,
+    })
 
 
 @login_required
@@ -380,7 +418,7 @@ def bookings(request):
         if queue == "review":
             qs = managed_reviews(request.user, qs)
         else:
-            qs=booking_queue(qs.filter(resource__lab__labgrant__user=request.user).distinct(),queue)
+            qs=booking_queue(managed_bookings(request.user, qs),queue)
             if queue == "recheck": qs=qs.exclude(applicant=request.user)
     scope_total=qs.count() if any((q,status,lab,day,kind)) else None;selected_day=ui.parse_day(day);query_invalid=False
     if queue == "review" and review_window:
@@ -569,20 +607,41 @@ def reports(request):
     default_start, _ = report_window(now)
     start_input = start_input or default_start.date().isoformat()
     end_input = end_input or now.astimezone(s.TZ).date().isoformat()
+    resources = Resource.objects.select_related("lab")
+    lab_options = Lab.objects.order_by("code")
+    if not request.user.has_role("DIRECTOR"):
+        resources = resources.filter(lab__labgrant__user=request.user)
+        lab_options = lab_options.filter(labgrant__user=request.user)
+    lab_filter, kind_filter = request.GET.get("lab", ""), request.GET.get("kind", "")
     rows, error, page, end = [], "", None, None
+    page_params = urlencode({"start": start_input, "end": end_input, "lab": lab_filter, "kind": kind_filter})
     try:
         start, end = report_window(now, start_input, end_input)
-        resources = Resource.objects.select_related("lab")
-        if not request.user.has_role("DIRECTOR"):
-            resources = resources.filter(lab__labgrant__user=request.user)
+        if lab_filter:
+            lab_id = s.positive_integer(lab_filter)
+            if lab_id is None:
+                raise s.BusinessError("请选择有效的实验室。")
+            resources = resources.filter(lab_id=lab_id)
+        if kind_filter:
+            if kind_filter not in ("EQUIPMENT", "ROOM"):
+                raise s.BusinessError("请选择有效的资源类型。")
+            resources = resources.filter(kind=kind_filter)
         result_page = Paginator(resources.order_by("code"), 50).get_page(request.GET.get("page", 1))
         rows = utilization(result_page.object_list, start, end, at=now)
         page = result_page
     except s.BusinessError as exc:
         error = str(exc)
+    chart_rows = rows[:8]
+    chart_keys = (("capacity", "可服务"), ("booked", "计划占用"), ("actual", "实际使用"))
+    scale = max((values[key] for values in chart_rows for key, _ in chart_keys), default=0) or 1
+    for row in chart_rows:
+        row["chart"] = [{"key": key, "label": label, "hours": row[key], "width": int(round(row[key] / scale * 100))}
+                        for key, label in chart_keys]
     return render(request, "reports.html", {
         "title": "利用与运行报表", "rows": rows, "end": end, "error": error, "page": page,
         "start_input": start_input, "end_input": end_input, "default_report_days": DEFAULT_REPORT_DAYS,
+        "chart_rows": chart_rows, "lab_options": lab_options, "lab_filter": lab_filter,
+        "kind_filter": kind_filter, "page_params": page_params,
     })
 
 @login_required

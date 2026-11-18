@@ -11,7 +11,8 @@ from .models import User, Resource, Reservation, CalendarException, LabGrant, Ro
 from . import services as s
 from .catalog import filter_resources
 from .forms import QueryForm, ResourceForm
-from .workbench import review_snapshot
+from .workbench import review_snapshot, handover_snapshot
+from .review_trends import approval_trend
 
 
 class ProductTests(TestCase):
@@ -351,6 +352,84 @@ class ProductTests(TestCase):
         self.assertContains(self.client.get(path), "未来两小时内暂无待审核申请。")
         self.assertEqual(self.client.post(path).status_code, 405)
 
+    def test_approval_trend_preserves_carry_in_and_uses_event_dates(self):
+        at = self.start
+        old = at - timedelta(days=8)
+        yesterday = at - timedelta(days=1)
+        LabGrant.objects.get_or_create(user=self.admin, lab=self.eq.lab)
+
+        def recorded(started, status, action=None, finished=None):
+            booking = Reservation.objects.create(
+                applicant=self.student, resource=self.eq, starts_at=at + timedelta(days=1),
+                ends_at=at + timedelta(days=1, hours=1), created_at=started,
+                purpose="趋势验收", status=status, approval_mode="MANUAL",
+            )
+            s.audit(self.student, booking, "SUBMIT", new={"status": "PENDING"}, at=started)
+            if action:
+                s.audit(self.admin, booking, action, {"status": "PENDING"}, {"status": status}, at=finished)
+            return booking
+
+        decided = recorded(old, "REJECTED", "REJECT", yesterday + timedelta(minutes=1))
+        recorded(yesterday, "CANCELLED", "CANCEL", yesterday + timedelta(minutes=2))
+        recorded(yesterday + timedelta(minutes=1), "EXPIRED", "EXPIRE", yesterday + timedelta(minutes=4))
+        pending = recorded(yesterday + timedelta(minutes=3), "PENDING")
+        trend = approval_trend(self.admin, at)
+        self.assertTrue(trend["coverage"])
+        self.assertEqual(trend["days"][0]["remaining"], 1)
+        day = trend["days"][-2]
+        self.assertEqual((day["incoming"], day["decided"], day["other_exit"], day["remaining"]), (3, 1, 2, 1))
+        self.client.force_login(self.admin)
+        with patch("core.views.timezone.now", return_value=at):
+            self.assertContains(self.client.get(day["decided_url"]), f'href="/bookings/{decided.pk}/"')
+            self.assertContains(self.client.get("/workbench/review/snapshot/?trend=1"), "审批积压趋势")
+            self.assertNotContains(self.client.get("/workbench/review/snapshot/"), "审批积压趋势")
+            self.assertContains(self.client.get(day["remaining_url"]), f'href="/bookings/{pending.pk}/"')
+            missing = Reservation.objects.filter(pk=pending.pk)
+            missing.update(status="REJECTED")
+            self.assertFalse(approval_trend(self.admin, at)["coverage"])
+            self.assertContains(self.client.get(day["remaining_url"]), "状态历史有缺口")
+        self.client.force_login(self.system)
+        self.assertEqual(self.client.get(day["decided_url"]).status_code, 403)
+
+    def test_handover_refresh_updates_when_real_equipment_is_returned(self):
+        booking = self.book()
+        LabGrant.objects.get_or_create(user=self.admin, lab=self.eq.lab)
+        when = booking.starts_at - timedelta(minutes=20)
+        self.assertEqual(handover_snapshot(self.admin, when)[0]["count"], 1)
+        s.checkout(self.admin, booking.pk, self.student.school_no, self.eq.code, at=booking.starts_at)
+        when = booking.ends_at + timedelta(minutes=1)
+        self.assertEqual(handover_snapshot(self.admin, when)[1]["count"], 1)
+        s.return_equipment(self.admin, booking.pk, self.eq.code, "正常归还", at=when)
+        self.assertEqual(handover_snapshot(self.admin, when)[1]["count"], 0)
+        self.client.force_login(self.admin)
+        self.assertContains(self.client.get("/workbench/review/snapshot/"), "交接与复核")
+
+    def test_report_filters_and_chart_use_role_scoped_rows(self):
+        other = Lab.objects.exclude(pk=self.eq.lab_id).first()
+        LabGrant.objects.filter(user=self.admin, lab=other).delete()
+        self.client.force_login(self.admin)
+        page = self.client.get("/reports/", {"lab": other.pk, "kind": "ROOM"})
+        self.assertEqual(page.context["rows"], [])
+        self.assertNotContains(page, "计划占用与实际使用")
+        self.client.force_login(User.objects.get(username="director"))
+        page = self.client.get("/reports/", {"lab": other.pk, "kind": "ROOM"})
+        self.assertTrue(page.context["rows"])
+        for row in page.context["chart_rows"]:
+            self.assertEqual(row["resource"].lab_id, other.pk)
+            self.assertEqual(row["resource"].kind, "ROOM")
+            self.assertEqual([x["hours"] for x in row["chart"]], [row["capacity"], row["booked"], row["actual"]])
+        self.assertContains(page, "计划占用与实际使用")
+
+    def test_operations_overview_is_system_only(self):
+        for username in ("admin", "director"):
+            self.client.force_login(User.objects.get(username=username))
+            self.assertEqual(self.client.get("/operations/overview/").status_code, 403)
+        self.client.force_login(self.system)
+        response = self.client.get("/operations/overview/")
+        self.assertContains(response, "运行健康")
+        self.assertContains(response, "后台任务")
+        self.assertContains(response, "查看投递记录")
+
     def test_room_directory_shows_individual_rooms_grouped_by_lab(self):
         self.client.force_login(User.objects.get(username="teacher"))
         page = self.client.get("/resources/", {"kind": "ROOM"})
@@ -465,7 +544,7 @@ class ProductTests(TestCase):
         other_resource=Resource.objects.exclude(lab=self.eq.lab).first()
         i=Incident.objects.create(resource=other_resource,reporter=self.admin,kind='FAULT',description='跨范围报告',occurred_at=timezone.now())
         self.client.force_login(self.admin)
-        page=self.client.get('/');self.assertEqual(next(t['count'] for t in page.context['tasks'] if t['name']=='待复核承诺'),0)
+        page=self.client.get('/');self.assertEqual(next(group['count'] for group in page.context['handover'] if group['key']=='recheck'),0)
         self.assertEqual(self.client.get('/bookings/',{'queue':'recheck'}).context['page'].paginator.count,0)
         self.assertNotContains(self.client.get('/incidents/',{'queue':'managed','status':'PENDING'}),i.code)
         self.assertContains(self.client.get('/incidents/',{'status':'PENDING'}),i.code)

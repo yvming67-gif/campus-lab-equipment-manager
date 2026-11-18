@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-top">
+  <div><a class="back-link" href="{% url 'dashboard' %}">返回工作台</a><h1>运行健康</h1>
+  <p>检查于 {{ as_of|date:"Y-m-d H:i:s" }}（北京时间）</p></div>
+  <a class="button secondary" href="{% url 'operations-overview' %}">刷新状态</a>
+</div>
+{% if health.error %}
+  <p class="message error" role="alert">{{ health.error }}</p>
+{% else %}
+  <p class="fine">{% if attention %}有项目需核查。{% else %}当前检查项正常。{% endif %}</p>
+  <div class="stats" aria-label="后台运行状态">
+    <div class="stat"><span>后台任务</span><strong>{% if health.worker_recent %}心跳正常{% else %}需核查{% endif %}</strong>
+      <small>{% if heartbeat.last_success %}最近成功于 {{ heartbeat.last_success|date:"m-d H:i:s" }}{% else %}暂无成功心跳{% endif %}</small>
+      {% if heartbeat.last_error_at %}<small>最近有记录的失败 {{ heartbeat.last_error_at|date:"m-d H:i:s" }}</small>{% endif %}
+    </div>
+    <div class="stat"><span>投递超期</span><strong>{{ health.delivery_overdue }}</strong><small>超过计划处理时间 5 分钟</small></div>
+    <div class="stat"><span>投递失败</span><strong>{{ health.delivery_failed }}</strong><small>查看投递记录核对详情</small></div>
+  </div>
+  <div class="panel">
+    <h2>本实例存储与备份</h2>
+    <dl class="resource-facts">
+      <dt>本地备份</dt><dd>{% if health.backup_recent %}24 小时内有成功标记{% else %}暂无近期成功标记{% endif %}</dd>
+      <dt>备份副本</dt><dd>{% if health.replica_verified %}本地记录显示已验证{% else %}暂无已验证记录{% endif %}</dd>
+      <dt>本地存储</dt><dd>{% if health.storage_ok %}在配置阈值内{% else %}需核查存储容量{% endif %} · 剩余 {{ health.free_bytes|filesizeformat }}</dd>
+    </dl>
+    <p class="fine">本机标记反映当前实例可见的备份记录。外部数据库和对象存储的恢复情况需以各服务的记录为准。</p>
+    <a class="touch-link" href="{% url 'deliveries' %}">查看投递记录 →</a>
+  </div>
+{% endif %}
+{% endblock %}

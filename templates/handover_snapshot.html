@@ -1,0 +1,21 @@
+<section class="handover-feed" aria-labelledby="handover-heading" data-handover-feed>
+  <h3 id="handover-heading">交接与复核</h3>
+  <div class="handover-groups">
+    {% for group in handover %}
+      <section class="handover-group">
+        <h4><a href="{{ group.url }}" data-handover-focus="{{ group.key }}">{{ group.label }} · {{ group.count }}</a></h4>
+        <p class="fine">{{ group.note }}</p>
+        <ul>
+          {% for booking in group.rows %}
+            <li>
+              <a href="{% url 'booking' booking.pk %}" data-handover-focus="{{ group.key }}-{{ booking.pk }}">
+                <strong>{{ booking.resource.name }}</strong>
+                <small>{{ booking.resource.lab.name }} · {% if group.key == "overdue" %}应结束 {{ booking.ends_at|date:"m-d H:i" }}{% else %}{{ booking.starts_at|date:"m-d H:i" }}{% endif %}</small>
+              </a>
+            </li>
+          {% empty %}<li class="fine">暂无记录。</li>{% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+</section>

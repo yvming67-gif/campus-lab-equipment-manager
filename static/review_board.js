@@ -5,7 +5,9 @@ if (reviewBoard) {
   const refreshLink = reviewBoard.querySelector('[data-review-refresh]');
   const status = reviewBoard.querySelector('[data-review-status]');
   const interval = 60000;
-  const idleLimit = 5 * 60000;
+  const trendInterval = 5 * interval;
+  const idleLimit = 5 * interval;
+  let lastTrend = Date.now();
   let lastActivity = Date.now();
   let timer;
   let pending = false;
@@ -70,7 +72,8 @@ if (reviewBoard) {
     const metrics = [...next.querySelectorAll('[data-review-metric]')];
     const nextTime = next.querySelector('[data-review-time]');
     const nextList = next.querySelector('[data-review-list]');
-    if (metrics.length !== 3 || !nextTime || !nextList) throw new Error('Invalid snapshot.');
+    const nextHandover = next.querySelector('[data-handover-feed]');
+    if (metrics.length !== 3 || !nextTime || !nextList || !nextHandover) throw new Error('Invalid snapshot.');
     for (const item of metrics) {
       const metric = content.querySelector('[data-review-metric="' + item.dataset.reviewMetric + '"]');
       const number = metric.querySelector('[data-review-value]');
@@ -83,9 +86,34 @@ if (reviewBoard) {
     time.dateTime = nextTime.dateTime;
     time.textContent = nextTime.textContent;
     updatePreview(nextList);
+    const handover = content.querySelector('[data-handover-feed]');
+    if (handover.innerHTML !== nextHandover.innerHTML) {
+      const key = handover.contains(document.activeElement) ? document.activeElement.dataset.handoverFocus : null;
+      handover.replaceWith(nextHandover);
+      if (key) {
+        const retained = [...nextHandover.querySelectorAll('[data-handover-focus]')]
+          .find(link => link.dataset.handoverFocus === key);
+        (retained ?? refreshLink).focus({ preventScroll: true });
+      }
+    }
   }
 
-  async function refresh(manual = false) {
+  function updateTrend(next) {
+    const trend = document.querySelector('[data-review-restricted]');
+    const updated = next.querySelector('[data-review-restricted]');
+    if (!trend || !updated) throw new Error('Trend unavailable.');
+    if (trend.innerHTML !== updated.innerHTML) {
+      const focusedURL = trend.contains(document.activeElement) ? document.activeElement.href : null;
+      trend.replaceWith(updated);
+      if (focusedURL) {
+        const retained = [...updated.querySelectorAll('a')].find(link => link.href === focusedURL);
+        (retained ?? updated.querySelector('[data-review-trend-refresh]')).focus({ preventScroll: true });
+      }
+    }
+    lastTrend = Date.now();
+  }
+
+  async function refresh(manual = false, forceTrend = false) {
     if (pending || accessLost || document.hidden) return;
     clearTimeout(timer);
     timer = undefined;
@@ -94,7 +122,10 @@ if (reviewBoard) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 20000);
     try {
-      const response = await fetch(reviewBoard.dataset.reviewBoard, {
+      const endpoint = new URL(reviewBoard.dataset.reviewBoard, location.origin);
+      const withTrend = forceTrend || Date.now() - lastTrend >= trendInterval;
+      if (withTrend) endpoint.searchParams.set('trend', '1');
+      const response = await fetch(endpoint, {
         cache: 'no-store',
         signal: controller.signal,
       });
@@ -102,12 +133,14 @@ if (reviewBoard) {
         accessLost = true;
         if (content.contains(document.activeElement)) refreshLink.focus({ preventScroll: true });
         content.replaceChildren();
+        document.querySelectorAll('[data-review-restricted]').forEach(section => section.remove());
         status.textContent = '待审数据已隐藏，请刷新页面重新确认登录和权限。';
         return;
       }
       if (!response.ok) throw new Error('Snapshot request failed.');
       const next = new DOMParser().parseFromString(await response.text(), 'text/html');
       updateSnapshot(next);
+      if (withTrend) updateTrend(next);
       status.textContent = manual ? '待审数据已更新。' : '';
       delay = interval;
     } catch (_) {
@@ -141,6 +174,13 @@ if (reviewBoard) {
     event.preventDefault();
     lastActivity = Date.now();
     refresh(true);
+  });
+  document.addEventListener('click', event => {
+    const trigger = event.target.closest('[data-review-trend-refresh]');
+    if (!trigger || accessLost || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    lastActivity = Date.now();
+    refresh(true, true);
   });
   document.addEventListener('visibilitychange', resume);
   document.addEventListener('pointerdown', recordActivity);

@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import Http404,JsonResponse
 from django.utils import timezone
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_GET
 from . import services as s, coordination as c
 from .models import *
 from .forms import CoordinationForm,RecheckForm,CalendarExceptionForm,WorkCreateForm,IncidentResponseForm
@@ -60,9 +62,7 @@ def respond(request,pk):
     return render(request,'form.html',{'title':'异常确认与异议','form':form,'subtitle':'独立复核需另一名有范围管理员，不覆盖原事实。'})
 
 
-@login_required
-def operations_health(request):
-    protected(request.user.has_role('SYS_ADMIN'))
+def operations_health_snapshot():
     from .operations import healthy_worker
     from django.conf import settings
     import json
@@ -82,7 +82,7 @@ def operations_health(request):
         minimum_free=int(os.environ.get('CAMPUS_BACKUP_MIN_FREE_BYTES',str(1024**3)))
         if capacity<=0 or minimum_free<=0:raise ValueError
     except ValueError:
-        return JsonResponse({'error':'备份容量预警阈值配置无效'},status=503)
+        return {'error': '备份容量预警阈值配置无效'}, 503
     storage_ok=backup_bytes<capacity and free_bytes>=minimum_free
     backlog=Delivery.objects.filter(status__in=['PENDING','RETRY','PROCESSING'],next_attempt_at__lt=timezone.now()-timezone.timedelta(minutes=5)).count()
     replica=False
@@ -90,4 +90,29 @@ def operations_health(request):
         try:replica=bool(json.loads(marker.read_text('utf-8')).get('replica_verified'))
         except (OSError,ValueError):pass
     failed=Delivery.objects.filter(status='FAILED').count()
-    return JsonResponse({'worker_recent':worker,'backup_recent':fresh,'delivery_failed':failed,'delivery_overdue':backlog,'replica_verified':replica,'storage_ok':storage_ok,'backup_bytes':backup_bytes,'free_bytes':free_bytes},status=200 if worker and fresh and not backlog and not failed and storage_ok else 503)
+    summary = {'worker_recent':worker, 'backup_recent':fresh, 'delivery_failed':failed,
+               'delivery_overdue':backlog, 'replica_verified':replica, 'storage_ok':storage_ok,
+               'backup_bytes':backup_bytes, 'free_bytes':free_bytes}
+    status = 200 if worker and fresh and not backlog and not failed and storage_ok else 503
+    return summary, status
+
+
+@login_required
+@never_cache
+def operations_health(request):
+    protected(request.user.has_role("SYS_ADMIN"))
+    summary, status = operations_health_snapshot()
+    return JsonResponse(summary, status=status)
+
+
+@login_required
+@never_cache
+@require_GET
+def operations_overview(request):
+    protected(request.user.has_role("SYS_ADMIN"))
+    summary, status = operations_health_snapshot()
+    heartbeat = JobHeartbeat.objects.filter(name="business-jobs").only("last_success", "last_error_at").first()
+    return render(request, "operations_overview.html", {
+        "title": "运行健康", "health": summary, "attention": status != 200,
+        "heartbeat": heartbeat, "as_of": timezone.now(),
+    })

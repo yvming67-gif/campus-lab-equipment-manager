@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-top">
+  <div><a class="back-link" href="{% url 'dashboard' %}">返回工作台</a><h1>{{ title }}</h1>
+  <p>{{ day|date:"Y-m-d" }} · 北京时间{% if day == today %} · 截至 {{ as_of|date:"H:i" }}{% endif %}</p></div>
+</div>
+{% if coverage_missing %}
+  <p class="message warning">状态历史有缺口，积压明细暂无法核对。</p>
+{% else %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th scope="col">预约资源</th><th scope="col">申请人</th><th scope="col">记录时间</th><th scope="col">事件</th></tr></thead>
+      <tbody>{% for row in rows %}
+        <tr><td><a href="{% url 'booking' row.booking.pk %}">{{ row.booking.resource.name }}</a></td><td>{{ row.booking.applicant.display_name }}</td>
+          <td>{{ row.at|date:"m-d H:i" }}</td><td>{{ row.label }}</td></tr>
+      {% empty %}<tr><td colspan="4">当前日期没有符合条件的记录。</td></tr>{% endfor %}</tbody>
+    </table>
+  </div>
+  {% include "pagination.html" %}
+{% endif %}
+{% endblock %}

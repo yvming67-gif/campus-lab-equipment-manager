@@ -1,0 +1,18 @@
+{% if chart_rows %}
+<section class="panel utilization-comparison" aria-labelledby="utilization-chart-title" data-scroll-reveal>
+  <h2 id="utilization-chart-title">计划占用与实际使用</h2>
+  <p class="fine">图中最多显示本页前 8 项资源，条形使用同一小时刻度。完整数据见下表，可按实验室和资源类型筛选。</p>
+  {% for row in chart_rows %}
+    <div class="usage-resource">
+      <h3>{{ row.resource.name }}</h3>
+      {% for value in row.chart %}
+        <div class="usage-row">
+          <span>{{ value.label }}</span>
+          <span class="usage-track" aria-hidden="true"><span class="usage-{{ value.key }}" style="width:{{ value.width }}%"></span></span>
+          <span>{{ value.hours }} 小时</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</section>
+{% endif %}

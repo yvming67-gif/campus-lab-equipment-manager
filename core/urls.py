@@ -14,3 +14,5 @@ urlpatterns += [
 urlpatterns += [path('operations/health/',cv.operations_health,name='operations-health')]
 urlpatterns += [path('reservation-receipt/', v.reservation_receipt, name='reservation-receipt')]
 urlpatterns += [path("workbench/review/snapshot/", v.review_board_snapshot, name="review-board-snapshot")]
+urlpatterns += [path("workbench/review/history/", v.review_trend_detail, name="review-trend-detail")]
+urlpatterns += [path("operations/overview/", cv.operations_overview, name="operations-overview")]

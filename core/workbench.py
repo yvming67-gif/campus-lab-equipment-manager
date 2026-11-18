@@ -15,10 +15,14 @@ REVIEW_WINDOWS = {
 }
 
 
-def managed_reviews(user, queryset=None):
+def managed_bookings(user, queryset=None):
     queryset = Reservation.objects.all() if queryset is None else queryset
     labs = LabGrant.objects.filter(user=user).values("lab_id")
-    return queryset.filter(resource__lab_id__in=labs, status="PENDING").exclude(applicant=user)
+    return queryset.filter(resource__lab_id__in=labs)
+
+
+def managed_reviews(user, queryset=None):
+    return managed_bookings(user, queryset).filter(status="PENDING").exclude(applicant=user)
 
 
 def review_window_conditions(now):
@@ -78,20 +82,34 @@ def booking_queue(qs, name, now=None):
     return qs.filter(rules[name]) if name in rules else qs
 
 
-def tasks_for(user, bookings, incidents, work, now=None):
-    now = now or timezone.now()
+HANDOVER_QUEUES = {
+    "handover": ("今日待交接", "已确认且今天开始的预约"),
+    "overdue": ("超期未结束", "已超出结束时间，仍在使用"),
+    "recheck": ("待复核承诺", "条件变化后，交接前需复核"),
+}
+
+
+def handover_snapshot(user, now):
+    managed = managed_bookings(user)
+    groups = []
+    for key, (label, note) in HANDOVER_QUEUES.items():
+        queue = booking_queue(managed, key, now)
+        if key == "recheck":
+            queue = queue.exclude(applicant=user)
+        rows = list(queue.select_related("resource__lab")
+                    .only("starts_at", "ends_at", "resource__name", "resource__lab__name")
+                    .annotate(queue_count=Window(Count("pk"))).order_by("starts_at", "pk")[:3])
+        groups.append({
+            "key": key, "label": label, "note": note, "rows": rows,
+            "count": rows[0].queue_count if rows else 0,
+            "url": reverse("bookings") + "?" + urlencode({"queue": key, "sort": "starts"}),
+        })
+    return groups
+
+
+def tasks_for(user, incidents, work):
     cards = []
     if user.has_role('LAB_ADMIN'):
-        managed = bookings.filter(resource__lab__labgrant__user=user).distinct()
-        for key, name, note in [
-            ('recheck', '待复核承诺', '条件变化后先复核，再交接'),
-            ('handover', '今日待交接', '已确认不代表已经领取或入场'),
-            ('overdue', '超期未结束', '核实实物与人员，协调后续使用'),
-        ]:
-            qs = booking_queue(managed, key, now)
-            if key == 'recheck': qs = qs.exclude(applicant=user)
-            cards.append({'name': name, 'count': qs.count(), 'note': note,
-                          'url': reverse('bookings')+'?queue='+key})
         pending = incidents.filter(resource__lab__labgrant__user=user, status='PENDING').distinct()
         cards.append({'name': '异常待核实', 'count': pending.count(), 'note': '核实事实后决定隔离、处置或维修', 'url': reverse('incidents')+'?queue=managed&status=PENDING'})
         acceptance = acceptance_queue(work,user)

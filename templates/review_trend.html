@@ -1,0 +1,43 @@
+<section class="panel review-trend" aria-labelledby="review-trend-title" data-scroll-reveal data-review-restricted>
+  <div class="section-heading"><h2 id="review-trend-title">审批积压趋势</h2><a class="touch-link" href="{% url 'dashboard' %}#review-trend-title" data-review-trend-refresh>刷新趋势</a></div>
+  <p class="fine">最近 7 天 · 北京时间 · 今天截至 {{ trend.as_of|date:"H:i" }}。
+    人工审核包括通过和驳回，取消和失效另计。</p>
+  <div class="trend-legend"><span class="trend-incoming">新增待审</span><span class="trend-decided">人工审核</span></div>
+  <div class="trend-bars" aria-label="每日新增待审与人工审核数量">
+    {% for day in trend.days %}
+      <div class="trend-day">
+        <div class="trend-pair">
+          <a class="trend-bar-link" href="{{ day.incoming_url }}" aria-label="{{ day.day|date:'m月d日' }}新增待审 {{ day.incoming }} 项">
+            <span class="trend-column trend-incoming" style="height:{{ day.incoming_height }}%" aria-hidden="true"></span><span>{{ day.incoming }}</span><span class="trend-tooltip" aria-hidden="true">{{ day.day|date:"m-d" }} 新增待审 {{ day.incoming }} 项</span>
+          </a>
+          <a class="trend-bar-link" href="{{ day.decided_url }}" aria-label="{{ day.day|date:'m月d日' }}人工审核 {{ day.decided }} 项">
+            <span class="trend-column trend-decided" style="height:{{ day.decided_height }}%" aria-hidden="true"></span><span>{{ day.decided }}</span><span class="trend-tooltip" aria-hidden="true">{{ day.day|date:"m-d" }} 人工审核 {{ day.decided }} 项</span>
+          </a>
+        </div>
+        <span>{{ day.day|date:"m-d" }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  {% if trend.coverage %}
+    <h3>日末积压</h3>
+    <svg class="trend-line" viewBox="0 0 700 110" role="group" aria-label="过去七日待审积压折线，数值见下表">
+      <polyline fill="none" stroke="currentColor" stroke-width="3" points="{% for day in trend.days %}{{ day.x }},{{ day.y }} {% endfor %}"/>
+      {% for day in trend.days %}<a href="{{ day.remaining_url }}" aria-label="{{ day.day|date:'m月d日' }}积压 {{ day.remaining }} 项"><circle cx="{{ day.x }}" cy="{{ day.y }}" r="16" fill="transparent"/><circle class="trend-point" cx="{{ day.x }}" cy="{{ day.y }}" r="5" fill="currentColor"/></a>{% endfor %}
+    </svg>
+  {% else %}
+    <p class="message warning">部分预约缺少完整的状态历史，日末积压暂无法核对。新增和处理量仅统计已记录事件。</p>
+  {% endif %}
+  <div class="table-wrap">
+    <table>
+      <caption class="fine">审批趋势明细</caption>
+      <thead><tr><th scope="col">日期</th><th scope="col">新增待审</th><th scope="col">人工审核</th><th scope="col">取消或失效</th><th scope="col">积压</th></tr></thead>
+      <tbody>
+      {% for day in trend.days %}
+        <tr><th scope="row">{{ day.day|date:"m-d" }}{% if day.today %} 当前{% endif %}</th>
+        <td><a href="{{ day.incoming_url }}">{{ day.incoming }}</a></td><td><a href="{{ day.decided_url }}">{{ day.decided }}</a></td>
+        <td>{{ day.other_exit }}</td><td>{% if trend.coverage %}<a href="{{ day.remaining_url }}">{{ day.remaining }}</a>{% else %}—{% endif %}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
