@@ -23,6 +23,7 @@ function sameSession(saved) {
 function clearSession(expected) {
   if (expected && !sameSession(expected)) return false;
   wx.removeStorageSync(SESSION_KEY); wx.removeStorageSync(DRAFT_KEY); wx.removeStorageSync(DRAFTS_KEY); wx.removeStorageSync(ACTIONS_KEY); wx.removeStorageSync('campus-mini-booking-filter'); wx.removeStorageSync('campus-mini-base');
+  if (wx.removeTabBarBadge) wx.removeTabBarBadge({index:2,fail() {}});
   return true;
 }
 function session() {
@@ -65,9 +66,9 @@ function request(path, method, data, options) {
       },
       fail(detail) {
         const message = detail && detail.errMsg || '';
-        let reason = '暂时无法连接服务，请检查网络；测试号真机请开启调试后重试';
+        let reason = '暂时无法连接服务，请检查网络后重试';
         if (/timeout/i.test(message)) reason = '连接超时，云端演示可能正在唤醒，请稍候重试';
-        else if (/url not in domain list|not in.*domain|合法域名/i.test(message)) reason = '域名校验未通过，测试号请在右上角开启调试，退出后重新进入';
+        else if (/url not in domain list|not in.*domain|合法域名/i.test(message)) reason = '域名校验未通过，请联系维护人员核对服务器域名';
         else if (/ssl|tls|certificate|cert_/i.test(message)) reason = '安全连接未建立，请检查手机网络和系统时间后重试';
         const mutating = method === 'POST' && (path.indexOf('/bookings/') === 0 || path === '/incidents/');
         const e = new Error(mutating ? '未能确认操作结果，请保持原内容后重试，或先核对相关记录' : reason);
@@ -84,6 +85,7 @@ async function login(username, password) {
   wx.removeStorageSync(DRAFTS_KEY);
   wx.removeStorageSync(ACTIONS_KEY);
   wx.removeStorageSync('campus-mini-booking-filter');
+  if (wx.removeTabBarBadge) wx.removeTabBarBadge({index:2,fail() {}});
   return data;
 }
 async function logout() { const saved = session(); try { await request('/auth/logout/', 'POST', {}); } finally { if (saved) clearSession(saved); } }

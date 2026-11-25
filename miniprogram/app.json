@@ -10,7 +10,7 @@
     "pages/incident/index"
   ],
   "window": {
-    "navigationBarTitleText": "校园实验资源中心",
+    "navigationBarTitleText": "青序实验设备簿",
     "navigationBarBackgroundColor": "#f5f5f7",
     "navigationBarTextStyle": "black",
     "backgroundColor": "#f5f5f7",

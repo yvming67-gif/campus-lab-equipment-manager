@@ -18,6 +18,11 @@ function openBookings(event) {
 }
 function openBooking(event) { wx.navigateTo({ url: '/pages/booking/index?id=' + event.currentTarget.dataset.id }); }
 function endRefresh() { if (wx.stopPullDownRefresh) wx.stopPullDownRefresh(); }
+function unreadBadge(count) {
+  if (!Number.isInteger(count) || count < 0) return;
+  if (count && wx.setTabBarBadge) wx.setTabBarBadge({index:2,text:count>99?'99+':String(count),fail() {}});
+  else if (!count && wx.removeTabBarBadge) wx.removeTabBarBadge({index:2,fail() {}});
+}
 function invalidateAvailability(page) {
   page._availabilitySerial=(page._availabilitySerial||0)+1;
   const loading=page._availabilityPending ? false : page.data.loading;
@@ -63,6 +68,7 @@ const screens = {
       const overview=api.request('/me/').then(data=>{
         if(serial!==this._overviewSerial)return;
         this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000),quickDates:fmt.quickDates(this.data.slot.date,data.policy?.window_days)});
+        unreadBadge(data.stats.unread);
       }).catch(e=>{if(serial===this._overviewSerial)this.setData({overviewError:api.errorText(e)});})
         .finally(()=>{if(serial===this._overviewSerial)this.setData({overviewLoading:false});});
       return Promise.all([overview,this.load(1)]);
@@ -306,7 +312,7 @@ const screens = {
     }
   },
   bookings: {
-    data: { items: [], statuses, statusIndex: 0, form: { q: '' }, loading: false, error: '', page: 1, hasMore: false, total: 0, appliedFilter:false },
+    data: { items: [], statuses, statusIndex: 0, form: { q: '' }, loading: false, error: '', page: 1, hasMore: false, total: 0, appliedFilter:false, stale:false, updatedAt:'' },
     onShow() {
       if (!api.requireLogin()) return;
       const status=wx.getStorageSync('campus-mini-booking-filter');
@@ -321,12 +327,13 @@ const screens = {
       if(page>1 && signature!==this._appliedQuery)page=1;
       const serial = (this._serial || 0) + 1; this._serial = serial;
       this._failedPage=page;
-      this.setData({ loading: true, error: '', ...(page===1?{items:[],hasMore:false,total:0}: {}) });
+      const changed=signature!==this._appliedQuery;
+      this.setData({ loading: true, error: '', ...(page===1 && changed?{items:[],hasMore:false,total:0,updatedAt:'',stale:false}: {stale:!!this.data.items.length}) });
       try {
         const result = await api.request('/bookings/', 'GET', Object.assign({},query,{page}));
         if (serial !== this._serial) return;
         this._appliedQuery=signature;
-        this.setData({ items: (page === 1 ? [] : this.data.items).concat(result.items.map(fmt.booking)), page: result.page, hasMore: result.has_more, total: result.total, appliedFilter:!!(query.status || query.q.trim()) });
+        this.setData({ items: (page === 1 ? [] : this.data.items).concat(result.items.map(fmt.booking)), page: result.page, hasMore: result.has_more, total: result.total, appliedFilter:!!(query.status || query.q.trim()),stale:false,updatedAt:fmt.snapshotTime() });
       } catch (e) { if (serial === this._serial) error(this, e); } finally { if (serial === this._serial) this.setData({ loading: false }); }
     },
     retry() { return this.load(this._failedPage || 1); },
@@ -464,7 +471,7 @@ const screens = {
     returnToResource(){wx.redirectTo({url:'/pages/resource/index?id='+this.data.resourceId});}
   },
   notifications: {
-    data: { items: [], loading: false, busy: false, error: '', unread: 0, unreadOnly: false, page: 1, hasMore: false, staleCount:false },
+    data: { items: [], loading: false, busy: false, error: '', unread: 0, unreadOnly: false, page: 1, hasMore: false, staleCount:false,updatedAt:'' },
     onShow() { if (api.requireLogin()) return this.load(1); },
     async load(page) {
       const serial=(this._serial||0)+1;this._serial=serial;
@@ -473,7 +480,8 @@ const screens = {
       try {
         const result = await api.request('/notifications/', 'GET', { page: this._failedPage, unread: this.data.unreadOnly ? '1' : '' });
         if(serial!==this._serial)return;
-        this.setData({ items: (this._failedPage > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread, staleCount:false });
+        this.setData({ items: (this._failedPage > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread, staleCount:false,updatedAt:fmt.snapshotTime() });
+        unreadBadge(result.unread);
       } catch (e) { if(serial===this._serial)error(this, e); } finally { if(serial===this._serial)this.setData({ loading: false }); }
     },
     retry() { return this.load(this._failedPage || 1); },
@@ -486,6 +494,7 @@ const screens = {
         const serial=(this._serial||0)+1;this._serial=serial;
         if (item.unread) await api.request('/notifications/' + id + '/read/', 'POST', {});
         if(serial===this._serial)this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
+        if(serial===this._serial)unreadBadge(this.data.unread);
         if(this.data.unreadOnly || serial!==this._serial) await this.load(1);
         if (item.booking_id) wx.navigateTo({ url: '/pages/booking/index?id=' + item.booking_id });
       } catch (e2) { error(this, e2); } finally { this.setData({ busy: false }); }
@@ -502,13 +511,22 @@ const screens = {
     onPullDownRefresh() { return this.load(1).finally(endRefresh); }
   },
   profile: {
-    data: { user: null, stats: null, policy: null, loading: false, error: '', busy: false, roleLabel: '', qualifications: [] },
+    data: { user: null, stats: null, policy: null, loading: false, error: '', busy: false, roleLabel: '', qualifications: [],stale:false,updatedAt:'',equipmentQuota:null,roomQuota:null },
     onShow() { if (api.requireLogin()) return this.load(); },
     async load() {
-      this.setData({ loading: true, error: '' });
-      try { const data = await api.request('/me/'); this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, qualifications: (data.qualifications || []).map(q=>Object.assign({},q,{expiry_label:q.expires_at ? fmt.dateTime(q.expires_at) : '未设到期时间'})), roleLabel: data.user.roles.map(x => x.name).join(' / ')}); }
-      catch (e) { error(this, e); } finally { this.setData({ loading: false }); }
+      const serial=(this._profileSerial||0)+1;this._profileSerial=serial;
+      this.setData({ loading: true, error: '',stale:!!this.data.user });
+      try {
+        const data = await api.request('/me/');
+        if(serial!==this._profileSerial)return;
+        unreadBadge(data.stats.unread);
+        this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, qualifications: (data.qualifications || []).map(q=>Object.assign({},q,{expiry_label:q.expires_at ? fmt.dateTime(q.expires_at) : '未设到期时间'})), roleLabel: data.user.roles.map(x => x.name).join(' / '),stale:false,updatedAt:fmt.snapshotTime(),equipmentQuota:fmt.quota(data.stats.future_equipment,data.policy.equipment_quota),roomQuota:fmt.quota(data.stats.future_room,data.policy.room_quota)});
+      } catch (e) { if(serial===this._profileSerial)error(this, e); } finally { if(serial===this._profileSerial)this.setData({ loading: false }); }
     },
+    retry() { return this.load(); },
+    onPullDownRefresh() { return this.load().finally(endRefresh); },
+    openBookings,
+    browse() { wx.switchTab({url:'/pages/resources/index'}); },
     chooseEffects(e) {const reduced=e.detail.value===true;wx.setStorageSync('campus-mini-simple-effects',reduced);this.setData({reducedEffects:reduced});},
     async signout() {
       if(this.data.busy)return;
@@ -544,7 +562,7 @@ function create(name) {
       if(name==='incident'){const now=nowFields();fresh.form={description:'',date:now.date,time:now.time};}
       this.setData(Object.assign(fresh,route));
       this._appliedFilterValues=null;this._appliedFilterOwner=null;this._appliedSlot=null;this._appliedQuery=null;
-      for(const key of ['_serial','_overviewSerial','_scheduleSerial','_detailSerial','_availabilitySerial','_slotsSerial'])this[key]=(this[key]||0)+1;
+      for(const key of ['_serial','_overviewSerial','_scheduleSerial','_detailSerial','_availabilitySerial','_slotsSerial','_profileSerial'])this[key]=(this[key]||0)+1;
     }
     this._displayOwner=scope;
     this.setData({reducedEffects:wx.getStorageSync('campus-mini-simple-effects')===true});

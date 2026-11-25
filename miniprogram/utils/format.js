@@ -2,6 +2,11 @@ const tones = { PENDING: 'amber', CONFIRMED: 'green', IN_USE: 'blue', COMPLETED:
 const photos=require('./photos');
 function day(value) { const d = new Date((value == null ? Date.now() : value) + 8 * 3600000); return d.toISOString().slice(0, 10); }
 function dateTime(value) { return value ? value.slice(0, 16).replace('T', ' ') : ''; }
+function snapshotTime() { return new Date(Date.now() + 8 * 3600000).toISOString().slice(0, 19).replace('T', ' '); }
+function quota(used, limit) {
+  if (!Number.isInteger(used) || used < 0 || !Number.isInteger(limit) || limit < 0) return null;
+  return {used, limit, remaining: Math.max(0, limit - used), percent: limit ? Math.min(100, Math.round(100 * used / limit)) : 0};
+}
 function quickDates(selected, windowDays, at) {
   const today=day(at),start=Date.parse(today+'T00:00:00Z');
   const limit=Number.isInteger(windowDays)&&windowDays>=0?Math.min(windowDays,6):6;
@@ -48,4 +53,4 @@ function validateForm(form, policy) {
   if ([form.start, form.end].some(t => Number(t.slice(3)) % policy.slot_minutes !== 0)) return '起止时间须以' + policy.slot_minutes + '分钟为单位';
   return '';
 }
-module.exports = { day, dateTime, quickDates, booking, resource, resourceMark, notify, defaultForm, validateForm };
+module.exports = { day, dateTime, snapshotTime, quota, quickDates, booking, resource, resourceMark, notify, defaultForm, validateForm };
