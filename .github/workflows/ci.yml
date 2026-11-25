@@ -66,7 +66,14 @@ jobs:
           git archive HEAD -o source.zip
           Expand-Archive -LiteralPath source.zip -DestinationPath $demoPath
           Set-Location -LiteralPath $demoPath
-          python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000 --db-port 55440
+          $databaseProbe = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+          try {
+            $databaseProbe.Start()
+            $databasePort = $databaseProbe.LocalEndpoint.Port
+          } finally {
+            $databaseProbe.Stop()
+          }
+          python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000 --db-port $databasePort
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -u tools/start_local.py --setup --smoke-test --no-browser --port 18000
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

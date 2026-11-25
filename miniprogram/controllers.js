@@ -18,8 +18,9 @@ function openBookings(event) {
 }
 function openBooking(event) { wx.navigateTo({ url: '/pages/booking/index?id=' + event.currentTarget.dataset.id }); }
 function endRefresh() { if (wx.stopPullDownRefresh) wx.stopPullDownRefresh(); }
-function unreadBadge(count) {
-  if (!Number.isInteger(count) || count < 0) return;
+let badgeEpoch=0;
+function unreadBadge(count, epoch) {
+  if (epoch!==badgeEpoch || !Number.isInteger(count) || count < 0) return;
   if (count && wx.setTabBarBadge) wx.setTabBarBadge({index:2,text:count>99?'99+':String(count),fail() {}});
   else if (!count && wx.removeTabBarBadge) wx.removeTabBarBadge({index:2,fail() {}});
 }
@@ -64,11 +65,12 @@ const screens = {
     async onShow() {
       if (!api.requireLogin()) return;
       const serial=(this._overviewSerial || 0)+1;this._overviewSerial=serial;
+      const badgeRead=++badgeEpoch;
       this.setData({user:api.session().user,overviewLoading:true,overviewError:'',minDate:fmt.day(),quickDates:fmt.quickDates(this.data.slot.date,this.data.policy?.window_days)});
       const overview=api.request('/me/').then(data=>{
         if(serial!==this._overviewSerial)return;
         this.setData({user:data.user,stats:data.stats,overdue:data.overdue,policy:data.policy,upcoming:(data.upcoming || []).map(fmt.booking),overviewReady:true,maxDate:fmt.day(Date.now()+(data.policy ? data.policy.window_days : 14)*86400000),quickDates:fmt.quickDates(this.data.slot.date,data.policy?.window_days)});
-        unreadBadge(data.stats.unread);
+        unreadBadge(data.stats.unread,badgeRead);
       }).catch(e=>{if(serial===this._overviewSerial)this.setData({overviewError:api.errorText(e)});})
         .finally(()=>{if(serial===this._overviewSerial)this.setData({overviewLoading:false});});
       return Promise.all([overview,this.load(1)]);
@@ -475,13 +477,14 @@ const screens = {
     onShow() { if (api.requireLogin()) return this.load(1); },
     async load(page) {
       const serial=(this._serial||0)+1;this._serial=serial;
+      const badgeRead=++badgeEpoch;
       this._failedPage=page||1;
       this.setData({ loading: true, error: '', ...((!page||page===1)?{items:[],hasMore:false,staleCount:true}: {}) });
       try {
         const result = await api.request('/notifications/', 'GET', { page: this._failedPage, unread: this.data.unreadOnly ? '1' : '' });
         if(serial!==this._serial)return;
         this.setData({ items: (this._failedPage > 1 ? this.data.items : []).concat(result.items.map(fmt.notify)), page: result.page, hasMore: result.has_more, unread: result.unread, staleCount:false,updatedAt:fmt.snapshotTime() });
-        unreadBadge(result.unread);
+        unreadBadge(result.unread,badgeRead);
       } catch (e) { if(serial===this._serial)error(this, e); } finally { if(serial===this._serial)this.setData({ loading: false }); }
     },
     retry() { return this.load(this._failedPage || 1); },
@@ -490,11 +493,12 @@ const screens = {
       const id = Number(e.currentTarget.dataset.id);const item = this.data.items.find(x => x.id === id);
       if (!item || this.data.busy) return;
       this.setData({ busy: true, loading:false, error: '' });
+      const badgeRead=++badgeEpoch;
       try {
         const serial=(this._serial||0)+1;this._serial=serial;
         if (item.unread) await api.request('/notifications/' + id + '/read/', 'POST', {});
         if(serial===this._serial)this.setData({ items: this.data.items.map(x => x.id === id ? Object.assign({}, x, { unread: false, read_at: new Date().toISOString() }) : x), unread: Math.max(0, this.data.unread - (item.unread ? 1 : 0)) });
-        if(serial===this._serial)unreadBadge(this.data.unread);
+        if(serial===this._serial)unreadBadge(this.data.unread,badgeRead);
         if(this.data.unreadOnly || serial!==this._serial) await this.load(1);
         if (item.booking_id) wx.navigateTo({ url: '/pages/booking/index?id=' + item.booking_id });
       } catch (e2) { error(this, e2); } finally { this.setData({ busy: false }); }
@@ -503,6 +507,7 @@ const screens = {
       if (this.data.busy) return;
       this.setData({ busy: true, loading:false, error: '' });
       this._serial=(this._serial||0)+1;
+      ++badgeEpoch;
       try { await api.request('/notifications/read-all/', 'POST', {}); await this.load(1); }
       catch (e) { error(this, e); } finally { this.setData({ busy: false }); }
     },
@@ -515,11 +520,12 @@ const screens = {
     onShow() { if (api.requireLogin()) return this.load(); },
     async load() {
       const serial=(this._profileSerial||0)+1;this._profileSerial=serial;
+      const badgeRead=++badgeEpoch;
       this.setData({ loading: true, error: '',stale:!!this.data.user });
       try {
         const data = await api.request('/me/');
         if(serial!==this._profileSerial)return;
-        unreadBadge(data.stats.unread);
+        unreadBadge(data.stats.unread,badgeRead);
         this.setData({ user: data.user, stats: data.stats, policy: data.policy, overdue: data.overdue, qualifications: (data.qualifications || []).map(q=>Object.assign({},q,{expiry_label:q.expires_at ? fmt.dateTime(q.expires_at) : '未设到期时间'})), roleLabel: data.user.roles.map(x => x.name).join(' / '),stale:false,updatedAt:fmt.snapshotTime(),equipmentQuota:fmt.quota(data.stats.future_equipment,data.policy.equipment_quota),roomQuota:fmt.quota(data.stats.future_room,data.policy.room_quota)});
       } catch (e) { if(serial===this._profileSerial)error(this, e); } finally { if(serial===this._profileSerial)this.setData({ loading: false }); }
     },
