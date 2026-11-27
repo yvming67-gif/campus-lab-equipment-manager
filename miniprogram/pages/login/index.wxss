@@ -1,1 +1,16 @@
 /* Shared visual system is defined in app.wxss. */
+
+.login-web {
+  margin-top:24rpx;
+  padding:24rpx;
+  border-radius:24rpx;
+  background:#fff;
+}
+.login-web-address {
+  display:block;
+  margin:8rpx 0;
+  font-size:26rpx;
+  overflow-wrap:anywhere;
+  word-break:break-all;
+}
+.login-web .hint { display:block; }

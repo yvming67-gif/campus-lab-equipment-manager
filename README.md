@@ -23,9 +23,9 @@
 
 **青序实验设备簿** · 备案已完成；当前开发版本为1.5.0，正式版尚未发布。
 
-<img src="docs/images/wechat-entry-code.jpg" width="220" height="220" alt="青序实验设备簿官方固定小程序码，正式版发布后可用">
+<img src="static/wechat-entry-code.jpg" width="220" height="220" alt="青序实验设备簿官方固定小程序码，正式版发布后可用">
 
-上图为官方固定小程序码，正式版发布后供微信扫码使用；当前不能保证普通用户扫码进入。[固定入口与当前状态](docs/微信小程序固定入口.md) · [下载原始小程序码](docs/images/wechat-entry-code.jpg)
+上图为官方固定小程序码，正式版发布后供微信扫码使用；当前不能保证普通用户扫码进入。[固定入口与当前状态](docs/微信小程序固定入口.md) · [下载原始小程序码](static/wechat-entry-code.jpg)
 
 ## 角色与能力
 

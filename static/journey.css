@@ -42,6 +42,16 @@
 .access-route small { margin-top:4px; }
 .access-guide { margin-top:26px; }
 .access-help summary { min-height:44px; padding:12px 0; cursor:pointer; }
+.access-mini {
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+  gap:18px; margin-top:22px; padding:clamp(16px,4vw,28px);
+  border:1px solid #dbe5e0; border-radius:22px; background:#fff; color:#244c3d;
+}
+.access-mini > div { flex:1 1 250px; min-width:0; }
+.access-mini h2 { margin:0 0 6px; }
+.access-mini p { margin:0 0 8px; }
+.access-mini img { display:block; max-width:100%; height:auto; }
+.access-mini-link { display:inline-flex; align-items:center; min-height:44px; gap:6px; }
 .account-login.identity-card { max-width:460px; margin:clamp(24px,6vw,72px) auto; }
 .account-login input { display:block; width:100%; }
 .account-login .fine { line-height:1.7; margin:20px 0 12px; }

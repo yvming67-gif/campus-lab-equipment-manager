@@ -12,5 +12,11 @@
     <button hover-class="control-pressed" hover-start-time="20" hover-stay-time="80" class="primary top-gap" loading="{{busy}}" disabled="{{busy}}" bindtap="submit">{{busy ? '正在连接…' : '进入实验室'}}</button>
     <view class="hint top-gap" wx:if="{{busy}}">首次连接云端演示可能需要约1分钟，请保持页面打开。</view>
   </view>
+  <view class="login-web">
+    <text class="field-label">也可使用网页版</text>
+    <text class="login-web-address" user-select>{{webAddress}}</text>
+    <button class="text-button" hover-class="control-pressed" bindtap="copyWebAddress">复制网页地址</button>
+    <text wx:if="{{webCopyMessage}}" class="hint" aria-live="polite">{{webCopyMessage}}</text>
+  </view>
   <view class="login-foot">模拟身份与数据 · 设备和整间场地分别预约</view>
 </view>

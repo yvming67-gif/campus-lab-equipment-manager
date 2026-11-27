@@ -49,9 +49,16 @@ function sessionStamp() {
 
 const screens = {
   login: {
-    data: { brandName: config.appName, accounts: [{ username: 'student', name: '学生 · 演示账号01' }, { username: 'student2', name: '学生 · 演示账号02' }, { username: 'teacher', name: '教师 · 演示账号' }], accountIndex: 0, form: { password: 'Demo@2026' }, busy: false, error: '' },
+    data: { brandName: config.appName, webAddress: api.baseUrl() + '/access/', webCopyMessage: '', accounts: [{ username: 'student', name: '学生 · 演示账号01' }, { username: 'student2', name: '学生 · 演示账号02' }, { username: 'teacher', name: '教师 · 演示账号' }], accountIndex: 0, form: { password: 'Demo@2026' }, busy: false, error: '' },
     onShow() { if (api.session()) wx.switchTab({ url: '/pages/resources/index' }); },
     input,
+    copyWebAddress() {
+      wx.setClipboardData({
+        data: this.data.webAddress,
+        success: () => this.setData({ webCopyMessage: '已复制，请到浏览器地址栏粘贴打开。' }),
+        fail: () => this.setData({ webCopyMessage: '未能复制，可在下方长按选择网页地址。' })
+      });
+    },
     chooseAccount(e) { this.setData({ accountIndex: Number(e.detail.value), error: '' }); },
     async submit() {
       if (this.data.busy) return;

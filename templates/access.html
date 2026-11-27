@@ -27,12 +27,22 @@
       <li>选资源与时段</li><li>核对并提交</li><li>查看结果与下一步</li>
     </ol>
     {% if demo %}
-      <details class="access-help"><summary>演示账号与小程序</summary>
+      <details class="access-help"><summary>演示账号</summary>
         {% if public_demo %}<p>公开学生和教师账号使用 <code>Demo@2026</code>。已开通的岗位账号通过同一入口登录。</p>{% else %}<p>本机模拟账号使用 <code>Demo@2026</code>。</p>{% endif %}
-        <p>微信小程序公开正式版尚未发布。当前可使用网页预约。</p>
         <p><a href="https://github.com/yvming67-gif/campus-lab-equipment-manager">项目文档与运行说明</a></p>
       </details>
     {% endif %}
   </section>
+  {% if public_demo %}
+    <section class="access-mini" aria-labelledby="access-mini-title">
+      <div>
+        <h2 id="access-mini-title">青序实验设备簿</h2>
+        <p class="fine">微信小程序 · 公开正式版待发布</p>
+        <p>正式发布后可用微信扫描此处的小程序码。现在可直接在网页预约。</p>
+        <a class="access-mini-link" href="{% url 'login' %}">登录网页版<span aria-hidden="true"> →</span></a>
+      </div>
+      <img src="{% static 'wechat-entry-code.jpg' %}" width="144" height="144" loading="lazy" alt="青序实验设备簿官方小程序码，公开正式版待发布">
+    </section>
+  {% endif %}
 </div>
 {% endblock %}
